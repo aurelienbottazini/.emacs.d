@@ -56,8 +56,9 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (require 'tronesque-theme)
-  (load-theme 'tronesque t)
+  (use-package zenburn-theme
+   :config
+   (load-theme 'zenburn t))
 #+END_SRC
 
 I keep elisp I write inside the site-lisp directory. The files
