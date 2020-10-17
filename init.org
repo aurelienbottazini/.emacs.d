@@ -55,6 +55,10 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
     (load "~/.emacs.d/.emacs-local"))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'tango-dark)
+#+END_SRC
+
 I keep elisp I write inside the site-lisp directory. The files
 inside that directory are automatically added to the Emacs load-path.
 #+BEGIN_SRC emacs-lisp
@@ -1530,6 +1534,7 @@ porcelains.
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
+  :demand true
   :bind (:map my-keys-minor-mode-map
               ("C-c gs" . magit-status)
               ("C-c gc" . magit-commit)

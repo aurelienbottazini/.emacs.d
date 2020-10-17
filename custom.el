@@ -140,16 +140,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background nil :foreground "#000"))))
- '(font-lock-comment-face ((t (:foreground "Firebrick" :slant italic))))
- '(font-lock-string-face ((t (:foreground "VioletRed4" :slant italic))))
- '(magit-diff-file-heading ((t (:foreground "black" :weight medium))))
- '(magit-diff-file-heading-highlight ((t (:inherit magit-section-highlight :foreground "black"))))
- '(magit-section-highlight ((t (:background "grey95" :weight normal))))
- '(magit-section-secondary-heading ((t (:foreground "black" :weight medium))))
- '(mode-line-buffer-id ((t (:foreground "black" :slant italic :weight medium))))
- '(org-document-info-keyword ((t (:inherit shadow :slant italic))))
- '(org-document-title ((t (:foreground "midnight blue" :weight normal))))
- '(org-level-1 ((t (:inherit outline-1 :slant italic :weight medium :height 1.6))))
- '(org-level-2 ((t (:inherit outline-2 :slant italic))))
- '(org-level-3 ((t (:inherit outline-3 :slant italic)))))
+ )

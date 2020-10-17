@@ -19,6 +19,8 @@ file-name-handler-alist last-file-name-handler-alist)))
 (if (file-exists-p "~/.emacs.d/.emacs-local")
   (load "~/.emacs.d/.emacs-local"))
 
+(load-theme 'tango-dark)
+
 (let ((default-directory  "~/.emacs.d/site-lisp/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
@@ -1057,6 +1059,7 @@ This command switches to browser."
   (evil-define-key 'normal diff-mode-map (kbd "q") 'quit-window))
 
 (use-package magit
+  :demand true
   :bind (:map my-keys-minor-mode-map
               ("C-c gs" . magit-status)
               ("C-c gc" . magit-commit)
