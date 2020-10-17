@@ -19,7 +19,9 @@ file-name-handler-alist last-file-name-handler-alist)))
 (if (file-exists-p "~/.emacs.d/.emacs-local")
   (load "~/.emacs.d/.emacs-local"))
 
-(load-theme 'tango-dark)
+(use-package zenburn-theme
+ :config
+ (load-theme 'zenburn t))
 
 (let ((default-directory  "~/.emacs.d/site-lisp/"))
   (normal-top-level-add-to-load-path '("."))
