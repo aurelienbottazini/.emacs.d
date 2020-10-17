@@ -56,9 +56,8 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme
-   :config
-   (load-theme 'zenburn t))
+  (require 'tronesque-theme)
+  (load-theme 'tronesque t)
 #+END_SRC
 
 I keep elisp I write inside the site-lisp directory. The files
@@ -833,7 +832,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 (define-key my-keys-minor-mode-map (kbd "C-c a") 'org-agenda)
 (define-key my-keys-minor-mode-map (kbd "C-c R") 'revert-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-c jc") 'org-clock-jump-to-current-clock)
-(define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/dotfiles/emacs/.emacs.d/init.org")))
+(define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
 (define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
 (define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
 (define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file **local-note-file**)))

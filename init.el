@@ -19,9 +19,8 @@ file-name-handler-alist last-file-name-handler-alist)))
 (if (file-exists-p "~/.emacs.d/.emacs-local")
   (load "~/.emacs.d/.emacs-local"))
 
-(use-package zenburn-theme
- :config
- (load-theme 'zenburn t))
+(require 'tronesque-theme)
+(load-theme 'tronesque t)
 
 (let ((default-directory  "~/.emacs.d/site-lisp/"))
   (normal-top-level-add-to-load-path '("."))
@@ -626,7 +625,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 (define-key my-keys-minor-mode-map (kbd "C-c a") 'org-agenda)
 (define-key my-keys-minor-mode-map (kbd "C-c R") 'revert-buffer)
 (define-key my-keys-minor-mode-map (kbd "C-c jc") 'org-clock-jump-to-current-clock)
-(define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/dotfiles/emacs/.emacs.d/init.org")))
+(define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
 (define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
 (define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
 (define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file **local-note-file**)))
