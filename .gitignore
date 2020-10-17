@@ -1,0 +1,6 @@
+.emacs-local
+company-stats-cache.el
+init.shell
+recentf
+network-security.data
+transient
