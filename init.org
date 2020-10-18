@@ -863,10 +863,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
 (define-key my-keys-minor-mode-map (kbd "C-c h") 'highlight-symbol-at-point)
 (define-key my-keys-minor-mode-map (kbd "C-c H") 'unhighlight-regexp)
-(define-key my-keys-minor-mode-map (kbd "C-c oh") '(lambda ()
-  (interactive)
-  (hi-lock-mode -1)
-  (evil-search-highlight-persist-remove-all)))
 
 (defun hide-line-numbers ()
   (interactive)
@@ -914,16 +910,18 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
 #+begin_src emacs-lisp
 (use-package general
-:config
-(general-create-definer my-leader-def
-  ;; :prefix my-leader
-  :prefix "SPC")
-(my-leader-def
-  :states 'normal
-  :keymaps 'override
-  "p" 'find-file-in-project
-  "f" 'counsel-rg
-))
+  :config
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "p" 'find-file-in-project
+    "f" 'counsel-rg
+    "oh" '(lambda ()
+            (interactive)
+            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
 #+end_src
 * Notes
 

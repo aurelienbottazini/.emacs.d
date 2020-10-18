@@ -652,10 +652,6 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (define-key my-keys-minor-mode-map (kbd "C-c h") 'highlight-symbol-at-point)
 (define-key my-keys-minor-mode-map (kbd "C-c H") 'unhighlight-regexp)
-(define-key my-keys-minor-mode-map (kbd "C-c oh") '(lambda ()
-  (interactive)
-  (hi-lock-mode -1)
-  (evil-search-highlight-persist-remove-all)))
 
 (defun hide-line-numbers ()
   (interactive)
@@ -697,16 +693,18 @@ file-name-handler-alist last-file-name-handler-alist)))
   (drag-stuff-global-mode t))
 
 (use-package general
-:config
-(general-create-definer my-leader-def
-  ;; :prefix my-leader
-  :prefix "SPC")
-(my-leader-def
-  :states 'normal
-  :keymaps 'override
-  "p" 'find-file-in-project
-  "f" 'counsel-rg
-))
+  :config
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "p" 'find-file-in-project
+    "f" 'counsel-rg
+    "oh" '(lambda ()
+            (interactive)
+            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
 
 (setq org-directory **local-org-folder**)
 
