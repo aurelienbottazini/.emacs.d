@@ -600,6 +600,17 @@ file-name-handler-alist last-file-name-handler-alist)))
   :modes (cfn-mode))
 (add-to-list 'flycheck-checkers 'cfn-lint))
 
+(use-package evil
+  :config
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+
+(use-package key-chord
+  :defer 2
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+
 (use-package which-key
   :diminish which-key-mode
   :config
@@ -685,16 +696,17 @@ file-name-handler-alist last-file-name-handler-alist)))
   :config
   (drag-stuff-global-mode t))
 
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-
-(use-package evil
-  :config
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+(use-package general
+:config
+(general-create-definer my-leader-def
+  ;; :prefix my-leader
+  :prefix "SPC")
+(my-leader-def
+  :states 'normal
+  :keymaps 'override
+  "p" 'find-file-in-project
+  "f" 'counsel-rg
+))
 
 (setq org-directory **local-org-folder**)
 

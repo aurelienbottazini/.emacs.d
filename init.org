@@ -794,6 +794,21 @@ adjustments for JSX.
 
 #+END_SRC
 * Bindings
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package key-chord
+  :defer 2
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+#+END_SRC
+
 ** General
 Shows a key combination helper in the minibuffer
 #+BEGIN_SRC emacs-lisp
@@ -895,21 +910,21 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (drag-stuff-global-mode t))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-#+END_SRC
+** Evil leader
 
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
-#+END_SRC
-
+#+begin_src emacs-lisp
+(use-package general
+:config
+(general-create-definer my-leader-def
+  ;; :prefix my-leader
+  :prefix "SPC")
+(my-leader-def
+  :states 'normal
+  :keymaps 'override
+  "p" 'find-file-in-project
+  "f" 'counsel-rg
+))
+#+end_src
 * Notes
 
 Some people switch to Emacs just to use org-mode.
