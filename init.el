@@ -702,6 +702,7 @@ file-name-handler-alist last-file-name-handler-alist)))
     :keymaps 'override
     "p" 'find-file-in-project
     "f" 'counsel-rg
+    "g" 'magit-status
     "oh" '(lambda ()
             (interactive)
             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))

@@ -919,6 +919,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     :keymaps 'override
     "p" 'find-file-in-project
     "f" 'counsel-rg
+    "g" 'magit-status
     "oh" '(lambda ()
             (interactive)
             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
