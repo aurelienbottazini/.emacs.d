@@ -86,6 +86,7 @@ file-name-handler-alist last-file-name-handler-alist)))
                   "/home/linuxbrew/.linuxbrew/bin/:"
                   (concat home-folder "/.config/yarn/global/node_modules/.bin/:")
                   (concat home-folder "/.local/share/n/bin/:")
+                  (concat home-folder "/.local/share/npm/bin/:")
                   (concat home-folder "/.cargo/bin/:")
                   (concat home-folder "/.local/bin/:")
                   (concat home-folder "/work/dox-compose/bin/:")
@@ -106,6 +107,7 @@ file-name-handler-alist last-file-name-handler-alist)))
                     ,(concat home-folder "/dotfiles/bin/")
                     ,(concat home-folder "/.fzf/bin")
                     ,(concat home-folder "/.local/bin")
+                    ,(concat home-folder "/.local/share/npm/bin/")
                     ,(concat home-folder "/bin")
                     "/usr/local/opt/node@10/bin/"
                     "/usr/local/bin"
@@ -569,6 +571,9 @@ file-name-handler-alist last-file-name-handler-alist)))
   (add-hook 'js2-mode-hook 'flycheck-mode)
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   :config
+  (define-key my-keys-minor-mode-map "[f" 'flycheck-previous-error)
+  (define-key my-keys-minor-mode-map "]f" 'flycheck-next-error)
+
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
     (let* ((root (locate-dominating-file

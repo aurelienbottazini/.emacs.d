@@ -28,6 +28,7 @@
  '(electric-pair-mode nil)
  '(electric-quote-string t)
  '(fci-rule-color "#383838")
+ '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
  '(global-evil-search-highlight-persist t)
  '(indicate-buffer-boundaries 'left)
