@@ -495,8 +495,7 @@ file-name-handler-alist last-file-name-handler-alist)))
                         "--single-quote" "true"
                         )
         prettier-js-command "prettier")
-  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-  (add-hook 'js2-mode-hook 'prettier-js-mode))
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode))
 
 (use-package context-coloring
   :ensure t
@@ -513,12 +512,6 @@ file-name-handler-alist last-file-name-handler-alist)))
   (web-mode-set-content-type "jsx")
   (setq emmet-expand-jsx-className? t)
   (emmet-mode)))
-
-(use-package prettier-js
-  :config
-  (add-hook 'web-mode-hook #'(lambda ()
-                               (enable-minor-mode
-                                '("\\.jsx?\\'" . prettier-js-mode)))))
 
 (use-package web-mode
   :mode "\\.vue\\'"

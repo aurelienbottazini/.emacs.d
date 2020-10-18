@@ -668,8 +668,7 @@ Auto-format JavaScript on save
                            "--single-quote" "true"
                            )
            prettier-js-command "prettier")
-     (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-     (add-hook 'js2-mode-hook 'prettier-js-mode))
+     (add-hook 'js2-mode-hook #'js2-imenu-extras-mode))
 #+END_SRC
 
 Context-coloring highlights code based on closures.
@@ -699,12 +698,6 @@ adjustments for JSX.
   (web-mode-set-content-type "jsx")
   (setq emmet-expand-jsx-className? t)
   (emmet-mode)))
-
-(use-package prettier-js
-  :config
-  (add-hook 'web-mode-hook #'(lambda ()
-                               (enable-minor-mode
-                                '("\\.jsx?\\'" . prettier-js-mode)))))
 #+END_SRC
 *** Vue
 #+BEGIN_SRC emacs-lisp
