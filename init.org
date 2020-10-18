@@ -1597,6 +1597,15 @@ See in the fringe lines added, changed and removed since last commit.
 Emacs is not an IDE but I can be pretty close to one.
 Here are some tools I use that are IDE oriented.
 
+** Projectile
+#+begin_src emacs-lisp
+(use-package projectile
+:bind-keymap
+("C-c p" . projectile-command-map)
+:config
+(projectile-mode +1))
+
+#+end_src
 ** Find file in project
 *** Examples
 #+BEGIN_SRC emacs-lisp :tangle no

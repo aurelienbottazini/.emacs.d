@@ -1093,6 +1093,12 @@ This command switches to browser."
   (add-hook 'prog-mode-hook 'diff-hl-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
+(use-package projectile
+:bind-keymap
+("C-c p" . projectile-command-map)
+:config
+(projectile-mode +1))
+
 (use-package find-file-in-project
   :ensure t
   :bind (:map  my-keys-minor-mode-map
