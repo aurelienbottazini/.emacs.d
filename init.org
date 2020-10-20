@@ -755,9 +755,10 @@ adjustments for JSX.
   (add-hook 'web-mode-hook 'flycheck-mode)
   (add-hook 'js2-mode-hook 'flycheck-mode)
   (add-hook 'cfn-mode-hook 'flycheck-mode)
+  (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
-  (define-key my-keys-minor-mode-map "[f" 'flycheck-previous-error)
-  (define-key my-keys-minor-mode-map "]f" 'flycheck-next-error)
+  (define-key evil-normal-state-map (kbd "[f") 'flycheck-previous-error)
+  (define-key evil-normal-state-map (kbd "]f") 'flycheck-next-error)
 
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
