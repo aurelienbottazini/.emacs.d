@@ -464,6 +464,7 @@ file-name-handler-alist last-file-name-handler-alist)))
         web-mode-attr-indent-offset 2)
   :config
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'js2-mode-hook (lambda() (subword-mode t)))
 
   ;; (use-package xref-js2
@@ -1112,8 +1113,6 @@ This command switches to browser."
 (use-package find-file-in-project
   :ensure t
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . find-file-in-project)
-               ;; ("C-c t" . counsel-fzf)
                ("C-c T" . find-file-in-project-by-selected)
                :map evil-normal-state-map
                ("gf" . find-file-in-project-at-point))
@@ -1126,7 +1125,7 @@ This command switches to browser."
   (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.bmp")) ffip-ignore-filenames))
   (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.ico")) ffip-ignore-filenames))
   (setq ffip-prefer-ido-mode nil)
-  (setq ffip-use-rust-fd nil) ;; find works better than fd. fd with ffip ignores my .emacs.d directory for some reason
+  (setq ffip-use-rust-fd t)
   (setq ffip-strip-file-name-regex "\\(\\.mock\\|_test\\|\\.test\\|\\.mockup\\|\\.spec\\)")
   (add-to-list 'ffip-prune-patterns "*/.git/*")
   (add-to-list 'ffip-prune-patterns "*/dist/*")
@@ -1135,10 +1134,15 @@ This command switches to browser."
   (add-to-list 'ffip-prune-patterns "*/spec/coverage/*")
   (add-to-list 'ffip-prune-patterns "*/public/*")
   (add-to-list 'ffip-prune-patterns "*/.shadow-cljs/*")
+  (add-to-list 'ffip-prune-patterns "*/vendor/*")
   (add-to-list 'ffip-prune-patterns "node_modules/*"))
 
 (require 'abo-find-in-project)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abo-find-file-with-similar-name)
+
+(use-package fzf
+  :bind (:map  my-keys-minor-mode-map
+               ("C-c t" . fzf)))
 
 (use-package dumb-jump
   :init
@@ -1324,7 +1328,7 @@ This command switches to browser."
   :states 'normal
   :keymaps 'override
   "SPC" 'counsel-rg
-  "p" 'find-file-in-project
+  "p" 'fzf
   "b" 'counsel-buffer-or-recentf
   "m" 'counsel-bookmark))
 
