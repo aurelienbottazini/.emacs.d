@@ -28,7 +28,7 @@
  '(dumb-jump-mode t)
  '(electric-pair-mode nil)
  '(electric-quote-string t)
- '(evil-undo-system 'undo-redo)
+ '(evil-undo-system nil)
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
