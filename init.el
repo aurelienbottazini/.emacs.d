@@ -105,7 +105,7 @@ file-name-handler-alist last-file-name-handler-alist)))
                   "/usr/local/sbin/"
                   "/usr/bin/"))
       )
-  (setenv "PATH" (mapconcat 'identity my-paths ";" ))
+  (setenv "PATH" (mapconcat 'identity my-paths ":" ))
   (setq exec-path my-paths))
 
 (defun check-large-file-hook ()

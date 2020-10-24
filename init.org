@@ -187,7 +187,7 @@ slow down my Emacs.
                   "/usr/local/sbin/"
                   "/usr/bin/"))
       )
-  (setenv "PATH" (mapconcat 'identity my-paths ";" ))
+  (setenv "PATH" (mapconcat 'identity my-paths ":" ))
   (setq exec-path my-paths))
 #+END_SRC
 
