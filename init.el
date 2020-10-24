@@ -1114,7 +1114,7 @@ This command switches to browser."
 
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . fzf)))
+               ("C-c t" . fzf-projectile)))
 
 (use-package dumb-jump
   :init
@@ -1300,10 +1300,13 @@ This command switches to browser."
   :states 'normal
   :keymaps 'override
   "SPC" 'counsel-rg
-  "p" 'fzf
+  "p" 'fzf-projectile
   "b" 'counsel-buffer-or-recentf
   "m" 'counsel-bookmark))
 
 (use-package origami
  :config
   (global-origami-mode))
+
+(use-package doom-modeline
+:init (doom-modeline-mode 1))

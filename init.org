@@ -1691,7 +1691,7 @@ to use `fd` instead of find.
 #+BEGIN_SRC emacs-lisp
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . fzf)))
+               ("C-c t" . fzf-projectile)))
 #+END_SRC
 
 ** Jump
@@ -1988,7 +1988,7 @@ To get a list of videos to watch do:
   :states 'normal
   :keymaps 'override
   "SPC" 'counsel-rg
-  "p" 'fzf
+  "p" 'fzf-projectile
   "b" 'counsel-buffer-or-recentf
   "m" 'counsel-bookmark))
 #+end_src
@@ -1998,6 +1998,12 @@ Code folding
 (use-package origami
  :config
   (global-origami-mode))
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+:init (doom-modeline-mode 1))
 #+END_SRC
 
 * Local variables
