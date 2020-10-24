@@ -9,9 +9,16 @@
 gc-cons-percentage 0.1
 file-name-handler-alist last-file-name-handler-alist)))
 
-(setq evil-toggle-key "C-c e")
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs))
 
-(toggle-debug-on-error)
+(setq evil-toggle-key "C-c e")
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
@@ -81,39 +88,25 @@ file-name-handler-alist last-file-name-handler-alist)))
         (my-reload-dir-locals-for-current-buffer)))))
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
-(let ((home-folder (getenv "HOME")))
-  (setenv "PATH" (concat
-                  "/home/linuxbrew/.linuxbrew/bin/:"
-                  (concat home-folder "/.config/yarn/global/node_modules/.bin/:")
-                  (concat home-folder "/.local/share/n/bin/:")
-                  (concat home-folder "/.local/share/npm/bin/:")
-                  (concat home-folder "/.cargo/bin/:")
-                  (concat home-folder "/.local/bin/:")
-                  (concat home-folder "/work/dox-compose/bin/:")
-                  (concat home-folder "/.rbenv/shims:")
-                  (concat home-folder "/.rbenv/bin:")
-                  (concat home-folder "/.fzf/bin:")
-                  "/mnt/c/Windows/system32:"
-                  "/usr/bin:"
-                  "/usr/local/bin:"
-                  "/bin"))
-
-  (setq exec-path `(
-                    "/home/linuxbrew/.linuxbrew/bin/"
-                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
-                    ,(concat home-folder "/work/dox-compose/bin/")
-                    ,(concat home-folder "/.rbenv/bin/")
-                    ,(concat home-folder "/.rbenv/shims/")
-                    ,(concat home-folder "/dotfiles/bin/")
-                    ,(concat home-folder "/.fzf/bin")
-                    ,(concat home-folder "/.local/bin")
-                    ,(concat home-folder "/.local/share/npm/bin/")
-                    ,(concat home-folder "/bin")
-                    "/usr/local/opt/node@10/bin/"
-                    "/usr/local/bin"
-                    "/bin/"
-                    "/usr/local/sbin/"
-                    "/usr/bin/")))
+(let* ((home-folder (getenv "HOME"))
+      (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
+                  ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
+                  ,(concat home-folder "/work/dox-compose/bin/")
+                  ,(concat home-folder "/.rbenv/bin/")
+                  ,(concat home-folder "/.rbenv/shims/")
+                  ,(concat home-folder "/dotfiles/bin/")
+                  ,(concat home-folder "/.fzf/bin")
+                  ,(concat home-folder "/.local/bin")
+                  ,(concat home-folder "/.local/share/npm/bin/")
+                  ,(concat home-folder "/bin")
+                  "/usr/local/opt/node@10/bin/"
+                  "/usr/local/bin"
+                  "/bin/"
+                  "/usr/local/sbin/"
+                  "/usr/bin/"))
+      )
+  (setenv "PATH" (mapconcat 'identity my-paths ";" ))
+  (setq exec-path my-paths))
 
 (defun check-large-file-hook ()
   "If a file is over a given size, turn off minor modes."
@@ -951,15 +944,7 @@ This command switches to browser."
   ;; :init
   ;; (setq evil-mode-line-format nil)
   :config
-
   (evil-mode 1)
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-
   (evil-ex-define-cmd "W" 'save-buffer))
 
 (use-package evil-indent-plus
@@ -972,7 +957,9 @@ This command switches to browser."
   :bind (("C-s" . swiper-isearch)
          :map my-keys-minor-mode-map
          ("C-c v" . ivy-push-view)
-         ("C-c V" . ivy-pop-view))
+         ("C-c V" . ivy-pop-view)
+         :map ivy-minibuffer-map
+         ("C-c C-c" . ivy-restrict-to-matches))
   :init
   (setq ivy-use-selectable-prompt t)
   ;; enable bookmarks and recent-f
@@ -988,7 +975,6 @@ This command switches to browser."
     "Occur function for `ivy-switch-buffer' using `ibuffer'."
     (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
   (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
-  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)))
 
 (use-package avy
   :bind (:map my-keys-minor-mode-map

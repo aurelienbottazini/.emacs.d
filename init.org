@@ -17,20 +17,33 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 I use Vim keybindings everywhere except with special modes
 like Magit, Dired... I setup those special modes to start with Emacs
-keybindings by default. If for any reason I encounter other modes
-where the Vim keybindings are interfering too much, I can disable the
-Vim keybindings with ~evil-toggle-key~.
+keybindings by default.
+
+#+begin_src emacs-lisp
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs))
+#+end_src
+
+If for any reason I encounter other modes where the Vim keybindings
+are interfering too much, I can disable the Vim keybindings with
+~evil-toggle-key~.
 #+BEGIN_SRC emacs-lisp
 (setq evil-toggle-key "C-c e")
 #+END_SRC
 
 If Emacs complains about a mismatched paren while trying to start
-you can use ~check-parens~
+you can use ~check-parens~ to find the mismatched parenthesis.
 #+begin_src emacs-lisp :tangle no
 (check-parens)
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (toggle-debug-on-error)
 #+end_src
 
@@ -55,6 +68,8 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
     (load "~/.emacs.d/.emacs-local"))
 #+END_SRC
 
+Zenburn is one of the most complete theme out there. It also works
+well on the terminal.
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
    :config
@@ -62,17 +77,17 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
 #+END_SRC
 
 I keep elisp I write inside the site-lisp directory. The files
-inside that directory are automatically added to the Emacs load-path.
+in that directory are automatically added to the Emacs load-path.
 #+BEGIN_SRC emacs-lisp
   (let ((default-directory  "~/.emacs.d/site-lisp/"))
     (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
-I use a special keymap ~my-keys-minor-mode-map~ where i store my global keybindings.
+I use a special keymap ~my-keys-minor-mode-map~ to store my global keybindings.
 This is mainly to use a ~defadvice~ to make sure that any key I
 define in my keymap as priority over ones defined elsewhere by
-built-in Emacs modes or 3rd party packages
+built-in Emacs modes or 3rd party packages.
 #+BEGIN_SRC emacs-lisp
   (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
   (define-minor-mode my-keys-minor-mode
@@ -151,41 +166,29 @@ functions help me with the reloading of those locals.
 I like setting the path manually as other solutions like ~exec-path-from-shell~
 slow down my Emacs.
 
+`exec-path` is used by Emacs to find executables.
+`PATH` is used by Emacs when you are running a shell in emacs
 #+BEGIN_SRC emacs-lisp
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
-(let ((home-folder (getenv "HOME")))
-  (setenv "PATH" (concat
-                  "/home/linuxbrew/.linuxbrew/bin/:"
-                  (concat home-folder "/.config/yarn/global/node_modules/.bin/:")
-                  (concat home-folder "/.local/share/n/bin/:")
-                  (concat home-folder "/.local/share/npm/bin/:")
-                  (concat home-folder "/.cargo/bin/:")
-                  (concat home-folder "/.local/bin/:")
-                  (concat home-folder "/work/dox-compose/bin/:")
-                  (concat home-folder "/.rbenv/shims:")
-                  (concat home-folder "/.rbenv/bin:")
-                  (concat home-folder "/.fzf/bin:")
-                  "/mnt/c/Windows/system32:"
-                  "/usr/bin:"
-                  "/usr/local/bin:"
-                  "/bin"))
-
-  (setq exec-path `(
-                    "/home/linuxbrew/.linuxbrew/bin/"
-                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
-                    ,(concat home-folder "/work/dox-compose/bin/")
-                    ,(concat home-folder "/.rbenv/bin/")
-                    ,(concat home-folder "/.rbenv/shims/")
-                    ,(concat home-folder "/dotfiles/bin/")
-                    ,(concat home-folder "/.fzf/bin")
-                    ,(concat home-folder "/.local/bin")
-                    ,(concat home-folder "/.local/share/npm/bin/")
-                    ,(concat home-folder "/bin")
-                    "/usr/local/opt/node@10/bin/"
-                    "/usr/local/bin"
-                    "/bin/"
-                    "/usr/local/sbin/"
-                    "/usr/bin/")))
+(let* ((home-folder (getenv "HOME"))
+      (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
+                  ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
+                  ,(concat home-folder "/work/dox-compose/bin/")
+                  ,(concat home-folder "/.rbenv/bin/")
+                  ,(concat home-folder "/.rbenv/shims/")
+                  ,(concat home-folder "/dotfiles/bin/")
+                  ,(concat home-folder "/.fzf/bin")
+                  ,(concat home-folder "/.local/bin")
+                  ,(concat home-folder "/.local/share/npm/bin/")
+                  ,(concat home-folder "/bin")
+                  "/usr/local/opt/node@10/bin/"
+                  "/usr/local/bin"
+                  "/bin/"
+                  "/usr/local/sbin/"
+                  "/usr/bin/"))
+      )
+  (setenv "PATH" (mapconcat 'identity my-paths ";" ))
+  (setq exec-path my-paths))
 #+END_SRC
 
 Emacs can be really fast with large files too. The trick is to
@@ -1289,15 +1292,7 @@ Surround things with
     ;; :init
     ;; (setq evil-mode-line-format nil)
     :config
-
     (evil-mode 1)
-    (evil-set-initial-state 'deft-mode 'insert)
-    (evil-set-initial-state 'dired-mode 'normal)
-    (evil-set-initial-state 'magit-mode 'emacs)
-    (evil-set-initial-state 'use-package-statistics 'emacs)
-    (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-    (evil-set-initial-state 'term-mode 'emacs)
-
     (evil-ex-define-cmd "W" 'save-buffer))
   #+END_SRC
 
@@ -1344,7 +1339,9 @@ them using:
     :bind (("C-s" . swiper-isearch)
            :map my-keys-minor-mode-map
            ("C-c v" . ivy-push-view)
-           ("C-c V" . ivy-pop-view))
+           ("C-c V" . ivy-pop-view)
+           :map ivy-minibuffer-map
+           ("C-c C-c" . ivy-restrict-to-matches))
     :init
     (setq ivy-use-selectable-prompt t)
     ;; enable bookmarks and recent-f
@@ -1360,7 +1357,6 @@ them using:
       "Occur function for `ivy-switch-buffer' using `ibuffer'."
       (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
     (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
-    (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)))
   #+END_SRC
 
 ** Search in visible windows
