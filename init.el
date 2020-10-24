@@ -602,6 +602,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (use-package evil
   :config
+  (setq evil-want-C-i-jump nil)
   (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
 
 (use-package key-chord
@@ -987,8 +988,7 @@ This command switches to browser."
     "Occur function for `ivy-switch-buffer' using `ibuffer'."
     (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
   (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
-  (eval-after-load "ivy"
-    '(define-key ivy-minibuffer-map (kbd "C-c SPC") 'ivy-restrict-to-matches))
+  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)))
 
 (use-package avy
   :bind (:map my-keys-minor-mode-map

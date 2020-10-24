@@ -797,6 +797,7 @@ adjustments for JSX.
 #+BEGIN_SRC emacs-lisp
 (use-package evil
   :config
+  (setq evil-want-C-i-jump nil)
   (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
 #+END_SRC
 
@@ -1359,8 +1360,7 @@ them using:
       "Occur function for `ivy-switch-buffer' using `ibuffer'."
       (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
     (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
-    (eval-after-load "ivy"
-      '(define-key ivy-minibuffer-map (kbd "C-c SPC") 'ivy-restrict-to-matches))
+    (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)))
   #+END_SRC
 
 ** Search in visible windows
