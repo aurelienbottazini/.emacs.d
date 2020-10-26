@@ -1988,7 +1988,7 @@ To get a list of videos to watch do:
   :states 'normal
   :keymaps 'override
   "SPC" 'counsel-rg
-  "p" 'fzf-projectile
+  "p" 'ffip
   "b" 'counsel-buffer-or-recentf
   "m" 'counsel-bookmark))
 #+end_src

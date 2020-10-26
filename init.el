@@ -1300,7 +1300,7 @@ This command switches to browser."
   :states 'normal
   :keymaps 'override
   "SPC" 'counsel-rg
-  "p" 'fzf-projectile
+  "p" 'ffip
   "b" 'counsel-buffer-or-recentf
   "m" 'counsel-bookmark))
 
