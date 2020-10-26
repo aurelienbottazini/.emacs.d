@@ -909,6 +909,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "f" 'counsel-rg
     "g" 'magit-status
     "r" 'emamux:run-last-command
+    "R" 'emamux:run-command
     "oh" '(lambda ()
             (interactive)
             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
