@@ -1005,13 +1005,6 @@ This command switches to browser."
 (use-package iedit
  :bind (:map my-keys-minor-mode-map ("<f6>" . iedit-mode)))
 
-(use-package multiple-cursors
-  :bind (:map my-keys-minor-mode-map
-              ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-              ("C-c c a" . mc/mark-all-like-this)
-              ("C-c c p" . mc/mark-previous-like-this)
-              ("C-c c n" . mc/mark-next-like-this)))
-
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 (setq ediff-split-window-function 'split-window-vertically)
@@ -1314,3 +1307,14 @@ This command switches to browser."
 :init (doom-modeline-mode 1))
 
 (use-package emamux)
+
+(use-package hydra
+  :config
+  (defhydra hydra-zoom (global-map "<f8>")
+    "drag"
+    ("d" drag-stuff-down "down")
+    ("u" drag-stuff-up "up")))
+
+(use-package evil-multiedit
+  :config
+  (evil-multiedit-default-keybinds))

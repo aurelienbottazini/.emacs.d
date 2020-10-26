@@ -1432,18 +1432,6 @@ Shows only matching lines with ~C-'~
  :bind (:map my-keys-minor-mode-map ("<f6>" . iedit-mode)))
 #+END_SRC
 
-Sometimes I like to use the mouse to setup multiple cursors. For
-other /multiple-cursors/ usage I prefer to use either
-~evil-visual-block-mode~ or ~iedit~.
-#+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors
-  :bind (:map my-keys-minor-mode-map
-              ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-              ("C-c c a" . mc/mark-all-like-this)
-              ("C-c c p" . mc/mark-previous-like-this)
-              ("C-c c n" . mc/mark-next-like-this)))
-#+END_SRC
-
 * VCS
 I mainly use git. I prefix all git related keybindings with ~c-c g~.
 
@@ -2012,6 +2000,29 @@ Code folding
 #+BEGIN_SRC emacs-lisp
 (use-package emamux)
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package hydra
+  :config
+  (defhydra hydra-zoom (global-map "<f8>")
+    "drag"
+    ("d" drag-stuff-down "down")
+    ("u" drag-stuff-up "up")))
+#+END_SRC
+
+In visual mode
+`R` to mark all
+`M-d` to mark next like this
+`M-D` mark and previous like this
+`C-n` and `C-p` to navigate through marks
+`enter` to toggle
+#+BEGIN_SRC emacs-lisp
+(use-package evil-multiedit
+  :config
+  (evil-multiedit-default-keybinds))
+#+END_SRC
+
+
 * Local variables
 
 # Local Variables:
