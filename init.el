@@ -684,7 +684,7 @@ file-name-handler-alist last-file-name-handler-alist)))
     "f" 'counsel-rg
     "g" 'magit-status
     "r" 'emamux:run-last-command
-    "R" 'emamux:run-command
+    "R" 'emamux:send-command
     "oh" '(lambda ()
             (interactive)
             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
