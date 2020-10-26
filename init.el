@@ -254,7 +254,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (electric-indent-mode t)
 
-(electric-pair-mode)
+(electric-pair-mode nil)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
   (minibufferp))
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)

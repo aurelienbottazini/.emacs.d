@@ -375,7 +375,7 @@ You can remove all tabs from your buffer with ~untabify~
 
 (electric-indent-mode t)
 
-(electric-pair-mode)
+(electric-pair-mode nil)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
   (minibufferp))
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
@@ -2005,7 +2005,6 @@ Code folding
 (use-package doom-modeline
 :init (doom-modeline-mode 1))
 #+END_SRC
-
 * Local variables
 
 # Local Variables:
