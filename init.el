@@ -1315,5 +1315,5 @@ This command switches to browser."
   :config
   (defhydra hydra-zoom (global-map "<f8>")
     "drag"
-    ("d" drag-stuff-down "down")
-    ("u" drag-stuff-up "up")))
+    ("j" drag-stuff-down "down")
+    ("k" drag-stuff-up "up")))
