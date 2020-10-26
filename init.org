@@ -1420,16 +1420,21 @@ I find the UI better.
 
 ** Rename
 
-~iedit~ makes it very easy to
-Prefix with ~0~ to only match in current function.
-Prefix with universal argument to repeat the previous iedit match.
-Select region and press ~F6~ again to restrict to region.
-~tab~ and ~S-tab~ to navigate between matches. ~M-;~ to clear a match.
+Bindings: https://github.com/syl20bnr/evil-iedit-state#in-iedit-state
 
-Shows only matching lines with ~C-'~
+`e` from expand region to switch to iedit state
+`S` to substitute
+`D` to delete
+`n` next
+`p` previous
+`F` reduce scope to current function
+`tab` toggle occurrence
 #+BEGIN_SRC emacs-lisp
-(use-package iedit
- :bind (:map my-keys-minor-mode-map ("<f6>" . iedit-mode)))
+(use-package iedit)
+
+(use-package evil-iedit-state
+:bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode))
+)
 #+END_SRC
 
 * VCS

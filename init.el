@@ -1002,8 +1002,11 @@ This command switches to browser."
                                              `((":" ,@fns)))
                                     items)))))
 
-(use-package iedit
- :bind (:map my-keys-minor-mode-map ("<f6>" . iedit-mode)))
+(use-package iedit)
+
+(use-package evil-iedit-state
+:bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode))
+)
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
