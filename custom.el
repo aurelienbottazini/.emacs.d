@@ -159,4 +159,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "PragmataPro Mono" :foundry "FSD " :slant normal :weight normal :height 139 :width normal))))
- '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black")))))
+ '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black"))))
+ '(mode-line-inactive ((t (:background "#474646" :foreground "#7a7979" :box (:line-width -1 :style released-button))))))
