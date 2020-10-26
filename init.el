@@ -683,6 +683,7 @@ file-name-handler-alist last-file-name-handler-alist)))
     "p" 'find-file-in-project
     "f" 'counsel-rg
     "g" 'magit-status
+    "r" 'emamux:run-last-command
     "oh" '(lambda ()
             (interactive)
             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
@@ -1310,3 +1311,5 @@ This command switches to browser."
 
 (use-package doom-modeline
 :init (doom-modeline-mode 1))
+
+(use-package emamux)

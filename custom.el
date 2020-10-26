@@ -28,6 +28,7 @@
  '(dumb-jump-mode t)
  '(electric-pair-mode nil)
  '(electric-quote-string t)
+ '(emamux:use-nearest-pane t)
  '(evil-undo-system nil)
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
