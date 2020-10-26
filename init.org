@@ -2010,19 +2010,6 @@ Code folding
     ("u" drag-stuff-up "up")))
 #+END_SRC
 
-In visual mode
-`R` to mark all
-`M-d` to mark next like this
-`M-D` mark and previous like this
-`C-n` and `C-p` to navigate through marks
-`enter` to toggle
-#+BEGIN_SRC emacs-lisp
-(use-package evil-multiedit
-  :config
-  (evil-multiedit-default-keybinds))
-#+END_SRC
-
-
 * Local variables
 
 # Local Variables:

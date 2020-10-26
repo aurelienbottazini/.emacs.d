@@ -1314,7 +1314,3 @@ This command switches to browser."
     "drag"
     ("d" drag-stuff-down "down")
     ("u" drag-stuff-up "up")))
-
-(use-package evil-multiedit
-  :config
-  (evil-multiedit-default-keybinds))
