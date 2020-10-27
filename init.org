@@ -70,6 +70,7 @@ and the name starts with local. Ex: ~(setq **local-my-variable**
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
+
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
    :config
@@ -1764,6 +1765,7 @@ The description of all the hippie expand functions is inside
 company shows a popup where you can select completions with a number
 or with ~enter~. You can also invoke the popup manually with ~C-x
 C-o~
+
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :defer 2
@@ -1775,7 +1777,7 @@ C-o~
         company-require-match 'never
         company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-dabbrev-code company-capf company-yasnippet))
+        company-backends '((company-files company-dabbrev company-capf company-yasnippet))
         company-transformers '(company-sort-by-occurrence))
   (global-company-mode +1)
 
