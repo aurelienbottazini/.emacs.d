@@ -1759,7 +1759,6 @@ C-o~
 
 #+BEGIN_SRC emacs-lisp
 (use-package company
-  :defer 2
   :diminish company-mode
   :config
   (setq company-idle-delay 0.2
@@ -1771,7 +1770,7 @@ C-o~
         company-backends '((company-files company-dabbrev company-capf company-yasnippet))
         company-transformers '(company-sort-by-occurrence))
 
-  (global-company-mode t)
+  (add-hook 'after-init-hook 'global-company-mode)
   (setq company-dabbrev-downcase nil)
   (setq company-show-numbers t)
   (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)

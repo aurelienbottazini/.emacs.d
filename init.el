@@ -1126,7 +1126,6 @@ This command switches to browser."
 (define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
 
 (use-package company
-  :defer 2
   :diminish company-mode
   :config
   (setq company-idle-delay 0.2
@@ -1138,7 +1137,7 @@ This command switches to browser."
         company-backends '((company-files company-dabbrev company-capf company-yasnippet))
         company-transformers '(company-sort-by-occurrence))
 
-  (global-company-mode t)
+  (add-hook 'after-init-hook 'global-company-mode)
   (setq company-dabbrev-downcase nil)
   (setq company-show-numbers t)
   (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)
