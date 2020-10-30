@@ -16,7 +16,8 @@ file-name-handler-alist last-file-name-handler-alist)))
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs))
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs))
 
 (setq evil-toggle-key "C-c e")
 
@@ -176,16 +177,6 @@ file-name-handler-alist last-file-name-handler-alist)))
 (recentf-mode 1)
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
-
-(defun slip-box()
-  "Setup windows to work with my slip box"
-  (interactive)
-  (delete-other-windows)
-  (find-file (concat **local-dropbox-folder** "org/slip-box/index.org"))
-  (split-window-horizontally)
-  (other-window 1)
-  (find-file (concat **local-dropbox-folder** "org/slip-box/"))
-  (other-window 1))
 
 ;; we can do the same with ivy, with M-o r
 (defun sudo ()
@@ -1306,9 +1297,6 @@ This command switches to browser."
  :config
   (global-origami-mode))
 
-(use-package doom-modeline
-:init (doom-modeline-mode 1))
-
 (use-package emamux)
 
 (use-package hydra
@@ -1317,3 +1305,5 @@ This command switches to browser."
     "drag"
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
+
+(require 'oray-slip-box)

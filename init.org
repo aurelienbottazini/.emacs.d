@@ -27,7 +27,8 @@ keybindings by default.
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs))
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs))
 #+end_src
 
 If for any reason I encounter other modes where the Vim keybindings
@@ -296,16 +297,6 @@ You can remove all tabs from your buffer with ~untabify~
 
 * Utility functions
 #+BEGIN_SRC emacs-lisp
-(defun slip-box()
-  "Setup windows to work with my slip box"
-  (interactive)
-  (delete-other-windows)
-  (find-file (concat **local-dropbox-folder** "org/slip-box/index.org"))
-  (split-window-horizontally)
-  (other-window 1)
-  (find-file (concat **local-dropbox-folder** "org/slip-box/"))
-  (other-window 1))
-
 ;; we can do the same with ivy, with M-o r
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -1998,7 +1989,7 @@ Code folding
 #+END_SRC
 
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package doom-modeline
 :init (doom-modeline-mode 1))
 #+END_SRC
@@ -2016,6 +2007,10 @@ Code folding
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(require 'oray-slip-box)
+#+end_src
 
 * Local variables
 
