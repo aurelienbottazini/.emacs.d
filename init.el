@@ -914,7 +914,6 @@ This command switches to browser."
   (global-evil-matchit-mode 1))
 
 (use-package evil-search-highlight-persist
-  :defer 2
   :config
   (global-evil-search-highlight-persist t))
 

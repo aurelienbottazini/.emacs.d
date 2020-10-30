@@ -1258,7 +1258,6 @@ Surround things with
   Persist highlight from ~evil search~ and ~isearch~
   #+BEGIN_SRC emacs-lisp
   (use-package evil-search-highlight-persist
-    :defer 2
     :config
     (global-evil-search-highlight-persist t))
   #+END_SRC
