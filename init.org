@@ -2005,6 +2005,10 @@ Code folding
 (require 'oray-slip-box)
 #+end_src
 
+#+begin_src emacs-lisp
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
+#+end_src
+
 * Local variables
 
 # Local Variables:

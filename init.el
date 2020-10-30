@@ -1307,3 +1307,5 @@ This command switches to browser."
     ("k" drag-stuff-up "up")))
 
 (require 'oray-slip-box)
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
