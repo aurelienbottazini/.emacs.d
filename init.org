@@ -1770,9 +1770,8 @@ C-o~
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
         company-backends '((company-files company-dabbrev company-capf company-yasnippet))
         company-transformers '(company-sort-by-occurrence))
-  (global-company-mode +1)
 
-  (add-hook 'after-init-hook 'global-company-mode)
+  (global-company-mode t)
   (setq company-dabbrev-downcase nil)
   (setq company-show-numbers t)
   (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)
@@ -1786,30 +1785,7 @@ C-o~
   (autoload 'company-capf "company-capf")
   (autoload 'company-yasnippet "company-yasnippet")
   (autoload 'company-elisp "company-elisp")
-  (autoload 'company-files "company-files")
-  (let ((map company-active-map))
-    (mapc
-     (lambda (x)
-       (define-key map (format "%d" x) 'ora-company-number))
-     (number-sequence 0 9))
-    (define-key map " " (lambda ()
-                          (interactive)
-                          (company-abort)
-                          (self-insert-command 1)))
-    (define-key map (kbd "<return>") nil))
-
-  (defun ora-company-number ()
-    "Forward to `company-complete-number'.
-
-     Unless the number is potentially part of the candidate.
-     In that case, insert the number."
-    (interactive)
-    (let* ((k (this-command-keys))
-           (re (concat "^" company-prefix k)))
-      (if (cl-find-if (lambda (s) (string-match re s))
-                      company-candidates)
-          (self-insert-command 1)
-        (company-complete-number (string-to-number k))))))
+  (autoload 'company-files "company-files"))
 #+END_SRC
 
 ** Snippets
