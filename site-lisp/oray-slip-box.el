@@ -14,16 +14,21 @@
 
 (defun next-slip-box-card-letter (card-filename)
   (let* ((last-char (substring card-filename -1))
-         (last-number) (string-to-number last-char))
-    (cond ((> last-number 0) (number-to-string (+ 1 last-number)))
+         (all-but-last-char (substring card-filename 0 -1))
+         (last-number (string-to-number last-char)))
+    (cond ((> last-number 0) (concat all-but-last-char (number-to-string (+ 1 last-number))))
           (t 3)
           ))
   )
 
 (ert-deftest next-slip-box-card-letter-test ()
   "Tests the rendering of `quote' symbols in `pp-to-string'."
-  (should (= (next-slip-box-card-letter "1") "2"))
-  (should (= (next-slip-box-card-letter "9") "10"))
+  (should (string= (next-slip-box-card-letter "1") "2"))
+  (should (string= (next-slip-box-card-letter "9") "10"))
+  (should (string= (next-slip-box-card-letter "a1") "a2"))
+  (should (string= (next-slip-box-card-letter "a19") "a20"))
   )
+
+;; (ert "")
 
 (provide 'oray-slip-box)
