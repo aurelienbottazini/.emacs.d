@@ -1988,13 +1988,6 @@ Code folding
   (global-origami-mode))
 #+END_SRC
 
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package doom-modeline
-:init (doom-modeline-mode 1))
-#+END_SRC
-
-
 #+BEGIN_SRC emacs-lisp
 (use-package emamux)
 #+END_SRC
