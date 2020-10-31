@@ -1283,3 +1283,11 @@ This command switches to browser."
 (require 'oray-slip-box)
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom-face
+  (mode-line ((t (:height 0.8))))
+  (mode-line-inactive ((t (:height 0.8))))
+  :config
+  (setq doom-modeline-height 10)))
