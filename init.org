@@ -409,12 +409,8 @@ You can remove all tabs from your buffer with ~untabify~
 
 *** [[https://gist.github.com/aurelienbottazini/63b6fbd69e570374975a8b3b86798dae][Ansi colors for a light terminal]]
 * Windows
-Splitting can be done with ~C-x 2~ and ~C-x 3~ but I prefer more
-memorable keybindings.
-#+BEGIN_SRC emacs-lisp
-(define-key my-keys-minor-mode-map (kbd "C-c \\") 'split-window-right)
-(define-key my-keys-minor-mode-map (kbd "C-c -") 'split-window-below)
-#+END_SRC
+Splitting can be done with ~C-x 2~ and ~C-x 3~ but I use mostly
+~C-w v~ and ~C-w s~ to split vertically and horizontally.
 
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
 to [[file:~/dotfiles/tmux/.tmux.conf::is_vim_or_emacs='echo%20"#{pane_current_command}"%20|%20grep%20-iqE%20"vim|emacs|reattach-to-user-namespace"'%20bind%20-n%20C-h%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-h"%20"select-pane%20-L"%20bind%20-n%20C-j%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-j"%20"select-pane%20-D"%20bind%20-n%20C-k%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-k"%20"select-pane%20-U"%20bind%20-n%20C-l%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-l"%20"select-pane%20-R"][make it work seamlessly]] with Emacs.
@@ -1998,6 +1994,15 @@ Code folding
   :config
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
   (ivy-posframe-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package default-text-scale
+  :config
+  (define-key my-keys-minor-mode-map (kbd "C-=") 'default-text-scale-reset)
+  (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
 #+end_src
 
 * Local variables

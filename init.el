@@ -269,9 +269,6 @@ file-name-handler-alist last-file-name-handler-alist)))
   (diminish 'my-keys-minor-mode)
   (diminish 'eldoc-mode))
 
-(define-key my-keys-minor-mode-map (kbd "C-c \\") 'split-window-right)
-(define-key my-keys-minor-mode-map (kbd "C-c -") 'split-window-below)
-
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -1296,3 +1293,10 @@ This command switches to browser."
   :config
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
   (ivy-posframe-mode 1))
+
+(use-package default-text-scale
+  :config
+  (define-key my-keys-minor-mode-map (kbd "C-=") 'default-text-scale-reset)
+  (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
