@@ -1291,3 +1291,8 @@ This command switches to browser."
   (mode-line-inactive ((t (:height 0.8))))
   :config
   (setq doom-modeline-height 10)))
+
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+  (ivy-posframe-mode 1))

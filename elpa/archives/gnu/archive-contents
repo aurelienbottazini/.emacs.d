@@ -720,7 +720,7 @@
 		     (:keywords "languages" "lisp")
 		     (:url . "http://elpa.gnu.org/packages/elisp-benchmarks.html"))])
  (emms .
-       [(5 42)
+       [(6 0)
 	((cl-lib
 	  (0 5)))
 	"The Emacs Multimedia System" tar
@@ -1099,7 +1099,7 @@
 		 (:maintainer "Clemens Radermacher" . "clemera@posteo.net")
 		 (:url . "https://github.com/clemera/ivy-explorer"))])
  (ivy-posframe .
-	       [(0 5 1)
+	       [(0 5 2)
 		((emacs
 		  (26 0))
 		 (posframe
@@ -1371,7 +1371,7 @@
 			(:maintainer "Protesilaos Stavrou" . "info@protesilaos.com")
 			(:url . "https://gitlab.com/protesilaos/modus-themes"))])
  (multishell .
-	     [(1 1 5)
+	     [(1 1 9)
 	      ((cl-lib
 		(0 5)))
 	      "Easily use multiple shell buffers, local and remote" tar
@@ -1657,7 +1657,7 @@
 	   ("Mario Lang" . "mlang@delysid.org"))
 	  (:maintainer "Mario Lang" . "mlang@delysid.org"))])
  (posframe .
-	   [(0 8 1)
+	   [(0 8 2)
 	    ((emacs
 	      (26)))
 	    "Pop a posframe (just a frame) at point" single
@@ -2211,7 +2211,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:keywords "convenience"))])
  (tramp .
-	[(2 4 4 2)
+	[(2 4 4 3)
 	 ((emacs
 	   (24 4)))
 	 "Transparent Remote Access, Multiple Protocol" tar
