@@ -1301,13 +1301,3 @@ This command switches to browser."
   (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
-
-(use-package centaur-tabs
- :config
-  (centaur-tabs-mode t)
-  (setq centaur-tabs-style "bar")
- :bind
-  (:map evil-normal-state-map
-             ("g t" . centaur-tabs-forward)
-             ("g T" . centaur-tabs-backward))
-)
