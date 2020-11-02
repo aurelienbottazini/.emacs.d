@@ -608,7 +608,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 (define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
 (define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
 (define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
-(define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file **local-note-file**)))
+(define-key my-keys-minor-mode-map (kbd "C-c jg") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/gtd.org"))))
 (define-key my-keys-minor-mode-map (kbd "C-c js") 'slip-box)
 (define-key my-keys-minor-mode-map (kbd "C-c ji") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/slip-box/index.org"))))
 (define-key my-keys-minor-mode-map (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
@@ -673,9 +673,7 @@ file-name-handler-alist last-file-name-handler-alist)))
     "g" 'magit-status
     "r" 'emamux:run-last-command
     "R" 'emamux:send-command
-    "oh" '(lambda ()
-            (interactive)
-            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))))
+    ))
 
 (setq org-directory **local-org-folder**)
 
@@ -709,7 +707,7 @@ file-name-handler-alist last-file-name-handler-alist)))
  :config
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory **local-deft-directory**))
+       deft-directory (concat **local-dropbox-folder** "org/notes")))
 
 (use-package org-ref
   :defer 2
@@ -811,7 +809,7 @@ file-name-handler-alist last-file-name-handler-alist)))
         ;; ... add all the components here (see below)...
         ;; ("wiki" :components ("wiki-files"))
         )
-      org-export-with-toc nil
+      org-export-with-toc t
       org-html-doctype "html5"
       org-html-head nil
       org-html-head-include-default-style nil
@@ -911,6 +909,12 @@ This command switches to browser."
   (global-evil-matchit-mode 1))
 
 (use-package evil-search-highlight-persist
+  :bind  (:map my-keys-minor-mode-map
+              ("C-c oh" . (lambda ()
+                            (interactive)
+                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+               )
+              )
   :config
   (global-evil-search-highlight-persist t))
 
@@ -946,10 +950,12 @@ This command switches to browser."
   :config
   (use-package ivy-hydra)
   (ivy-mode 1)
+
   (defun ivy-switch-buffer-occur ()
     "Occur function for `ivy-switch-buffer' using `ibuffer'."
     (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
-  (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
+  (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur)
+  )
 
 (use-package avy
   :bind (:map my-keys-minor-mode-map
@@ -1287,12 +1293,7 @@ This command switches to browser."
   (mode-line ((t (:height 0.8))))
   (mode-line-inactive ((t (:height 0.8))))
   :config
-  (setq doom-modeline-height 10)))
-
-(use-package ivy-posframe
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-  (ivy-posframe-mode 1))
+  (setq doom-modeline-height 10))
 
 (use-package default-text-scale
   :config
@@ -1300,3 +1301,13 @@ This command switches to browser."
   (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
+
+(use-package centaur-tabs
+ :config
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-style "bar")
+ :bind
+  (:map evil-normal-state-map
+             ("g t" . centaur-tabs-forward)
+             ("g T" . centaur-tabs-backward))
+)

@@ -7,3 +7,4 @@ transient
 /projectile-bookmarks.eld
 /.mc-lists.el
 bookmarks
+/eshell/
