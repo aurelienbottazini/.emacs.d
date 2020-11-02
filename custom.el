@@ -165,6 +165,6 @@
  '(mode-line ((t (:height 0.8))))
  '(mode-line-inactive ((t (:background "#474646" :foreground "#7a7979" :box (:line-width -1 :style released-button)))))
  '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
- '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :box (:line-width 1 :style released-button)))))
- '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#4f4f4f"))))
+ '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :foreground "#f0dfaf" :box (:line-width 1 :style released-button) :height 0.9))))
+ '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#4f4f4f" :foreground "#989890" :height 0.8))))
  '(tab-line-tab-current ((t (:inherit tab-line-tab)))))
