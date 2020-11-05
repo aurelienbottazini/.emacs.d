@@ -2004,6 +2004,13 @@ Code folding
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package ivy-rich
+:config
+(ivy-rich-mode 1)
+(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+#+end_src
+
 * Local variables
 
 # Local Variables:
