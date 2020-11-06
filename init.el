@@ -100,6 +100,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 (let* ((home-folder (getenv "HOME"))
       (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
                   ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
+                  ,(concat home-folder "/.local/share/n/bin")
                   ,(concat home-folder "/work/dox-compose/bin/")
                   ,(concat home-folder "/.rbenv/bin/")
                   ,(concat home-folder "/.rbenv/shims/")
