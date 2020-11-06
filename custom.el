@@ -113,6 +113,7 @@
      (ffip-find-options . "-not -size +64k -not -iwholename './target/debug/*'")
      (org-confirm-babel-evaluate)))
  '(scroll-bar-mode nil)
+ '(scroll-conservatively 1)
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
  '(speedbar-default-position 'right)
