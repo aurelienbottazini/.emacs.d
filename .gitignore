@@ -8,3 +8,5 @@ transient
 /.mc-lists.el
 bookmarks
 /eshell/
+/.emacs.desktop
+/.emacs.desktop.lock
