@@ -19,7 +19,7 @@
   :init (doom-modeline-mode 1)
   :custom-face
   (mode-line ((t (:height 0.8))))
-  (mode-line-inactive ((t (:height 0.8))))
+  (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
   :config
   (setq doom-modeline-height 10))
 
@@ -630,6 +630,7 @@ cons cell (regexp . minor-mode)."
 (define-key my-keys-minor-mode-map (kbd "C-c oll") 'show-line-numbers)
 (define-key my-keys-minor-mode-map (kbd "C-c ow") 'visual-line-mode)
 (define-key my-keys-minor-mode-map (kbd "C-c of") 'auto-fill-mode)
+(global-hl-line-mode t)
 (define-key my-keys-minor-mode-map (kbd "C-c og") 'global-hl-line-mode)
 (define-key my-keys-minor-mode-map (kbd "C-c op") 'show-paren-mode)
 
@@ -941,11 +942,12 @@ This command switches to browser."
   :diminish ivy-mode
   :bind (("C-s" . swiper-isearch)
          :map my-keys-minor-mode-map
-         ("C-c v" . ivy-push-view)
-         ("C-c V" . ivy-pop-view)
+         ("C-c v" . ivy-switch-view)
+         ("C-c V" . ivy-push-view)
          :map ivy-minibuffer-map
          ("C-c C-c" . ivy-restrict-to-matches))
   :init
+  (setq ivy-display-style 'fancy)
   (setq ivy-use-selectable-prompt t)
   (setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
   (setq enable-recursive-minibuffers t)
