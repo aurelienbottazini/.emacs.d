@@ -9,6 +9,8 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
+(toggle-debug-on-error)
+
 (use-package zenburn-theme
  :config
  (load-theme 'zenburn t))
@@ -952,7 +954,7 @@ This command switches to browser."
         '((t . ivy--regex-plus)))
   :config
   (use-package ivy-hydra)
-  (ivy-mode 1)
+  (ivy-mode 1))
 
 (use-package avy
   :bind (:map my-keys-minor-mode-map
