@@ -5,21 +5,9 @@
       file-name-handler-alist nil)
 
 (add-hook 'emacs-startup-hook (lambda ()
-(setq gc-cons-threshold 16777216
-gc-cons-percentage 0.1
-file-name-handler-alist last-file-name-handler-alist)))
-
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs))
-
-(setq evil-toggle-key "C-c e")
+                                (setq gc-cons-threshold 16777216
+                                      gc-cons-percentage 0.1
+                                      file-name-handler-alist last-file-name-handler-alist)))
 
 (use-package zenburn-theme
  :config
@@ -63,9 +51,9 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
-(setq ;; this tells package.el not to add those pesky customized variable settings
-      ;; at the end of your init.el
-      package--init-file-ensured t)
+;; this tells package.el not to add those pesky customized variable settings at
+;; the end of your init.el
+(setq package--init-file-ensured t)
 
 (package-initialize)
 (unless package-archive-contents
@@ -78,8 +66,10 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (require-package 'use-package)
 (require 'use-package)
-(setq use-package-compute-statistics t) ;; For (use-package-report)
-(setq use-package-always-ensure t) ;; Install package if it is missing
+
+;; For (use-package-report). Shows which package is slow to start.
+(setq use-package-compute-statistics t)
+(setq use-package-always-ensure t) ; Install package if it is missing
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -134,9 +124,9 @@ file-name-handler-alist last-file-name-handler-alist)))
       tab-always-indent 'complete ; try to indent first, if already indented try to complete
 )
 
-(make-variable-buffer-local 'compile-command)
-(defalias 'yes-or-no-p 'y-or-n-p) ;; instead of typing yes or no, type y or n
-(setq ring-bell-function 'ignore) ;; please don't startle me with a bell!
+(make-variable-buffer-local 'compile-command) ; makes the compile command be buffer specific.
+(defalias 'yes-or-no-p 'y-or-n-p) ; instead of typing yes or no, type y or n
+(setq ring-bell-function 'ignore) ; please don't startle me with a bell!
 
 (setq backup-by-copying t      ; don't clobber symlinks
       backup-directory-alist
@@ -154,12 +144,14 @@ file-name-handler-alist last-file-name-handler-alist)))
 )
 
 (setq global-auto-revert-non-file-buffers t) ; also auto-revert dired buffers and other special buffers
+
 ;; if file has no change, just load any changes
 ;; coming from an external process
 (global-auto-revert-mode 1)
 
-
-(pending-delete-mode 1) ; replace selected text when typing
+;; replace selected text when typing. Not very useful as I use vim keybindings.
+;; Still nice to have as a default
+(pending-delete-mode 1)
 
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
@@ -174,10 +166,11 @@ file-name-handler-alist last-file-name-handler-alist)))
 (setq reb-re-syntax 'string)
 
 (setq-default
- indent-tabs-mode nil    ;no tabs
+ indent-tabs-mode nil    ; no tabs
  c-basic-offset 2)
 
 (setq-default whitespace-style '(face trailing tabs tab-mark))
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook 'whitespace-mode)
 (eval-after-load "whitespace"
@@ -187,7 +180,6 @@ file-name-handler-alist last-file-name-handler-alist)))
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-;; we can do the same with ivy, with M-o r
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)
@@ -197,7 +189,8 @@ file-name-handler-alist last-file-name-handler-alist)))
              buffer-file-name))))
 
 (defun enable-minor-mode (my-pair)
-  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
+  "Enable minor mode if filename match the regexp. MY-PAIR is a
+cons cell (regexp . minor-mode)."
   (if (buffer-file-name)
       (if (string-match (car my-pair) buffer-file-name)
           (funcall (cdr my-pair)))))
@@ -247,8 +240,6 @@ file-name-handler-alist last-file-name-handler-alist)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
       (set-buffer-file-coding-system 'unix))))
 
-(add-hook 'find-file-hooks 'abo-change-line-endings-to-unix)
-
 (blink-cursor-mode 0)
 (column-number-mode) ; column number in the mode line
 
@@ -261,7 +252,6 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (setq frame-title-format "emacs")
 
-(define-key my-keys-minor-mode-map (kbd "C-c op") 'show-paren-mode)
 (setq blink-matching-paren 'jump-offscreen)
 
 ;; makes fringe big enough with HDPI
@@ -410,16 +400,13 @@ file-name-handler-alist last-file-name-handler-alist)))
   (add-hook 'sgml-mode-hook
             (lambda ()
               (emmet-mode)
-              (setq emmet-expand-jsx-className? nil)))
-              )
+              (setq emmet-expand-jsx-className? nil))))
 
-(use-package scss-mode
-  :mode "\\.scss\\'")
+(use-package scss-mode :mode "\\.scss\\'")
 
 (use-package sass-mode :mode "\\.sass\\'")
 
-(use-package less-css-mode
-  :mode "\\.less\\'")
+(use-package less-css-mode :mode "\\.less\\'")
 
 (require 'compile)
 (setq compilation-error-regexp-alist-alist
@@ -642,6 +629,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 (define-key my-keys-minor-mode-map (kbd "C-c ow") 'visual-line-mode)
 (define-key my-keys-minor-mode-map (kbd "C-c of") 'auto-fill-mode)
 (define-key my-keys-minor-mode-map (kbd "C-c og") 'global-hl-line-mode)
+(define-key my-keys-minor-mode-map (kbd "C-c op") 'show-paren-mode)
 
 (use-package rainbow-mode
   :diminish rainbow-mode
@@ -672,19 +660,20 @@ file-name-handler-alist last-file-name-handler-alist)))
 (use-package general
   :config
   (general-create-definer my-leader-def
-    ;; :prefix my-leader
     :prefix "SPC")
   (my-leader-def
     :states 'normal
     :keymaps 'override
-    "p" 'find-file-in-project
-    "f" 'counsel-rg
+    "SPC" 'counsel-rg
+    "p" 'ffip
     "g" 'magit-status
+    "m" 'counsel-bookmark
+    "b" 'counsel-buffer-or-recentf
     "r" 'emamux:run-last-command
     "R" 'emamux:send-command
     ))
 
-(setq org-directory **local-org-folder**)
+(setq org-directory **local-dropbox-folder**)
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -692,7 +681,7 @@ file-name-handler-alist last-file-name-handler-alist)))
 
 (use-package evil
   :init
-  (setq org-use-speed-commands nil)
+  (setq org-use-speed-commands nil) ; they don't work well with Evil.
   :config
   (evil-define-key 'normal org-mode-map
     (kbd "M-l") 'org-shiftmetaright
@@ -721,12 +710,11 @@ file-name-handler-alist last-file-name-handler-alist)))
 (use-package org-ref
   :defer 2
   :config
-  (setq reftex-default-bibliography `(,(concat **local-org-folder** "/references.bib")))
+  (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
 
-  ;; see org-ref for use of these variables
-  (setq org-ref-bibliography-notes (concat **local-org-folder** "/references-notes/")
-        org-ref-default-bibliography `(,(concat **local-org-folder** "/references.bib"))
-        org-ref-pdf-directory (concat **local-org-folder** "/bibtex-pdfs/"))
+  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references-notes/")
+        org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
+        org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
   (require 'org-ref-pdf)
   (require 'org-ref-url-utils)
   (require 'org-ref-isbn)
@@ -738,7 +726,7 @@ file-name-handler-alist last-file-name-handler-alist)))
   :config
   (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
   (setq bibtex-completion-bibliography reftex-default-bibliography)
-  (setq bibtex-completion-notes-path (concat **local-org-folder** "/references-notes/")))
+  (setq bibtex-completion-notes-path (concat **local-dropbox-folder** "org/references-notes/")))
 
 (use-package markdown-mode
  :mode "\\.md\\'")
@@ -798,8 +786,8 @@ file-name-handler-alist last-file-name-handler-alist)))
 (setq org-src-preserve-indentation nil
       org-html-indent nil
       org-edit-src-content-indentation 0)
-(use-package htmlize :defer 2) ;; for org html export
-(setq system-time-locale "C") ;; make sure time local is in english when exporting
+(use-package htmlize :defer 2) ; for org html export
+(setq system-time-locale "C") ; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
 (setq org-publish-project-alist
       '(
@@ -833,7 +821,7 @@ file-name-handler-alist last-file-name-handler-alist)))
             (org-indent-mode t)
             (add-hook 'before-save-hook 'time-stamp nil 'local)))
 
-(add-hook 'write-file-hooks 'time-stamp) ; update when saving
+(add-hook 'write-file-hooks 'time-stamp) ; update time-stamp on save
 (require 'ox-publish)
 (setq system-time-locale "C") ;; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
@@ -893,7 +881,17 @@ This command switches to browser."
   (with-eval-after-load 'evil-maps
     (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
 
-(use-package evil-easymotion)
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs))
+
+(setq evil-toggle-key "C-c e")
 
 (use-package evil-surround
   :after evil
@@ -928,9 +926,6 @@ This command switches to browser."
   (global-evil-search-highlight-persist t))
 
 (use-package evil
-  :ensure t
-  ;; :init
-  ;; (setq evil-mode-line-format nil)
   :config
   (evil-mode 1)
   (evil-ex-define-cmd "W" 'save-buffer))
@@ -950,8 +945,7 @@ This command switches to browser."
          ("C-c C-c" . ivy-restrict-to-matches))
   :init
   (setq ivy-use-selectable-prompt t)
-  ;; enable bookmarks and recent-f
-  (setq ivy-use-virtual-buffers t)
+  (setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
   (setq enable-recursive-minibuffers t)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
@@ -959,12 +953,6 @@ This command switches to browser."
   :config
   (use-package ivy-hydra)
   (ivy-mode 1)
-
-  (defun ivy-switch-buffer-occur ()
-    "Occur function for `ivy-switch-buffer' using `ibuffer'."
-    (ibuffer nil (buffer-name) (list (cons 'name ivy--old-re))))
-  (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur)
-  )
 
 (use-package avy
   :bind (:map my-keys-minor-mode-map
@@ -992,23 +980,22 @@ This command switches to browser."
   :init
   (setq counsel-git-cmd "rg --files")
   (setq counsel-rg-base-command
-        "rg --smart-case -M 120 --hidden --no-heading --line-number --color never %s ."))
+        "rg --smart-case -M 120 --hidden --no-heading --line-number --color never %s .")
 
   :config
-(eval-after-load "counsel" '(progn
-                              (defun counsel-imenu-categorize-functions (items)
-                                "Categorize all the functions of imenu."
-                                (let ((fns (cl-remove-if #'listp items :key #'cdr)))
-                                  (if fns
-                                      (nconc (cl-remove-if #'nlistp items :key #'cdr)
-                                             `((":" ,@fns)))
-                                    items)))))
+  (eval-after-load "counsel" '(progn
+                                (defun counsel-imenu-categorize-functions (items)
+                                  "Categorize all the functions of imenu."
+                                  (let ((fns (cl-remove-if #'listp items :key #'cdr)))
+                                    (if fns
+                                        (nconc (cl-remove-if #'nlistp items :key #'cdr)
+                                               `((":" ,@fns)))
+                                      items))))))
 
 (use-package iedit)
 
 (use-package evil-iedit-state
-:bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode))
-)
+  :bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode)))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
@@ -1062,13 +1049,6 @@ This command switches to browser."
 (use-package evil
   :config
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(defun ab-run-gitsh ()
-  "Start gitsh in current git project. Uses st as a terminal."
-  (interactive)
-  (let ((default-directory (locate-dominating-file (expand-file-name default-directory) ".gitignore")))
-    (start-process "gitsh" nil "gnome-terminal" "--geometry=120x70" "--class=scratch-term" "--" "gitsh")))
-(define-key my-keys-minor-mode-map (kbd "C-c gg") 'ab-run-gitsh)
 
 (use-package diff-hl
   :after magit
@@ -1265,20 +1245,6 @@ This command switches to browser."
  :bind (:map dired-mode-map
              ("P" . peep-dired)))
 
-(use-package general
- :config
-(general-create-definer my-leader-def
-  ;; :prefix my-leader
-  :prefix "SPC")
-
-(my-leader-def
-  :states 'normal
-  :keymaps 'override
-  "SPC" 'counsel-rg
-  "p" 'ffip
-  "b" 'counsel-buffer-or-recentf
-  "m" 'counsel-bookmark))
-
 (use-package origami
  :config
   (global-origami-mode))
@@ -1287,7 +1253,7 @@ This command switches to browser."
 
 (use-package hydra
   :config
-  (defhydra hydra-zoom (global-map "<f8>")
+  (defhydra hydra-utils (global-map "<f8>")
     "drag"
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
