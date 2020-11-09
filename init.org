@@ -39,6 +39,14 @@ well on the terminal.
    (load-theme 'zenburn t))
 #+END_SRC
 
+It is important to load custom settings early. Those are the ones
+managed by Emacs through customization menus. They can impact the
+loading of other packages.
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file (concat user-emacs-directory "custom.el"))
+  (load custom-file)
+#+END_SRC
+
 A better buffer bar­mode-line in Emacs vocabulary.
 #+begin_src emacs-lisp
 (use-package doom-modeline
@@ -49,14 +57,6 @@ A better buffer bar­mode-line in Emacs vocabulary.
   :config
   (setq doom-modeline-height 10))
 #+end_src
-
-It is important to load custom settings early. Those are the ones
-managed by Emacs through customization menus. They can impact the
-loading of other packages.
-#+BEGIN_SRC emacs-lisp
-  (setq custom-file (concat user-emacs-directory "custom.el"))
-  (load custom-file)
-#+END_SRC
 
 As I work on different computers, I need slightly different
 settings. Instead of embedding machine specific code through
@@ -889,8 +889,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "SPC" 'counsel-rg
     "p" 'ffip
     "g" 'magit-status
-    "m" 'counsel-bookmark
-    "b" 'counsel-buffer-or-recentf
     "r" 'emamux:run-last-command
     "R" 'emamux:send-command
     ))
@@ -1391,7 +1389,7 @@ I find the UI better.
          :map minibuffer-local-map
          ("C-r" . counsel-minibuffer-history)
          :map my-keys-minor-mode-map
-         ("C-c r" . counsel-recentf)
+         ("C-c r" . counsel-buffer-or-recentf)
          ("C-c i" . counsel-imenu)
          ("C-c m" . counsel-bookmark))
   :init

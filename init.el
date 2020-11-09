@@ -15,6 +15,9 @@
  :config
  (load-theme 'zenburn t))
 
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file)
+
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
   :custom-face
@@ -22,9 +25,6 @@
   (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
   :config
   (setq doom-modeline-height 10))
-
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file)
 
 (if (file-exists-p "~/.emacs.d/.emacs-local")
   (load "~/.emacs.d/.emacs-local"))
@@ -670,8 +670,6 @@ cons cell (regexp . minor-mode)."
     "SPC" 'counsel-rg
     "p" 'ffip
     "g" 'magit-status
-    "m" 'counsel-bookmark
-    "b" 'counsel-buffer-or-recentf
     "r" 'emamux:run-last-command
     "R" 'emamux:send-command
     ))
@@ -978,7 +976,7 @@ This command switches to browser."
          :map minibuffer-local-map
          ("C-r" . counsel-minibuffer-history)
          :map my-keys-minor-mode-map
-         ("C-c r" . counsel-recentf)
+         ("C-c r" . counsel-buffer-or-recentf)
          ("C-c i" . counsel-imenu)
          ("C-c m" . counsel-bookmark))
   :init
