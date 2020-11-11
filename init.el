@@ -949,7 +949,7 @@ This command switches to browser."
   (setq enable-recursive-minibuffers t)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
-        '((t . ivy--regex-plus)))
+        '((t . ivy--regex-fuzzy)))
   :config
   (use-package ivy-hydra)
   (ivy-mode 1))
