@@ -25,7 +25,7 @@ you can use ~check-parens~ to find the mismatched parenthesis.
 Emacs tends to swallow errors to not annoy the user.
 If something is not working correctly there is a good chance you will
 discover what is wrong by running ~toggle-debug-on-error~
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (toggle-debug-on-error)
 #+end_src
 
@@ -1381,6 +1381,7 @@ I find the UI better.
          ("C-x C-m" . counsel-M-x)
          ("C-c C-m" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
+         ("C-x b" . ibuffer)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
          ("<f1> l" . counsel-find-library)
