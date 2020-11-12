@@ -962,7 +962,7 @@ To add references to my reference library:
   (require 'org-ref-pdf)
   (require 'org-ref-url-utils)
   (require 'org-ref-isbn)
-  (require 'org-ref-bibtex))
+  (require 'org-ref-bibtex)
   (require 'doi-utils))
 
 (use-package ivy-bibtex

@@ -717,7 +717,7 @@ cons cell (regexp . minor-mode)."
   (require 'org-ref-pdf)
   (require 'org-ref-url-utils)
   (require 'org-ref-isbn)
-  (require 'org-ref-bibtex))
+  (require 'org-ref-bibtex)
   (require 'doi-utils))
 
 (use-package ivy-bibtex
