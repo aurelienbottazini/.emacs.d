@@ -1390,7 +1390,7 @@ I find the UI better.
          ("C-x C-m" . counsel-M-x)
          ("C-c C-m" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
-         ("C-x b" . ibuffer)
+         ("C-x b" . counsel-switch-buffer)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
          ("<f1> l" . counsel-find-library)
@@ -1973,13 +1973,6 @@ Code folding
   (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package ivy-rich
-:config
-(ivy-rich-mode 1)
-(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 #+end_src
 
  #+begin_src emacs-lisp

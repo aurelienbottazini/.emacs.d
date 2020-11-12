@@ -967,7 +967,7 @@ This command switches to browser."
          ("C-x C-m" . counsel-M-x)
          ("C-c C-m" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
-         ("C-x b" . ibuffer)
+         ("C-x b" . counsel-switch-buffer)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
          ("<f1> l" . counsel-find-library)
@@ -1270,11 +1270,6 @@ This command switches to browser."
   (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
-
-(use-package ivy-rich
-:config
-(ivy-rich-mode 1)
-(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (desktop-save-mode 1)
 
