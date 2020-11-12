@@ -110,7 +110,7 @@
 
 (defun check-large-file-hook ()
   "If a file is over a given size, turn off minor modes."
-  (when (> (buffer-size) (* 1024 100)) ;; 100K
+  (when (> (buffer-size) (* 1024 100)) ; 100K
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
@@ -711,13 +711,14 @@ cons cell (regexp . minor-mode)."
   :config
   (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
 
-  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references-notes/")
+  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
         org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
         org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
   (require 'org-ref-pdf)
   (require 'org-ref-url-utils)
   (require 'org-ref-isbn)
   (require 'org-ref-bibtex))
+  (require 'doi-utils))
 
 (use-package ivy-bibtex
   :bind (:map my-keys-minor-mode-map
@@ -949,8 +950,7 @@ This command switches to browser."
   (setq enable-recursive-minibuffers t)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
-    '((swiper-isearch . ivy--regex-plus)
-      (t      . ivy--regex-fuzzy)))
+    '((t      . ivy--regex-plus)))
   :config
   (use-package ivy-hydra)
   (ivy-mode 1))
@@ -1277,3 +1277,6 @@ This command switches to browser."
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (desktop-save-mode 1)
+
+(setq initial-major-mode 'org-mode)
+(setq initial-scratch-message nil)
