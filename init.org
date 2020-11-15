@@ -29,6 +29,13 @@ discover what is wrong by running ~toggle-debug-on-error~
 (toggle-debug-on-error)
 #+end_src
 
+If a command is slow you can investigage with
+#+begin_src emacs-lisp :tangle no
+(profiler-start)
+;; run your slow command
+(profiler-report)
+#+end_src
+
 * Setup
 
 Zenburn is one of the most complete theme out there. It also works
@@ -1065,8 +1072,6 @@ My strategy is to keep my writings in the same folder
 ~$HOME/Dropbox/org/writing~ and run ~org-publish-current-file~ or
 ~org-publish~ to export to HTML.
 
-The HTML export has just the body. I then use a tool like ~jekyll~
-or ~hugo~ to make it accessible on internet.
 #+BEGIN_SRC emacs-lisp
 (setq
  time-stamp-active t
@@ -1084,11 +1089,11 @@ or ~hugo~ to make it accessible on internet.
 (setq system-time-locale "C") ; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
 (setq org-publish-project-alist
-      '(
+      `(
         ("blog-files"
-         :base-directory **local-blog-folder**
+         :base-directory ,(concat **local-dropbox-folder** "/org/write")
          :base-extension "org"
-         :publishing-directory **local-blog-exported-folder**
+         :publishing-directory ,(concat **local-dropbox-folder** "/org/write_published")
          :recursive t
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.

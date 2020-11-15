@@ -790,11 +790,11 @@ cons cell (regexp . minor-mode)."
 (setq system-time-locale "C") ; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
 (setq org-publish-project-alist
-      '(
+      `(
         ("blog-files"
-         :base-directory **local-blog-folder**
+         :base-directory ,(concat **local-dropbox-folder** "/org/write")
          :base-extension "org"
-         :publishing-directory **local-blog-exported-folder**
+         :publishing-directory ,(concat **local-dropbox-folder** "/org/write_published")
          :recursive t
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.
