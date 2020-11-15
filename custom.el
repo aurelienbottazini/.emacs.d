@@ -155,8 +155,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -164,7 +164,13 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "PragmataPro Mono" :foundry "FSD " :slant normal :weight normal :height 139 :width normal))))
  '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black"))))
+ '(highlight ((t (:background "#6f6f6f"))))
  '(hl-line ((t (:extend t :background "#4f4f4f"))))
+ '(ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
+ '(ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
+ '(ivy-minibuffer-match-face-4 ((t (:background "#bfebbf" :foreground "black"))))
+ '(mode-line ((t (:height 0.8))))
+ '(mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
  '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
  '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :foreground "#f0dfaf" :box (:line-width 1 :style released-button) :height 0.9))))
  '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#4f4f4f" :foreground "#989890" :height 0.8))))
