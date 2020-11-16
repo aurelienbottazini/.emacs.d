@@ -67,8 +67,7 @@
 (require-package 'use-package)
 (require 'use-package)
 
-;; For (use-package-report). Shows which package is slow to start.
-(setq use-package-compute-statistics t)
+(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
 (setq use-package-always-ensure t) ; Install package if it is missing
 
 (defun my-reload-dir-locals-for-current-buffer ()

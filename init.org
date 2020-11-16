@@ -16,15 +16,17 @@ Adjusts garbage collector for faster startup.
                                       file-name-handler-alist last-file-name-handler-alist)))
 #+end_src
 
+* Debug Emacs
+
 If Emacs complains about a mismatched paren while trying to start
 you can use ~check-parens~ to find the mismatched parenthesis.
 #+begin_src emacs-lisp :tangle no
 (check-parens)
 #+end_src
 
-Emacs tends to swallow errors to not annoy the user.
+Emacs tends to swallow errors.
 If something is not working correctly there is a good chance you will
-discover what is wrong by running ~toggle-debug-on-error~
+discover what is wrong by turning on ~toggle-debug-on-error~
 #+begin_src emacs-lisp :tangle no
 (toggle-debug-on-error)
 #+end_src
@@ -54,7 +56,7 @@ loading of other packages.
   (load custom-file)
 #+END_SRC
 
-A better buffer bar­mode-line in Emacs vocabulary.
+A better mode-line.
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
@@ -86,10 +88,10 @@ added to the Emacs load-path.
     (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
-A special keymap ~my-keys-minor-mode-map~ to store my global keybindings.
-This is mainly to use a ~defadvice~ to make sure that any key I
-define in my keymap as priority over ones defined elsewhere by
-built-in Emacs modes or 3rd party packages.
+A special keymap ~my-keys-minor-mode-map~ to store my global
+keybindings. This is to make sure that any key I define in my keymap
+as priority over ones defined elsewhere by built-in Emacs modes or 3rd
+party packages.
 #+BEGIN_SRC emacs-lisp
   (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
   (define-minor-mode my-keys-minor-mode
@@ -130,13 +132,11 @@ built-in Emacs modes or 3rd party packages.
 (require-package 'use-package)
 (require 'use-package)
 
-;; For (use-package-report). Shows which package is slow to start.
-(setq use-package-compute-statistics t)
+(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
 (setq use-package-always-ensure t) ; Install package if it is missing
 #+END_SRC
 
 You can get the time it took for emacs to start with.
-It ~c-c c-c~ and it will show in the echo area.
 #+BEGIN_SRC emacs-lisp :tangle no
    (emacs-init-time)
 #+END_SRC
@@ -410,11 +410,11 @@ cons cell (regexp . minor-mode)."
   (diminish 'eldoc-mode))
 #+END_SRC
 * Windows
-Splitting can be done with ~C-x 2~ and ~C-x 3~ but I use mostly
+Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
 
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
-to [[file:~/dotfiles/tmux/.config/tmux/tmux.conf::is_vim_or_emacs='echo%20"#{pane_current_command}"%20|%20grep%20-iqE%20"vim|emacs|reattach-to-user-namespace"'%20bind%20-n%20C-h%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-h"%20"select-pane%20-L"%20bind%20-n%20C-j%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-j"%20"select-pane%20-D"%20bind%20-n%20C-k%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-k"%20"select-pane%20-U"%20bind%20-n%20C-l%20if-shell%20"$is_vim_or_emacs"%20"send-keys%20C-l"%20"select-pane%20-R"][make it work seamlessly]] with Emacs.
+to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
 #+BEGIN_SRC emacs-lisp
 (defun tmux-socket-command-string ()
   (interactive)
@@ -677,7 +677,7 @@ efficiently.
 
 *** React
 
-The following shows a pretty interesting way to quickly create
+The following shows an interesting way to quickly create
 major modes _magically_. It parses the file to detect if this is a
 react file. If yes I run a function to use web-mode and make some
 adjustments for JSX.
@@ -1705,7 +1705,7 @@ I added a small function to make the current line flash just after a jump
 
 ** Tags
 
-Tags are generated through a [[file:~/dotfiles/git/.git_template/hooks/post-commit::.git/hooks/create_ctags%20>/dev/null%202>&1%20&][git hook]] with [[https://ctags.io/][Universal ctags]].
+Tags are generated through a [[file:~/dotfiles/git/.git_template/hooks/post-commit::.git/hooks/create_ctags%20>/dev/null%202>&1%20&][git hook] with] [[https://ctags.io/][Universal ctags]].
 
 To make sure my hooks are used I delete the hooks directory
 ~./git/config~ and run ~git init .~ again from the concerned project
