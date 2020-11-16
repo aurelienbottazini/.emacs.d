@@ -32,6 +32,7 @@
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
  '(fzf/args "-x --print-query")
+ '(git-link-use-commit t)
  '(global-evil-search-highlight-persist t)
  '(indicate-buffer-boundaries 'left)
  '(indicate-empty-lines nil)
