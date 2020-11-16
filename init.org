@@ -946,7 +946,7 @@ for org template captures.
  :config
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory (concat **local-dropbox-folder** "org/notes")))
+       deft-directory (concat **local-dropbox-folder** "org/write")))
 #+end_src
 ** References
 

@@ -704,7 +704,7 @@ cons cell (regexp . minor-mode)."
  :config
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory (concat **local-dropbox-folder** "org/notes")))
+       deft-directory (concat **local-dropbox-folder** "org/write")))
 
 (use-package org-ref
   :defer 2
