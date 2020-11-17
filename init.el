@@ -1275,3 +1275,5 @@ This command switches to browser."
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
+
+(require 'org-git-link)

@@ -1999,6 +1999,10 @@ Code folding
 (setq initial-scratch-message nil)
 #+end_src
 
+#+begin_src emacs-lisp
+(require 'org-git-link)
+#+end_src
+
 * Local variables
 
 # Local Variables:
