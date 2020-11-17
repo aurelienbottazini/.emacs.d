@@ -1074,7 +1074,8 @@ My strategy is to keep my writings in the same folder
 
 To get a preview
 I run ~toggle-html-export-on-save~ when i work on a particular org file.
-I use ~npm install -g simple-autoreload-server~ to watch my files
+I use ~npm install -g simple-autoreload-server~ to auto-reload files
+in my browser.
 
 #+begin_src shell :tangle no
 autoreload-server -w "**/**.{html,css,js}" .\write_published 8008
