@@ -798,13 +798,13 @@ cons cell (regexp . minor-mode)."
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.
          :auto-preamble t
-         :html-head nil
          :html-head-extra nil
-         :body-only true
+         ;; :body-only nil
          )
         ;; ... add all the components here (see below)...
         ;; ("wiki" :components ("wiki-files"))
         )
+      user-full-name "Aurélien Bottazini"
       org-export-with-toc t
       org-html-doctype "html5"
       org-html-head nil
@@ -812,7 +812,8 @@ cons cell (regexp . minor-mode)."
       org-html-head-include-scripts nil
       org-html-html5-fancy t
       org-html-postamble nil
-      org-html-indent t)
+      org-html-indent t
+)
 
 (add-hook 'org-mode-hook
           (lambda ()

@@ -1072,6 +1072,15 @@ My strategy is to keep my writings in the same folder
 ~$HOME/Dropbox/org/writing~ and run ~org-publish-current-file~ or
 ~org-publish~ to export to HTML.
 
+To get a preview
+I run ~toggle-html-export-on-save~ when i work on a particular org file.
+I use ~npm install -g simple-autoreload-server~ to watch my files
+
+#+begin_src shell :tangle no
+autoreload-server -w "**/**.{html,css,js}" .\write_published 8008
+#+end_src
+
+
 #+BEGIN_SRC emacs-lisp
 (setq
  time-stamp-active t
@@ -1098,13 +1107,13 @@ My strategy is to keep my writings in the same folder
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.
          :auto-preamble t
-         :html-head nil
          :html-head-extra nil
-         :body-only true
+         ;; :body-only nil
          )
         ;; ... add all the components here (see below)...
         ;; ("wiki" :components ("wiki-files"))
         )
+      user-full-name "Aurélien Bottazini"
       org-export-with-toc t
       org-html-doctype "html5"
       org-html-head nil
@@ -1112,7 +1121,8 @@ My strategy is to keep my writings in the same folder
       org-html-head-include-scripts nil
       org-html-html5-fancy t
       org-html-postamble nil
-      org-html-indent t)
+      org-html-indent t
+)
 
 (add-hook 'org-mode-hook
           (lambda ()
