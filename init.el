@@ -692,6 +692,7 @@ cons cell (regexp . minor-mode)."
 (require 'org)
 (add-to-list 'org-modules "org-habit")
 (setq org-log-into-drawer t)
+(define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "|" "DONE(!)")))
