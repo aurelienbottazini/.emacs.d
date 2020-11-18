@@ -1270,21 +1270,20 @@ This command switches to browser."
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
 
-(setq default-color (cons (face-background 'mode-line)
-                          (face-foreground 'mode-line)))
-(add-hook 'post-command-hook
-          (lambda ()
-            (let ((color (cond ((minibufferp) default-color)
-                               ((evil-emacs-state-p)  '("#ffa2cb" . "#4c4e56"))
-                               ((evil-visual-state-p) '("#adcff1" . "#4c4e56"))
-                               ((evil-insert-state-p)  '("#97d88a" . "#4c4e56"))
-                               ((buffer-modified-p)   '("#f79b2f" . "#4c4e56"))
-                               (t default-color)))
-                  )
-              (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-              (set-face-background 'mode-line (car color))
-              (set-face-foreground 'mode-line-buffer-id (cdr color))
-              (set-face-foreground 'mode-line (cdr color)))))
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+         (color (cond ((minibufferp) default-color)
+                      ((evil-emacs-state-p)  '("#ffa2cb" "#4c4e56" . "#4c4e56"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      ((buffer-modified-p)   '("#f79b2f" "#4c4e56" . "#4c4e56"))
+                      (t default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+    (set-face-foreground 'mode-line (cadr color))))))
 
 (use-package evil
   :config
