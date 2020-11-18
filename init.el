@@ -683,6 +683,7 @@ cons cell (regexp . minor-mode)."
   )
 (require 'org)
 (add-to-list 'org-modules "org-habit")
+(add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
@@ -1268,8 +1269,6 @@ This command switches to browser."
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
-
-(require 'org-git-link)
 
 (setq default-color (cons (face-background 'mode-line)
                           (face-foreground 'mode-line)))
