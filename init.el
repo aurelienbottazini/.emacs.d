@@ -700,7 +700,7 @@ cons cell (regexp . minor-mode)."
  :config
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory (concat **local-dropbox-folder** "org/write")))
+       deft-directory (concat **local-dropbox-folder** "org/")))
 
 (use-package org-ref
   :defer 2
@@ -785,9 +785,9 @@ cons cell (regexp . minor-mode)."
 (setq org-publish-project-alist
       `(
         ("blog-files"
-         :base-directory ,(concat **local-dropbox-folder** "/org/write")
+         :base-directory ,(concat **local-dropbox-folder** "/org/blog")
          :base-extension "org"
-         :publishing-directory ,(concat **local-dropbox-folder** "/org/write_published")
+         :publishing-directory ,(concat **local-dropbox-folder** "/org/blog_published")
          :recursive t
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.
@@ -801,12 +801,13 @@ cons cell (regexp . minor-mode)."
       user-full-name "Aurélien Bottazini"
       org-export-with-toc t
       org-html-doctype "html5"
-      org-html-head nil
+      org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
       org-html-head-include-default-style nil
       org-html-head-include-scripts nil
       org-html-html5-fancy t
       org-html-postamble nil
       org-src-preserve-indentation nil
+      org-html-htmlize-output-type "css"
       org-html-indent nil               ; a value other than nil will screw up src block indentation
       org-edit-src-content-indentation 0)
 
@@ -970,7 +971,6 @@ This command switches to browser."
          ("C-r" . counsel-minibuffer-history)
          :map my-keys-minor-mode-map
          ("C-c r" . counsel-buffer-or-recentf)
-         ("C-c i" . counsel-imenu)
          ("C-c m" . counsel-bookmark))
   :init
   (setq counsel-git-cmd "rg --files")
