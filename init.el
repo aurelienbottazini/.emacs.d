@@ -1282,7 +1282,7 @@ This command switches to browser."
     (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
     (set-face-background 'mode-line (car color))
     (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color))))))
+    (set-face-foreground 'mode-line (cadr color)))))
 
 (use-package evil
   :config
