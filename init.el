@@ -37,6 +37,9 @@
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
+(setq evil-toggle-key "C-c e")
+(define-key my-keys-minor-mode-map "C-z" 'suspend-emacs)
+
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
         ("gnu"         . "http://elpa.gnu.org/packages/")))
@@ -884,8 +887,6 @@ This command switches to browser."
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
-
-(setq evil-toggle-key "C-c e")
 
 (use-package evil-surround
   :after evil

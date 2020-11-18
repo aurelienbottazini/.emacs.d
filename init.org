@@ -97,6 +97,14 @@ party packages.
   (ad-activate 'load)
 #+END_SRC
 
+If for any reason I encounter other modes where the Vim keybindings
+are interfering too much, I can disable the Vim keybindings with
+~evil-toggle-key~.
+#+BEGIN_SRC emacs-lisp
+(setq evil-toggle-key "C-c e")
+(define-key my-keys-minor-mode-map "C-z" 'suspend-emacs)
+#+END_SRC
+
 ** Package library initialization
 #+BEGIN_SRC emacs-lisp
 (setq package-archives
@@ -1228,13 +1236,6 @@ keybindings by default.
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
 #+end_src
-
-If for any reason I encounter other modes where the Vim keybindings
-are interfering too much, I can disable the Vim keybindings with
-~evil-toggle-key~.
-#+BEGIN_SRC emacs-lisp
-(setq evil-toggle-key "C-c e")
-#+END_SRC
 
 Surround things with
 - ~S~ in visual mode
