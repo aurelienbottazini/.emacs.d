@@ -779,9 +779,6 @@ cons cell (regexp . minor-mode)."
   :bind (:map my-keys-minor-mode-map
               ("C-c z" . writeroom-mode)))
 
-(setq org-src-preserve-indentation nil
-      org-html-indent nil
-      org-edit-src-content-indentation 0)
 (use-package htmlize :defer 2) ; for org html export
 (setq system-time-locale "C") ; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
@@ -809,8 +806,9 @@ cons cell (regexp . minor-mode)."
       org-html-head-include-scripts nil
       org-html-html5-fancy t
       org-html-postamble nil
-      org-html-indent t
-)
+      org-src-preserve-indentation nil
+      org-html-indent nil               ; a value other than nil will screw up src block indentation
+      org-edit-src-content-indentation 0)
 
 (add-hook 'org-mode-hook
           (lambda ()
