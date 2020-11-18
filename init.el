@@ -16,14 +16,6 @@
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom-face
-  (mode-line ((t (:height 0.8))))
-  (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
-  :config
-  (setq doom-modeline-height 10))
-
 (if (file-exists-p "~/.emacs.d/.emacs-local")
   (load "~/.emacs.d/.emacs-local"))
 
@@ -1278,3 +1270,26 @@ This command switches to browser."
 (setq initial-scratch-message nil)
 
 (require 'org-git-link)
+
+(setq default-color (cons (face-background 'mode-line)
+                          (face-foreground 'mode-line)))
+(add-hook 'post-command-hook
+          (lambda ()
+            (let ((color (cond ((minibufferp) default-color)
+                               ((evil-emacs-state-p)  '("#ffa2cb" . "#4c4e56"))
+                               ((evil-visual-state-p) '("#adcff1" . "#4c4e56"))
+                               ((evil-insert-state-p)  '("#97d88a" . "#4c4e56"))
+                               ((buffer-modified-p)   '("#f79b2f" . "#4c4e56"))
+                               (t default-color)))
+                  )
+              (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+              (set-face-background 'mode-line (car color))
+              (set-face-foreground 'mode-line-buffer-id (cdr color))
+              (set-face-foreground 'mode-line (cdr color)))))
+
+(use-package evil
+  :config
+  (setq evil-insert-state-cursor '(bar "#4c4e56")
+        evil-visual-state-cursor '(box "#adcff1")
+        evil-emacs-state-cursor '(box "#ffa2cb")
+        evil-normal-state-cursor '(box "#bc3e44")))
