@@ -652,20 +652,6 @@ cons cell (regexp . minor-mode)."
   :config
   (drag-stuff-global-mode t))
 
-(use-package general
-  :config
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "SPC" 'counsel-rg
-    "p" 'ffip
-    "g" 'magit-status
-    "r" 'emamux:run-last-command
-    "R" 'emamux:send-command
-    ))
-
 (setq org-directory **local-dropbox-folder**)
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -1085,7 +1071,7 @@ This command switches to browser."
   (add-to-list 'ffip-prune-patterns "node_modules/*"))
 
 (require 'abo-find-in-project)
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'abo-find-file-with-similar-name)
+(define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
@@ -1095,11 +1081,12 @@ This command switches to browser."
   :init
   (setq dumb-jump-selector 'ivy)
   :config
-(setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
-(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
-  (add-hook 'dumb-jump-after-jump-hook
-            (defun abo-dumb-jump-pulse-line ()
-              (pulse-momentary-highlight-one-line (point)))))
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  ;; (add-hook 'dumb-jump-after-jump-hook
+  ;;           (defun abo-dumb-jump-pulse-line ()
+  ;;             (pulse-momentary-highlight-one-line (point))))
+
+)
 
 (setq speedbar-directory-unshown-regexp "^$")
 (define-key my-keys-minor-mode-map (kbd "C-c b") 'speedbar-get-focus)
@@ -1244,7 +1231,9 @@ This command switches to browser."
  :config
   (global-origami-mode))
 
-(use-package emamux)
+(use-package emamux
+:config
+(define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
 
 (use-package hydra
   :config

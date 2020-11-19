@@ -880,23 +880,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (drag-stuff-global-mode t))
 #+END_SRC
 
-** Evil leader
-
-#+begin_src emacs-lisp
-(use-package general
-  :config
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "SPC" 'counsel-rg
-    "p" 'ffip
-    "g" 'magit-status
-    "r" 'emamux:run-last-command
-    "R" 'emamux:send-command
-    ))
-#+end_src
 * Notes
 
 Some people switch to Emacs just to use org-mode.
@@ -1675,7 +1658,7 @@ to use `fd` instead of find.
 
 #+BEGIN_SRC emacs-lisp
 (require 'abo-find-in-project)
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'abo-find-file-with-similar-name)
+(define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 #+END_SRC
 
 ** fzf
@@ -1697,11 +1680,12 @@ I added a small function to make the current line flash just after a jump
   :init
   (setq dumb-jump-selector 'ivy)
   :config
-(setq xref-backend-functions (remq 'etags--xref-backend xref-backend-functions))
-(add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
-  (add-hook 'dumb-jump-after-jump-hook
-            (defun abo-dumb-jump-pulse-line ()
-              (pulse-momentary-highlight-one-line (point)))))
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  ;; (add-hook 'dumb-jump-after-jump-hook
+  ;;           (defun abo-dumb-jump-pulse-line ()
+  ;;             (pulse-momentary-highlight-one-line (point))))
+
+)
 #+END_SRC
 
 ** Tags
@@ -1951,8 +1935,11 @@ Code folding
   (global-origami-mode))
 #+END_SRC
 
+Use emamux to rerun the last command run in tmux pane
 #+BEGIN_SRC emacs-lisp
-(use-package emamux)
+(use-package emamux
+:config
+(define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
