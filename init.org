@@ -1674,18 +1674,15 @@ to use `fd` instead of find.
 correct jump location for the current symbol. It is not has good as an
 IDE code analysis but it works surprisingly well.
 
-I added a small function to make the current line flash just after a jump
+~M-.~ or ~gd~ to search from normal mode
+~M-,~ to go back.
+~M-?~ to find references
 #+BEGIN_SRC emacs-lisp
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
   :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  ;; (add-hook 'dumb-jump-after-jump-hook
-  ;;           (defun abo-dumb-jump-pulse-line ()
-  ;;             (pulse-momentary-highlight-one-line (point))))
-
-)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 #+END_SRC
 
 ** Tags

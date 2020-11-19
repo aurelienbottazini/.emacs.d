@@ -1081,12 +1081,7 @@ This command switches to browser."
   :init
   (setq dumb-jump-selector 'ivy)
   :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
-  ;; (add-hook 'dumb-jump-after-jump-hook
-  ;;           (defun abo-dumb-jump-pulse-line ()
-  ;;             (pulse-momentary-highlight-one-line (point))))
-
-)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (setq speedbar-directory-unshown-regexp "^$")
 (define-key my-keys-minor-mode-map (kbd "C-c b") 'speedbar-get-focus)
