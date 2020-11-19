@@ -102,7 +102,7 @@ are interfering too much, I can disable the Vim keybindings with
 ~evil-toggle-key~.
 #+BEGIN_SRC emacs-lisp
 (setq evil-toggle-key "C-c e")
-(define-key my-keys-minor-mode-map "C-z" 'suspend-emacs)
+(define-key my-keys-minor-mode-map "\C-z" 'suspend-frame)
 #+END_SRC
 
 ** Package library initialization

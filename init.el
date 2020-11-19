@@ -38,7 +38,7 @@
 (ad-activate 'load)
 
 (setq evil-toggle-key "C-c e")
-(define-key my-keys-minor-mode-map "C-z" 'suspend-emacs)
+(define-key my-keys-minor-mode-map "\C-z" 'suspend-frame)
 
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
