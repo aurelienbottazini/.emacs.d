@@ -32,7 +32,7 @@
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
- '(fzf/args "-x --print-query")
+ '(fzf/args "-x --color pointer:0,fg+:0,bg+:3,hl+:1,hl:1 --print-query")
  '(git-link-use-commit t)
  '(global-evil-search-highlight-persist t)
  '(indicate-buffer-boundaries 'left)
