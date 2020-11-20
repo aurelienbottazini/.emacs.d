@@ -1279,7 +1279,7 @@ This command switches to browser."
                       ((evil-emacs-state-p)  '("#ffa2cb" "#4c4e56" . "#4c4e56"))
                       ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
                       ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      ((buffer-modified-p)   '("#f79b2f" "#4c4e56" . "#4c4e56"))
+                      ;; ((buffer-modified-p)   '("#f79b2f" "#4c4e56" . "#4c4e56"))
                       (t default-color)))
          )
     (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
