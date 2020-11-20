@@ -1059,6 +1059,7 @@ I run ~toggle-html-export-on-save~ when i work on a particular org file.
 I use ~npm install -g simple-autoreload-server~ to auto-reload files
 in my browser.
 
+I have a [[https://github.com/aurelienbottazini/dotfiles/blob/c071cf2ca49ca9a98da815f17d500980f95873da/tmux/.config/tmuxinator/blog.yml#L9][tmuxinator configuration file]] to quickly launch my blog server
 #+begin_src shell :tangle no
 autoreload-server -w "**/**.{html,css,js}" .\write_published 8008
 #+end_src
