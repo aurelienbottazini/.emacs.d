@@ -6,12 +6,18 @@
 
 (defun abott-fip-base-name (file-name)
   "Extract the base name for current buffer. This base name will be used to find simlarly named files for the current project."
-  (downcase (car (split-string (file-name-nondirectory file-name) "\\."))))
+  (downcase
+   (car (split-string
+         (car (split-string (file-name-nondirectory file-name) "\\."))
+         "_spec"))))
 
 (ert-deftest abott-fip-base-name-test ()
   (should (string= "foo" (abott-fip-base-name "path/foo.el")))
   (should (string= "foo" (abott-fip-base-name "path/foo_spec.rb")))
   )
+
+(split-string "foo_spec" "_spec")
+(split-string "foo" "_spec")
 
 (defun abott-alternate-files-for-current-buffer ()
   (nbutlast
