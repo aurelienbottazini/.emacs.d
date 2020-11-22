@@ -13,11 +13,7 @@
 
 (ert-deftest abott-fip-base-name-test ()
   (should (string= "foo" (abott-fip-base-name "path/foo.el")))
-  (should (string= "foo" (abott-fip-base-name "path/foo_spec.rb")))
-  )
-
-(split-string "foo_spec" "_spec")
-(split-string "foo" "_spec")
+  (should (string= "foo" (abott-fip-base-name "path/foo_spec.rb"))))
 
 (defun abott-alternate-files-for-current-buffer ()
   (nbutlast
