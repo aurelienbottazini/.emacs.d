@@ -1965,10 +1965,6 @@ Use emamux to rerun the last command run in tmux pane
 #+END_SRC
 
 #+begin_src emacs-lisp
-(require 'oray-slip-box)
-#+end_src
-
-#+begin_src emacs-lisp
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 #+end_src
 
