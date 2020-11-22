@@ -1070,8 +1070,9 @@ This command switches to browser."
   (add-to-list 'ffip-prune-patterns "*/vendor/*")
   (add-to-list 'ffip-prune-patterns "node_modules/*"))
 
-(require 'abo-find-in-project)
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
+(require 'abott-find-in-project)
+;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
+(define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map

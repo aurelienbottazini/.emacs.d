@@ -1654,8 +1654,9 @@ to use `fd` instead of find.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(require 'abo-find-in-project)
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
+(require 'abott-find-in-project)
+;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
+(define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 #+END_SRC
 
 ** fzf
