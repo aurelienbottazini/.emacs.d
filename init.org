@@ -994,7 +994,10 @@ org-capture allows to set up templates for quick note taking.
 This is a must to capture ideas quickly.
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-       '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")))
+      '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")
+        ("t" "todo" entry (file+headline **local-note-file** "Inbox")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")"))]")
+      ))
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
 (add-hook 'org-capture-mode-hook 'evil-insert-state)

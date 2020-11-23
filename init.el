@@ -721,7 +721,10 @@ cons cell (regexp . minor-mode)."
   (add-hook 'org-mode-hook 'palimpsest-mode))
 
 (setq org-capture-templates
-       '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")))
+      '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")
+        ("t" "todo" entry (file+headline **local-note-file** "Inbox")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")"))]")
+      ))
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
 (add-hook 'org-capture-mode-hook 'evil-insert-state)
