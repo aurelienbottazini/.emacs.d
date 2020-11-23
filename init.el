@@ -768,7 +768,7 @@ cons cell (regexp . minor-mode)."
   :bind (:map my-keys-minor-mode-map
               ("C-c z" . writeroom-mode)))
 
-(use-package htmlize :defer 2) ; for org html export
+(use-package htmlize) ; for org html export
 (setq system-time-locale "C") ; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
 (setq org-publish-project-alist
@@ -1362,3 +1362,19 @@ This command switches to browser."
     (message "Starting chromium...")))
 
 (setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+
+(setq mail-user-agent 'mu4e-user-agent)
+(use-package org-msg
+  :config
+  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+        org-msg-startup "hidestars indent inlineimages"
+        org-msg-greeting-fmt "\nHi *%s*,\n\n"
+        org-msg-greeting-name-limit 3
+        org-msg-default-alternatives '(html text)
+        org-msg-signature "
+
+ #+begin_signature
+ -- *Aurélien* \\\\
+ #+end_signature")
+  (org-msg-mode)
+  )
