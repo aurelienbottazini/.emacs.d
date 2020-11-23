@@ -80,7 +80,10 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook
+   '((eval when
+           (require 'rainbow-mode nil t)
+           (rainbow-mode 1))
+     (eval add-hook 'after-save-hook
            (lambda nil
              (org-babel-tangle))
            nil t)
