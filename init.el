@@ -1352,14 +1352,18 @@ This command switches to browser."
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 
+(use-package s)
 (defun my-browse-url-chromium-new-app (url &optional new-window)
   "Open URL in app mode in chromium."
   (interactive (browse-url-interactive-arg "URL: "))
-  (unless
-      (string= ""
-               (shell-command-to-string
-                (concat "chromium --new-window --app=" url)))
-    (message "Starting chromium...")))
+  (let ((wsl-path (s-replace "file:///" "Z:/" url)))
+    (unless
+        (string= ""
+                 (shell-command-to-string
+                  (concat "/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe --new-window --app="
+                          (concat "\"" wsl-path "\"")
+                          )))
+      (message wsl-path))))
 
 (setq browse-url-browser-function 'my-browse-url-chromium-new-app)
 
