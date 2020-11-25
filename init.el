@@ -1318,10 +1318,13 @@ This command switches to browser."
 
 (setq mu4e-maildir-shortcuts
       '(("/INBOX" . ?i)
+        ("/@next" . ?n)
         ("/@waiting" . ?w)
         ("/@maybe" . ?m)
         ("/@read" . ?r)
-        ("/Sent Items" . ?s)))
+        ("/Archive" . ?a)
+        ("/Sent Items" . ?s)
+        ("/Trash" . ?t)))
 
 ;; needed for mbsync
 (setq mu4e-change-filenames-when-moving t)
@@ -1356,7 +1359,7 @@ This command switches to browser."
   :config
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
         org-msg-startup "hidestars indent inlineimages"
-        org-msg-greeting-fmt "\nHi *%s*,\n\n"
+        org-msg-greeting-fmt ""
         org-msg-greeting-name-limit 3
         org-msg-default-alternatives '(html text)
         org-msg-signature "
