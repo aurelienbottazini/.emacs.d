@@ -170,6 +170,7 @@
  '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black"))))
  '(highlight ((t (:background "#6f6f6f"))))
  '(hl-line ((t (:extend t :background "#4f4f4f"))))
+ '(ivy-current-match ((t (:extend nil :background "#f0dfaf" :foreground "#2b2b2b" :underline t :weight bold))))
  '(ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#bfebbf" :foreground "black"))))

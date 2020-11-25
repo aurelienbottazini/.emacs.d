@@ -1308,8 +1308,6 @@ This command switches to browser."
 (require 'mu4e)
 (require 'org-mu4e)
 
-(add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
-
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-messages-behavior 'sent)
 (setq mu4e-sent-folder "/Sent Items"
@@ -1352,21 +1350,6 @@ This command switches to browser."
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 
-(use-package s)
-(defun my-browse-url-chromium-new-app (url &optional new-window)
-  "Open URL in app mode in chromium."
-  (interactive (browse-url-interactive-arg "URL: "))
-  (let ((wsl-path (s-replace "file:///" "Z:/" url)))
-    (unless
-        (string= ""
-                 (shell-command-to-string
-                  (concat "/mnt/c/Program\\ Files/Google/Chrome/Application/chrome.exe --new-window --app="
-                          (concat "\"" wsl-path "\"")
-                          )))
-      (message wsl-path))))
-
-(setq browse-url-browser-function 'my-browse-url-chromium-new-app)
-
 (setq mail-user-agent 'mu4e-user-agent)
 (use-package org-msg
   :config
@@ -1382,3 +1365,67 @@ This command switches to browser."
  #+end_signature")
   (org-msg-mode)
   )
+
+(use-package s)
+(defun my-browse-url-chromium-new-app (url &optional new-window)
+  "Open URL in app mode in chromium."
+  (interactive (browse-url-interactive-arg "URL: "))
+  (let ((wsl-path (s-replace "file:///" "Z:/" url)))
+    (unless
+        (string= ""
+                 (shell-command-to-string
+                  (concat "/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe --new-window --app="
+                          (concat "\"" wsl-path "\"")
+                          )))
+      (message wsl-path))))
+
+(setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+(add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
+
+(defun my-attachment-action-func (msg attachment-num)
+  "Describe my attachment function."
+  (message (mu4e-message-field msg :attachments))
+  (unless (mu4e-message-field msg :attachments)
+   (message "yo"))
+)
+
+(add-to-list 'mu4e-view-attachment-actions '("custom action" . my-attachment-action-func) t)
+
+(defun abott-mu4e-view-open-attachment-emacs (msg attachnum)
+  "Open MSG's attachment ATTACHNUM in the current emacs instance."
+  (let* ((att (mu4e~view-get-attach msg attachnum))
+         (index (plist-get att :index)))
+    (mu4e~view-temp-action (mu4e-message-field msg :docid) index 'wsl-open)))
+
+(add-to-list 'mu4e-view-attachment-actions '("abott action" . abott-mu4e-view-open-attachment-emacs) t)
+
+(defun mu4e~view-temp-handler (path what docid param)
+  "Handler function for doing things with temp files (ie.,
+attachments) in response to a (mu4e~proc-extract 'temp ... )."
+  (cond
+   ((string= what "wsl-open")
+    (shell-command-to-string
+                  (concat "wsl-open " path)))
+   ((string= what "open-with")
+    ;; 'param' will be the program to open-with
+    (start-process "*mu4e-open-with-proc*" "*mu4e-open-with*" param path))
+   ((string= what "pipe")
+    ;; 'param' will be the pipe command, path the infile for this
+    (mu4e-process-file-through-pipe path param))
+   ;; if it's mu4e, it's some embedded message; 'param' may contain the docid
+   ;; of the parent message.
+   ((string= what "mu4e")
+    ;; remember the mapping path->docid, which maps the path of the embedded
+    ;; message to the docid of its parent
+    (puthash path docid mu4e~path-parent-docid-map)
+    (mu4e~proc-view-path path mu4e-view-show-images mu4e-decryption-policy))
+   ((string= what "emacs")
+    (find-file path)
+    ;; make the buffer read-only since it usually does not make
+    ;; sense to edit the temp buffer; use C-x C-q if you insist...
+    (setq buffer-read-only t))
+   ((string= what "diary")
+    (icalendar-import-file path diary-file))
+   ((string= what "gpg")
+    (epa-import-keys path))
+   (t (mu4e-error "Unsupported action %S" what))))
