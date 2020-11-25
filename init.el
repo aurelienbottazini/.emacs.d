@@ -1308,7 +1308,7 @@ This command switches to browser."
 (require 'mu4e)
 (require 'org-mu4e)
 
-(add-to-list 'mu4e-view-actions '("Browser View" . mu4e-action-view-in-browser) t)
+(add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
 
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-messages-behavior 'sent)
@@ -1360,7 +1360,7 @@ This command switches to browser."
     (unless
         (string= ""
                  (shell-command-to-string
-                  (concat "/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe --new-window --app="
+                  (concat "/mnt/c/Program\\ Files/Google/Chrome/Application/chrome.exe --new-window --app="
                           (concat "\"" wsl-path "\"")
                           )))
       (message wsl-path))))
