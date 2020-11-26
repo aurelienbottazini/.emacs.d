@@ -1254,7 +1254,7 @@ This command switches to browser."
       ;; machine smtp.fastmail.com login your-email@fastmail.fm port 465 password your-password
       ;; command to encrypt authinfo, you can delete authinfo after that:
       ;; gpg --output ~/.authinfo.gpg --symmetric ~/.authinfo
-      smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
+      smtpmail-auth-credentials (expand-file-name "~/.authinfo")
       smtpmail-stream-type 'ssl
       smtpmail-smtp-service 465)
 
@@ -1338,6 +1338,30 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
     (epa-import-keys path))
    (t (mu4e-error "Unsupported action %S" what))))
 
+(setq mu4e-contexts
+      `(
+        ,(make-mu4e-context
+          :name "abott"
+          :enter-func (lambda () (mu4e-message "Entering abott context"))
+          :leave-func (lambda () (mu4e-message "Leaving abott context"))
+          :vars '( ( user-mail-address . "aurelien.bottazini@gmail.com" )))
+        ,(make-mu4e-context
+          :name "Doximity"
+          :enter-func (lambda () (mu4e-message "Entering doximity context"))
+          :leave-func (lambda () (mu4e-message "Leaving doximity context"))
+          ;; we match based on the contact-fields of the message
+          :match-func (lambda (msg)
+                        (when msg
+                          (mu4e-message-contact-field-matches msg
+                                                              :to "doximity")))
+          :vars '( ( user-mail-address . "abottazini@doximity.com"  )))))
+
+(setq mu4e-context-policy 'pick-first)
+
+;; compose with the current context is no context matches;
+;; default is to ask
+(setq mu4e-compose-context-policy nil)
+
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -1349,42 +1373,42 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (require 'wat-mode)
 
 (use-package rust-mode
- :bind (:map rust-mode-map
-        ("C-c C-c" . rust-run)))
+  :bind (:map rust-mode-map
+              ("C-c C-c" . rust-run)))
 
 (use-package engine-mode
   :bind (:map my-keys-minor-mode-map
-         ("C-c d c" . engine/search-caniuse)
-         ("C-c d m" . engine/search-mdn)
-         ("C-c d ra" . engine/search-rails)
-         ("C-c d rr" . engine/search-ruby))
+              ("C-c d c" . engine/search-caniuse)
+              ("C-c d m" . engine/search-mdn)
+              ("C-c d ra" . engine/search-rails)
+              ("C-c d rr" . engine/search-ruby))
   :config
   (defengine ruby "https://apidock.com/ruby/search?query=%s")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
   (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
   (defengine caniuse "https://caniuse.com/#search=%s")
-)
+  )
 
 (define-key my-keys-minor-mode-map "\C-c u" 'universal-argument)
 (define-key my-keys-minor-mode-map "\C-u" 'evil-scroll-up)
 
 (use-package restclient
- :demand t
- :config
- (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
+  :demand t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
 
 (use-package peep-dired
- :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
- :bind (:map dired-mode-map
-             ("P" . peep-dired)))
+  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
+  :bind (:map dired-mode-map
+              ("P" . peep-dired)))
 
 (use-package origami
- :config
+  :config
   (global-origami-mode))
 
 (use-package emamux
-:config
-(define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
+  :config
+  (define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
 
 (use-package hydra
   :config
@@ -1411,7 +1435,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (let* (
          (default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
          (color (cond ((minibufferp) default-color)
-                      ((evil-emacs-state-p)  '("#ffa2cb" "#4c4e56" . "#4c4e56"))
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
                       ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
                       ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
                       ;; ((buffer-modified-p)   '("#f79b2f" "#4c4e56" . "#4c4e56"))
