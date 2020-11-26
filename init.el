@@ -694,19 +694,17 @@ cons cell (regexp . minor-mode)."
        deft-recursive t
        deft-directory (concat **local-dropbox-folder** "org/")))
 
-;; (use-package org-ref
-;;   :defer 2
-;;   :config
-;;   (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
-
-;;   (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
-;;         org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
-;;         org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
-;;   (require 'org-ref-pdf)
-;;   (require 'org-ref-url-utils)
-;;   (require 'org-ref-isbn)
-;;   (require 'org-ref-bibtex)
-;;   (require 'doi-utils))
+(setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
+(use-package org-ref
+  :config
+  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
+        org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
+        org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
+  (require 'org-ref-pdf)
+  (require 'org-ref-url-utils)
+  (require 'org-ref-isbn)
+  (require 'org-ref-bibtex)
+  (require 'doi-utils))
 
 (use-package ivy-bibtex
   :bind (:map my-keys-minor-mode-map
