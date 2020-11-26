@@ -2022,7 +2022,7 @@ Make my cursor match my modeline color
 
 Run the initial indexing with mu
 #+begin_src shell :tangle no
-mu init -m ~/Maildir/fastmail/
+mu init --my-address=aurelien.bottazini@gmail.com -m ~/Maildir/fastmail
 mu index
 #+end_src
 
