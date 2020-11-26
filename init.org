@@ -2193,6 +2193,11 @@ Make my cursor match my modeline color
         evil-emacs-state-cursor '(box "#ffa2cb")
         evil-normal-state-cursor '(box "#bc3e44")))
 #+end_src
+
+* PDFs
+
+https://github.com/politza/pdf-tools looks cool. Demo here: https://www.youtube.com/watch?v=LFO2UbzbZhA
+https://github.com/fuxialexander/org-pdftools
 * Local variables
 
 # Local Variables:
