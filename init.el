@@ -9,6 +9,8 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
+(toggle-debug-on-error)
+
 (use-package zenburn-theme
  :config
  (load-theme 'zenburn t))
@@ -42,7 +44,10 @@
 
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
+        ("org"         . "https://orgmode.org/elpa/")
         ("gnu"         . "http://elpa.gnu.org/packages/")))
+
+(use-package org)
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
@@ -671,9 +676,9 @@ cons cell (regexp . minor-mode)."
     (kbd "M-p") 'org-publish-current-project
     (kbd "TAB") 'org-cycle)
   )
-(require 'org)
-(add-to-list 'org-modules "org-habit")
-(add-to-list 'org-modules "org-git-link")
+
+;; (add-to-list 'org-modules "org-habit")
+;; (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
@@ -689,19 +694,19 @@ cons cell (regexp . minor-mode)."
        deft-recursive t
        deft-directory (concat **local-dropbox-folder** "org/")))
 
-(use-package org-ref
-  :defer 2
-  :config
-  (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
+;; (use-package org-ref
+;;   :defer 2
+;;   :config
+;;   (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
 
-  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
-        org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
-        org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
-  (require 'org-ref-pdf)
-  (require 'org-ref-url-utils)
-  (require 'org-ref-isbn)
-  (require 'org-ref-bibtex)
-  (require 'doi-utils))
+;;   (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
+;;         org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
+;;         org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
+;;   (require 'org-ref-pdf)
+;;   (require 'org-ref-url-utils)
+;;   (require 'org-ref-isbn)
+;;   (require 'org-ref-bibtex)
+;;   (require 'doi-utils))
 
 (use-package ivy-bibtex
   :bind (:map my-keys-minor-mode-map
@@ -1307,7 +1312,7 @@ This command switches to browser."
 (epa-file-enable)
 
 (require 'mu4e)
-(require 'org-mu4e)
+;; (require 'org-mu4e)
 
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-messages-behavior 'sent)
@@ -1324,11 +1329,12 @@ This command switches to browser."
         ("/@read" . ?r)
         ("/Archive" . ?a)
         ("/Sent Items" . ?s)
+        ("/Learn Spam" . ?l)
         ("/Trash" . ?t)))
 
 ;; needed for mbsync
 (setq mu4e-change-filenames-when-moving t)
-
+(setq message-kill-buffer-on-exit t)
 ;; I want my format=flowed thank you very much mu4e sets up visual-line-mode and
 ;; also fill (M-q) to do the right thing each paragraph is a single long line;
 ;; at sending, emacs will add the special line continuation characters.
