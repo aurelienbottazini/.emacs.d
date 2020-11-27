@@ -815,6 +815,21 @@ cons cell (regexp . minor-mode)."
 (setq system-time-locale "C") ;; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
 
+(add-to-list 'org-latex-packages-alist '("" "listings" nil))
+(setq org-latex-listings t)
+(setq org-latex-listings-options '(("breaklines" "true")
+                                   ("literate" "{0}{0}{1}%
+           {1}{1}{1}%
+           {2}{2}{1}%
+           {3}{3}{1}%
+           {4}{4}{1}%
+           {5}{5}{1}%
+           {6}{6}{1}%
+           {7}{7}{1}%
+           {8}{8}{1}%
+           {9}{9}{1}%
+    ")))"")"")))
+
 (setq ispell-program-name "aspell")
 (setq ispell-silently-savep t)
 (setq ispell-personal-dictionary **local-personal-dictionary**)

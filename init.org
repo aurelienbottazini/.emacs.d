@@ -1118,7 +1118,27 @@ I have a [[https://github.com/aurelienbottazini/dotfiles/blob/c071cf2ca49ca9a98d
 (require 'ox-publish)
 (setq system-time-locale "C") ;; make sure time local is in english when exporting
 (setq org-html-validation-link nil)
+
 #+END_SRC
+** Latex
+
+[[https://emacs.stackexchange.com/questions/33010/how-to-word-wrap-within-code-blocks][How To break lines with code blocks]]
+#+begin_src emacs-lisp
+(add-to-list 'org-latex-packages-alist '("" "listings" nil))
+(setq org-latex-listings t)
+(setq org-latex-listings-options '(("breaklines" "true")
+                                   ("literate" "{0}{0}{1}%
+           {1}{1}{1}%
+           {2}{2}{1}%
+           {3}{3}{1}%
+           {4}{4}{1}%
+           {5}{5}{1}%
+           {6}{6}{1}%
+           {7}{7}{1}%
+           {8}{8}{1}%
+           {9}{9}{1}%
+    ")))"")"")))
+#+end_src
 
 ** Feedback
 
