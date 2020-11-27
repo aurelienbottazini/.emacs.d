@@ -1137,7 +1137,7 @@ I have a [[https://github.com/aurelienbottazini/dotfiles/blob/c071cf2ca49ca9a98d
            {7}{7}{1}%
            {8}{8}{1}%
            {9}{9}{1}%
-    ")))"")"")))
+    ")))
 #+end_src
 
 ** Feedback
@@ -2213,6 +2213,17 @@ Make my cursor match my modeline color
         evil-emacs-state-cursor '(box "#ffa2cb")
         evil-normal-state-cursor '(box "#bc3e44")))
 #+end_src
+
+* 24 bits emacs
+
+Run this command to know if your Emacs display 24 bits colors.
+Result should be 16777216
+#+begin_src emacs-lisp :tangle no
+(display-color-cells)
+#+end_src
+
+On Ubuntu 20.04 I had to [[https://github.com/aurelienbottazini/dotfiles/blob/565cfb75d84d323e472232698458167ce5a66076/home/.config/shell/exports#L89][add a TERM env variable]]
+If that is not the case you probably need [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][to setup your TERM]] manually
 
 * PDFs
 

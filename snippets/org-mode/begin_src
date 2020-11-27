@@ -2,6 +2,5 @@
 # name: begin_src
 # key: bsrc
 # --
-#+begin_src ${1:emacs-lisp}
-  $0
+#+begin_src ${1:emacs-lisp}$0
 #+end_src

@@ -828,7 +828,7 @@ cons cell (regexp . minor-mode)."
            {7}{7}{1}%
            {8}{8}{1}%
            {9}{9}{1}%
-    ")))"")"")))
+    ")))
 
 (setq ispell-program-name "aspell")
 (setq ispell-silently-savep t)
