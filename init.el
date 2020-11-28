@@ -201,11 +201,15 @@ cons cell (regexp . minor-mode)."
   (interactive)
   (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
 
+(defun abott/today ()
+  "Today's date as a string."
+  (format-time-string "%Y-%m-%d"))
+
 (defun add-date-to-filename ()
   "Add current date in front of filename for current buffer. This is useful with some
         Blog tools like Jekyll to publish new articles."
   (interactive)
-  (let* ((date (format-time-string "%Y-%m-%d"))
+  (let* ((date (abott/today))
          (buffer-file (buffer-file-name))
          (new-file-name (concat (file-name-directory buffer-file)
                                 date
@@ -215,6 +219,11 @@ cons cell (regexp . minor-mode)."
     (rename-file buffer-file new-file-name)
     (set-visited-file-name new-file-name)
     (save-buffer)))
+
+(defun abott/insert-date ()
+  "Insert today's date in current buffer"
+  (interactive)
+  (insert (abott/today)))
 
 (defun toggle-html-export-on-save ()
   "Enable or disable HTML export when saving current org buffer."
@@ -1467,3 +1476,9 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
         evil-normal-state-cursor '(box "#bc3e44")))
+
+(setq org-refile-targets '((nil :maxlevel . 3)
+                                (org-agenda-files :maxlevel . 3)))
+(advice-add 'org-refile :after
+        (lambda (&rest _)
+        (org-save-all-org-buffers)))
