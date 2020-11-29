@@ -2214,7 +2214,7 @@ Make my cursor match my modeline color
         evil-normal-state-cursor '(box "#bc3e44")))
 #+end_src
 
-* 24 bits emacs
+* 24 bits Emacs
 
 Run this command to know if your Emacs display 24 bits colors.
 Result should be 16777216
