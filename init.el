@@ -1482,3 +1482,5 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (advice-add 'org-refile :after
         (lambda (&rest _)
         (org-save-all-org-buffers)))
+
+(setq default-frame-alist '((font . "OperatorMono Book-28")))

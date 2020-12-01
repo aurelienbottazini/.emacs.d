@@ -2247,6 +2247,10 @@ tix -x ~/.emacs.d/terminfo-24bit.src
 
 Other =terminfo= examples are available on the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
 
+#+begin_src emacs-lisp
+(setq default-frame-alist '((font . "OperatorMono Book-28")))
+#+end_src
+
 * PDFs
 
 https://github.com/politza/pdf-tools looks cool. Demo here: https://www.youtube.com/watch?v=LFO2UbzbZhA
@@ -2256,3 +2260,4 @@ https://github.com/fuxialexander/org-pdftools
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
+
