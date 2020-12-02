@@ -99,6 +99,7 @@
                   ,(concat home-folder "/.local/share/npm/bin/")
                   ,(concat home-folder "/bin")
                   "/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/"
+                  "/mnt/c/WINDOWS/System32/"
                   "/usr/local/opt/node@10/bin/"
                   "/usr/local/bin"
                   "/bin/"
@@ -1485,6 +1486,11 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
         (org-save-all-org-buffers)))
 
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+
+(defun abott/wsl-copy (start end)
+  (interactive "r")
+  (shell-command-on-region start end "clip.exe")
+  (deactivate-mark))
 
 (defun abott/wsl-paste ()
   (interactive)

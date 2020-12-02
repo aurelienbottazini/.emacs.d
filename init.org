@@ -188,6 +188,7 @@ It make things easier when the two match.
                   ,(concat home-folder "/.local/share/npm/bin/")
                   ,(concat home-folder "/bin")
                   "/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/"
+                  "/mnt/c/WINDOWS/System32/"
                   "/usr/local/opt/node@10/bin/"
                   "/usr/local/bin"
                   "/bin/"
@@ -2237,6 +2238,11 @@ Make my cursor match my modeline color
 #+end_src
 
 #+begin_src emacs-lisp
+(defun abott/wsl-copy (start end)
+  (interactive "r")
+  (shell-command-on-region start end "clip.exe")
+  (deactivate-mark))
+
 (defun abott/wsl-paste ()
   (interactive)
   (let ((clipboard
