@@ -2239,10 +2239,10 @@ Result should be 16777216
 (display-color-cells)
 #+end_src
 
-On Ubuntu 20.04 I had to [[https://github.com/aurelienbottazini/dotfiles/blob/565cfb75d84d323e472232698458167ce5a66076/home/.config/shell/exports#L89][add a TERM env variable]]  and add the
+On Ubuntu 20.04 I had to [[https://github.com/aurelienbottazini/dotfiles/blob/dc400917364c9cc61d804e6d88c2c11b63da1c3c/home/.config/shell/aliases#L29][add a TERM env variable]] and add the
 corresponding =terminfo= entry
 #+begin_src shell
-tix -x ~/.emacs.d/terminfo-24bit.src
+tix -o ~/.terminfo -x ~/.emacs.d/terminfo-emacs-rgb.src
 #+end_src
 
 Other =terminfo= examples are available on the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
