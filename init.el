@@ -1108,7 +1108,13 @@ This command switches to browser."
 
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . fzf-projectile)))
+               ("C-c t" . abott/fzf))
+  :config
+  (defun abott/fzf ()
+    (interactive)
+    (fzf/start (or magit--default-directory
+                   (locate-dominating-file (or buffer-file-name (dired-current-directory)) ".git")
+                   default-directory))))
 
 (use-package dumb-jump
   :init
@@ -1453,6 +1459,8 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
 
 (desktop-save-mode 1)
+(setq desktop-path '("~/"))
+(setq desktop-dirname "~/")
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
