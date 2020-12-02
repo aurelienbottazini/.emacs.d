@@ -11,10 +11,6 @@
 
 (toggle-debug-on-error)
 
-(use-package zenburn-theme
- :config
- (load-theme 'zenburn t))
-
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
@@ -1507,3 +1503,5 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
  (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
 
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
+
+(load-theme 'tronesque)

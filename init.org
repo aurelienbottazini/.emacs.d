@@ -42,7 +42,7 @@ If a command is slow you can investigage with
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package zenburn-theme
    :config
    (load-theme 'zenburn t))
@@ -2295,6 +2295,10 @@ Make my cursor match my modeline color
 
 #+begin_src emacs-lisp
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
+#+end_src
+
+#+begin_src emacs-lisp
+(load-theme 'tronesque)
 #+end_src
 
 * Local variables
