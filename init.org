@@ -2262,6 +2262,7 @@ Make my cursor match my modeline color
 
 #+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 #+end_src
 
 #+begin_src emacs-lisp

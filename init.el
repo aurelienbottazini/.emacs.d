@@ -1494,6 +1494,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
         (org-save-all-org-buffers)))
 
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
 (defun abott/wsl-copy (start end)
   (interactive "r")
