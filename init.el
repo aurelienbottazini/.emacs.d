@@ -1483,4 +1483,6 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
         (lambda (&rest _)
         (org-save-all-org-buffers)))
 
+(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
