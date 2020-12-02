@@ -1695,10 +1695,10 @@ to use `fd` instead of find.
 #+END_SRC
 
 ** fzf
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . counsel/fzf))
+               ("C-c t" . abott/fzf))
   :config
   (defun abott/fzf ()
     (interactive)
@@ -1706,6 +1706,12 @@ to use `fd` instead of find.
                    (locate-dominating-file (or buffer-file-name (dired-current-directory)) ".git")
                    default-directory))))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package counsel
+  :config
+  (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
+#+end_src
 
 ** Jump
 
