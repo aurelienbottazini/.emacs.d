@@ -253,6 +253,7 @@ cons cell (regexp . minor-mode)."
 (column-number-mode) ; column number in the mode line
 
 (electric-indent-mode t)
+(define-key my-keys-minor-mode-map (kbd "C-c oi") 'electric-indent-mode)
 
 (electric-pair-mode -1)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
@@ -1484,5 +1485,13 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
         (org-save-all-org-buffers)))
 
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+
+(defun abott/wsl-paste ()
+  (interactive)
+  (let ((clipboard
+     (shell-command-to-string "powershell.exe -command 'Get-Clipboard' 2> /dev/null")))
+    (setq clipboard (replace-regexp-in-string "\r" "" clipboard)) ; Remove Windows ^M characters
+    (setq clipboard (substring clipboard 0 -1)) ; Remove newline added by Powershell
+    (insert clipboard)))
 
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
