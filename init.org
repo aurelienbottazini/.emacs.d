@@ -2250,6 +2250,9 @@ Make my cursor match my modeline color
     (setq clipboard (replace-regexp-in-string "\r" "" clipboard)) ; Remove Windows ^M characters
     (setq clipboard (substring clipboard 0 -1)) ; Remove newline added by Powershell
     (insert clipboard)))
+
+ (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
+ (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
 #+end_src
 
 * 24 bits Emacs

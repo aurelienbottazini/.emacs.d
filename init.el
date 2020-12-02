@@ -1500,4 +1500,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
     (setq clipboard (substring clipboard 0 -1)) ; Remove newline added by Powershell
     (insert clipboard)))
 
+ (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
+ (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
+
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
