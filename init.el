@@ -1108,7 +1108,7 @@ This command switches to browser."
 
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . abott/fzf))
+               ("C-c t" . counsel/fzf))
   :config
   (defun abott/fzf ()
     (interactive)
