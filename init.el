@@ -254,7 +254,7 @@ cons cell (regexp . minor-mode)."
 
 (electric-indent-mode t)
 
-(electric-pair-mode nil)
+(electric-pair-mode -1)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
   (minibufferp))
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
