@@ -931,7 +931,7 @@ for org template captures.
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
 (setq org-todo-keywords
-      '((sequence "TODO" "WAITING" "|" "DONE(!)")))
+      '((sequence "TODO" "DOING" "WAITING" "CANCELED" "|" "DONE(!)")))
 #+END_SRC
 
 ** Navigate Notes
@@ -1913,6 +1913,10 @@ the yasnippet format. The filenames for the template are regexes.
 ** Counsel
 I redefine the standard ~C-x C-f~ to use counsel. It allows me to do
 pretty cool stuff with it [[https://oremacs.com/2017/11/18/dired-occur/][thanks to ivy-occur and dired]].
+
+=C-d= to delete entries in ivy occur
+=C-o= to open entry in a side buffer and switch to it
+=f= to open entry in side buffer by stay in ivy-occur
 
 #+BEGIN_QUOTE
 To delete all *.elc files in the current folder do:

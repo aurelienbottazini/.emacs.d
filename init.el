@@ -694,7 +694,7 @@ cons cell (regexp . minor-mode)."
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
 (setq org-todo-keywords
-      '((sequence "TODO" "WAITING" "|" "DONE(!)")))
+      '((sequence "TODO" "DOING" "WAITING" "CANCELED" "|" "DONE(!)")))
 
 (use-package deft
  :bind (:map my-keys-minor-mode-map
