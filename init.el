@@ -325,7 +325,7 @@ cons cell (regexp . minor-mode)."
 (electric-indent-mode t)
 (define-key my-keys-minor-mode-map (kbd "C-c oi") 'electric-indent-mode)
 
-(electric-pair-mode -1)
+(electric-pair-mode t)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
   (minibufferp))
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
@@ -1554,3 +1554,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
  (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
 
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))

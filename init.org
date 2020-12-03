@@ -480,7 +480,7 @@ cons cell (regexp . minor-mode)."
 (electric-indent-mode t)
 (define-key my-keys-minor-mode-map (kbd "C-c oi") 'electric-indent-mode)
 
-(electric-pair-mode -1)
+(electric-pair-mode t)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
   (minibufferp))
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
@@ -2351,6 +2351,11 @@ Use emamux to rerun the last command run in tmux pane
 
 #+begin_src emacs-lisp
 (setq default-frame-alist '((font . "OperatorMono Book-28")))
+#+end_src
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 * Local variables
 
