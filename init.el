@@ -79,7 +79,7 @@
 
 (use-package evil
   :config
-  (setq evil-insert-state-cursor '(bar "#4c4e56")
+  (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
         evil-normal-state-cursor '(box "#bc3e44")))
