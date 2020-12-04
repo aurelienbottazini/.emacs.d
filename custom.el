@@ -165,17 +165,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "PragmataPro Mono" :foundry "FSD " :slant normal :weight normal :height 139 :width normal))))
- '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black"))))
- '(highlight ((t (:background "#6f6f6f"))))
- '(hl-line ((t (:extend t :background "#4f4f4f"))))
- '(ivy-current-match ((t (:extend nil :background "#f0dfaf" :foreground "#2b2b2b" :underline t :weight bold))))
- '(ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
- '(ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
- '(ivy-minibuffer-match-face-4 ((t (:background "#bfebbf" :foreground "black"))))
- '(mode-line ((t (:height 0.8))))
- '(mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
- '(org-drawer ((t (:foreground "#94bff3"))))
- '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
- '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :foreground "#f0dfaf" :box (:line-width 1 :style released-button) :height 0.9))))
- '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#4f4f4f" :foreground "#989890" :height 0.8))))
- '(tab-line-tab-current ((t (:inherit tab-line-tab)))))
+ )
