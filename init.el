@@ -82,7 +82,7 @@
   (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#bc3e44")))
+        evil-normal-state-cursor '(box "#ecb3b3")))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)

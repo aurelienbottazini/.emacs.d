@@ -129,7 +129,7 @@ Make my cursor match my modeline color
   (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#bc3e44")))
+        evil-normal-state-cursor '(box "#ecb3b3")))
 #+end_src
 
 It is important to load custom settings early. Those are the ones
