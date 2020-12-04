@@ -9,8 +9,6 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
-(toggle-debug-on-error)
-
 (use-package zenburn-theme
  :custom-face
 (evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
@@ -38,8 +36,7 @@
  (info-menu-star ((t (:foreground "#ecb3b3"))))
  (info-node ((t (:foreground "#ac7373"))))
  (gnus-emphasis-highlight-words ((t (:foreground "#f0dfaf" :background "#2b2b2b"))))
- (mode-line ((t (:height 0.8))))
- (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
+ (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890"))))
  (org-drawer ((t (:foreground "#94bff3"))))
  (message-cited-text-2 ((t (:foreground "#bc8383"))))
  (message-cited-text-4 ((t (:foreground "#5c888b"))))

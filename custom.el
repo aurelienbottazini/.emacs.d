@@ -164,7 +164,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "PragmataPro Mono" :foundry "FSD " :slant normal :weight normal :height 139 :width normal))))
  '(company-preview ((t (:foreground "#2b2b2b"))))
  '(compilation-error ((t (:foreground "#ecb3b3"))))
  '(completions-common-part ((t (:foreground "#bde0f3"))))
@@ -190,8 +189,7 @@
  '(ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#bfebbf" :foreground "black"))))
- '(mode-line ((t (:height 0.8))))
- '(mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
+ '(mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890"))))
  '(org-drawer ((t (:foreground "#94bff3"))))
  '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
  '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :foreground "#f0dfaf" :box (:line-width 1 :style released-button) :height 0.9))))

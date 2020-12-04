@@ -27,7 +27,7 @@ you can use ~check-parens~ to find the mismatched parenthesis.
 Emacs tends to swallow errors.
 If something is not working correctly there is a good chance you will
 discover what is wrong by turning on ~toggle-debug-on-error~
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (toggle-debug-on-error)
 #+end_src
 
@@ -70,8 +70,7 @@ well on the terminal.
  (info-menu-star ((t (:foreground "#ecb3b3"))))
  (info-node ((t (:foreground "#ac7373"))))
  (gnus-emphasis-highlight-words ((t (:foreground "#f0dfaf" :background "#2b2b2b"))))
- (mode-line ((t (:height 0.8))))
- (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890" :height 0.8))))
+ (mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890"))))
  (org-drawer ((t (:foreground "#94bff3"))))
  (message-cited-text-2 ((t (:foreground "#bc8383"))))
  (message-cited-text-4 ((t (:foreground "#5c888b"))))
