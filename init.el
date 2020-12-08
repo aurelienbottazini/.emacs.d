@@ -11,9 +11,11 @@
 
 (use-package zenburn-theme
  :custom-face
-(evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
+ (evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
  (highlight ((t (:background "#6f6f6f"))))
  (hl-line ((t (:extend t :background "#4f4f4f"))))
+ (font-lock-comment-face ((t (:foreground "#7f9f7f" :italic t))))
+ (font-lock-string-face ((t (:foreground "#cc9393" :italic t))))
  (ivy-current-match ((t (:extend nil :background "#f0dfaf" :foreground "#2b2b2b" :underline t :weight bold))))
  (ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
  (ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
@@ -1175,9 +1177,15 @@ This command switches to browser."
 ;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
-(use-package counsel
+(use-package fzf
+  :bind (:map  my-keys-minor-mode-map
+               ("C-c t" . abott/fzf))
   :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
+  (defun abott/fzf ()
+    (interactive)
+    (fzf/start (or magit--default-directory
+                   (locate-dominating-file (or buffer-file-name (dired-current-directory)) ".git")
+                   default-directory))))
 
 (use-package dumb-jump
   :init

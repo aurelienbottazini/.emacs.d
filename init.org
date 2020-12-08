@@ -45,9 +45,11 @@ well on the terminal.
 #+BEGIN_SRC emacs-lisp
 (use-package zenburn-theme
  :custom-face
-(evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
+ (evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
  (highlight ((t (:background "#6f6f6f"))))
  (hl-line ((t (:extend t :background "#4f4f4f"))))
+ (font-lock-comment-face ((t (:foreground "#7f9f7f" :italic t))))
+ (font-lock-string-face ((t (:foreground "#cc9393" :italic t))))
  (ivy-current-match ((t (:extend nil :background "#f0dfaf" :foreground "#2b2b2b" :underline t :weight bold))))
  (ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
  (ivy-minibuffer-match-face-3 ((t (:background "#ecb3b3" :foreground "black"))))
@@ -1779,7 +1781,7 @@ to use `fd` instead of find.
 #+END_SRC
 
 ** fzf
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
                ("C-c t" . abott/fzf))
@@ -1791,7 +1793,7 @@ to use `fd` instead of find.
                    default-directory))))
 #+END_SRC
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package counsel
   :config
   (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
