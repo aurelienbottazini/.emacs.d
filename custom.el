@@ -67,7 +67,7 @@
  '(org-startup-folded nil)
  '(org-startup-indented t)
  '(package-selected-packages
-   '(rainbow-delimiters org-plus-contrib org-msg ivy-rich default-text-scale ivy-posframe doom-modeline fzf zenburn-theme dracula-theme origami-mode origame-mode general evil-leader peep-dired smart-mode-line restclient engine-mode evil-easymotion ruby ivy-bibtex org-ref zotxt zotxt-emacs eglot treemacs leuven leuven-theme prettier company-statistics writeroom-mode go-mode org ob-clojurescript writegood-mode writegood osx-dictionary powerthesaurus all-the-icons-dired-mode all-the-icons-dired all-the-icons evil-iedit-state ivy dired-rsync docker xref-js2 posframe js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode find-file-in-project noflet lsp-ui lsp-css company-lsp lsp-javascript-typescript lsp-mode lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout avy org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode which-key wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere ivy-hydra hydra counsel-projectile ace-window iedit emamux typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses projectile evil-search-highlight-persist evil-matchit evil-indent-plus evil-visualstar evil-commentary evil-surround evil-numbers evil exec-path-from-shell counsel use-package))
+   '(ob-graphql rainbow-delimiters org-plus-contrib org-msg ivy-rich default-text-scale ivy-posframe doom-modeline fzf zenburn-theme dracula-theme origami-mode origame-mode general evil-leader peep-dired smart-mode-line restclient engine-mode evil-easymotion ruby ivy-bibtex org-ref zotxt zotxt-emacs eglot treemacs leuven leuven-theme prettier company-statistics writeroom-mode go-mode org ob-clojurescript writegood-mode writegood osx-dictionary powerthesaurus all-the-icons-dired-mode all-the-icons-dired all-the-icons evil-iedit-state ivy dired-rsync docker xref-js2 posframe js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode find-file-in-project noflet lsp-ui lsp-css company-lsp lsp-javascript-typescript lsp-mode lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout avy org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode which-key wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere ivy-hydra hydra counsel-projectile ace-window iedit emamux typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses projectile evil-search-highlight-persist evil-matchit evil-indent-plus evil-visualstar evil-commentary evil-surround evil-numbers evil exec-path-from-shell counsel use-package))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-switch-project-action 'projectile-dired)
  '(projectile-tags-command "git ls-files | /usr/local/bin/ctags -e -L -")
@@ -157,8 +157,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -178,6 +178,8 @@
  '(evil-ex-substitute-replacement ((t (:foreground "#ecb3b3" :underline t))))
  '(evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
  '(fill-column-indicator ((t (:foreground "#6f6f6f"))))
+ '(font-lock-comment-face ((t (:foreground "#7f9f7f" :italic t))))
+ '(font-lock-string-face ((t (:foreground "#cc9393" :italic t))))
  '(gnus-emphasis-highlight-words ((t (:foreground "#f0dfaf" :background "#2b2b2b"))))
  '(helm-prefarg ((t (:foreground "#ecb3b3"))))
  '(highlight ((t (:background "#6f6f6f"))))

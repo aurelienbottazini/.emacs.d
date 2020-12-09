@@ -1149,6 +1149,8 @@ This loads more programming languages to use with org-babel.
                              '((shell . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+
+(use-package ob-graphql)
 #+END_SRC
 
 ** Publish

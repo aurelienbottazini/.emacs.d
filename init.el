@@ -845,6 +845,8 @@ cons cell (regexp . minor-mode)."
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
 
+(use-package ob-graphql)
+
 (setq
  time-stamp-active t
  time-stamp-line-limit 30     ; check first 30 buffer lines for Time-stamp:
