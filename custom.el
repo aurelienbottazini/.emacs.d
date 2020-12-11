@@ -164,7 +164,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cider-debug-code-overlay-face ((t (:background "#5f5f5f"))))
+ '(cider-debug-code-overlay-face ((t (:background "#366060"))))
+ '(cider-debug-prompt-face ((t (:inherit font-lock-builtin-face :background "#7c4343" :underline t))))
+ '(cider-enlightened-face ((t (:background "#2f4f2f" :box (:line-width -1 :color "#DFAF8F")))))
+ '(cider-instrumented-face ((t (:background "#ac7373" :box (:line-width -1 :color "#CC9393")))))
+ '(cider-repl-input-face ((t (:foreground "#9fc59f" :weight bold))))
+ '(cider-repl-result-face ((t (:foreground "#93e0e3"))))
+ '(cider-result-overlay-face ((t (:background "#3f5f3f"))))
+ '(cider-stacktrace-fn-face ((t (:inherit default :foreground "#afd8af" :weight bold))))
+ '(cider-traced-face ((t (:background "#4c7073" :box (:line-width -1 :color "#93E0E3")))))
  '(company-preview ((t (:foreground "#2b2b2b"))))
  '(compilation-error ((t (:background "#7c4343"))))
  '(completions-common-part ((t (:foreground "#bde0f3"))))
