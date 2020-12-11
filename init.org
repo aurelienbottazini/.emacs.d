@@ -2314,9 +2314,14 @@ Use emamux to rerun the last command run in tmux pane
 #+end_src
 
 #+begin_src emacs-lisp
-(desktop-save-mode 1)
-(setq desktop-path '("~/"))
-(setq desktop-dirname "~/")
+(use-package desktop
+  :defer 2
+  :config
+  (setq desktop-path '("~/"))
+  (setq desktop-dirname "~/")
+  (setq desktop-restore-eager 5)
+  (setq desktop-load-locked-desktop t)
+  (desktop-save-mode +1))
 #+end_src
 
 #+begin_src emacs-lisp

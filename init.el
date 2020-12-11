@@ -1533,9 +1533,14 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
 
-(desktop-save-mode 1)
-(setq desktop-path '("~/"))
-(setq desktop-dirname "~/")
+(use-package desktop
+  :defer 2
+  :config
+  (setq desktop-path '("~/"))
+  (setq desktop-dirname "~/")
+  (setq desktop-restore-eager 5)
+  (setq desktop-load-locked-desktop t)
+  (desktop-save-mode +1))
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
