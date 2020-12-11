@@ -570,7 +570,10 @@ Auto-fill comments in prog modes
   :mode "\\.clj\\'"
   :config
   (add-hook 'clojure-mode-hook #'subword-mode)
-  (use-package cider))
+  (use-package cider
+    :config
+    (evil-make-intercept-map cider--debug-mode-map 'normal)
+    ))
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
@@ -1986,7 +1989,6 @@ the yasnippet format. The filenames for the template are regexes.
      (define-key dired-mode-map (kbd "k") 'dired-previous-line)
      (define-key dired-mode-map (kbd "[b") 'previous-buffer)
      (define-key dired-mode-map (kbd "]b") 'next-buffer)
-     (define-key dired-mode-map (kbd "C-u") 'evil-scroll-page-up)
      (define-key dired-mode-map (kbd "C-d") 'evil-scroll-page-down)
      (evil-define-key 'normal dired-mode-map
        "gg" 'evil-goto-first-line
@@ -2257,8 +2259,8 @@ https://github.com/fuxialexander/org-pdftools
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(define-key my-keys-minor-mode-map "\C-c u" 'universal-argument)
-(define-key my-keys-minor-mode-map "\C-u" 'evil-scroll-up)
+(define-key my-keys-minor-mode-map (kbd "C-c u") 'universal-argument)
+(define-key my-keys-minor-mode-map (kbd "C-u") 'evil-scroll-up)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

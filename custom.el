@@ -157,13 +157,14 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cider-debug-code-overlay-face ((t (:background "#5f5f5f"))))
  '(company-preview ((t (:foreground "#2b2b2b"))))
  '(compilation-error ((t (:background "#7c4343"))))
  '(completions-common-part ((t (:foreground "#bde0f3"))))

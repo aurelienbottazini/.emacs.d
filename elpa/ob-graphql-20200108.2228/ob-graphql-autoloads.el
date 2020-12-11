@@ -21,6 +21,10 @@ as type \"graphql.\"
 
 ;;;***
 
+;;;### (autoloads nil nil ("ob-graphql-pkg.el") (0 0 0 0))
+
+;;;***
+
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t

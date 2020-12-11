@@ -399,7 +399,10 @@ cons cell (regexp . minor-mode)."
   :mode "\\.clj\\'"
   :config
   (add-hook 'clojure-mode-hook #'subword-mode)
-  (use-package cider))
+  (use-package cider
+    :config
+    (evil-make-intercept-map cider--debug-mode-map 'normal)
+    ))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -1299,7 +1302,6 @@ This command switches to browser."
      (define-key dired-mode-map (kbd "k") 'dired-previous-line)
      (define-key dired-mode-map (kbd "[b") 'previous-buffer)
      (define-key dired-mode-map (kbd "]b") 'next-buffer)
-     (define-key dired-mode-map (kbd "C-u") 'evil-scroll-page-up)
      (define-key dired-mode-map (kbd "C-d") 'evil-scroll-page-down)
      (evil-define-key 'normal dired-mode-map
        "gg" 'evil-goto-first-line
@@ -1494,8 +1496,8 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (defengine caniuse "https://caniuse.com/#search=%s")
   )
 
-(define-key my-keys-minor-mode-map "\C-c u" 'universal-argument)
-(define-key my-keys-minor-mode-map "\C-u" 'evil-scroll-up)
+(define-key my-keys-minor-mode-map (kbd "C-c u") 'universal-argument)
+(define-key my-keys-minor-mode-map (kbd "C-u") 'evil-scroll-up)
 
 (use-package restclient
   :demand t
