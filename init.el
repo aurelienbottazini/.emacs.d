@@ -401,8 +401,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'clojure-mode-hook #'subword-mode)
   (use-package cider
     :config
-    (evil-make-intercept-map cider--debug-mode-map 'normal)
-    ))
+    (setq cider-repl-display-help-banner nil)
+    (evil-make-intercept-map cider--debug-mode-map 'normal)))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -1221,7 +1221,8 @@ This command switches to browser."
         company-transformers '(company-sort-by-occurrence))
 
   (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-downcase nil
+        company-dabbrev-ignore-case nil)
   (setq company-show-numbers t)
   (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)
 
