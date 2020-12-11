@@ -1217,7 +1217,7 @@ This command switches to browser."
         company-require-match 'never
         company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-dabbrev company-capf company-yasnippet))
+        company-backends '((company-files company-capf company-yasnippet))
         company-transformers '(company-sort-by-occurrence))
 
   (add-hook 'after-init-hook 'global-company-mode)
