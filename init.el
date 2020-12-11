@@ -9,12 +9,40 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
+(setq package-archives
+      '(("melpa"       . "https://melpa.org/packages/")
+        ("org"         . "https://orgmode.org/elpa/")
+        ("gnu"         . "http://elpa.gnu.org/packages/")))
+
+(use-package org)
+
+(setq package-user-dir (concat user-emacs-directory "elpa"))
+
+;; this tells package.el not to add those pesky customized variable settings at
+;; the end of your init.el
+(setq package--init-file-ensured t)
+
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(defun require-package (package &optional min-version)
+  "Ask elpa to install given PACKAGE. You can specify a MIN-VERSION for your PACKAGE."
+  (unless (package-installed-p package min-version)
+    (package-install package)))
+
+(require-package 'use-package)
+(require 'use-package)
+
+(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
+(setq use-package-always-ensure t) ; Install package if it is missing
+
 (use-package zenburn-theme
  :custom-face
  (evil-search-highlight-persist-highlight-face ((t (:background "#f0dfaf" :foreground "black"))))
  (highlight ((t (:background "#6f6f6f"))))
  (hl-line ((t (:extend t :background "#4f4f4f"))))
- (font-lock-comment-face ((t (:foreground "#7f9f7f" :italic t))))
+ (font-lock-comment-face ((t (:foreground "#6f9f7f" :italic t))))
  (font-lock-string-face ((t (:foreground "#cc9393" :italic t))))
  (ivy-current-match ((t (:extend nil :background "#f0dfaf" :foreground "#2b2b2b" :underline t :weight bold))))
  (ivy-minibuffer-match-face-2 ((t (:background "#f0dfaf" :foreground "black"))))
@@ -112,34 +140,6 @@
 
 (setq evil-toggle-key "C-c e")
 (define-key my-keys-minor-mode-map "\C-z" 'suspend-frame)
-
-(setq package-archives
-      '(("melpa"       . "https://melpa.org/packages/")
-        ("org"         . "https://orgmode.org/elpa/")
-        ("gnu"         . "http://elpa.gnu.org/packages/")))
-
-(use-package org)
-
-(setq package-user-dir (concat user-emacs-directory "elpa"))
-
-;; this tells package.el not to add those pesky customized variable settings at
-;; the end of your init.el
-(setq package--init-file-ensured t)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(defun require-package (package &optional min-version)
-  "Ask elpa to install given PACKAGE. You can specify a MIN-VERSION for your PACKAGE."
-  (unless (package-installed-p package min-version)
-    (package-install package)))
-
-(require-package 'use-package)
-(require 'use-package)
-
-(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
-(setq use-package-always-ensure t) ; Install package if it is missing
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -1092,7 +1092,17 @@ This command switches to browser."
 
 (use-package git-link
   :bind (:map my-keys-minor-mode-map
-              ("C-c gl" . git-link)))
+              ("C-c gl" . git-link))
+   :config
+
+   (defun abott/git-link-advice (orig-fun url)
+     "For use with wsl. Copies git-link to windows clipboard."
+
+     (shell-command (concat "echo "
+                            (shell-quote-argument url)
+                            " | clip.exe") url))
+
+   (advice-add 'git-link--new :around #'abott/git-link-advice))
 
 (use-package git-timemachine
   :bind (:map my-keys-minor-mode-map
