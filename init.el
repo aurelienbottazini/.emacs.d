@@ -397,12 +397,19 @@ cons cell (regexp . minor-mode)."
 
 (use-package clojure-mode
   :mode "\\.clj\\'"
+  :after evil
   :config
-  (add-hook 'clojure-mode-hook #'subword-mode)
-  (use-package cider
-    :config
-    (setq cider-repl-display-help-banner nil)
-    (evil-make-intercept-map cider--debug-mode-map 'normal)))
+  (add-hook 'clojure-mode-hook #'subword-mode))
+
+(use-package cider
+  :after evil
+  :config
+  (setq cider-repl-display-help-banner nil)
+(defadvice cider--debug-mode ( after activate-emacs-state activate)
+  (evil-make-intercept-map cider--debug-mode-map)
+  (evil-normal-state))
+  ;;(evil-make-intercept-map cider--debug-mode-map 'normal)
+  )
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -1543,15 +1550,6 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
-
-(use-package desktop
-  :defer 2
-  :config
-  (setq desktop-path '("~/"))
-  (setq desktop-dirname "~/")
-  (setq desktop-restore-eager 5)
-  (setq desktop-load-locked-desktop t)
-  (desktop-save-mode +1))
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)

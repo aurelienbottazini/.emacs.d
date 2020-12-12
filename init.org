@@ -568,12 +568,19 @@ Auto-fill comments in prog modes
 #+BEGIN_SRC emacs-lisp
 (use-package clojure-mode
   :mode "\\.clj\\'"
+  :after evil
   :config
-  (add-hook 'clojure-mode-hook #'subword-mode)
-  (use-package cider
-    :config
-    (setq cider-repl-display-help-banner nil)
-    (evil-make-intercept-map cider--debug-mode-map 'normal)))
+  (add-hook 'clojure-mode-hook #'subword-mode))
+
+(use-package cider
+  :after evil
+  :config
+  (setq cider-repl-display-help-banner nil)
+(defadvice cider--debug-mode ( after activate-emacs-state activate)
+  (evil-make-intercept-map cider--debug-mode-map)
+  (evil-normal-state))
+  ;;(evil-make-intercept-map cider--debug-mode-map 'normal)
+  )
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
@@ -2325,7 +2332,7 @@ Use emamux to rerun the last command run in tmux pane
   (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package desktop
   :defer 2
   :config
