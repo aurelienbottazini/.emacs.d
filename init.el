@@ -1100,16 +1100,16 @@ This command switches to browser."
 (use-package git-link
   :bind (:map my-keys-minor-mode-map
               ("C-c gl" . git-link))
-   :config
+  :config
 
-   (defun abott/git-link-advice (orig-fun url)
-     "For use with wsl. Copies git-link to windows clipboard."
+  (defun abott/git-link-advice (orig-fun url)
+    "For use with wsl. Copies git-link to windows clipboard."
+    (shell-command (concat "echo "
+                           (shell-quote-argument url)
+                           " | clip.exe") url)
+    (funcall orig-fun url))
 
-     (shell-command (concat "echo "
-                            (shell-quote-argument url)
-                            " | clip.exe") url))
-
-   (advice-add 'git-link--new :around #'abott/git-link-advice))
+  (advice-add 'git-link--new :around #'abott/git-link-advice))
 
 (use-package git-timemachine
   :bind (:map my-keys-minor-mode-map

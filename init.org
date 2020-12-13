@@ -1577,16 +1577,16 @@ To grab a link I can share with co-workers from the region or file.
 (use-package git-link
   :bind (:map my-keys-minor-mode-map
               ("C-c gl" . git-link))
-   :config
+  :config
 
-   (defun abott/git-link-advice (orig-fun url)
-     "For use with wsl. Copies git-link to windows clipboard."
+  (defun abott/git-link-advice (orig-fun url)
+    "For use with wsl. Copies git-link to windows clipboard."
+    (shell-command (concat "echo "
+                           (shell-quote-argument url)
+                           " | clip.exe") url)
+    (funcall orig-fun url))
 
-     (shell-command (concat "echo "
-                            (shell-quote-argument url)
-                            " | clip.exe") url))
-
-   (advice-add 'git-link--new :around #'abott/git-link-advice))
+  (advice-add 'git-link--new :around #'abott/git-link-advice))
 #+END_SRC
 
 Otherwise I launch a ~gitsh~ session and I use [[https://github.com/github/hub][hub]] to interact with
