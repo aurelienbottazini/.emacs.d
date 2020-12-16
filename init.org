@@ -2050,6 +2050,7 @@ To get a list of videos to watch do:
 
 Setup mu4e directories to match [[https://www.fastmail.com][Fastmail]]
 #+begin_src emacs-lisp
+(add-to-list 'load-path (expand-file-name "/usr/share/emacs/site-lisp/mu4e"))
 (require 'mu4e)
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-folder "/Sent Items"
@@ -2380,7 +2381,7 @@ Use emamux to rerun the last command run in tmux pane
 #+end_src
 
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "OperatorMono Book-28")))
+(setq default-frame-alist '((font . "Fantasque Sans Mono-14")))
 #+end_src
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters

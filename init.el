@@ -1333,6 +1333,7 @@ This command switches to browser."
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)))
 
+(add-to-list 'load-path (expand-file-name "/usr/share/emacs/site-lisp/mu4e"))
 (require 'mu4e)
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-folder "/Sent Items"
@@ -1579,7 +1580,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
  (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
  (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
 
-(setq default-frame-alist '((font . "OperatorMono Book-28")))
+(setq default-frame-alist '((font . "Fantasque Sans Mono-14")))
 
 (use-package rainbow-delimiters
   :config
