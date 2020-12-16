@@ -173,6 +173,7 @@
                   "/mnt/c/WINDOWS/System32/"
                   "/usr/local/opt/node@10/bin/"
                   "/usr/local/bin"
+                  "/snap/bin"
                   "/bin/"
                   "/usr/local/sbin/"
                   "/usr/bin/"))
@@ -186,9 +187,9 @@
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
-    (buffer-disable-undo)))
+    (buffer-disable-undo))
 
-(add-hook 'find-file-hooks 'check-large-file-hook)
+  (add-hook 'find-file-hooks 'check-large-file-hook))
 
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
@@ -1423,7 +1424,9 @@ This command switches to browser."
   (let ((wsl-path (s-replace "file:///" "/" url)))
     (unless (string= "" (abott-open-with-wsl-open (concat "\"" url "\""))))))
 
-(setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+;; (setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "google-chrome")
 (add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
 
 (defun abott-mu4e-view-open-attachment-emacs (msg attachnum)
@@ -1580,8 +1583,18 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
  (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
  (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
 
-(setq default-frame-alist '((font . "Fantasque Sans Mono-14")))
+(setq default-frame-alist '((font . "Input Mono-14")))
 
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package org-tree-slide
+:config
+(define-key my-keys-minor-mode-map (kbd "<f7>") 'org-tree-slide-mode)
+(define-key my-keys-minor-mode-map (kbd "S-<f7>") 'org-tree-slide-skip-done-toggle)
+(with-eval-after-load "org-tree-slide"
+  (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)
+  )
+)

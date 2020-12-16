@@ -277,6 +277,7 @@ It make things easier when the two match.
                   "/mnt/c/WINDOWS/System32/"
                   "/usr/local/opt/node@10/bin/"
                   "/usr/local/bin"
+                  "/snap/bin"
                   "/bin/"
                   "/usr/local/sbin/"
                   "/usr/bin/"))
@@ -294,9 +295,9 @@ stick to fundamental mode and disable expensive minor modes.
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
-    (buffer-disable-undo)))
+    (buffer-disable-undo))
 
-(add-hook 'find-file-hooks 'check-large-file-hook)
+  (add-hook 'find-file-hooks 'check-large-file-hook))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1973,6 +1974,8 @@ the yasnippet format. The filenames for the template are regexes.
 #+END_SRC
 
 * Files and directories
+To play a video, with cursor on video file in dired =! vlc=
+
 ** Dired
 #+BEGIN_SRC emacs-lisp
 (setq ls-lisp-use-insert-directory-program t) ;same ls-lisp for Dired regardless of the platform
@@ -2154,7 +2157,9 @@ Custom mu4e actions
   (let ((wsl-path (s-replace "file:///" "/" url)))
     (unless (string= "" (abott-open-with-wsl-open (concat "\"" url "\""))))))
 
-(setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+;; (setq browse-url-browser-function 'my-browse-url-chromium-new-app)
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "google-chrome")
 (add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
 
 (defun abott-mu4e-view-open-attachment-emacs (msg attachnum)
@@ -2324,6 +2329,8 @@ Use emamux to rerun the last command run in tmux pane
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 #+end_src
 
+
+Changes the size of the text. Useful when I pair program
 #+begin_src emacs-lisp
 (use-package default-text-scale
   :config
@@ -2381,12 +2388,24 @@ Use emamux to rerun the last command run in tmux pane
 #+end_src
 
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Fantasque Sans Mono-14")))
+(setq default-frame-alist '((font . "Input Mono-14")))
 #+end_src
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-tree-slide
+:config
+(define-key my-keys-minor-mode-map (kbd "<f7>") 'org-tree-slide-mode)
+(define-key my-keys-minor-mode-map (kbd "S-<f7>") 'org-tree-slide-skip-done-toggle)
+(with-eval-after-load "org-tree-slide"
+  (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)
+  )
+)
 #+end_src
 * Local variables
 
