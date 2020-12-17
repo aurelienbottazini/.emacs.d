@@ -203,6 +203,11 @@ A special keymap ~my-keys-minor-mode-map~ to store my global
 keybindings. This is to make sure that any key I define in my keymap
 as priority over ones defined elsewhere by built-in Emacs modes or 3rd
 party packages.
+
+*I now consider this mode a bad idea.* As it indeed interferes with key
+overriding functions that I now understand better.
+For example If mapped to a global-mode-map, I can override the key for
+=eval-after-load=
 #+BEGIN_SRC emacs-lisp
   (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
   (define-minor-mode my-keys-minor-mode
@@ -1105,7 +1110,7 @@ This is a must to capture ideas quickly.
 (setq org-capture-templates
       '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")
         ("t" "todo" entry (file+headline **local-note-file** "Inbox")
-         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")"))]")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
@@ -1579,14 +1584,15 @@ To grab a link I can share with co-workers from the region or file.
               ("C-c gl" . git-link))
   :config
 
-  (defun abott/git-link-advice (orig-fun url)
-    "For use with wsl. Copies git-link to windows clipboard."
-    (shell-command (concat "echo "
-                           (shell-quote-argument url)
-                           " | clip.exe") url)
-    (funcall orig-fun url))
+  ;; (defun abott/git-link-advice (orig-fun url)
+  ;;   "For use with wsl. Copies git-link to windows clipboard."
+  ;;   (shell-command (concat "echo "
+  ;;                          (shell-quote-argument url)
+  ;;                          " | clip.exe") url)
+  ;;   (funcall orig-fun url))
 
-  (advice-add 'git-link--new :around #'abott/git-link-advice))
+  ;; (advice-add 'git-link--new :around #'abott/git-link-advice)
+)
 #+END_SRC
 
 Otherwise I launch a ~gitsh~ session and I use [[https://github.com/github/hub][hub]] to interact with
@@ -2334,9 +2340,8 @@ Changes the size of the text. Useful when I pair program
 (use-package default-text-scale
   :config
   (define-key my-keys-minor-mode-map (kbd "C-=") 'default-text-scale-reset)
-  (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
-  (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
-  (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
+  (define-key my-keys-minor-mode-map (kbd "C-+") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-M-+") 'default-text-scale-decrease))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -2368,7 +2373,7 @@ Changes the size of the text. Useful when I pair program
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun abott/wsl-copy (start end)
   (interactive "r")
   (shell-command-on-region start end "clip.exe")
@@ -2397,14 +2402,12 @@ Changes the size of the text. Useful when I pair program
 
 #+begin_src emacs-lisp
 (use-package org-tree-slide
-:config
-(define-key my-keys-minor-mode-map (kbd "<f7>") 'org-tree-slide-mode)
-(define-key my-keys-minor-mode-map (kbd "S-<f7>") 'org-tree-slide-skip-done-toggle)
-(with-eval-after-load "org-tree-slide"
-  (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
-  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)
-  )
-)
+  :bind (("<f7>" . org-tree-slide-mode)
+         ("S-<f7>" . org-tree-slide-skip-done-toggle))
+  :config
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
 #+end_src
 * Local variables
 

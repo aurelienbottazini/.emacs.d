@@ -819,7 +819,7 @@ cons cell (regexp . minor-mode)."
 (setq org-capture-templates
       '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")
         ("t" "todo" entry (file+headline **local-note-file** "Inbox")
-         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")"))]")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
@@ -1102,14 +1102,15 @@ This command switches to browser."
               ("C-c gl" . git-link))
   :config
 
-  (defun abott/git-link-advice (orig-fun url)
-    "For use with wsl. Copies git-link to windows clipboard."
-    (shell-command (concat "echo "
-                           (shell-quote-argument url)
-                           " | clip.exe") url)
-    (funcall orig-fun url))
+  ;; (defun abott/git-link-advice (orig-fun url)
+  ;;   "For use with wsl. Copies git-link to windows clipboard."
+  ;;   (shell-command (concat "echo "
+  ;;                          (shell-quote-argument url)
+  ;;                          " | clip.exe") url)
+  ;;   (funcall orig-fun url))
 
-  (advice-add 'git-link--new :around #'abott/git-link-advice))
+  ;; (advice-add 'git-link--new :around #'abott/git-link-advice)
+)
 
 (use-package git-timemachine
   :bind (:map my-keys-minor-mode-map
@@ -1550,9 +1551,8 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (use-package default-text-scale
   :config
   (define-key my-keys-minor-mode-map (kbd "C-=") 'default-text-scale-reset)
-  (define-key my-keys-minor-mode-map (kbd "C-c =") 'default-text-scale-increase)
-  (define-key my-keys-minor-mode-map (kbd "C-c +") 'default-text-scale-increase)
-  (define-key my-keys-minor-mode-map (kbd "C-c -") 'default-text-scale-decrease))
+  (define-key my-keys-minor-mode-map (kbd "C-+") 'default-text-scale-increase)
+  (define-key my-keys-minor-mode-map (kbd "C-M-+") 'default-text-scale-decrease))
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
@@ -1566,22 +1566,6 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(defun abott/wsl-copy (start end)
-  (interactive "r")
-  (shell-command-on-region start end "clip.exe")
-  (deactivate-mark))
-
-(defun abott/wsl-paste ()
-  (interactive)
-  (let ((clipboard
-     (shell-command-to-string "powershell.exe -command 'Get-Clipboard' 2> /dev/null")))
-    (setq clipboard (replace-regexp-in-string "\r" "" clipboard)) ; Remove Windows ^M characters
-    (setq clipboard (substring clipboard 0 -1)) ; Remove newline added by Powershell
-    (insert clipboard)))
-
- (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
- (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
-
 (setq default-frame-alist '((font . "Input Mono-14")))
 
 (use-package rainbow-delimiters
@@ -1589,11 +1573,9 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package org-tree-slide
-:config
-(define-key my-keys-minor-mode-map (kbd "<f7>") 'org-tree-slide-mode)
-(define-key my-keys-minor-mode-map (kbd "S-<f7>") 'org-tree-slide-skip-done-toggle)
-(with-eval-after-load "org-tree-slide"
-  (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
-  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)
-  )
-)
+  :bind (("<f7>" . org-tree-slide-mode)
+         ("S-<f7>" . org-tree-slide-skip-done-toggle))
+  :config
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
