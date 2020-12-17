@@ -1531,3 +1531,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   (with-eval-after-load "org-tree-slide"
     (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
     (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
+
+(use-package ox-reveal
+  :config
+  (setq org-reveal-root "file:///home/abott/.emacs.d/site-lisp/reveal.js-4.1.0"))

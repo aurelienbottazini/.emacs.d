@@ -2372,6 +2372,12 @@ light weights. Medium and Light conflict with the Regular and Book versions
     (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
     (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package ox-reveal
+  :config
+  (setq org-reveal-root "file:///home/abott/.emacs.d/site-lisp/reveal.js-4.1.0"))
+#+end_src
 * Local variables
 
 # Local Variables:
