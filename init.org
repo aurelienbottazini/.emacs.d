@@ -2373,6 +2373,7 @@ light weights. Medium and Light conflict with the Regular and Book versions
     (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
 #+end_src
 
+C-c C-e R =letter= to export a presentation from your org file
 #+begin_src emacs-lisp
 (use-package ox-reveal
   :config
