@@ -702,7 +702,6 @@ cons cell (regexp . minor-mode)."
 (setq org-directory **local-dropbox-folder**)
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
-(add-hook 'org-mode-hook 'variable-pitch-mode)
 
 (add-hook 'org-capture-mode-hook 'evil-insert-state)
 

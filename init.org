@@ -959,7 +959,6 @@ for org template captures.
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
-(add-hook 'org-mode-hook 'variable-pitch-mode)
 
 (add-hook 'org-capture-mode-hook 'evil-insert-state)
 
@@ -2249,6 +2248,7 @@ https://github.com/fuxialexander/org-pdftools
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
 #+END_SRC
 
+TODO: fix keys as they don't work because of evil-mode
 #+BEGIN_SRC emacs-lisp
 (use-package peep-dired
   :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
