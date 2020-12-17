@@ -1034,8 +1034,7 @@ for org template captures.
 ** Navigate Notes
 #+begin_src emacs-lisp :results silent
 (use-package deft
- :bind (:map my-keys-minor-mode-map
-             ("<f9>" . deft))
+ :bind (("<f9>" . deft))
  :commands (deft)
  :config
  (setq deft-extensions '("org" "md")

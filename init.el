@@ -779,8 +779,7 @@ cons cell (regexp . minor-mode)."
       '((sequence "TODO(t)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(canceled@)")))
 
 (use-package deft
- :bind (:map my-keys-minor-mode-map
-             ("<f9>" . deft))
+ :bind (("<f9>" . deft))
  :commands (deft)
  :config
  (setq deft-extensions '("org" "md")
