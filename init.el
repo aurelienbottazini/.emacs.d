@@ -1515,7 +1515,16 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(defun abott/org-tree-slide-play ()
+  (writeroom-mode 1)
+  (default-text-scale-increment 40))
+(defun abott/org-tree-slide-stop ()
+  (writeroom-mode -1)
+  (default-text-scale-reset))
+
 (use-package org-tree-slide
+  :hook ((org-tree-slide-play . abott/org-tree-slide-play)
+         (org-tree-slide-stop . abott/org-tree-slide-stop))
   :bind (("<f7>" . org-tree-slide-mode)
          ("S-<f7>" . org-tree-slide-skip-done-toggle))
   :config
