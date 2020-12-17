@@ -1149,15 +1149,9 @@ This command switches to browser."
 ;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
-(use-package fzf
-  :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . abott/fzf))
+(use-package counsel
   :config
-  (defun abott/fzf ()
-    (interactive)
-    (fzf/start (or magit--default-directory
-                   (locate-dominating-file (or buffer-file-name (dired-current-directory)) ".git")
-                   default-directory))))
+  (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
 
 (use-package dumb-jump
   :init

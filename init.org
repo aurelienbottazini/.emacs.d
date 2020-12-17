@@ -1758,7 +1758,7 @@ to use `fd` instead of find.
 #+END_SRC
 
 ** fzf
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package fzf
   :bind (:map  my-keys-minor-mode-map
                ("C-c t" . abott/fzf))
@@ -1770,7 +1770,7 @@ to use `fd` instead of find.
                    default-directory))))
 #+END_SRC
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package counsel
   :config
   (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
