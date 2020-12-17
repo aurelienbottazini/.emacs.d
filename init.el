@@ -284,6 +284,7 @@ cons cell (regexp . minor-mode)."
 (setq frame-title-format "emacs")
 
 (setq blink-matching-paren 'jump-offscreen)
+(show-paren-mode 1)
 
 ;; makes fringe big enough with HDPI
 (when (boundp 'fringe-mode)
