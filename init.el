@@ -1277,7 +1277,7 @@ This command switches to browser."
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)))
 
-(add-to-list 'load-path (expand-file-name "/usr/share/emacs/site-lisp/mu4e"))
+(add-to-list 'load-path (expand-file-name "/usr/local/share/emacs/site-lisp/mu4e"))
 (require 'mu4e)
 (setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
 (setq mu4e-sent-folder "/Sent Items"
