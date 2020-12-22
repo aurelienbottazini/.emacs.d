@@ -135,9 +135,8 @@
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
-    (buffer-disable-undo))
-
-  (add-hook 'find-file-hooks 'check-large-file-hook))
+    (buffer-disable-undo)))
+(add-hook 'find-file-hooks 'check-large-file-hook)
 
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t

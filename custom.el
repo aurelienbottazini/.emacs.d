@@ -78,7 +78,11 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((eval when
+   '((org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
+     (org-reveal-title-slide . "<h1>Life beyong distributed Transactions</h1>")
+     (org-reveal-title-slide . "<h1>Life Beyong Distributed Transactions</h1>")
+     (org-reveal-title-slide . "<h1>Yo</h1>")
+     (eval when
            (require 'rainbow-mode nil t)
            (rainbow-mode 1))
      (eval add-hook 'after-save-hook
@@ -157,8 +161,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
