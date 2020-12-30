@@ -873,12 +873,14 @@ cons cell (regexp . minor-mode)."
            {9}{9}{1}%
     ")))
 
-(setq ispell-program-name "aspell")
+(setq ispell-dictionary "en_US,fr_FR")
+(setq ispell-program-name "hunspell")
 (setq ispell-silently-savep t)
 (setq ispell-personal-dictionary **local-personal-dictionary**)
 ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-(setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))
-
+;; (setq ispell-extra-args '("--sug-mode=ultra"))
+(ispell-set-spellchecker-params)
+(ispell-hunspell-add-multi-dic "en_US,fr_FR")
 (add-hook 'org-mode-hook 'turn-on-flyspell)
 (eval-after-load "flyspell"
      '(diminish 'flyspell-mode))
