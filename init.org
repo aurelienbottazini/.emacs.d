@@ -248,9 +248,8 @@ stick to fundamental mode and disable expensive minor modes.
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
-    (buffer-disable-undo))
-
-  (add-hook 'find-file-hooks 'check-large-file-hook))
+    (buffer-disable-undo)))
+(add-hook 'find-file-hooks 'check-large-file-hook)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
