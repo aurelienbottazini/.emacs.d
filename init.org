@@ -646,7 +646,6 @@ the result after the comment.
 Node compilation errors messages are not understood by Emacs by
 default. All that's needed to make it work is to add a new regex
 describing what are the components of the messages.
-
 After running the compile command, you can navigate through the
 errors with ~next-error~ and ~previous-error~
 #+BEGIN_SRC emacs-lisp
@@ -2353,7 +2352,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Input Mono-14")))
+(setq default-frame-alist '((font . "Input-14")))
 #+end_src
 
 #+begin_src emacs-lisp

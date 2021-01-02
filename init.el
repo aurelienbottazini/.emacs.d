@@ -1510,7 +1510,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(setq default-frame-alist '((font . "Input Mono-14")))
+(setq default-frame-alist '((font . "Input-14")))
 
 (use-package rainbow-delimiters
   :config
