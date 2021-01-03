@@ -223,6 +223,8 @@
  '(org-level-6 ((t (:inherit default :extend nil :foreground "#9fc59f" :slant italic))))
  '(org-level-7 ((t (:inherit default :extend nil :foreground "#8c5353" :slant italic))))
  '(org-level-8 ((t (:inherit default :extend nil :foreground "#4c7073" :slant italic))))
+ '(show-paren-match ((t (:background "#6F6F6F" :foreground "#DCDCCC"))))
+ '(show-paren-mismatch ((t (:background "#6F6F6F" :foreground "#DCA3A3"))))
  '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
  '(tab-bar-tab ((t (:inherit tab-bar :background "#2b2b2b" :foreground "#f0dfaf" :box (:line-width 1 :style released-button) :height 0.9))))
  '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#4f4f4f" :foreground "#989890" :height 0.8))))
