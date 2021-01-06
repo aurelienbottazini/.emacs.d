@@ -223,6 +223,7 @@
  '(org-level-6 ((t (:inherit default :extend nil :foreground "#9fc59f" :slant italic))))
  '(org-level-7 ((t (:inherit default :extend nil :foreground "#8c5353" :slant italic))))
  '(org-level-8 ((t (:inherit default :extend nil :foreground "#4c7073" :slant italic))))
+ '(org-table ((t (:foreground "#9FC59F" :family "Input Mono"))))
  '(show-paren-match ((t (:background "#6F6F6F" :foreground "#DCDCCC"))))
  '(show-paren-mismatch ((t (:background "#6F6F6F" :foreground "#DCA3A3"))))
  '(tab-bar ((t (:inherit nil :background "#4f4f4f" :foreground "#dcdccc"))))
