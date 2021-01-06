@@ -729,7 +729,7 @@ cons cell (regexp . minor-mode)."
 (use-package deft
  :bind (("<f9>" . deft))
  :commands (deft)
- :config
+ :init
  (setq deft-extensions '("org" "md")
        deft-recursive t
        deft-directory (concat **local-dropbox-folder** "org/")))
