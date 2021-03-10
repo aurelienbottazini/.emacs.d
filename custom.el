@@ -207,7 +207,7 @@
  '(message-cited-text-2 ((t (:foreground "#bc8383"))))
  '(message-cited-text-4 ((t (:foreground "#5c888b"))))
  '(mm-command-output ((t (:foreground "#bc8383"))))
- '(mode-line-buffer-id ((t (:foreground "#f0dfaf" :height 1.1 :slant italic :weight normal :family "Operator Mono"))))
+ '(mode-line-buffer-id ((t (:foreground "#f0dfaf" :height 1.1 :slant italic :weight normal :family "Operator Mono AB"))))
  '(mode-line-inactive ((t (:background "#4f4f4f" :foreground "#989890"))))
  '(nobreak-hyphen ((t (:foreground "#bc8383"))))
  '(org-block ((t (:extend t :background "#494949"))))

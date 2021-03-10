@@ -872,18 +872,6 @@ cons cell (regexp . minor-mode)."
            {9}{9}{1}%
     ")))
 
-(setq ispell-dictionary "en_US,fr_FR")
-(setq ispell-program-name "hunspell")
-(setq ispell-silently-savep t)
-(setq ispell-personal-dictionary **local-personal-dictionary**)
-;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-;; (setq ispell-extra-args '("--sug-mode=ultra"))
-(ispell-set-spellchecker-params)
-(ispell-hunspell-add-multi-dic "en_US,fr_FR")
-(add-hook 'org-mode-hook 'turn-on-flyspell)
-(eval-after-load "flyspell"
-     '(diminish 'flyspell-mode))
-
 (use-package define-word
   :bind (:map evil-normal-state-map
           ("zw" . define-word-at-point)))
@@ -1278,163 +1266,6 @@ This command switches to browser."
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)))
 
-(add-to-list 'load-path (expand-file-name "/usr/local/share/emacs/site-lisp/mu4e"))
-(require 'mu4e)
-(setq mu4e-maildir (expand-file-name "~/Maildir/fastmail"))
-(setq mu4e-sent-folder "/Sent Items"
-      mu4e-drafts-folder "/Drafts"
-      mu4e-trash-folder "/Trash"
-      mu4e-refile-folder "/Archive")
-
-(define-key my-keys-minor-mode-map (kbd "C-c m") 'mu4e)
-(setq mu4e-html2text-command "/usr/bin/w3m -T text/html")
-(setq mu4e-get-mail-command "/usr/bin/mbsync -a")
-(setq mu4e-update-interval 300)
-(add-to-list 'load-path (expand-file-name "/usr/share/emacs/site-lisp/mu4e"))
-
-(require 'epa-file)
-(setq epa-pinentry-mode 'loopback) ; fix gpg2 encryption
-(epa-file-enable)
-
-(setq mu4e-sent-messages-behavior 'sent)
-
-(setq mu4e-maildir-shortcuts
-      '(("/INBOX" . ?i)
-        ("/@next" . ?n)
-        ("/@waiting" . ?w)
-        ("/@maybe" . ?m)
-        ("/@read" . ?r)
-        ("/Archive" . ?a)
-        ("/Sent Items" . ?s)
-        ("/Learn Spam" . ?l)
-        ("/Trash" . ?t)))
-
-;; needed for mbsync
-(setq mu4e-change-filenames-when-moving t)
-(setq message-kill-buffer-on-exit t)
-;; I want my format=flowed thank you very much mu4e sets up visual-line-mode and
-;; also fill (M-q) to do the right thing each paragraph is a single long line;
-;; at sending, emacs will add the special line continuation characters.
-(setq mu4e-compose-format-flowed t)
-(setq message-send-mail-function 'smtpmail-send-it
-      ;; smtpmail-starttls-credentials
-      ;; '(("smtp.fastmail.com" 587 nil nil))
-      smtpmail-default-smtp-server "smtp.fastmail.com"
-      smtpmail-smtp-server "smtp.fastmail.com"
-      ;; .authinfo example
-      ;; machine smtp.fastmail.com login your-email@fastmail.fm port 465 password your-password
-      ;; command to encrypt authinfo, you can delete authinfo after that:
-      ;; gpg --output ~/.authinfo.gpg --symmetric ~/.authinfo
-      smtpmail-auth-credentials (expand-file-name "~/.authinfo")
-      smtpmail-stream-type 'ssl
-      smtpmail-smtp-service 465)
-
-(setq user-full-name "Aurélien Bottazini")
-(setq user-mail-address "aurelien.bottazini@gmail.com")
-
-(setq mu4e-view-show-images t)
-;; use imagemagick, if available
-(when (fboundp 'imagemagick-register-types)
-  (imagemagick-register-types))
-
-(setq mail-user-agent 'mu4e-user-agent)
-(use-package org-msg
-  :config
-  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
-        org-msg-startup "hidestars indent inlineimages"
-        org-msg-greeting-fmt ""
-        org-msg-greeting-name-limit 3
-        org-msg-default-alternatives '(html text)
-        org-msg-signature "
-
- #+begin_signature
- -- *Aurélien* \\\\
- #+end_signature")
-  (org-msg-mode)
-  )
-
-(use-package s)
-
-(defun abott-prepare-path-for-wsl-open (path)
-  (s-replace " " "\\ " (s-replace "file:///" "/" path)))
-
-(defun abott-open-with-wsl-open (path)
-(shell-command-to-string
-(concat "wsl-open " (abott-prepare-path-for-wsl-open path))))
-
-(defun my-browse-url-chromium-new-app (url &optional new-window)
-  "Open URL in default windows app."
-  (interactive (browse-url-interactive-arg "URL: "))
-  (let ((wsl-path (s-replace "file:///" "/" url)))
-    (unless (string= "" (abott-open-with-wsl-open (concat "\"" url "\""))))))
-
-;; (setq browse-url-browser-function 'my-browse-url-chromium-new-app)
-(setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program "google-chrome")
-(add-to-list 'mu4e-view-actions '("browser View" . mu4e-action-view-in-browser) t)
-
-(defun abott-mu4e-view-open-attachment-emacs (msg attachnum)
-  "Open MSG's attachment ATTACHNUM in the current emacs instance."
-  (let* ((att (mu4e~view-get-attach msg attachnum))
-         (index (plist-get att :index)))
-    (mu4e~view-temp-action (mu4e-message-field msg :docid) index 'wsl-open)))
-
-(add-to-list 'mu4e-view-attachment-actions '("open" . abott-mu4e-view-open-attachment-emacs) t)
-
-;;; rewritting the mu4e handler to add wsl-open (windows subsystem for linux) handler
-(defun mu4e~view-temp-handler (path what docid param)
-  "Handler function for doing things with temp files (ie.,
-attachments) in response to a (mu4e~proc-extract 'temp ... )."
-  (cond
-   ((string= what "wsl-open") (abott-open-with-wsl-open path))
-   ((string= what "open-with")
-    ;; 'param' will be the program to open-with
-    (start-process "*mu4e-open-with-proc*" "*mu4e-open-with*" param path))
-   ((string= what "pipe")
-    ;; 'param' will be the pipe command, path the infile for this
-    (mu4e-process-file-through-pipe path param))
-   ;; if it's mu4e, it's some embedded message; 'param' may contain the docid
-   ;; of the parent message.
-   ((string= what "mu4e")
-    ;; remember the mapping path->docid, which maps the path of the embedded
-    ;; message to the docid of its parent
-    (puthash path docid mu4e~path-parent-docid-map)
-    (mu4e~proc-view-path path mu4e-view-show-images mu4e-decryption-policy))
-   ((string= what "emacs")
-    (find-file path)
-    ;; make the buffer read-only since it usually does not make
-    ;; sense to edit the temp buffer; use C-x C-q if you insist...
-    (setq buffer-read-only t))
-   ((string= what "diary")
-    (icalendar-import-file path diary-file))
-   ((string= what "gpg")
-    (epa-import-keys path))
-   (t (mu4e-error "Unsupported action %S" what))))
-
-(setq mu4e-contexts
-      `(
-        ,(make-mu4e-context
-          :name "abott"
-          :enter-func (lambda () (mu4e-message "Entering abott context"))
-          :leave-func (lambda () (mu4e-message "Leaving abott context"))
-          :vars '( ( user-mail-address . "aurelien.bottazini@gmail.com" )))
-        ,(make-mu4e-context
-          :name "Doximity"
-          :enter-func (lambda () (mu4e-message "Entering doximity context"))
-          :leave-func (lambda () (mu4e-message "Leaving doximity context"))
-          ;; we match based on the contact-fields of the message
-          :match-func (lambda (msg)
-                        (when msg
-                          (mu4e-message-contact-field-matches msg
-                                                              :to "doximity")))
-          :vars '( ( user-mail-address . "abottazini@doximity.com"  )))))
-
-(setq mu4e-context-policy 'pick-first)
-
-;; compose with the current context is no context matches;
-;; default is to ask
-(setq mu4e-compose-context-policy nil)
-
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -1510,7 +1341,7 @@ attachments) in response to a (mu4e~proc-extract 'temp ... )."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(setq default-frame-alist '((font . "Input-14")))
+(setq default-frame-alist '((font . "Operator Mono AB-18")))
 
 (use-package rainbow-delimiters
   :config
