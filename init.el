@@ -117,11 +117,8 @@
                   ,(concat home-folder "/.local/bin")
                   ,(concat home-folder "/.local/share/npm/bin/")
                   ,(concat home-folder "/bin")
-                  "/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/"
-                  "/mnt/c/WINDOWS/System32/"
-                  "/usr/local/opt/node@10/bin/"
-                  "/usr/local/bin"
                   "/snap/bin"
+                  "/usr/local/bin"
                   "/bin/"
                   "/usr/local/sbin/"
                   "/usr/bin/"))
@@ -1140,7 +1137,7 @@ This command switches to browser."
 
 (use-package counsel
   :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'counsel-fzf))
+  (define-key my-keys-minor-mode-map (kbd "C-c t") 'fzf-projectile))
 
 (use-package dumb-jump
   :init

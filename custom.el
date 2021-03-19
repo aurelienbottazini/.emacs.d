@@ -29,6 +29,8 @@
  '(emamux:use-nearest-pane t)
  '(evil-mode-line-format nil)
  '(evil-undo-system nil)
+ '(exec-path
+   '("/home/linuxbrew/.linuxbrew/bin/" "/Users/auray/.config/yarn/global/node_modules/.bin/" "/Users/auray/.local/share/n/bin" "/Users/auray/work/dox-compose/bin/" "/Users/auray/.rbenv/bin/" "/Users/auray/.rbenv/shims/" "/Users/auray/dotfiles/bin/" "/Users/auray/.fzf/bin" "/Users/auray/.local/bin" "/Users/auray/.local/share/npm/bin/" "/Users/auray/bin" "/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/" "/mnt/c/WINDOWS/System32/" "/usr/local/opt/node@10/bin/" "/snap/bin" "/usr/local/bin" "/usr/local/sbin/" "/usr/bin/"))
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
