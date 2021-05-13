@@ -2148,32 +2148,12 @@ Changes the size of the text. Useful when I pair program
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 #+end_src
 
-To copy paste from Windows Terminal inside a wsl instance
-#+begin_src emacs-lisp :tangle no
-(defun abott/wsl-copy (start end)
-  (interactive "r")
-  (shell-command-on-region start end "clip.exe")
-  (deactivate-mark))
-
-(defun abott/wsl-paste ()
-  (interactive)
-  (let ((clipboard
-     (shell-command-to-string "powershell.exe -command 'Get-Clipboard' 2> /dev/null")))
-    (setq clipboard (replace-regexp-in-string "\r" "" clipboard)) ; Remove Windows ^M characters
-    (setq clipboard (substring clipboard 0 -1)) ; Remove newline added by Powershell
-    (insert clipboard)))
-
- (evil-define-key 'normal my-keys-minor-mode-map "gy" 'abott/wsl-paste)
- (evil-define-key 'visual my-keys-minor-mode-map "gw" 'abott/wsl-copy)
-#+end_src
-
 Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 
-set-frame-font
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB-18")))
+(setq default-frame-alist '((font . "Input Sans Condensed-14")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -2209,7 +2189,7 @@ C-c C-e R =letter= to export a presentation from your org file
 #+begin_src emacs-lisp
 (use-package ox-reveal
   :config
-  (setq org-reveal-root "file:///home/abott/.emacs.d/site-lisp/reveal.js-4.1.0"))
+  (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+end_src
 * Local variables
 

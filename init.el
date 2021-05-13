@@ -1338,7 +1338,7 @@ This command switches to browser."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(setq default-frame-alist '((font . "Operator Mono AB-18")))
+(setq default-frame-alist '((font . "Input Sans Condensed-14")))
 
 (use-package rainbow-delimiters
   :config
@@ -1363,4 +1363,4 @@ This command switches to browser."
 
 (use-package ox-reveal
   :config
-  (setq org-reveal-root "file:///home/abott/.emacs.d/site-lisp/reveal.js-4.1.0"))
+  (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
