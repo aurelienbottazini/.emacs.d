@@ -1108,6 +1108,7 @@ This command switches to browser."
   :ensure t
   :bind (:map  my-keys-minor-mode-map
                ("C-c T" . find-file-in-project-by-selected)
+               ("M-p" . ffip)
                :map evil-normal-state-map
                ("gf" . find-file-in-project-at-point))
   :config
@@ -1132,7 +1133,6 @@ This command switches to browser."
   (add-to-list 'ffip-prune-patterns "node_modules/*"))
 
 (require 'abott-find-in-project)
-;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
 (use-package counsel

@@ -1722,14 +1722,12 @@ A sample .dir-locals.el,
 
 *** My configuration
 
-To install fd (rust replacement for find), download it
-[[https://github.com/sharkdp/fd/releases][here]] and run ~sudo dpkg -i fd_7.0.0_amd64.deb~. You can then choose
-to use `fd` instead of find.
 #+BEGIN_SRC emacs-lisp
 (use-package find-file-in-project
   :ensure t
   :bind (:map  my-keys-minor-mode-map
                ("C-c T" . find-file-in-project-by-selected)
+               ("M-p" . ffip)
                :map evil-normal-state-map
                ("gf" . find-file-in-project-at-point))
   :config
@@ -1756,7 +1754,6 @@ to use `fd` instead of find.
 
 #+BEGIN_SRC emacs-lisp
 (require 'abott-find-in-project)
-;; (define-key my-keys-minor-mode-map (kbd "C-c s") 'projectile-toggle-between-implementation-and-test)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 #+END_SRC
 
@@ -1798,7 +1795,7 @@ IDE code analysis but it works surprisingly well.
 
 ** Tags
 
-Tags are generated through a [[file:~/dotfiles/git/.git_template/hooks/post-commit::.git/hooks/create_ctags%20>/dev/null%202>&1%20&][git hook] with] [[https://ctags.io/][Universal ctags]].
+Tags are generated through a git hook
 
 To make sure my hooks are used I delete the hooks directory
 ~./git/config~ and run ~git init .~ again from the concerned project
