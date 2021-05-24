@@ -1,0 +1,2 @@
+;;; Generated package description from coverlay.el  -*- no-byte-compile: t -*-
+(define-package "coverlay" "20190414.940" "Test coverage overlays" '((emacs "24.1") (cl-lib "0.5")) :commit "0beae208d0e7d746a94385428bd61aa5cd7ea828" :keywords '("coverage" "overlay") :authors '(("Takuto Wada <takuto.wada at gmail com>")) :maintainer '("Takuto Wada <takuto.wada at gmail com>") :url "https://github.com/twada/coverlay.el")

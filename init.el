@@ -731,26 +731,6 @@ cons cell (regexp . minor-mode)."
        deft-recursive t
        deft-directory (concat **local-dropbox-folder** "org/")))
 
-(setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
-(use-package org-ref
-  :config
-  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
-        org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
-        org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
-  (require 'org-ref-pdf)
-  (require 'org-ref-url-utils)
-  (require 'org-ref-isbn)
-  (require 'org-ref-bibtex)
-  (require 'doi-utils))
-
-(use-package ivy-bibtex
-  :bind (:map my-keys-minor-mode-map
-             ("C-c B" . ivy-bibtex))
-  :config
-  (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-  (setq bibtex-completion-bibliography reftex-default-bibliography)
-  (setq bibtex-completion-notes-path (concat **local-dropbox-folder** "org/references-notes/")))
-
 (use-package markdown-mode
  :mode "\\.md\\'")
 
@@ -1338,7 +1318,7 @@ This command switches to browser."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(setq default-frame-alist '((font . "Input Mono Condensed-14")))
+(setq default-frame-alist '((font . "Jetbrains Mono-14")))
 
 (use-package rainbow-delimiters
   :config

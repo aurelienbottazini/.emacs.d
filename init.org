@@ -999,7 +999,7 @@ To add references to my reference library:
 - for papers I use ~doi-add-bibtex-entry~
 - for websites I use ~org-ref-url-html-to-bibtex~
 - for books I use ~isbn-to-bibtex~
-#+begin_src emacs-lisp :results silent :tangle yes
+#+begin_src emacs-lisp :results silent :tangle no
 (setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
 (use-package org-ref
   :config
@@ -2150,7 +2150,7 @@ The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Input Mono Condensed-14")))
+(setq default-frame-alist '((font . "Jetbrains Mono-14")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
