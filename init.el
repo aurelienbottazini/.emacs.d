@@ -567,6 +567,7 @@ cons cell (regexp . minor-mode)."
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
+(advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))
   (define-key evil-normal-state-map (kbd "[f") 'flycheck-previous-error)
   (define-key evil-normal-state-map (kbd "]f") 'flycheck-next-error)
 
