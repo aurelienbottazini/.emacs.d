@@ -341,10 +341,15 @@ cons cell (regexp . minor-mode)."
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
 
+;; First install the package:
+(use-package flycheck-clj-kondo
+  :ensure t)
+
 (use-package clojure-mode
   :mode "\\.clj\\'"
   :after evil
   :config
+  (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
@@ -1363,7 +1368,6 @@ This command switches to browser."
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
-;; optionally
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package lsp-ui :commands lsp-ui-mode)
-;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)

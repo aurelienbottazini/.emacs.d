@@ -517,10 +517,15 @@ Auto-fill comments in prog modes
 
 ** Clojure
 #+BEGIN_SRC emacs-lisp
+;; First install the package:
+(use-package flycheck-clj-kondo
+  :ensure t)
+
 (use-package clojure-mode
   :mode "\\.clj\\'"
   :after evil
   :config
+  (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
@@ -2208,9 +2213,8 @@ C-c C-e R =letter= to export a presentation from your org file
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
-;; optionally
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package lsp-ui :commands lsp-ui-mode)
-;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+end_src
 * Local variables
