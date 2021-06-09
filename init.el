@@ -1351,6 +1351,8 @@ This command switches to browser."
   (setq lsp-keymap-prefix "C-c l")
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (js2-mode . lsp)
+         (web-mode . lsp)
+         (clojure-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
