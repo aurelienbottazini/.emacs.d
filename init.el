@@ -1355,6 +1355,7 @@ This command switches to browser."
          (js2-mode . lsp)
          (web-mode . lsp)
          (clojure-mode . lsp)
+         (json-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
