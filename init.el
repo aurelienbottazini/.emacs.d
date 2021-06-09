@@ -1349,6 +1349,8 @@ This command switches to browser."
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
+
+  (setq read-process-output-max (* 1024 1024))
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (js2-mode . lsp)
          (web-mode . lsp)
