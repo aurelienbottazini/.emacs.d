@@ -1248,9 +1248,7 @@ This command switches to browser."
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-;; I don't want to keep the current tags table when there's another one in the directory i am visiting.
-;; Let's automatically switch to the new one without asking
-(setq tags-add-tables nil)
+(setq tags-add-tables 'ask-user)
 
 (require 'wat-mode)
 
