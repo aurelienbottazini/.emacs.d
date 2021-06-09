@@ -1360,6 +1360,9 @@ This command switches to browser."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
 ;; if you are ivy user
