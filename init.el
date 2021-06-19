@@ -37,10 +37,10 @@
 (setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
 (setq use-package-always-ensure t) ; Install package if it is missing
 
-(use-package zenburn-theme
+(use-package solarized-theme
  :config
- (setq abott/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
+ ;; (setq abott/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+ (load-theme 'solarized-dark t))
 
 (add-hook 'post-command-hook '(lambda ()
   (let* (

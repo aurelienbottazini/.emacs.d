@@ -78,7 +78,7 @@ You can get the time it took for emacs to start with.
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package zenburn-theme
  :config
  (setq abott/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
@@ -91,6 +91,13 @@ well on the terminal.
 (setq abott/default-color '("#335ea8" "#85ceeb" . "yellow"))
 (load-theme 'leuven t))
 #+end_src
+
+#+BEGIN_SRC emacs-lisp
+(use-package solarized-theme
+ :config
+ ;; (setq abott/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+ (load-theme 'solarized-dark t))
+#+END_SRC
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
 #+begin_src emacs-lisp
