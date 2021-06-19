@@ -649,9 +649,7 @@ cons cell (regexp . minor-mode)."
 (define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
 (define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
 (define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
-(define-key my-keys-minor-mode-map (kbd "C-c jg") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/gtd.org"))))
-(define-key my-keys-minor-mode-map (kbd "C-c js") 'slip-box)
-(define-key my-keys-minor-mode-map (kbd "C-c ji") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/slip-box/index.org"))))
+(define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
 (define-key my-keys-minor-mode-map (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
 (define-key my-keys-minor-mode-map (kbd "C-c jj") 'dired-jump)
 (define-key my-keys-minor-mode-map (kbd "C-c k") 'recompile)
@@ -1121,10 +1119,6 @@ This command switches to browser."
 
 (require 'abott-find-in-project)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
-
-(use-package counsel
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'fzf-projectile))
 
 (use-package dumb-jump
   :init

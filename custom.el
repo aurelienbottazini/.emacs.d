@@ -46,6 +46,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(js2-highlight-level 3)
+ '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-prefer-flymake :none)
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-doc-use-webkit nil)

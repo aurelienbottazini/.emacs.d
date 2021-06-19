@@ -891,9 +891,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 (define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
 (define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
 (define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
-(define-key my-keys-minor-mode-map (kbd "C-c jg") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/gtd.org"))))
-(define-key my-keys-minor-mode-map (kbd "C-c js") 'slip-box)
-(define-key my-keys-minor-mode-map (kbd "C-c ji") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/slip-box/index.org"))))
+(define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
 (define-key my-keys-minor-mode-map (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
 (define-key my-keys-minor-mode-map (kbd "C-c jj") 'dired-jump)
 (define-key my-keys-minor-mode-map (kbd "C-c k") 'recompile)
@@ -1765,22 +1763,10 @@ A sample .dir-locals.el,
 #+END_SRC
 
 ** fzf
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package fzf
-  :bind (:map  my-keys-minor-mode-map
-               ("C-c t" . abott/fzf))
+#+begin_src emacs-lisp :tangle no
+(use-package projectile
   :config
-  (defun abott/fzf ()
-    (interactive)
-    (fzf/start (or magit--default-directory
-                   (locate-dominating-file (or buffer-file-name (dired-current-directory)) ".git")
-                   default-directory))))
-#+END_SRC
-
-#+begin_src emacs-lisp :tangle yes
-(use-package counsel
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'fzf-projectile))
+  (define-key my-keys-minor-mode-map (kbd "C-c t") 'projectile-find-file))
 #+end_src
 
 ** Jump
