@@ -39,7 +39,9 @@
 
 (use-package solarized-theme
  :config
- ;; (setq abott/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+(setq solarized-distinct-fringe-background t)
+(setq solarized-high-contrast-mode-line t)
+ (setq abott/default-color '("#eee8d5" "#657b83" . "#0087ff"))
  (load-theme 'solarized-dark t))
 
 (add-hook 'post-command-hook '(lambda ()
