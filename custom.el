@@ -56,7 +56,7 @@
  '(menu-bar-mode nil)
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
- '(org-agenda-files '("/mnt/c/Users/abott/Dropbox/org/job.org"))
+ '(org-agenda-files '("~/Dropbox/org/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-html-doctype "html5")
  '(org-html-head-include-default-style nil)
@@ -81,7 +81,8 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
+   '((cider-shadow-cljs-default-options . "app")
+     (org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Life beyong distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Life Beyong Distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Yo</h1>")
@@ -164,8 +165,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

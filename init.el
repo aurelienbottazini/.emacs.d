@@ -62,7 +62,7 @@
   (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#ecb3b3")))
+        evil-normal-state-cursor '(box "#d33682")))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
@@ -722,8 +722,9 @@ cons cell (regexp . minor-mode)."
     (kbd "TAB") 'org-cycle)
   )
 
-;; (add-to-list 'org-modules "org-habit")
-;; (add-to-list 'org-modules "org-git-link")
+(require 'org-habit)
+(add-to-list 'org-modules "org-habit")
+(add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
 
