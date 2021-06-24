@@ -2038,7 +2038,7 @@ https://github.com/fuxialexander/org-pdftools
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'ask-user)
+(setq tags-add-tables 'nil) ; always start a new table don't ask the user
 #+end_src
 
 #+begin_src emacs-lisp :results silent

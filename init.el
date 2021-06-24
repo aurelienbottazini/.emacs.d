@@ -1257,7 +1257,7 @@ This command switches to browser."
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'ask-user)
+(setq tags-add-tables 'nil) ; always start a new table don't ask the user
 
 (require 'wat-mode)
 
