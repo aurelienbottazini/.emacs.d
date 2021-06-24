@@ -1123,6 +1123,10 @@ This command switches to browser."
 (require 'abott-find-in-project)
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
+(use-package projectile
+  :config
+  (define-key my-keys-minor-mode-map (kbd "C-c t") 'projectile-find-file))
+
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)

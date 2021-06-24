@@ -1773,7 +1773,7 @@ A sample .dir-locals.el,
 #+END_SRC
 
 ** fzf
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package projectile
   :config
   (define-key my-keys-minor-mode-map (kbd "C-c t") 'projectile-find-file))

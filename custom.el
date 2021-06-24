@@ -81,7 +81,8 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((cider-shadow-cljs-default-options . "app")
+   '((cider-shadow-cljs-default-options . "spa")
+     (cider-shadow-cljs-default-options . "app")
      (org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Life beyong distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Life Beyong Distributed Transactions</h1>")
