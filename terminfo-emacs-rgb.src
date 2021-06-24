@@ -4,3 +4,7 @@ xterm-emacs-rgb|xterm with RGB 24-bit direct color mode for Emacs,
      %d\:%p1%{255}%&%dm,
   setf24=\E[38\:2\:\:%p1%{65536}%/%d\:%p1%{256}%/%{255}%&\
      %d\:%p1%{255}%&%dm,
+
+xterm-emacs-rgb-italic|xterm 256color with italic and underline,
+    ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@, ncv@,
+    use=xterm-emacs-rgb,

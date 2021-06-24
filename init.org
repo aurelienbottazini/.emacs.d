@@ -185,8 +185,7 @@ If for any reason I encounter other modes where the Vim keybindings
 are interfering too much, I can disable the Vim keybindings with
 ~evil-toggle-key~.
 #+BEGIN_SRC emacs-lisp
-(setq evil-toggle-key "C-c e")
-(define-key my-keys-minor-mode-map "\C-z" 'suspend-frame)
+;; (define-key my-keys-minor-mode-map (kbd "C-z") 'suspend-frame)
 #+END_SRC
 
 ** Local variables
@@ -1780,10 +1779,10 @@ A sample .dir-locals.el,
 #+END_SRC
 
 ** fzf
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
 (use-package projectile
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'projectile-find-file))
+  :bind (:map my-keys-minor-mode-map
+              ("C-c t" . projectile-find-file)))
 #+end_src
 
 ** Jump

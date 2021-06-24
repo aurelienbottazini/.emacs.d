@@ -88,8 +88,7 @@
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
-(setq evil-toggle-key "C-c e")
-(define-key my-keys-minor-mode-map "\C-z" 'suspend-frame)
+;; (define-key my-keys-minor-mode-map (kbd "C-z") 'suspend-frame)
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -1127,8 +1126,8 @@ This command switches to browser."
 (define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
 
 (use-package projectile
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c t") 'projectile-find-file))
+  :bind (:map my-keys-minor-mode-map
+              ("C-c t" . projectile-find-file)))
 
 (use-package dumb-jump
   :init
