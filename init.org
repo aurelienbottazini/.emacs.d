@@ -434,6 +434,13 @@ cons cell (regexp . minor-mode)."
 #+END_SRC
 
 * GUI
+
+Enable ligatures on mac
+#+begin_src emacs-lisp
+(if (fboundp 'mac-auto-operator-composition-mode)
+  (mac-auto-operator-composition-mode t))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
 (blink-cursor-mode 0)
 (column-number-mode) ; column number in the mode line

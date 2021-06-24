@@ -268,6 +268,9 @@ cons cell (regexp . minor-mode)."
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
       (set-buffer-file-coding-system 'unix))))
 
+(if (fboundp 'mac-auto-operator-composition-mode)
+  (mac-auto-operator-composition-mode t))
+
 (blink-cursor-mode 0)
 (column-number-mode) ; column number in the mode line
 
