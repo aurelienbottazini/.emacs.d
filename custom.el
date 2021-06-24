@@ -174,4 +174,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(evil-search-highlight-persist-highlight-face ((t (:background "#5b7300" :foreground "black"))))
+ '(ivy-current-match ((t (:extend t :background "#eee8d5" :underline t :weight bold))))
+ '(swiper-line-face ((t (:background "#eee8d5")))))
