@@ -48,6 +48,7 @@
      (ivy--regex-fuzzy . "fuzzy")))
  '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
+ '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-doc-use-webkit nil)
@@ -167,8 +168,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

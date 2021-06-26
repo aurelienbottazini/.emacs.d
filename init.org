@@ -16,6 +16,10 @@ Adjusts garbage collector for faster startup.
                                       file-name-handler-alist last-file-name-handler-alist)))
 #+end_src
 
+#+begin_src emacs-lisp
+(setq lsp-headerline-arrow ">")
+#+end_src
+
 * Debug Emacs
 
 If Emacs complains about a mismatched paren while trying to start
@@ -2219,6 +2223,7 @@ C-c C-e R =letter= to export a presentation from your org file
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+end_src
+
 * Local variables
 
 # Local Variables:

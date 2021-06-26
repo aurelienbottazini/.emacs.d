@@ -9,6 +9,8 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
+(setq lsp-headerline-arrow ">")
+
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
         ("org"         . "https://orgmode.org/elpa/")
