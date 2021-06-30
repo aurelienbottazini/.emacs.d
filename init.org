@@ -1429,8 +1429,7 @@ them using:
       #+BEGIN_SRC emacs-lisp
       (use-package ivy
         :diminish ivy-mode
-        :bind (("C-s" . swiper-isearch)
-               :map my-keys-minor-mode-map
+        :bind (:map my-keys-minor-mode-map
                ("C-c v" . ivy-switch-view)
                ("C-c V" . ivy-push-view)
                :map ivy-minibuffer-map
@@ -1456,30 +1455,12 @@ them using:
 #+END_SRC
 ** Search in project
 
-~counsel-rg~ is my main way to search. Invoked with an argument, it
-allows you to specify the directory and search options.
 #+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (:map my-keys-minor-mode-map ("C-c f" . counsel-rg)))
+(use-package rg
+  :bind (:map my-keys-minor-mode-map ("C-c f" . rg-project)))
 #+END_SRC
 
-When I am investigating things, I like to see a preview of the
-results as I scroll down the search results. I do it with ~C-o~ then
-either ~g~ on the entry I want to preview or ~c~ to automatically
-preview results as I move through the result list.
-
-A trick I am learning is to use ~C-'~ to jump directly to a
-search results.
-
-*** When I need to narrow down my search to specific files
-
-**** Narrowing on the file-type
-
-Launch ~counsel-rg~ with a prefix and then I can use for example
-~-tjs~ as an argument to search only inside javascript files.
-~-Tjs~ searches inside files but javascript ones.
-
-**** From Dired
+*** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.

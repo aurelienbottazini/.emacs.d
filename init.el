@@ -960,8 +960,7 @@ This command switches to browser."
 
 (use-package ivy
   :diminish ivy-mode
-  :bind (("C-s" . swiper-isearch)
-         :map my-keys-minor-mode-map
+  :bind (:map my-keys-minor-mode-map
          ("C-c v" . ivy-switch-view)
          ("C-c V" . ivy-push-view)
          :map ivy-minibuffer-map
@@ -982,8 +981,8 @@ This command switches to browser."
   :bind (:map my-keys-minor-mode-map
          ("C-c ;" . avy-goto-char-timer)))
 
-(use-package counsel
-  :bind (:map my-keys-minor-mode-map ("C-c f" . counsel-rg)))
+(use-package rg
+  :bind (:map my-keys-minor-mode-map ("C-c f" . rg-project)))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
