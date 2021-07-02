@@ -218,6 +218,15 @@ with the reloading of those locals.
 #+END_SRC
 
 ** Better Defaults
+
+Enable osx clipboard in terminal
+#+begin_src emacs-lisp
+(setq select-enable-clipboard t)
+(use-package osx-clipboard
+  :config
+  (osx-clipboard-mode t))
+#+end_src
+
 I like setting the path manually as other solutions like ~exec-path-from-shell~
 can slow down Emacs startup if the shells scripts do too many things.
 
@@ -1456,9 +1465,21 @@ them using:
 ** Search in project
 
 #+BEGIN_SRC emacs-lisp
-(use-package rg
-  :bind (:map my-keys-minor-mode-map ("C-c f" . rg-project)))
+(use-package counsel
+  :bind (:map my-keys-minor-mode-map ("C-c f" . counsel-rg)))
 #+END_SRC
+
+While performing a search, you can activate the calling action with
+~C-o c~ to automatically switch to the result while navigating the
+list in the minibuffer.
+
+You can call ivy-occur with ~C-x C-o~ and it will show all the results
+in a seperate buffer. While in this buffer
+- ~f~ to show the current result in an adjacent buffer
+- ~j~ or ~k~ for next or previous result
+- ~C-c C-f~ to activate error follow mode. This allows you to navigate
+  the error list with emacs error mechanism. ~[e~ and ~]e~ with my
+  emacs evil config.
 
 *** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with

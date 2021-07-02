@@ -107,6 +107,11 @@
         (when (equal default-directory dir))
         (my-reload-dir-locals-for-current-buffer)))))
 
+(setq select-enable-clipboard t)
+(use-package osx-clipboard
+  :config
+  (osx-clipboard-mode t))
+
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
       (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
@@ -981,8 +986,8 @@ This command switches to browser."
   :bind (:map my-keys-minor-mode-map
          ("C-c ;" . avy-goto-char-timer)))
 
-(use-package rg
-  :bind (:map my-keys-minor-mode-map ("C-c f" . rg-project)))
+(use-package counsel
+  :bind (:map my-keys-minor-mode-map ("C-c f" . counsel-rg)))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
