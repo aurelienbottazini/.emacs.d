@@ -737,6 +737,7 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 (define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
+(define-key org-mode-map "\C-c\C-x\C-t" 'counsel-org-tag)
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(canceled@)")))
