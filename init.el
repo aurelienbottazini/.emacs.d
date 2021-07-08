@@ -996,7 +996,7 @@ This command switches to browser."
          ("C-x C-m" . counsel-M-x)
          ("C-c C-m" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
-         ("C-x b" . counsel-switch-buffer)
+         ("C-x b" . ido-switch-buffer)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
          ("<f1> l" . counsel-find-library)
