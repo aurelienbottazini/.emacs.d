@@ -16,10 +16,6 @@ Adjusts garbage collector for faster startup.
                                       file-name-handler-alist last-file-name-handler-alist)))
 #+end_src
 
-#+begin_src emacs-lisp
-(setq lsp-headerline-arrow ">")
-#+end_src
-
 * Debug Emacs
 
 If Emacs complains about a mismatched paren while trying to start
@@ -196,6 +192,7 @@ are interfering too much, I can disable the Vim keybindings with
 Local variables are useful to customize your settings for different
 projects/directories. The built in ~make-local-variable~ is
 convenient in helping you create those variables.
+I also like to use ~projectile-edit-dir-locals~
 
 It is annoying when I edit those local variables that they are not
 picked up automatically for open buffers. Those two functions help me
@@ -2165,7 +2162,7 @@ The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Jetbrains Mono-14")))
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -2204,7 +2201,7 @@ C-c C-e R =letter= to export a presentation from your org file
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package lsp-mode
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
@@ -2219,6 +2216,10 @@ C-c C-e R =letter= to export a presentation from your org file
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
+
+#+begin_src emacs-lisp
+(setq lsp-headerline-arrow ">")
+#+end_src
 
 (use-package company-box
   :hook (company-mode . company-box-mode))

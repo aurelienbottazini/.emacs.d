@@ -9,8 +9,6 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
-(setq lsp-headerline-arrow ">")
-
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
         ("org"         . "https://orgmode.org/elpa/")
@@ -1334,7 +1332,7 @@ This command switches to browser."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
-(setq default-frame-alist '((font . "Jetbrains Mono-14")))
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
 
 (use-package rainbow-delimiters
   :config
@@ -1360,25 +1358,3 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-
-  (setq read-process-output-max (* 1024 1024))
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (js2-mode . lsp)
-         (web-mode . lsp)
-         (clojure-mode . lsp)
-         (json-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
-
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)

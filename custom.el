@@ -14,6 +14,8 @@
  '(company-minimum-prefix-length 1)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
+ '(coverlay:tested-line-background-color "#2e3600")
+ '(coverlay:untested-line-background-color "#8a1f1d")
  '(custom-safe-themes
    '("2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "51ec7bfa54adf5fff5d466248ea6431097f5a18224788d0bd7eb1257a4f7b773" "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70" "aae95bbe93015b723d94b7081fdb27610d393c2156e2cda2e43a1ea7624c9e6f" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "0809c08440b51a39c77ec5529f89af83ab256a9d48107b088d40098ce322c7d8" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default))
  '(deft-new-file-format "%Y-%m-%dT%H:%M")
@@ -83,7 +85,8 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((cider-shadow-cljs-default-options . "spa")
+   '((coverlay:base-path . "/Users/auray/work/dox-errors-js/")
+     (cider-shadow-cljs-default-options . "spa")
      (cider-shadow-cljs-default-options . "app")
      (org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Life beyong distributed Transactions</h1>")
@@ -168,8 +171,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -177,4 +180,7 @@
  ;; If there is more than one, they won't work right.
  '(evil-search-highlight-persist-highlight-face ((t (:background "#5b7300" :foreground "black"))))
  '(ivy-current-match ((t (:extend t :background "#eee8d5" :underline t :weight bold))))
- '(swiper-line-face ((t (:background "#eee8d5")))))
+ '(org-level-1 ((t (:extend nil :foreground "#cb4b16" :slant italic :weight bold :height 1.3 :family "Operator Mono AB"))))
+ '(org-level-2 ((t (:inherit variable-pitch :extend nil :foreground "#859900" :slant italic :height 1.2))))
+ '(swiper-line-face ((t (:background "#eee8d5"))))
+ '(variable-pitch ((t (:family "Operator Mono AB")))))
