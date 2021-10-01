@@ -1094,46 +1094,7 @@ This command switches to browser."
   (add-hook 'prog-mode-hook 'diff-hl-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-(use-package projectile
-:bind-keymap
-("C-c p" . projectile-command-map)
-:config
-(projectile-mode +1))
-
-(use-package find-file-in-project
-  :ensure t
-  :bind (:map  my-keys-minor-mode-map
-               ("C-c T" . find-file-in-project-by-selected)
-               ("M-p" . ffip)
-               :map evil-normal-state-map
-               ("gf" . find-file-in-project-at-point))
-  :config
-
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.png")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpeg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.gif")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.bmp")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.ico")) ffip-ignore-filenames))
-  (setq ffip-prefer-ido-mode nil)
-  (setq ffip-use-rust-fd t)
-  (setq ffip-strip-file-name-regex "\\(\\.mock\\|_test\\|\\.test\\|\\.mockup\\|\\.spec\\)")
-  (add-to-list 'ffip-prune-patterns "*/.git/*")
-  (add-to-list 'ffip-prune-patterns "*/dist/*")
-  (add-to-list 'ffip-prune-patterns "*/.emacs.d/elpa/*")
-  (add-to-list 'ffip-prune-patterns "*/.nuxt/*")
-  (add-to-list 'ffip-prune-patterns "*/spec/coverage/*")
-  (add-to-list 'ffip-prune-patterns "*/public/*")
-  (add-to-list 'ffip-prune-patterns "*/.shadow-cljs/*")
-  (add-to-list 'ffip-prune-patterns "*/vendor/*")
-  (add-to-list 'ffip-prune-patterns "node_modules/*"))
-
-(require 'abott-find-in-project)
-(define-key my-keys-minor-mode-map (kbd "C-c s") 'abott-find-file-with-similar-name)
-
-(use-package projectile
-  :bind (:map my-keys-minor-mode-map
-              ("C-c t" . projectile-find-file)))
+(require 'project)
 
 (use-package dumb-jump
   :init
