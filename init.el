@@ -1096,6 +1096,8 @@ This command switches to browser."
 
 (require 'project)
 
+(define-key my-keys-minor-mode-map (kbd "M-.") 'xref-find-definitions)
+(define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)

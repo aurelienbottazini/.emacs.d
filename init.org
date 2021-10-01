@@ -1704,6 +1704,8 @@ IDE code analysis but it works surprisingly well.
 ~M-,~ to go back.
 ~M-?~ to find references
 #+BEGIN_SRC emacs-lisp
+(define-key my-keys-minor-mode-map (kbd "M-.") 'xref-find-definitions)
+(define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
