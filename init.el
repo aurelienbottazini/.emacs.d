@@ -301,7 +301,9 @@ cons cell (regexp . minor-mode)."
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
+  :after clojure-mode
   :config
+
   (setq cider-repl-display-help-banner nil)
   )
 
@@ -862,7 +864,7 @@ This command switches to browser."
   (fullframe vc-annotate quit-window))
 
 (use-package magit
-  :demand true
+;;  :demand true
   :bind (:map my-keys-minor-mode-map
               ("C-c gs" . magit-status)
               ("C-c gc" . magit-commit)
@@ -1083,3 +1085,6 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
