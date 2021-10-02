@@ -543,7 +543,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package which-key
   :diminish which-key-mode
-  :after magit
   :config
   (which-key-mode))
 
@@ -1030,10 +1029,6 @@ This command switches to browser."
 (use-package origami
   :config
   (global-origami-mode))
-
-(use-package emamux
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
 
 (use-package hydra
   :config

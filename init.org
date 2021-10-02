@@ -772,7 +772,6 @@ Shows a key combination helper in the minibuffer
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
   :diminish which-key-mode
-  :after magit
   :config
   (which-key-mode))
 #+END_SRC
@@ -1675,13 +1674,6 @@ it allows quick previews.
 (use-package origami
   :config
   (global-origami-mode))
-#+END_SRC
-
-Use emamux to rerun the last command run in tmux pane
-#+BEGIN_SRC emacs-lisp
-(use-package emamux
-  :config
-  (define-key my-keys-minor-mode-map (kbd "C-c x") '(lambda () (interactive) (emamux:send-command "!!"))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
