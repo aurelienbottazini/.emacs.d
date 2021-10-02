@@ -178,9 +178,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(evil-search-highlight-persist-highlight-face ((t (:background "#5b7300" :foreground "black"))))
- '(ivy-current-match ((t (:extend t :background "#eee8d5" :underline t :weight bold))))
- '(org-level-1 ((t (:extend nil :foreground "#cb4b16" :slant italic :weight bold :height 1.3 :family "Operator Mono AB"))))
- '(org-level-2 ((t (:inherit variable-pitch :extend nil :foreground "#859900" :slant italic :height 1.2))))
- '(swiper-line-face ((t (:background "#eee8d5"))))
  '(variable-pitch ((t (:family "Operator Mono AB")))))
