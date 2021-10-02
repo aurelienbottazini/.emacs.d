@@ -2,6 +2,7 @@
 #+OPTIONS: toc:4 h:4
 #+PROPERTY: header-args :results silent :tangle yes
 
+* Faster startup
 Adjusts garbage collector for faster startup.
 #+begin_src emacs-lisp :results silent
 ;; -*- lexical-binding: t; -*-
@@ -1343,7 +1344,7 @@ porcelains.
 
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package magit
-;;  :demand true
+  :demand true
   :bind (:map my-keys-minor-mode-map
               ("C-c gs" . magit-status)
               ("C-c gc" . magit-commit)
