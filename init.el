@@ -44,26 +44,6 @@
  (setq abott/default-color '("#eee8d5" "#657b83" . "#0087ff"))
  (load-theme 'solarized-dark t))
 
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) abott/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t abott/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
-
-(use-package evil
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#d33682")))
-
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
@@ -87,8 +67,6 @@
         (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
-
-;; (define-key my-keys-minor-mode-map (kbd "C-z") 'suspend-frame)
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -306,45 +284,6 @@ cons cell (regexp . minor-mode)."
   (diminish 'my-keys-minor-mode)
   (diminish 'eldoc-mode))
 
-(defun tmux-socket-command-string ()
-  (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
-
-(defun tmux-move-left ()
-  (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
-
-(defun tmux-move-up ()
-  (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
-
-(defun tmux-move-down ()
-  (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(define-key my-keys-minor-mode-map (kbd "C-h") 'tmux-move-left)
-(define-key my-keys-minor-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key my-keys-minor-mode-map (kbd "C-k") 'tmux-move-up)
-(define-key my-keys-minor-mode-map (kbd "C-l") 'tmux-move-right)
-
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 80)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
@@ -357,19 +296,13 @@ cons cell (regexp . minor-mode)."
 
 (use-package clojure-mode
   :mode "\\.clj\\'"
-  :after evil
   :config
   (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
-  :after evil
   :config
   (setq cider-repl-display-help-banner nil)
-(defadvice cider--debug-mode ( after activate-emacs-state activate)
-  (evil-make-intercept-map cider--debug-mode-map)
-  (evil-normal-state))
-  ;;(evil-make-intercept-map cider--debug-mode-map 'normal)
   )
 
 (use-package yaml-mode
@@ -438,13 +371,8 @@ cons cell (regexp . minor-mode)."
 
 (use-package emmet-mode
   :hook (css-mode sgml-mode web-mode)
-  :after evil
   :diminish emmet-mode
   :config
-  (progn
-    (evil-define-key 'insert emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
-    (evil-define-key 'emacs emmet-mode-keymap (kbd "C-j") 'emmet-expand-line))
-
   (add-hook 'css-mode-hook
             (lambda ()
               (emmet-mode)
@@ -582,10 +510,6 @@ cons cell (regexp . minor-mode)."
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
-(advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))
-  (define-key evil-normal-state-map (kbd "[f") 'flycheck-previous-error)
-  (define-key evil-normal-state-map (kbd "]f") 'flycheck-next-error)
-
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
     (let* ((root (locate-dominating-file
@@ -616,18 +540,6 @@ cons cell (regexp . minor-mode)."
                    )
   :modes (cfn-mode))
 (add-to-list 'flycheck-checkers 'cfn-lint))
-
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
-
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
 (use-package which-key
   :diminish which-key-mode
@@ -692,15 +604,8 @@ cons cell (regexp . minor-mode)."
 
 (define-key my-keys-minor-mode-map (kbd "C-c ot") 'toggle-truncate-lines)
 
-(use-package evil
-  :config
-   (define-key evil-normal-state-map (kbd "[b") 'previous-buffer)
-   (define-key evil-normal-state-map (kbd "]b") 'next-buffer)
-   (define-key evil-normal-state-map (kbd "]e") 'next-error)
-   (define-key evil-normal-state-map (kbd "[e") 'previous-error))
-
 (use-package windresize
-  :bind (:map evil-normal-state-map
+  :bind (:map  my-keys-minor-mode-map
               ("C-w r" . windresize)))
 
 (use-package drag-stuff
@@ -714,21 +619,6 @@ cons cell (regexp . minor-mode)."
 (setq org-directory **local-dropbox-folder**)
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
-
-(add-hook 'org-capture-mode-hook 'evil-insert-state)
-
-(use-package evil
-  :init
-  (setq org-use-speed-commands nil) ; they don't work well with Evil.
-  :config
-  (evil-define-key 'normal org-mode-map
-    (kbd "M-l") 'org-shiftmetaright
-    (kbd "M-h") 'org-shiftmetaleft
-    (kbd "M-k") 'org-move-subtree-up
-    (kbd "M-j") 'org-move-subtree-down
-    (kbd "M-p") 'org-publish-current-project
-    (kbd "TAB") 'org-cycle)
-  )
 
 (require 'org-habit)
 (add-to-list 'org-modules "org-habit")
@@ -765,7 +655,6 @@ cons cell (regexp . minor-mode)."
       )
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
-(add-hook 'org-capture-mode-hook 'evil-insert-state)
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
@@ -866,21 +755,7 @@ cons cell (regexp . minor-mode)."
            {9}{9}{1}%
     ")))
 
-(use-package define-word
-  :bind (:map evil-normal-state-map
-          ("zw" . define-word-at-point)))
-
-(use-package powerthesaurus
-  :bind (:map evil-normal-state-map
-          ("zs" . powerthesaurus-lookup-word-dwim)))
-
-(use-package writegood-mode
- :bind (:map evil-normal-state-map
- (
-         ("zgg" . writegood-mode)
-         ("zgr" . writegood-reading-ease)
-         ("zgl" . writegood-grade-level)
-  )))
+(use-package writegood-mode)
 
 (require 'browse-url) ; part of gnu emacs
 
@@ -899,69 +774,6 @@ This command switches to browser."
     (browse-url (concat "http://en.wikipedia.org/wiki/" word))
     ;; (eww myUrl) ; emacs's own browser
     ))
-
-(use-package evil
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs))
-
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-commentary
-  :after evil
-  :diminish evil-commentary-mode
-  :config
-  (evil-commentary-mode))
-
-(use-package evil-visualstar
-  :after evil
-  :config
-  (global-evil-visualstar-mode t))
-
-(use-package evil-matchit
-  :defer 2
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil-search-highlight-persist
-  :bind  (:map my-keys-minor-mode-map
-              ("C-c oh" . (lambda ()
-                            (interactive)
-                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
-               )
-              )
-  :config
-  (global-evil-search-highlight-persist t))
-
-(use-package evil
-  :config
-  (evil-mode 1)
-  (evil-ex-define-cmd "W" 'save-buffer))
-
-(use-package evil-indent-plus
-  :after evil
-  :config
-  (evil-indent-plus-default-bindings))
 
 (use-package ivy
   :diminish ivy-mode
@@ -1021,9 +833,6 @@ This command switches to browser."
 
 (use-package iedit)
 
-(use-package evil-iedit-state
-  :bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode)))
-
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 (setq ediff-split-window-function 'split-window-vertically)
@@ -1047,26 +856,11 @@ This command switches to browser."
   :bind (:map my-keys-minor-mode-map
               ("C-c gt" . git-timemachine-toggle))
   :config
-  (defadvice git-timemachine-mode (after git-timemachine-change-to-emacs-state activate compile)
-    "when entering git-timemachine mode, change evil normal state to emacs state"
-    (if (evil-normal-state-p)
-        (evil-emacs-state)
-      (evil-normal-state)))
-
   (ad-activate 'git-timemachine-mode))
 
 (use-package fullframe
   :config
   (fullframe vc-annotate quit-window))
-
-(eval-after-load "vc-annotate"
-     '(progn
-      (define-key vc-annotate-mode-map "j" 'evil-next-line)
-      (define-key vc-annotate-mode-map "k" 'evil-previous-line)))
-
-(use-package evil
-  :config
-  (evil-define-key 'normal diff-mode-map (kbd "q") 'quit-window))
 
 (use-package magit
   :demand true
@@ -1084,10 +878,6 @@ This command switches to browser."
   :config
   (fullframe magit-status magit-mode-quit-window))
 
-(use-package evil
-  :config
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
 (use-package diff-hl
   :after magit
   :config
@@ -1097,7 +887,6 @@ This command switches to browser."
 (require 'project)
 
 (define-key my-keys-minor-mode-map (kbd "M-.") 'xref-find-definitions)
-(define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
@@ -1111,8 +900,6 @@ This command switches to browser."
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-complete-lisp-symbol-partially try-complete-lisp-symbol))
-(define-key evil-insert-state-map (kbd "s-/") 'hippie-expand)
-(define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
 
 (use-package company
   :diminish company-mode
@@ -1130,7 +917,6 @@ This command switches to browser."
   (setq company-dabbrev-downcase nil
         company-dabbrev-ignore-case nil)
   (setq company-show-numbers t)
-  (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)
 
   (use-package company-statistics
     :after company
@@ -1203,18 +989,7 @@ This command switches to browser."
 
 (eval-after-load "dired"
   '(progn
-     (define-key dired-mode-map "-" 'dired-up-directory)
-     (define-key dired-mode-map (kbd "/") 'evil-search-forward)
-     (define-key dired-mode-map (kbd "j") 'dired-next-line)
-     (define-key dired-mode-map (kbd "k") 'dired-previous-line)
-     (define-key dired-mode-map (kbd "[b") 'previous-buffer)
-     (define-key dired-mode-map (kbd "]b") 'next-buffer)
-     (define-key dired-mode-map (kbd "C-d") 'evil-scroll-page-down)
-     (evil-define-key 'normal dired-mode-map
-       "gg" 'evil-goto-first-line
-       "^" '(lambda () (interactive) (find-alternate-file "..")))))
-
-(define-key package-menu-mode-map (kbd "/") 'evil-search-forward)
+     (define-key dired-mode-map "-" 'dired-up-directory)))
 
 (use-package dired-rsync
 :bind (:map dired-mode-map ("p" . dired-rsync)))
@@ -1247,18 +1022,10 @@ This command switches to browser."
   (defengine caniuse "https://caniuse.com/#search=%s")
   )
 
-(define-key my-keys-minor-mode-map (kbd "C-c u") 'universal-argument)
-(define-key my-keys-minor-mode-map (kbd "C-u") 'evil-scroll-up)
-
 (use-package restclient
   :demand t
   :config
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
-
-(use-package peep-dired
-  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
-  :bind (:map dired-mode-map
-              ("P" . peep-dired)))
 
 (use-package origami
   :config

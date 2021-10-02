@@ -101,32 +101,6 @@ well on the terminal.
  (load-theme 'solarized-dark t))
 #+END_SRC
 
-Changes mode-line color depending on Evil state, if buffer is-  modified etc...
-#+begin_src emacs-lisp
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) abott/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t abott/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
-#+end_src
-
-Make my cursor match my modeline color
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#d33682")))
-#+end_src
-
 It is important to load custom settings early. Those are the ones
 managed by Emacs through customization menus. They can impact the
 loading of other packages.
@@ -179,13 +153,6 @@ For example If mapped to a global-mode-map, I can override the key for
           (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
           (add-to-list 'minor-mode-map-alist mykeys))))
   (ad-activate 'load)
-#+END_SRC
-
-If for any reason I encounter other modes where the Vim keybindings
-are interfering too much, I can disable the Vim keybindings with
-~evil-toggle-key~.
-#+BEGIN_SRC emacs-lisp
-;; (define-key my-keys-minor-mode-map (kbd "C-z") 'suspend-frame)
 #+END_SRC
 
 ** Local variables
@@ -486,49 +453,6 @@ Enable ligatures on mac
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
-
-Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
-to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
-#+BEGIN_SRC emacs-lisp
-(defun tmux-socket-command-string ()
-  (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
-
-(defun tmux-move-left ()
-  (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
-
-(defun tmux-move-up ()
-  (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
-
-(defun tmux-move-down ()
-  (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(define-key my-keys-minor-mode-map (kbd "C-h") 'tmux-move-left)
-(define-key my-keys-minor-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key my-keys-minor-mode-map (kbd "C-k") 'tmux-move-up)
-(define-key my-keys-minor-mode-map (kbd "C-l") 'tmux-move-right)
-#+END_SRC
 * Programming languages
 
 Auto-fill comments in prog modes
@@ -548,19 +472,13 @@ Auto-fill comments in prog modes
 
 (use-package clojure-mode
   :mode "\\.clj\\'"
-  :after evil
   :config
   (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
-  :after evil
   :config
   (setq cider-repl-display-help-banner nil)
-(defadvice cider--debug-mode ( after activate-emacs-state activate)
-  (evil-make-intercept-map cider--debug-mode-map)
-  (evil-normal-state))
-  ;;(evil-make-intercept-map cider--debug-mode-map 'normal)
   )
 #+END_SRC
 ** Ruby
@@ -643,13 +561,8 @@ the result after the comment.
 
 (use-package emmet-mode
   :hook (css-mode sgml-mode web-mode)
-  :after evil
   :diminish emmet-mode
   :config
-  (progn
-    (evil-define-key 'insert emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
-    (evil-define-key 'emacs emmet-mode-keymap (kbd "C-j") 'emmet-expand-line))
-
   (add-hook 'css-mode-hook
             (lambda ()
               (emmet-mode)
@@ -755,12 +668,12 @@ Context-coloring highlights code based on closures.
 This gives a refreshing view of the code and helps using closures
 efficiently.
 #+BEGIN_SRC emacs-lisp
-   (use-package context-coloring
-     :ensure t
-     :diminish context-coloring-mode
-     :bind (:map my-keys-minor-mode-map ("C-c oc" . context-coloring-mode))
-     :config
-     (add-hook 'js2-mode-hook 'context-coloring-mode))
+(use-package context-coloring
+  :ensure t
+  :diminish context-coloring-mode
+  :bind (:map my-keys-minor-mode-map ("C-c oc" . context-coloring-mode))
+  :config
+  (add-hook 'js2-mode-hook 'context-coloring-mode))
 #+END_SRC
 
 *** React
@@ -820,10 +733,6 @@ adjustments for JSX.
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
-(advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))
-  (define-key evil-normal-state-map (kbd "[f") 'flycheck-previous-error)
-  (define-key evil-normal-state-map (kbd "]f") 'flycheck-next-error)
-
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
     (let* ((root (locate-dominating-file
@@ -857,21 +766,6 @@ adjustments for JSX.
 
 #+END_SRC
 * Bindings
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-#+END_SRC
 
 ** General
 Shows a key combination helper in the minibuffer
@@ -949,15 +843,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
 (define-key my-keys-minor-mode-map (kbd "C-c ot") 'toggle-truncate-lines)
 
-(use-package evil
-  :config
-   (define-key evil-normal-state-map (kbd "[b") 'previous-buffer)
-   (define-key evil-normal-state-map (kbd "]b") 'next-buffer)
-   (define-key evil-normal-state-map (kbd "]e") 'next-error)
-   (define-key evil-normal-state-map (kbd "[e") 'previous-error))
-
 (use-package windresize
-  :bind (:map evil-normal-state-map
+  :bind (:map  my-keys-minor-mode-map
               ("C-w r" . windresize)))
 #+END_SRC
 ** Drag stuff
@@ -985,21 +872,6 @@ for org template captures.
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
-
-(add-hook 'org-capture-mode-hook 'evil-insert-state)
-
-(use-package evil
-  :init
-  (setq org-use-speed-commands nil) ; they don't work well with Evil.
-  :config
-  (evil-define-key 'normal org-mode-map
-    (kbd "M-l") 'org-shiftmetaright
-    (kbd "M-h") 'org-shiftmetaleft
-    (kbd "M-k") 'org-move-subtree-up
-    (kbd "M-j") 'org-move-subtree-down
-    (kbd "M-p") 'org-publish-current-project
-    (kbd "TAB") 'org-cycle)
-  )
 
 (require 'org-habit)
 (add-to-list 'org-modules "org-habit")
@@ -1090,7 +962,6 @@ This is a must to capture ideas quickly.
       )
 
 (define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
-(add-hook 'org-capture-mode-hook 'evil-insert-state)
 #+END_SRC
 
 To launch an Emacs client with a capture frame selecting the ~n~ template
@@ -1254,30 +1125,10 @@ apt install hunspell hunspell-fr
      '(diminish 'flyspell-mode))
 #+END_SRC
 
-Word definition
-#+BEGIN_SRC emacs-lisp
-(use-package define-word
-  :bind (:map evil-normal-state-map
-          ("zw" . define-word-at-point)))
-#+END_SRC
-
-Word synonyms.
-#+BEGIN_SRC emacs-lisp
-(use-package powerthesaurus
-  :bind (:map evil-normal-state-map
-          ("zs" . powerthesaurus-lookup-word-dwim)))
-#+END_SRC
-
 For most documents, aim for a score of approximately 60 to 70 for
 the reading ease and 7.0 to 8.0 for the grade level.
 #+BEGIN_SRC emacs-lisp
-(use-package writegood-mode
- :bind (:map evil-normal-state-map
- (
-         ("zgg" . writegood-mode)
-         ("zgr" . writegood-reading-ease)
-         ("zgl" . writegood-grade-level)
-  )))
+(use-package writegood-mode)
 #+END_SRC
 
 If you need additional feedback from an external service here is an
@@ -1301,126 +1152,12 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 #+END_SRC
-* Vim
-I started using Vim to help me prevent [[https://www.emacswiki.org/emacs/RepeatedStrainInjury][emacs RSI.]]
-Now I am sticking with it because It makes me feel like beethoven
-manipulating text :-)
-
-Here is an awesome [[https://github.com/noctuid/evil-guide][Evil Guide]]
-
-Quit read-only windows with Q instead of trying to register a Vim
-Macro.
-This is mainly to restore emacs behavior with help windows.
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-#+END_SRC
-
-I use Vim keybindings everywhere except with special modes
-like Magit, Dired... I setup those special modes to start with Emacs
-keybindings by default.
-#+begin_src emacs-lisp
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs))
-#+end_src
-
-Surround things with
-- ~S~ in visual mode
-- ~ys<text-object>~ in normal mode
-  You can also change surroundings ~cs~ or delete surroundings ~ds~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode 1))
-  #+END_SRC
-
-  Comment things with ~gc~. Comment and copy with ~gy~
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-commentary
-    :after evil
-    :diminish evil-commentary-mode
-    :config
-    (evil-commentary-mode))
-  #+END_SRC
-
-  Start a search from visual selection with ~*~ or ~#~ (backward).
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-visualstar
-    :after evil
-    :config
-    (global-evil-visualstar-mode t))
-  #+END_SRC
-
-  Jump to matching pairs with ~%~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-matchit
-    :defer 2
-    :after evil
-    :config
-    (global-evil-matchit-mode 1))
-  #+END_SRC
-
-  Persist highlight from ~evil search~ and ~isearch~
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-search-highlight-persist
-    :bind  (:map my-keys-minor-mode-map
-                ("C-c oh" . (lambda ()
-                              (interactive)
-                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
-                 )
-                )
-    :config
-    (global-evil-search-highlight-persist t))
-  #+END_SRC
-
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :config
-    (evil-mode 1)
-    (evil-ex-define-cmd "W" 'save-buffer))
-  #+END_SRC
-
-  Add text objects to select, copy things based on indentation level.
-  Use it with ~vii~ and ~yii~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-indent-plus
-    :after evil
-    :config
-    (evil-indent-plus-default-bindings))
-  #+END_SRC
 
 * Search
 Searching is probably the most important thing in a code editor.
 Here is how I search.
 
 ** Search in current file/buffer
-
-I have two main way to search in a buffer:
-
-*** Vim way
-I use ~evil-search-forward~ (bound to ~/~) and
-~evil-search-backward~ (bound to ~?~) as it allows me to do
-powerful /vim/ combinations.
-
-For example I do a search, then navigate through the search list
-with ~n~ or ~N~. Or do a search then replace matches with ~:
-%s//replacement/gc~
 
 *** swiper
 I use ~swiper-isearch~ when I am exploring the buffer or when I
@@ -1476,8 +1213,7 @@ in a seperate buffer. While in this buffer
 - ~f~ to show the current result in an adjacent buffer
 - ~j~ or ~k~ for next or previous result
 - ~C-c C-f~ to activate error follow mode. This allows you to navigate
-  the error list with emacs error mechanism. ~[e~ and ~]e~ with my
-  emacs evil config.
+  the error list with emacs error mechanism.
 
 *** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with
@@ -1522,20 +1258,8 @@ I find the UI better.
 
 ** Rename
 
-Bindings: https://github.com/syl20bnr/evil-iedit-state#in-iedit-state
-
-`e` from expand region to switch to iedit state
-`S` to substitute
-`D` to delete
-`n` next
-`p` previous
-`F` reduce scope to current function
-`tab` toggle occurrence
 #+BEGIN_SRC emacs-lisp
 (use-package iedit)
-
-(use-package evil-iedit-state
-  :bind (:map my-keys-minor-mode-map ("<f6>" . evil-iedit-state/iedit-mode)))
 #+END_SRC
 
 * VCS
@@ -1585,12 +1309,6 @@ versions.
   :bind (:map my-keys-minor-mode-map
               ("C-c gt" . git-timemachine-toggle))
   :config
-  (defadvice git-timemachine-mode (after git-timemachine-change-to-emacs-state activate compile)
-    "when entering git-timemachine mode, change evil normal state to emacs state"
-    (if (evil-normal-state-p)
-        (evil-emacs-state)
-      (evil-normal-state)))
-
   (ad-activate 'git-timemachine-mode))
 #+END_SRC
 *** vc-annotate
@@ -1607,17 +1325,6 @@ Bound to ~C-x v g~.
   (use-package fullframe
     :config
     (fullframe vc-annotate quit-window))
-  #+END_SRC
-
-  #+BEGIN_SRC emacs-lisp
-  (eval-after-load "vc-annotate"
-       '(progn
-        (define-key vc-annotate-mode-map "j" 'evil-next-line)
-        (define-key vc-annotate-mode-map "k" 'evil-previous-line)))
-
-  (use-package evil
-    :config
-    (evil-define-key 'normal diff-mode-map (kbd "q") 'quit-window))
   #+END_SRC
 
 ** Magit
@@ -1653,13 +1360,6 @@ instead of splitting the current buffer.
   :after magit
   :config
   (fullframe magit-status magit-mode-quit-window))
-#+END_SRC
-
-Start in insert mode when committing from vcs
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+END_SRC
 
 ** gitsh
@@ -1705,7 +1405,6 @@ IDE code analysis but it works surprisingly well.
 ~M-?~ to find references
 #+BEGIN_SRC emacs-lisp
 (define-key my-keys-minor-mode-map (kbd "M-.") 'xref-find-definitions)
-(define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
@@ -1760,8 +1459,6 @@ The description of all the hippie expand functions is inside
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-complete-lisp-symbol-partially try-complete-lisp-symbol))
-(define-key evil-insert-state-map (kbd "s-/") 'hippie-expand)
-(define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
 #+END_SRC
 
 ** Auto-Completion
@@ -1788,7 +1485,6 @@ Use =company-diag= to debug completion problems
   (setq company-dabbrev-downcase nil
         company-dabbrev-ignore-case nil)
   (setq company-show-numbers t)
-  (define-key evil-insert-state-map (kbd "C-x C-o") 'company-complete)
 
   (use-package company-statistics
     :after company
@@ -1879,18 +1575,7 @@ To play a video, with cursor on video file in dired =! vlc=
 
 (eval-after-load "dired"
   '(progn
-     (define-key dired-mode-map "-" 'dired-up-directory)
-     (define-key dired-mode-map (kbd "/") 'evil-search-forward)
-     (define-key dired-mode-map (kbd "j") 'dired-next-line)
-     (define-key dired-mode-map (kbd "k") 'dired-previous-line)
-     (define-key dired-mode-map (kbd "[b") 'previous-buffer)
-     (define-key dired-mode-map (kbd "]b") 'next-buffer)
-     (define-key dired-mode-map (kbd "C-d") 'evil-scroll-page-down)
-     (evil-define-key 'normal dired-mode-map
-       "gg" 'evil-goto-first-line
-       "^" '(lambda () (interactive) (find-alternate-file "..")))))
-
-(define-key package-menu-mode-map (kbd "/") 'evil-search-forward)
+     (define-key dired-mode-map "-" 'dired-up-directory)))
 
 (use-package dired-rsync
 :bind (:map dired-mode-map ("p" . dired-rsync)))
@@ -1978,23 +1663,10 @@ https://github.com/fuxialexander/org-pdftools
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(define-key my-keys-minor-mode-map (kbd "C-c u") 'universal-argument)
-(define-key my-keys-minor-mode-map (kbd "C-u") 'evil-scroll-up)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
 (use-package restclient
   :demand t
   :config
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
-#+END_SRC
-
-TODO: fix keys as they don't work because of evil-mode
-#+BEGIN_SRC emacs-lisp
-(use-package peep-dired
-  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
-  :bind (:map dired-mode-map
-              ("P" . peep-dired)))
 #+END_SRC
 
 Code folding. Is it useful? I am testing =set-selective-display= and
