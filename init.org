@@ -804,6 +804,11 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 (use-package wgrep :defer t)
 #+END_SRC
 
+Another =M-x= without leaving the home row
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-j") 'execute-extended-command)
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
    (use-package paredit
      :diminish paredit-mode

@@ -562,6 +562,8 @@ cons cell (regexp . minor-mode)."
 ;; makes grep buffers writable and apply the changes to files.
 (use-package wgrep :defer t)
 
+(global-set-key (kbd "C-x C-j") 'execute-extended-command)
+
 (use-package paredit
    :diminish paredit-mode
    :config
