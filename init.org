@@ -141,6 +141,18 @@ with the reloading of those locals.
 #+END_SRC
 
 ** Better Defaults
+#+begin_src emacs-lisp
+(setq initial-major-mode 'org-mode)
+(setq initial-scratch-message nil)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq vc-follow-symlinks t)
+(put 'magit-edit-line-commit 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
+(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+#+end_src
 
 Enable osx clipboard in terminal
 #+begin_src emacs-lisp
@@ -194,12 +206,12 @@ stick to fundamental mode and disable expensive minor modes.
 (add-hook 'find-file-hooks 'check-large-file-hook)
 #+END_SRC
 
-                        #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
       tab-always-indent 'complete ; try to indent first, if already indented try to complete
-)
+      )
 
 (make-variable-buffer-local 'compile-command) ; makes the compile command be buffer specific.
 (defalias 'yes-or-no-p 'y-or-n-p) ; instead of typing yes or no, type y or n
@@ -226,8 +238,7 @@ stick to fundamental mode and disable expensive minor modes.
 ;; coming from an external process
 (global-auto-revert-mode 1)
 
-;; replace selected text when typing. Not very useful as I use vim keybindings.
-;; Still nice to have as a default
+;; replace selected text when typing.
 (pending-delete-mode 1)
 
 (prefer-coding-system 'utf-8)
@@ -246,13 +257,6 @@ the modern standard.
 I want error highlights and error bindings in shell modes too.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
-#+END_SRC
-
-~C-c C-w~ to copy regex
-~C-c C-q~ to quit re-builder and to remove highlights
-#+BEGIN_SRC emacs-lisp
-(require 're-builder)
-(setq reb-re-syntax 'string)
 #+END_SRC
 
 *** tabs and white-space
@@ -294,8 +298,6 @@ Clean white space on save.
 
 * Utility functions
 
-You can switch to root permissions with ivy with M-o r.
-This small function makes it easier for the current file.
 #+BEGIN_SRC emacs-lisp
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -391,9 +393,6 @@ Enable ligatures on mac
 
 (setq frame-title-format "emacs")
 
-(setq blink-matching-paren 'jump-offscreen)
-(show-paren-mode 1)
-
 ;; makes fringe big enough with HDPI
 (when (boundp 'fringe-mode)
   (fringe-mode 20))
@@ -407,9 +406,55 @@ Enable ligatures on mac
     (eval-after-load "subword"
     '(diminish 'subword-mode))
   (diminish 'auto-fill-function)
-  (diminish 'my-keys-minor-mode)
   (diminish 'eldoc-mode))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(setq blink-matching-paren 'jump-offscreen)
+(show-paren-mode 1)
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
+
+** Text size
+Changes the size of the text. Useful when I pair program
+#+begin_src emacs-lisp
+  (use-package default-text-scale
+    :config
+    :bind (("C-=" . 'default-text-scale-reset)
+           ("C-+" . 'default-text-scale-increase)
+           ("C-M-+" . 'default-text-scale-decrease)))
+#+end_src
+
+Emacs makes it hard to select font with weight of Regular or Book.
+The trick is to just install the font weight you want and omit the medium and
+light weights. Medium and Light conflict with the Regular and Book versions
+#+begin_src emacs-lisp
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
+#+end_src
+
+** Code Folding
+=set-selective-display=
+
+* Regex
+
+~C-c C-w~ to copy regex
+~C-c C-q~ to quit re-builder and to remove highlights
+#+BEGIN_SRC emacs-lisp
+(require 're-builder)
+(setq reb-re-syntax 'string)
+#+END_SRC
+* Org
+#+begin_src emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 3)
+                                (org-agenda-files :maxlevel . 3)))
+(advice-add 'org-refile :after
+        (lambda (&rest _)
+        (org-save-all-org-buffers)))
+#+end_src
+
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
@@ -418,7 +463,7 @@ Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 Auto-fill comments in prog modes
 #+BEGIN_SRC emacs-lisp
 (defun my-prog-mode-auto-fill-hook ()
-  (setq fill-column 80)
+  (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
@@ -491,7 +536,8 @@ Auto-fill comments in prog modes
 
 I learned about this on [[http://www.virtuouscode.com/2013/06/24/rubytapas-freebie-xmpfilter/][Ruby Tapas.]] Hit ~M-;~ twice adds a special
 comment for xmpfilter. Running ~xmp~ will evaluate the line and put
-the result after the comment.
+the result after the comment. By default it does not work with Ruby
+enhanced mode so I made a fix for that.
 #+BEGIN_SRC emacs-lisp
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
@@ -539,9 +585,7 @@ the result after the comment.
 ** CSS
 #+BEGIN_SRC emacs-lisp
 (use-package scss-mode :mode "\\.scss\\'")
-
 (use-package sass-mode :mode "\\.sass\\'")
-
 (use-package less-css-mode :mode "\\.less\\'")
 #+END_SRC
 ** JavaScript
@@ -590,12 +634,6 @@ errors with ~next-error~ and ~previous-error~
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'js2-mode-hook (lambda() (subword-mode t)))
-
-  ;; (use-package xref-js2
-  ;;   :init
-  ;;   (setq xref-js2-search-program 'rg)
-  ;;   :config
-  ;;   (add-hook 'js2-mode-hook (lambda () (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -681,6 +719,27 @@ adjustments for JSX.
 
 (require 'aurayb-narrow-indirect-vue)
 #+END_SRC
+** Rust
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :bind (:map rust-mode-map
+              ("C-c C-c" . rust-run)))
+#+END_SRC
+** WASM
+#+begin_src emacs-lisp :results silent
+(require 'wat-mode)
+#+end_src
+** Shell
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
+#+end_src
+
+** Lisp
+#+begin_src emacs-lisp
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
+#+end_src
+
 * Flycheck
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
@@ -693,6 +752,7 @@ adjustments for JSX.
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
+    "Find eslint in the closest node-modules folder"
     (let* ((root (locate-dominating-file
                   (or (buffer-file-name) default-directory)
                   "node_modules"))
@@ -743,10 +803,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 #+BEGIN_SRC emacs-lisp
    (use-package paredit
      :diminish paredit-mode
-     :bind  (("C-c 0" . paredit-forward-slurp-sexp)
-            ("C-c 9" . paredit-backward-slurp-sexp)
-            ("C-c ]" . paredit-forward-barf-sexp)
-            ("C-c [" . paredit-backward-barf-sexp))
      :config
      (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
@@ -793,6 +849,16 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    (use-package windresize
      :bind (("C-c o h" . windresize)))
 #+END_SRC
+** Hydra
+#+BEGIN_SRC emacs-lisp
+(use-package hydra
+  :config
+  (defhydra hydra-utils (global-map "<f8>")
+    "drag"
+    ("j" drag-stuff-down "down")
+    ("k" drag-stuff-up "up")))
+#+END_SRC
+
 ** Drag stuff
 #+BEGIN_SRC emacs-lisp
 (use-package drag-stuff
@@ -839,36 +905,6 @@ for org template captures.
        deft-recursive t
        deft-directory (concat **local-dropbox-folder** "org/")))
 #+end_src
-** References
-
-I use ~ivy-bibtex~ to add references to my documents.
-From ~ivy-bibtex~ I can access the ref note with hydra.
-
-To add references to my reference library:
-- for papers I use ~doi-add-bibtex-entry~
-- for websites I use ~org-ref-url-html-to-bibtex~
-- for books I use ~isbn-to-bibtex~
-#+begin_src emacs-lisp :results silent :tangle no
-(setq reftex-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib")))
-(use-package org-ref
-  :config
-  (setq org-ref-bibliography-notes (concat **local-dropbox-folder** "org/references.org")
-        org-ref-default-bibliography `(,(concat **local-dropbox-folder** "org/references.bib"))
-        org-ref-pdf-directory (concat **local-dropbox-folder** "org/bibtex-pdfs/"))
-  (require 'org-ref-pdf)
-  (require 'org-ref-url-utils)
-  (require 'org-ref-isbn)
-  (require 'org-ref-bibtex)
-  (require 'doi-utils))
-
-(use-package ivy-bibtex
-  :bind (("C-c B" . ivy-bibtex))
-  :config
-  (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
-  (setq bibtex-completion-bibliography reftex-default-bibliography)
-  (setq bibtex-completion-notes-path (concat **local-dropbox-folder** "org/references-notes/")))
-#+end_src
-
 ** Markdown
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
@@ -1107,62 +1143,14 @@ isearch and occur (~M-s o~)
 ** Search in project
 
 #+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
+(use-package rg
+  :bind (("C-c f" . rg)))
 #+END_SRC
-
-While performing a search, you can activate the calling action with
-~C-o c~ to automatically switch to the result while navigating the
-list in the minibuffer.
-
-You can call ivy-occur with ~C-x C-o~ and it will show all the results
-in a seperate buffer. While in this buffer
-- ~f~ to show the current result in an adjacent buffer
-- ~j~ or ~k~ for next or previous result
-- ~C-c C-f~ to activate error follow mode. This allows you to navigate
-  the error list with emacs error mechanism.
 
 *** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.
-** Search Emacs documentation
-
-Remplacements for emacs search and completion commands.
-I find the UI better.
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-m" . counsel-M-x)
-         ("C-c C-m" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x b" . ido-switch-buffer)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-find-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c r" . counsel-buffer-or-recentf)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-history)
-         )
-  :init
-  (setq counsel-git-cmd "rg --files")
-  (setq counsel-rg-base-command
-        "rg --smart-case -M 120 --hidden --no-heading --line-number --color never %s .")
-
-  :config
-  (eval-after-load "counsel" '(progn
-                                (defun counsel-imenu-categorize-functions (items)
-                                  "Categorize all the functions of imenu."
-                                  (let ((fns (cl-remove-if #'listp items :key #'cdr)))
-                                    (if fns
-                                        (nconc (cl-remove-if #'nlistp items :key #'cdr)
-                                               `((":" ,@fns)))
-                                      items))))))
-
-#+END_SRC
-
 ** Rename
 
 #+BEGIN_SRC emacs-lisp
@@ -1172,7 +1160,6 @@ I find the UI better.
 * VCS
 Don't forget Emacs vcs features accessible with the prefix ~C-x v~!
 
-g
 ** Resolving conflicts
 
 This is to prevent popup windows when resolving file conflicts.
@@ -1305,35 +1292,6 @@ IDE code analysis but it works surprisingly well.
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 #+END_SRC
 
-** Tags
-
-Tags are generated through a git hook
-
-To make sure my hooks are used I delete the hooks directory
-~./git/config~ and run ~git init .~ again from the concerned project
-directory.
-
-My [[file:~/dotfiles/git/.git_template][templates]] are used thanks to the [[~GIT_TEMPLATE_DIR][~GIT_TEMPLATE_DIR~]] environment variable.
-#+BEGIN_SRC shell :results output
-   env | grep GIT_TEMPLATE_DIR
-#+END_SRC
-
-#+RESULTS:
-: GIT_TEMPLATE_DIR=/home/auray/.git_template
-
-I install Universal ctags with
-#+BEGIN_SRC shell :results output
-   brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-#+END_SRC
-
-To verify you have the proper version of universal ctags run
-#+BEGIN_SRC shell :results output
-   ctags --version | grep -q "Universal Ctags" >/dev/null && echo "Universal ctags is installed" || echo "Missing Universal ctags"
-#+END_SRC
-
-#+RESULTS:
-: Universal ctags is installed
-
 ** Navigation tree
 #+begin_src emacs-lisp
  (setq speedbar-directory-unshown-regexp "^$")
@@ -1408,6 +1366,11 @@ Use =company-diag= to debug completion problems
   (autoload 'company-yasnippet "company-yasnippet")
   (autoload 'company-elisp "company-elisp")
   (autoload 'company-files "company-files"))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
+
 #+END_SRC
 
 ** Snippets
@@ -1473,33 +1436,6 @@ To play a video, with cursor on video file in dired =! vlc=
 :bind (:map dired-mode-map ("p" . dired-rsync)))
 #+END_SRC
 
-** Counsel
-I redefine the standard ~C-x C-f~ to use counsel. It allows me to do
-pretty cool stuff with it [[https://oremacs.com/2017/11/18/dired-occur/][thanks to ivy-occur and dired]].
-
-=C-d= to delete entries in ivy occur
-=C-o= to open entry in a side buffer and switch to it
-=f= to open entry in side buffer by stay in ivy-occur
-
-#+BEGIN_QUOTE
-To delete all *.elc files in the current folder do:
-
-~C-x C-f elc$ C-c C-o tDy.~
-
-To copy all Org files in a Git project to some directory do:
-
-~M-x counsel-git org$ C-c C-o tC.~
-
-To get a list of videos to watch do:
-
-~M-x counsel-fzf mp4$ C-c C-o.~
-#+END_QUOTE
-
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (("C-x C-f" . counsel-find-file)))
-#+END_SRC
-
 * 24 bits Emacs
 
 Run this command to know if your Emacs display 24 bits colors.
@@ -1516,29 +1452,7 @@ tic -o ~/.terminfo -x ~/.emacs.d/terminfo-emacs-rgb.src
 
 Other =terminfo= examples are available on the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
 
-* PDFs
-
-https://github.com/politza/pdf-tools looks cool. Demo here: https://www.youtube.com/watch?v=LFO2UbzbZhA
-https://github.com/fuxialexander/org-pdftools
-* Testing
-#+begin_src emacs-lisp :results silent
-(setq vc-follow-symlinks t)
-(put 'magit-edit-line-commit 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
-
-(setq tags-add-tables 'nil) ; always start a new table don't ask the user
-#+end_src
-
-#+begin_src emacs-lisp :results silent
-(require 'wat-mode)
-#+end_src
-
-#+BEGIN_SRC emacs-lisp
-(use-package rust-mode
-  :bind (:map rust-mode-map
-              ("C-c C-c" . rust-run)))
-#+END_SRC
-
+* Documentation
 #+BEGIN_SRC emacs-lisp
   (use-package engine-mode
     :bind (("C-c d c" . engine/search-caniuse)
@@ -1560,82 +1474,7 @@ https://github.com/fuxialexander/org-pdftools
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
 #+END_SRC
 
-Code folding. Is it useful? I am testing =set-selective-display= and
-it allows quick previews.
-#+BEGIN_SRC emacs-lisp :results silent
-(use-package origami
-  :config
-  (global-origami-mode))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package hydra
-  :config
-  (defhydra hydra-utils (global-map "<f8>")
-    "drag"
-    ("j" drag-stuff-down "down")
-    ("k" drag-stuff-up "up")))
-#+END_SRC
-
-#+begin_src emacs-lisp
-(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
-#+end_src
-
-Changes the size of the text. Useful when I pair program
-#+begin_src emacs-lisp
-  (use-package default-text-scale
-    :config
-    :bind (("C-=" . 'default-text-scale-reset)
-           ("C-+" . 'default-text-scale-increase)
-           ("C-M-+" . 'default-text-scale-decrease)))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package desktop
-  :defer 2
-  :config
-  (setq desktop-path '("~/"))
-  (setq desktop-dirname "~/")
-  (setq desktop-restore-eager 5)
-  (setq desktop-load-locked-desktop t)
-  (desktop-save-mode +1))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq initial-major-mode 'org-mode)
-(setq initial-scratch-message nil)
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-refile-targets '((nil :maxlevel . 3)
-                                (org-agenda-files :maxlevel . 3)))
-(advice-add 'org-refile :after
-        (lambda (&rest _)
-        (org-save-all-org-buffers)))
-#+end_src
-
-#+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
-#+end_src
-
-Emacs makes it hard to select font with weight of Regular or Book.
-The trick is to just install the font weight you want and omit the medium and
-light weights. Medium and Light conflict with the Regular and Book versions
-#+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB-16")))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(face-attribute 'default :font)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-#+end_src
-
+* Presentation
 #+begin_src emacs-lisp
 (defun abott/org-tree-slide-play ()
   (writeroom-mode 1)
@@ -1663,14 +1502,11 @@ C-c C-e R =letter= to export a presentation from your org file
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package company-box
-  :hook (company-mode . company-box-mode))
-#+end_src
-
+* Testing
 * Local variables
 
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
+
 

@@ -67,6 +67,15 @@
         (when (equal default-directory dir))
         (my-reload-dir-locals-for-current-buffer)))))
 
+(setq initial-major-mode 'org-mode)
+(setq initial-scratch-message nil)
+
+(setq vc-follow-symlinks t)
+(put 'magit-edit-line-commit 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
+(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+
 (setq select-enable-clipboard t)
 (use-package osx-clipboard
   :diminish osx-clipboard-mode
@@ -108,7 +117,7 @@
       inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
       tab-always-indent 'complete ; try to indent first, if already indented try to complete
-)
+      )
 
 (make-variable-buffer-local 'compile-command) ; makes the compile command be buffer specific.
 (defalias 'yes-or-no-p 'y-or-n-p) ; instead of typing yes or no, type y or n
@@ -135,8 +144,7 @@
 ;; coming from an external process
 (global-auto-revert-mode 1)
 
-;; replace selected text when typing. Not very useful as I use vim keybindings.
-;; Still nice to have as a default
+;; replace selected text when typing.
 (pending-delete-mode 1)
 
 (prefer-coding-system 'utf-8)
@@ -147,9 +155,6 @@
 (setq sentence-end-double-space nil)
 
 (add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
-
-(require 're-builder)
-(setq reb-re-syntax 'string)
 
 (setq-default
  indent-tabs-mode nil    ; no tabs
@@ -251,9 +256,6 @@ cons cell (regexp . minor-mode)."
 
 (setq frame-title-format "emacs")
 
-(setq blink-matching-paren 'jump-offscreen)
-(show-paren-mode 1)
-
 ;; makes fringe big enough with HDPI
 (when (boundp 'fringe-mode)
   (fringe-mode 20))
@@ -265,11 +267,34 @@ cons cell (regexp . minor-mode)."
     (eval-after-load "subword"
     '(diminish 'subword-mode))
   (diminish 'auto-fill-function)
-  (diminish 'my-keys-minor-mode)
   (diminish 'eldoc-mode))
 
+(setq blink-matching-paren 'jump-offscreen)
+(show-paren-mode 1)
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package default-text-scale
+  :config
+  :bind (("C-=" . 'default-text-scale-reset)
+         ("C-+" . 'default-text-scale-increase)
+         ("C-M-+" . 'default-text-scale-decrease)))
+
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
+
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
+(setq org-refile-targets '((nil :maxlevel . 3)
+                                (org-agenda-files :maxlevel . 3)))
+(advice-add 'org-refile :after
+        (lambda (&rest _)
+        (org-save-all-org-buffers)))
+
 (defun my-prog-mode-auto-fill-hook ()
-  (setq fill-column 80)
+  (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
@@ -370,9 +395,7 @@ cons cell (regexp . minor-mode)."
               (setq emmet-expand-jsx-className? nil))))
 
 (use-package scss-mode :mode "\\.scss\\'")
-
 (use-package sass-mode :mode "\\.sass\\'")
-
 (use-package less-css-mode :mode "\\.less\\'")
 
 (require 'compile)
@@ -411,12 +434,6 @@ cons cell (regexp . minor-mode)."
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   (add-hook 'js2-mode-hook (lambda() (subword-mode t)))
-
-  ;; (use-package xref-js2
-  ;;   :init
-  ;;   (setq xref-js2-search-program 'rg)
-  ;;   :config
-  ;;   (add-hook 'js2-mode-hook (lambda () (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -484,6 +501,17 @@ cons cell (regexp . minor-mode)."
 
 (require 'aurayb-narrow-indirect-vue)
 
+(use-package rust-mode
+  :bind (:map rust-mode-map
+              ("C-c C-c" . rust-run)))
+
+(require 'wat-mode)
+
+(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
+
 (use-package flycheck
   :diminish flycheck-mode
   :init
@@ -494,6 +522,7 @@ cons cell (regexp . minor-mode)."
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
+    "Find eslint in the closest node-modules folder"
     (let* ((root (locate-dominating-file
                   (or (buffer-file-name) default-directory)
                   "node_modules"))
@@ -533,10 +562,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package paredit
    :diminish paredit-mode
-   :bind  (("C-c 0" . paredit-forward-slurp-sexp)
-          ("C-c 9" . paredit-backward-slurp-sexp)
-          ("C-c ]" . paredit-forward-barf-sexp)
-          ("C-c [" . paredit-backward-barf-sexp))
    :config
    (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
@@ -582,6 +607,13 @@ cons cell (regexp . minor-mode)."
 
  (use-package windresize
    :bind (("C-c o h" . windresize)))
+
+(use-package hydra
+  :config
+  (defhydra hydra-utils (global-map "<f8>")
+    "drag"
+    ("j" drag-stuff-down "down")
+    ("k" drag-stuff-up "up")))
 
 (use-package drag-stuff
   :diminish t
@@ -748,38 +780,8 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-m" . counsel-M-x)
-         ("C-c C-m" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x b" . ido-switch-buffer)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-find-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c r" . counsel-buffer-or-recentf)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-history)
-         )
-  :init
-  (setq counsel-git-cmd "rg --files")
-  (setq counsel-rg-base-command
-        "rg --smart-case -M 120 --hidden --no-heading --line-number --color never %s .")
-
-  :config
-  (eval-after-load "counsel" '(progn
-                                (defun counsel-imenu-categorize-functions (items)
-                                  "Categorize all the functions of imenu."
-                                  (let ((fns (cl-remove-if #'listp items :key #'cdr)))
-                                    (if fns
-                                        (nconc (cl-remove-if #'nlistp items :key #'cdr)
-                                               `((":" ,@fns)))
-                                      items))))))
+(use-package rg
+  :bind (("C-c f" . rg)))
 
 (use-package iedit)
 
@@ -877,6 +879,9 @@ This command switches to browser."
   (autoload 'company-elisp "company-elisp")
   (autoload 'company-files "company-files"))
 
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
 (use-package yasnippet
   :defer 3
   :commands yas-expand-snippet
@@ -922,21 +927,6 @@ This command switches to browser."
 (use-package dired-rsync
 :bind (:map dired-mode-map ("p" . dired-rsync)))
 
-(use-package counsel
-  :bind (("C-x C-f" . counsel-find-file)))
-
-(setq vc-follow-symlinks t)
-(put 'magit-edit-line-commit 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
-
-(setq tags-add-tables 'nil) ; always start a new table don't ask the user
-
-(require 'wat-mode)
-
-(use-package rust-mode
-  :bind (:map rust-mode-map
-              ("C-c C-c" . rust-run)))
-
 (use-package engine-mode
   :bind (("C-c d c" . engine/search-caniuse)
          ("C-c d m" . engine/search-mdn)
@@ -953,43 +943,6 @@ This command switches to browser."
   :demand t
   :config
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
-
-(use-package origami
-  :config
-  (global-origami-mode))
-
-(use-package hydra
-  :config
-  (defhydra hydra-utils (global-map "<f8>")
-    "drag"
-    ("j" drag-stuff-down "down")
-    ("k" drag-stuff-up "up")))
-
-(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
-
-(use-package default-text-scale
-  :config
-  :bind (("C-=" . 'default-text-scale-reset)
-         ("C-+" . 'default-text-scale-increase)
-         ("C-M-+" . 'default-text-scale-decrease)))
-
-(setq initial-major-mode 'org-mode)
-(setq initial-scratch-message nil)
-
-(setq org-refile-targets '((nil :maxlevel . 3)
-                                (org-agenda-files :maxlevel . 3)))
-(advice-add 'org-refile :after
-        (lambda (&rest _)
-        (org-save-all-org-buffers)))
-
-(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
-
-(setq default-frame-alist '((font . "Operator Mono AB-16")))
-
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (defun abott/org-tree-slide-play ()
   (writeroom-mode 1)
@@ -1011,6 +964,3 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
