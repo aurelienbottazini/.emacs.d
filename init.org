@@ -1146,9 +1146,11 @@ isearch and occur (~M-s o~)
 
 ** Search in project
 
+=C-c s=
 #+BEGIN_SRC emacs-lisp
 (use-package rg
-  :bind (("C-c f" . rg)))
+  :config
+  (rg-enable-default-bindings))
 #+END_SRC
 
 *** From Dired

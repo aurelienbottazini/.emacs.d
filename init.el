@@ -783,7 +783,8 @@ This command switches to browser."
     ))
 
 (use-package rg
-  :bind (("C-c f" . rg)))
+  :config
+  (rg-enable-default-bindings))
 
 (use-package iedit)
 
