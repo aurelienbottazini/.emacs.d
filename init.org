@@ -147,6 +147,10 @@ with the reloading of those locals.
 #+end_src
 
 #+begin_src emacs-lisp
+(fido-mode t)
+#+end_src
+
+#+begin_src emacs-lisp
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

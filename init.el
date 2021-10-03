@@ -70,6 +70,8 @@
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
 
+(fido-mode t)
+
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
