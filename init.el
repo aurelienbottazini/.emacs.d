@@ -52,20 +52,6 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
-(define-minor-mode my-keys-minor-mode
-  "A minor mode so that my key settings override annoying major modes."
-  t " my-keys" 'my-keys-minor-mode-map)
-(my-keys-minor-mode 1)
-
-(defadvice load (after give-my-keybindings-priority)
-  "Try to ensure that my keybindings always have priority."
-  (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
-      (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
-        (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
-        (add-to-list 'minor-mode-map-alist mykeys))))
-(ad-activate 'load)
-
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
   (interactive)
@@ -242,7 +228,7 @@ cons cell (regexp . minor-mode)."
   "Jump to org note file for current buffer"
   (interactive)
   (find-file **local-note-file**))
-(define-key my-keys-minor-mode-map "\C-cn" 'abo-jump-to-note-file)
+(global-set-key "\C-cn" 'abo-jump-to-note-file)
 
 (defun abo-change-line-endings-to-unix ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
@@ -256,7 +242,7 @@ cons cell (regexp . minor-mode)."
 (column-number-mode) ; column number in the mode line
 
 (electric-indent-mode t)
-(define-key my-keys-minor-mode-map (kbd "C-c oi") 'electric-indent-mode)
+(global-set-key (kbd "C-c oi") 'electric-indent-mode)
 
 (electric-pair-mode t)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
@@ -460,7 +446,7 @@ cons cell (regexp . minor-mode)."
 (use-package context-coloring
   :ensure t
   :diminish context-coloring-mode
-  :bind (:map my-keys-minor-mode-map ("C-c oc" . context-coloring-mode))
+  :bind (("C-c oc" . context-coloring-mode))
   :config
   (add-hook 'js2-mode-hook 'context-coloring-mode))
 
@@ -497,10 +483,6 @@ cons cell (regexp . minor-mode)."
               (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index))))))
 
 (require 'aurayb-narrow-indirect-vue)
-;; (define-key my-keys-minor-mode-map (kbd "nj") (aurayb-make-narrow-indirect-vue "script" 'js2-mode))
-;; (define-key my-keys-minor-mode-map (kbd "nh") (aurayb-make-narrow-indirect-vue "template" 'html-mode))
-;; (define-key my-keys-minor-mode-map (kbd "ns") (aurayb-make-narrow-indirect-vue "style" 'scss-mode))
-;; (define-key my-keys-minor-mode-map (kbd "nn") '(lambda () (interactive) (pop-to-buffer-same-window (buffer-base-buffer))))
 
 (use-package flycheck
   :diminish flycheck-mode
@@ -546,71 +528,64 @@ cons cell (regexp . minor-mode)."
   :config
   (which-key-mode))
 
-(define-key my-keys-minor-mode-map (kbd "C-M-e") 'recursive-edit)
-
 ;; makes grep buffers writable and apply the changes to files.
 (use-package wgrep :defer t)
 
 (use-package paredit
-  :diminish paredit-mode
-  :bind (:map my-keys-minor-mode-map
-         ("C-c 0" . paredit-forward-slurp-sexp)
-         ("C-c 9" . paredit-backward-slurp-sexp)
-         ("C-c ]" . paredit-forward-barf-sexp)
-         ("C-c [" . paredit-backward-barf-sexp))
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
+   :diminish paredit-mode
+   :bind  (("C-c 0" . paredit-forward-slurp-sexp)
+          ("C-c 9" . paredit-backward-slurp-sexp)
+          ("C-c ]" . paredit-forward-barf-sexp)
+          ("C-c [" . paredit-backward-barf-sexp))
+   :config
+   (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
-(use-package expand-region
-  :bind (:map my-keys-minor-mode-map ("C-c w" . er/expand-region)))
+ (use-package expand-region
+   :bind (("C-c w" . er/expand-region)))
 
-(define-key my-keys-minor-mode-map (kbd "C-c a") 'org-agenda)
-(define-key my-keys-minor-mode-map (kbd "C-c R") 'revert-buffer)
-(define-key my-keys-minor-mode-map (kbd "C-c jc") 'org-clock-jump-to-current-clock)
-(define-key my-keys-minor-mode-map (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
-(define-key my-keys-minor-mode-map (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
-(define-key my-keys-minor-mode-map (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
-(define-key my-keys-minor-mode-map (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
-(define-key my-keys-minor-mode-map (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
-(define-key my-keys-minor-mode-map (kbd "C-c jj") 'dired-jump)
-(define-key my-keys-minor-mode-map (kbd "C-c k") 'recompile)
-(define-key my-keys-minor-mode-map (kbd "C-c K") 'compile)
+ (global-set-key (kbd "C-c a") 'org-agenda)
+ (global-set-key (kbd "C-c R") 'revert-buffer)
+ (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
+ (global-set-key (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
+ (global-set-key (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
+ (global-set-key (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
+ (global-set-key (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
+ (global-set-key (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
+ (global-set-key (kbd "C-c jj") 'dired-jump)
+ (global-set-key (kbd "C-c k") 'recompile)
+ (global-set-key (kbd "C-c K") 'compile)
 
-(define-key my-keys-minor-mode-map (kbd "<f5>") 'ispell-buffer)
+ (global-set-key (kbd "<f5>") 'ispell-buffer)
+ (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
+ (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
-(define-key my-keys-minor-mode-map (kbd "C-c h") 'highlight-symbol-at-point)
-(define-key my-keys-minor-mode-map (kbd "C-c H") 'unhighlight-regexp)
+ (defun hide-line-numbers ()
+   (interactive)
+   (setq display-line-numbers (quote nil)))
+ (global-set-key (kbd "C-c olh") 'hide-line-numbers)
 
-(defun hide-line-numbers ()
-  (interactive)
-  (setq display-line-numbers (quote nil)))
-(define-key my-keys-minor-mode-map (kbd "C-c olh") 'hide-line-numbers)
+ (defun show-line-numbers ()
+   (interactive)
+   (setq display-line-numbers (quote absolute)))
+ (global-set-key (kbd "C-c oll") 'show-line-numbers)
+ (global-set-key (kbd "C-c ow") 'visual-line-mode)
+ (global-set-key (kbd "C-c of") 'auto-fill-mode)
+ (global-hl-line-mode t)
+ (global-set-key (kbd "C-c og") 'global-hl-line-mode)
+ (global-set-key (kbd "C-c op") 'show-paren-mode)
 
-(defun show-line-numbers ()
-  (interactive)
-  (setq display-line-numbers (quote absolute)))
-(define-key my-keys-minor-mode-map (kbd "C-c oll") 'show-line-numbers)
-(define-key my-keys-minor-mode-map (kbd "C-c ow") 'visual-line-mode)
-(define-key my-keys-minor-mode-map (kbd "C-c of") 'auto-fill-mode)
-(global-hl-line-mode t)
-(define-key my-keys-minor-mode-map (kbd "C-c og") 'global-hl-line-mode)
-(define-key my-keys-minor-mode-map (kbd "C-c op") 'show-paren-mode)
+ (use-package rainbow-mode
+   :diminish rainbow-mode
+   :bind (("C-c or" . rainbow-mode)))
 
-(use-package rainbow-mode
-  :diminish rainbow-mode
-  :bind (:map my-keys-minor-mode-map
-              ("C-c or" . rainbow-mode)))
+(global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
 
-(define-key my-keys-minor-mode-map (kbd "C-c ot") 'toggle-truncate-lines)
-
-(use-package windresize
-  :bind (:map  my-keys-minor-mode-map
-              ("C-w r" . windresize)))
+ (use-package windresize
+   :bind (("C-c o h" . windresize)))
 
 (use-package drag-stuff
   :diminish t
-  :bind (:map my-keys-minor-mode-map
-         ("C-M-<up>" . drag-stuff-up)
+  :bind (("C-M-<up>" . drag-stuff-up)
          ("C-M-<down>" . drag-stuff-down))
   :config
   (drag-stuff-global-mode t))
@@ -623,7 +598,7 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'org-modules "org-habit")
 (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
-(define-key my-keys-minor-mode-map "\C-ci" 'counsel-org-goto)
+(global-set-key "\C-ci" 'counsel-org-goto)
 (define-key org-mode-map "\C-c\C-x\C-t" 'counsel-org-tag)
 
 (setq org-todo-keywords
@@ -640,7 +615,7 @@ cons cell (regexp . minor-mode)."
 (use-package markdown-mode
  :mode "\\.md\\'")
 
-(define-key my-keys-minor-mode-map "\C-cl" 'org-store-link)
+(global-set-key "\C-cl" 'org-store-link)
 
 (use-package palimpsest
   :diminish palimpsest-mode
@@ -653,7 +628,7 @@ cons cell (regexp . minor-mode)."
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
-(define-key my-keys-minor-mode-map (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
+(global-set-key (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
@@ -693,8 +668,7 @@ cons cell (regexp . minor-mode)."
  time-stamp-format "%04y-%02m-%02d") ;
 
 (use-package writeroom-mode
-  :bind (:map my-keys-minor-mode-map
-              ("C-c z" . writeroom-mode)))
+  :bind (("C-c z" . writeroom-mode)))
 
 (use-package htmlize) ; for org html export
 (setq system-time-locale "C") ; make sure time local is in english when exporting
@@ -774,31 +748,8 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package ivy
-  :diminish ivy-mode
-  :bind (:map my-keys-minor-mode-map
-         ("C-c v" . ivy-switch-view)
-         ("C-c V" . ivy-push-view)
-         :map ivy-minibuffer-map
-         ("C-c C-c" . ivy-restrict-to-matches))
-  :init
-  (setq ivy-display-style 'fancy)
-  (setq ivy-use-selectable-prompt t)
-  (setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-initial-inputs-alist nil)
-  (setq ivy-re-builders-alist
-    '((t      . ivy--regex-plus)))
-  :config
-  (use-package ivy-hydra)
-  (ivy-mode 1))
-
-(use-package avy
-  :bind (:map my-keys-minor-mode-map
-         ("C-c ;" . avy-goto-char-timer)))
-
 (use-package counsel
-  :bind (:map my-keys-minor-mode-map ("C-c f" . counsel-rg)))
+  :bind (("C-c f" . counsel-rg)))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
@@ -811,10 +762,10 @@ This command switches to browser."
          ("<f1> l" . counsel-find-library)
          ("<f2> i" . counsel-info-lookup-symbol)
          ("<f2> u" . counsel-unicode-char)
+         ("C-c r" . counsel-buffer-or-recentf)
          :map minibuffer-local-map
          ("C-r" . counsel-minibuffer-history)
-         :map my-keys-minor-mode-map
-         ("C-c r" . counsel-buffer-or-recentf))
+         )
   :init
   (setq counsel-git-cmd "rg --files")
   (setq counsel-rg-base-command
@@ -836,30 +787,26 @@ This command switches to browser."
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 (setq ediff-split-window-function 'split-window-vertically)
 
-(use-package git-link
-  :bind (:map my-keys-minor-mode-map
-              ("C-c gl" . git-link))
-  :config
-
-  ;; (defun abott/git-link-advice (orig-fun url)
-  ;;   "For use with wsl. Copies git-link to windows clipboard."
-  ;;   (shell-command (concat "echo "
-  ;;                          (shell-quote-argument url)
-  ;;                          " | clip.exe") url)
-  ;;   (funcall orig-fun url))
-
-  ;; (advice-add 'git-link--new :around #'abott/git-link-advice)
-)
+(use-package git-link :bind (("C-c gl" . git-link)))
 
 (use-package git-timemachine
-  :bind (:map my-keys-minor-mode-map
-              ("C-c gt" . git-timemachine-toggle))
+  :bind (("C-c gt" . git-timemachine-toggle))
   :config
   (ad-activate 'git-timemachine-mode))
 
 (use-package fullframe
   :config
   (fullframe vc-annotate quit-window))
+
+(use-package magit
+  :demand true
+  :bind (("C-c gs" . magit-status)
+         ("C-c gc" . magit-commit)
+         ("C-c gp" . magit-push-current)
+         ("C-c gf" . magit-file-dispatch))
+  :init
+  (setq magit-commit-show-diff nil
+        magit-revert-buffers 1))
 
 (use-package fullframe
   :after magit
@@ -868,7 +815,7 @@ This command switches to browser."
 
 (require 'project)
 
-(define-key my-keys-minor-mode-map (kbd "M-.") 'xref-find-definitions)
+(global-set-key (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
@@ -876,7 +823,7 @@ This command switches to browser."
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (setq speedbar-directory-unshown-regexp "^$")
-(define-key my-keys-minor-mode-map (kbd "C-c b") 'speedbar-get-focus)
+(global-set-key (kbd "C-c b") 'speedbar-get-focus)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list))
 (require 'mode-local)
@@ -933,8 +880,7 @@ This command switches to browser."
 (use-package yasnippet
   :defer 3
   :commands yas-expand-snippet
-  :bind (:map my-keys-minor-mode-map
-              ("C-c y" . yas-insert-snippet))
+  :bind (("C-c y" . yas-insert-snippet))
   :diminish yas-minor-mode
   :init
   (setq yas-snippet-dirs
@@ -992,11 +938,10 @@ This command switches to browser."
               ("C-c C-c" . rust-run)))
 
 (use-package engine-mode
-  :bind (:map my-keys-minor-mode-map
-              ("C-c d c" . engine/search-caniuse)
-              ("C-c d m" . engine/search-mdn)
-              ("C-c d ra" . engine/search-rails)
-              ("C-c d rr" . engine/search-ruby))
+  :bind (("C-c d c" . engine/search-caniuse)
+         ("C-c d m" . engine/search-mdn)
+         ("C-c d ra" . engine/search-rails)
+         ("C-c d rr" . engine/search-ruby))
   :config
   (defengine ruby "https://apidock.com/ruby/search?query=%s")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
@@ -1024,9 +969,9 @@ This command switches to browser."
 
 (use-package default-text-scale
   :config
-  (define-key my-keys-minor-mode-map (kbd "C-=") 'default-text-scale-reset)
-  (define-key my-keys-minor-mode-map (kbd "C-+") 'default-text-scale-increase)
-  (define-key my-keys-minor-mode-map (kbd "C-M-+") 'default-text-scale-decrease))
+  :bind (("C-=" . 'default-text-scale-reset)
+         ("C-+" . 'default-text-scale-increase)
+         ("C-M-+" . 'default-text-scale-decrease)))
 
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
