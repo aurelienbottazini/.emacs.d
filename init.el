@@ -633,8 +633,6 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'org-modules "org-habit")
 (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
-(global-set-key "\C-ci" 'counsel-org-goto)
-(define-key org-mode-map "\C-c\C-x\C-t" 'counsel-org-tag)
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(canceled@)")))
@@ -811,9 +809,8 @@ This command switches to browser."
          ("C-c gf" . magit-file-dispatch))
   :init
   (setq magit-commit-show-diff nil
-        magit-auto-revert-mode t
-        magit-commit-show-diff nil
-        magit-revert-buffers 1))
+        magit-auto-revert-mode nil
+        magit-commit-show-diff nil))
 
 (use-package fullframe
   :after magit
