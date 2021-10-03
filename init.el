@@ -804,13 +804,14 @@ This command switches to browser."
   (fullframe vc-annotate quit-window))
 
 (use-package magit
-  :demand true
   :bind (("C-c gs" . magit-status)
          ("C-c gc" . magit-commit)
          ("C-c gp" . magit-push-current)
          ("C-c gf" . magit-file-dispatch))
   :init
   (setq magit-commit-show-diff nil
+        magit-auto-revert-mode t
+        magit-commit-show-diff nil
         magit-revert-buffers 1))
 
 (use-package fullframe

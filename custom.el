@@ -55,8 +55,6 @@
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-doc-use-webkit nil)
  '(lsp-ui-sideline-enable nil)
- '(magit-auto-revert-mode t)
- '(magit-commit-show-diff nil)
  '(menu-bar-mode nil)
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
