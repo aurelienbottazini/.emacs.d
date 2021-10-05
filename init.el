@@ -432,8 +432,8 @@ cons cell (regexp . minor-mode)."
         web-mode-code-indent-offset 2
         web-mode-attr-indent-offset 2)
   :config
-  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
-  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+  (define-key js2-mode-map (kbd "M-.") 'xref-find-definitions)
+  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode))
   (add-hook 'js2-mode-hook (lambda() (subword-mode t)))
 
 (use-package json-mode
@@ -1119,3 +1119,5 @@ This command switches to browser."
   ;; auto-updating embark collect buffer
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package docker-tramp)
