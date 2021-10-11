@@ -475,7 +475,7 @@ cons cell (regexp . minor-mode)."
   (web-mode)
   (web-mode-set-content-type "jsx")
   (setq emmet-expand-jsx-className? t)
-  (emmet-mode)))
+  (emmet-mode))
 
 (use-package web-mode
   :mode "\\.vue\\'"

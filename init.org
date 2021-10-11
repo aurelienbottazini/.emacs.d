@@ -693,7 +693,7 @@ adjustments for JSX.
   (web-mode)
   (web-mode-set-content-type "jsx")
   (setq emmet-expand-jsx-className? t)
-  (emmet-mode)))
+  (emmet-mode))
 #+END_SRC
 *** Vue
 #+BEGIN_SRC emacs-lisp
