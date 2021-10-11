@@ -1121,3 +1121,7 @@ This command switches to browser."
   (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package docker-tramp)
+
+(use-package evil
+:config
+(evil-mode 1))

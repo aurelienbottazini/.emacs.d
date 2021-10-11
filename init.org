@@ -1670,6 +1670,12 @@ C-c C-e R =letter= to export a presentation from your org file
 #+begin_src emacs-lisp
 (use-package docker-tramp)
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package evil
+:config
+(evil-mode 1))
+#+end_src
 * Local variables
 
 # Local Variables:
