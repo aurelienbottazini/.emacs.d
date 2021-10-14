@@ -435,7 +435,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB-16")))
+(setq default-frame-alist '((font . "PragmataPro Liga-16")))
 #+end_src
 
 ** Code Folding
@@ -1512,7 +1512,7 @@ C-c C-e R =letter= to export a presentation from your org file
 
 * Testing
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package selectrum
 :config
 (selectrum-mode 1))
@@ -1675,6 +1675,30 @@ C-c C-e R =letter= to export a presentation from your org file
 (use-package evil
 :config
 (evil-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ivy
+:config
+(ivy-mode)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+(use-package counsel)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 #+end_src
 * Local variables
 
