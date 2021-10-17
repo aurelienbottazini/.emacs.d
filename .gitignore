@@ -20,3 +20,4 @@ bookmarks
 /projects
 var/prescient-save.el
 ./var/prescient-save.el
+/org-roam.db

@@ -1174,9 +1174,8 @@ This command switches to browser."
 (global-evil-visualstar-mode +1))
 
 (use-package org-roam
-  :ensure t
   :custom
-  (org-roam-directory (file-truename "/path/to/org-files/"))
+  (org-roam-directory (file-truename "~/Documents/org-roam"))
   :bind (("C-c w l" . org-roam-buffer-toggle)
          ("C-c w f" . org-roam-node-find)
          ("C-c w g" . org-roam-graph)
