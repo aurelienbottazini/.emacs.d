@@ -294,6 +294,19 @@ cons cell (regexp . minor-mode)."
         (lambda (&rest _)
         (org-save-all-org-buffers)))
 
+(use-package evil
+  :init
+  (setq org-use-speed-commands nil) ; they don't work well with Evil.
+  :config
+  (evil-define-key 'normal org-mode-map
+    (kbd "M-l") 'org-shiftmetaright
+    (kbd "M-h") 'org-shiftmetaleft
+    (kbd "M-k") 'org-move-subtree-up
+    (kbd "M-j") 'org-move-subtree-down
+    (kbd "M-p") 'org-publish-current-project
+    (kbd "TAB") 'org-cycle)
+  )
+
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
@@ -1215,8 +1228,7 @@ This command switches to browser."
   (global-evil-matchit-mode 1))
 
 (use-package evil-search-highlight-persist
-  :bind  (:map my-keys-minor-mode-map
-              ("C-c oh" . (lambda ()
+  :bind  (("C-c oh" . (lambda ()
                             (interactive)
                             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
                )
@@ -1234,15 +1246,14 @@ This command switches to browser."
   :config
   (evil-indent-plus-default-bindings))
 
-(use-package org-roam
-  :custom
-  (org-roam-directory (file-truename "~/Documents/org-roam"))
-  :bind (("C-c w l" . org-roam-buffer-toggle)
-         ("C-c w f" . org-roam-node-find)
-         ("C-c w g" . org-roam-graph)
-         ("C-c w i" . org-roam-node-insert)
-         ("C-c w c" . org-roam-capture)
-         ;; Dailies
-         ("C-c w j" . org-roam-dailies-capture-today))
+(use-package evil
   :config
-  (org-roam-db-autosync-mode))
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+
+(use-package key-chord
+  :defer 2
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))

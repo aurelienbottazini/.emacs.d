@@ -458,6 +458,21 @@ light weights. Medium and Light conflict with the Regular and Book versions
         (org-save-all-org-buffers)))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package evil
+  :init
+  (setq org-use-speed-commands nil) ; they don't work well with Evil.
+  :config
+  (evil-define-key 'normal org-mode-map
+    (kbd "M-l") 'org-shiftmetaright
+    (kbd "M-h") 'org-shiftmetaleft
+    (kbd "M-k") 'org-move-subtree-up
+    (kbd "M-j") 'org-move-subtree-down
+    (kbd "M-p") 'org-publish-current-project
+    (kbd "TAB") 'org-cycle)
+  )
+#+end_src
+
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
@@ -1828,8 +1843,7 @@ keybindings by default.
   Persist highlight from ~evil search~ and ~isearch~
   #+BEGIN_SRC emacs-lisp
   (use-package evil-search-highlight-persist
-    :bind  (:map my-keys-minor-mode-map
-                ("C-c oh" . (lambda ()
+    :bind  (("C-c oh" . (lambda ()
                               (interactive)
                               (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
                  )
@@ -1854,26 +1868,28 @@ keybindings by default.
     (evil-indent-plus-default-bindings))
   #+END_SRC
 
-
-#+begin_src emacs-lisp
-(use-package org-roam
-  :custom
-  (org-roam-directory (file-truename "~/Documents/org-roam"))
-  :bind (("C-c w l" . org-roam-buffer-toggle)
-         ("C-c w f" . org-roam-node-find)
-         ("C-c w g" . org-roam-graph)
-         ("C-c w i" . org-roam-node-insert)
-         ("C-c w c" . org-roam-capture)
-         ;; Dailies
-         ("C-c w j" . org-roam-dailies-capture-today))
+#+BEGIN_SRC emacs-lisp
+(use-package evil
   :config
-  (org-roam-db-autosync-mode))
-#+end_src
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package key-chord
+  :defer 2
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+#+END_SRC
 
 * Local variables
 
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
+
+
 
 
