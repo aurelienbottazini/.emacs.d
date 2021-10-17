@@ -19,3 +19,4 @@ bookmarks
 /.lsp-eslint-choices
 /projects
 var/prescient-save.el
+./var/prescient-save.el
