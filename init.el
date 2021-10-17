@@ -569,7 +569,7 @@ cons cell (regexp . minor-mode)."
    (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
  (use-package expand-region
-   :bind (("C-c w" . er/expand-region)))
+   :bind (("M-e" . er/expand-region)))
 
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
@@ -701,7 +701,7 @@ cons cell (regexp . minor-mode)."
  time-stamp-format "%04y-%02m-%02d") ;
 
 (use-package writeroom-mode
-  :bind (("C-c z" . writeroom-mode)))
+  :bind (("C-c w w" . writeroom-mode)))
 
 (use-package htmlize) ; for org html export
 (setq system-time-locale "C") ; make sure time local is in english when exporting
@@ -1164,3 +1164,28 @@ This command switches to browser."
 (global-set-key (kbd "C-j") 'tmux-move-down)
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
+
+(use-package evil-commentary
+:config
+(evil-commentary-mode +1))
+
+(use-package evil-visualstar
+:config
+(global-evil-visualstar-mode +1))
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "/path/to/org-files/"))
+  :bind (("C-c w l" . org-roam-buffer-toggle)
+         ("C-c w f" . org-roam-node-find)
+         ("C-c w g" . org-roam-graph)
+         ("C-c w i" . org-roam-node-insert)
+         ("C-c w c" . org-roam-capture)
+         ;; Dailies
+         ("C-c w j" . org-roam-dailies-capture-today))
+  :config
+  ;; (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  ;; (require 'org-roam-protocol)
+)
