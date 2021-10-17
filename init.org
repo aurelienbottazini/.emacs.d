@@ -1196,9 +1196,7 @@ diff but on the file itself. Use ~n~ and ~p~ to navigate between
 versions.
 #+BEGIN_SRC emacs-lisp
 (use-package git-timemachine
-  :bind (("C-c gt" . git-timemachine-toggle))
-  :config
-  (ad-activate 'git-timemachine-mode))
+  :bind (("C-c gt" . git-timemachine-toggle)))
 #+END_SRC
 *** vc-annotate
 
@@ -1750,7 +1748,112 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 (use-package evil-visualstar
 :config
 (global-evil-visualstar-mode +1))
+
 #+END_SRC
+
+I started using Vim to help me prevent [[https://www.emacswiki.org/emacs/RepeatedStrainInjury][emacs RSI.]]
+Now I am sticking with it because It makes me feel like beethoven
+manipulating text :-)
+
+Here is an awesome [[https://github.com/noctuid/evil-guide][Evil Guide]]
+
+Quit read-only windows with Q instead of trying to register a Vim
+Macro.
+This is mainly to restore emacs behavior with help windows.
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  (defun my-evil-record-macro ()
+    (interactive)
+    (if buffer-read-only
+        (quit-window)
+      (call-interactively 'evil-record-macro)))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+#+END_SRC
+
+Surround things with
+- ~S~ in visual mode
+- ~ys<text-object>~ in normal mode
+  You can also change surroundings ~cs~ or delete surroundings ~ds~.
+#+BEGIN_SRC emacs-lisp
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+#+END_SRC
+
+I use Vim keybindings everywhere except with special modes
+like Magit, Dired... I setup those special modes to start with Emacs
+keybindings by default.
+#+begin_src emacs-lisp
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs))
+#+end_src
+
+  Comment things with ~gc~. Comment and copy with ~gy~
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-commentary
+    :after evil
+    :diminish evil-commentary-mode
+    :config
+    (evil-commentary-mode))
+  #+END_SRC
+
+  Start a search from visual selection with ~*~ or ~#~ (backward).
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-visualstar
+    :after evil
+    :config
+    (global-evil-visualstar-mode t))
+  #+END_SRC
+
+  Jump to matching pairs with ~%~.
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-matchit
+    :defer 2
+    :after evil
+    :config
+    (global-evil-matchit-mode 1))
+  #+END_SRC
+
+  Persist highlight from ~evil search~ and ~isearch~
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-search-highlight-persist
+    :bind  (:map my-keys-minor-mode-map
+                ("C-c oh" . (lambda ()
+                              (interactive)
+                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+                 )
+                )
+    :config
+    (global-evil-search-highlight-persist t))
+  #+END_SRC
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :config
+    (evil-mode 1)
+    (evil-ex-define-cmd "W" 'save-buffer))
+  #+END_SRC
+
+  Add text objects to select, copy things based on indentation level.
+  Use it with ~vii~ and ~yii~.
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-indent-plus
+    :after evil
+    :config
+    (evil-indent-plus-default-bindings))
+  #+END_SRC
+
 
 #+begin_src emacs-lisp
 (use-package org-roam
@@ -1764,10 +1867,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
          ;; Dailies
          ("C-c w j" . org-roam-dailies-capture-today))
   :config
-  ;; (org-roam-db-autosync-mode)
-  ;; If using org-roam-protocol
-  ;; (require 'org-roam-protocol)
-)
+  (org-roam-db-autosync-mode))
 #+end_src
 
 * Local variables

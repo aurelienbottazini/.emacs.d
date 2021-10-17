@@ -794,9 +794,7 @@ This command switches to browser."
 (use-package git-link :bind (("C-c gl" . git-link)))
 
 (use-package git-timemachine
-  :bind (("C-c gt" . git-timemachine-toggle))
-  :config
-  (ad-activate 'git-timemachine-mode))
+  :bind (("C-c gt" . git-timemachine-toggle)))
 
 (use-package fullframe
   :config
@@ -1173,6 +1171,69 @@ This command switches to browser."
 :config
 (global-evil-visualstar-mode +1))
 
+(use-package evil
+  :config
+  (defun my-evil-record-macro ()
+    (interactive)
+    (if buffer-read-only
+        (quit-window)
+      (call-interactively 'evil-record-macro)))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs))
+
+(use-package evil-commentary
+  :after evil
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
+
+(use-package evil-visualstar
+  :after evil
+  :config
+  (global-evil-visualstar-mode t))
+
+(use-package evil-matchit
+  :defer 2
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package evil-search-highlight-persist
+  :bind  (:map my-keys-minor-mode-map
+              ("C-c oh" . (lambda ()
+                            (interactive)
+                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+               )
+              )
+  :config
+  (global-evil-search-highlight-persist t))
+
+(use-package evil
+  :config
+  (evil-mode 1)
+  (evil-ex-define-cmd "W" 'save-buffer))
+
+(use-package evil-indent-plus
+  :after evil
+  :config
+  (evil-indent-plus-default-bindings))
+
 (use-package org-roam
   :custom
   (org-roam-directory (file-truename "~/Documents/org-roam"))
@@ -1184,7 +1245,4 @@ This command switches to browser."
          ;; Dailies
          ("C-c w j" . org-roam-dailies-capture-today))
   :config
-  ;; (org-roam-db-autosync-mode)
-  ;; If using org-roam-protocol
-  ;; (require 'org-roam-protocol)
-)
+  (org-roam-db-autosync-mode))
