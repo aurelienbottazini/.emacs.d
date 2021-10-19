@@ -1,0 +1,2 @@
+;;; Generated package description from graphql-mode.el  -*- no-byte-compile: t -*-
+(define-package "graphql-mode" "20210912.1544" "Major mode for editing GraphQL schemas" '((emacs "24.3")) :commit "1912bd08f558e4609f4dd30ba91181b6ce7f69d9" :authors '(("David Vazquez Pua" . "davazp@gmail.com")) :maintainer '("David Vazquez Pua" . "davazp@gmail.com") :keywords '("languages") :url "https://github.com/davazp/graphql-mode")
