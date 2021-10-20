@@ -1127,30 +1127,37 @@ This command switches to browser."
 
 (global-set-key (kbd "C-x o") 'ace-window)
 
-(use-package find-file-in-project
-  :ensure t
-  :bind (("C-c T" . find-file-in-project-by-selected)
-         ("C-c t" . ffip)
-         ("M-p" . ffip)
-               :map evil-normal-state-map
-               ("gf" . find-file-in-project-at-point))
-  :config
+(setq project-switch-commands 'project-dired)
 
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.png")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpeg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.gif")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.bmp")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.ico")) ffip-ignore-filenames))
-  (setq ffip-prefer-ido-mode nil)
-  (setq ffip-use-rust-fd t)
-  (setq ffip-strip-file-name-regex "\\(\\.mock\\|_test\\|\\.test\\|\\.mockup\\|\\.spec\\)")
-  (add-to-list 'ffip-prune-patterns "*/.git/*")
-  (add-to-list 'ffip-prune-patterns "*/dist/*")
-  (add-to-list 'ffip-prune-patterns "*/.emacs.d/elpa/*")
-  (add-to-list 'ffip-prune-patterns "*/.nuxt/*")
-  (add-to-list 'ffip-prune-patterns "*/spec/coverage/*")
-  (add-to-list 'ffip-prune-patterns "*/public/*")
-  (add-to-list 'ffip-prune-patterns "*/.shadow-cljs/*")
-  (add-to-list 'ffip-prune-patterns "*/vendor/*")
-  (add-to-list 'ffip-prune-patterns "node_modules/*"))
+(global-set-key (kbd "C-c t") 'project-find-file)
+
+(use-package el-patch)
+(el-patch-defun project--files-in-directory (dir ignores &optional files)
+  (el-patch-remove
+    (require 'find-dired)
+    (require 'xref)
+    (defvar find-name-arg))
+  (let* ((default-directory dir)
+         ;; Make sure ~/ etc. in local directory name is
+         ;; expanded and not left for the shell command
+         ;; to interpret.
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (el-patch-swap
+                    (format "%s %s %s -type f %s -print0"
+                            find-program
+                            localdir
+                            (xref--find-ignores-arguments ignores localdir)
+                            (if files
+                                (concat (shell-quote-argument "(")
+                                        " " find-name-arg " "
+                                        (mapconcat
+                                         #'shell-quote-argument
+                                         (split-string files)
+                                         (concat " -o " find-name-arg " "))
+                                        " "
+                                        (shell-quote-argument ")"))
+                              ""))
+                    (format "fd -t f -0 . %s" localdir))))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))

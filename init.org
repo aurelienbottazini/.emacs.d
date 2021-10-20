@@ -1779,7 +1779,7 @@ A sample .dir-locals.el,
 
 *** My configuration
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package find-file-in-project
   :ensure t
   :bind (("C-c T" . find-file-in-project-by-selected)
@@ -1809,7 +1809,42 @@ A sample .dir-locals.el,
   (add-to-list 'ffip-prune-patterns "node_modules/*"))
 #+END_SRC
 
+#+begin_src emacs-lisp
+(setq project-switch-commands 'project-dired)
 
+(global-set-key (kbd "C-c t") 'project-find-file)
+
+(use-package el-patch)
+(el-patch-defun project--files-in-directory (dir ignores &optional files)
+  (el-patch-remove
+    (require 'find-dired)
+    (require 'xref)
+    (defvar find-name-arg))
+  (let* ((default-directory dir)
+         ;; Make sure ~/ etc. in local directory name is
+         ;; expanded and not left for the shell command
+         ;; to interpret.
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (el-patch-swap
+                    (format "%s %s %s -type f %s -print0"
+                            find-program
+                            localdir
+                            (xref--find-ignores-arguments ignores localdir)
+                            (if files
+                                (concat (shell-quote-argument "(")
+                                        " " find-name-arg " "
+                                        (mapconcat
+                                         #'shell-quote-argument
+                                         (split-string files)
+                                         (concat " -o " find-name-arg " "))
+                                        " "
+                                        (shell-quote-argument ")"))
+                              ""))
+                    (format "fd -t f -0 . %s" localdir))))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
+#+end_src
 
 * Local variables
 
