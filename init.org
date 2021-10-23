@@ -1533,19 +1533,21 @@ C-c C-e R =letter= to export a presentation from your org file
 
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy
-:config
-(ivy-mode)
+:init
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
 ;; enable this if you want `swiper' to use it
 ;; (setq search-default-mode #'char-fold-to-regexp)
+:config
+(ivy-mode)
 (use-package counsel)
 (global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
 (global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-c r") 'counsel-rg)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
 (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
@@ -1556,8 +1558,11 @@ C-c C-e R =letter= to export a presentation from your org file
 (global-set-key (kbd "C-c b") 'counsel-bookmark)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 )
-(setq counsel-grep-base-command
- "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+
+(use-package evil
+:config
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
+)
 #+end_src
 
 ~counsel-rg~ is my main way to search. Invoked with an argument, it
@@ -1587,6 +1592,8 @@ Launch ~counsel-rg~ with a prefix and then I can use for example
 ~C-x d~ to launch dired . I mark the files I am interested in with
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.
+
+
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
 to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
 #+begin_src emacs-lisp
@@ -1625,10 +1632,12 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
                                                  (tmux-socket-command-string) " select-pane -D") nil)))))
 
 (global-set-key (kbd "C-h") 'tmux-move-left)
+
 (global-set-key (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
-
 (use-package evil-commentary
 :config
 (evil-commentary-mode +1))
@@ -1659,6 +1668,7 @@ This is mainly to restore emacs behavior with help windows.
 
   (with-eval-after-load 'evil-maps
     (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+
 #+END_SRC
 
 Surround things with
@@ -1673,6 +1683,7 @@ Surround things with
 #+END_SRC
 
 I use Vim keybindings everywhere except with special modes
+
 like Magit, Dired... I setup those special modes to start with Emacs
 keybindings by default.
 #+begin_src emacs-lisp
@@ -1684,7 +1695,6 @@ keybindings by default.
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
 #+end_src
 

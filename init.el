@@ -983,19 +983,21 @@ This command switches to browser."
 (evil-mode 1))
 
 (use-package ivy
-:config
-(ivy-mode)
+:init
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
 ;; enable this if you want `swiper' to use it
 ;; (setq search-default-mode #'char-fold-to-regexp)
+:config
+(ivy-mode)
 (use-package counsel)
 (global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
 (global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-c r") 'counsel-rg)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
 (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
@@ -1006,8 +1008,11 @@ This command switches to browser."
 (global-set-key (kbd "C-c b") 'counsel-bookmark)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 )
-(setq counsel-grep-base-command
- "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+
+(use-package evil
+:config
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
+)
 
 (use-package counsel
   :bind (("C-c f" . counsel-rg)))
@@ -1047,10 +1052,12 @@ This command switches to browser."
                                                  (tmux-socket-command-string) " select-pane -D") nil)))))
 
 (global-set-key (kbd "C-h") 'tmux-move-left)
+
 (global-set-key (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
-
 (use-package evil-commentary
 :config
 (evil-commentary-mode +1))
@@ -1083,7 +1090,6 @@ This command switches to browser."
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
 
 (use-package evil-commentary
