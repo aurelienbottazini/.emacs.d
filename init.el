@@ -301,7 +301,7 @@ cons cell (regexp . minor-mode)."
     (kbd "M-h") 'org-shiftmetaleft
     (kbd "M-k") 'org-move-subtree-up
     (kbd "M-j") 'org-move-subtree-down
-    (kbd "M-p") 'org-publish-current-project
+    ;; (kbd "M-p") 'org-publish-current-project
     (kbd "TAB") 'org-cycle)
   )
 
@@ -995,6 +995,7 @@ This command switches to browser."
 (global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-c r") 'counsel-rg)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
 (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
@@ -1002,7 +1003,14 @@ This command switches to browser."
 (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
 (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 (global-set-key (kbd "C-x l") 'counsel-locate)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+)
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+
+(use-package counsel
+  :bind (("C-c f" . counsel-rg)))
 
 (defun tmux-socket-command-string ()
   (interactive)
@@ -1075,6 +1083,7 @@ This command switches to browser."
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
 
 (use-package evil-commentary
@@ -1130,6 +1139,7 @@ This command switches to browser."
 (setq project-switch-commands 'project-dired)
 
 (global-set-key (kbd "C-c t") 'project-find-file)
+(global-set-key (kbd "M-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)

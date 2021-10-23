@@ -464,7 +464,7 @@ light weights. Medium and Light conflict with the Regular and Book versions
     (kbd "M-h") 'org-shiftmetaleft
     (kbd "M-k") 'org-move-subtree-up
     (kbd "M-j") 'org-move-subtree-down
-    (kbd "M-p") 'org-publish-current-project
+    ;; (kbd "M-p") 'org-publish-current-project
     (kbd "TAB") 'org-cycle)
   )
 #+end_src
@@ -1545,6 +1545,7 @@ C-c C-e R =letter= to export a presentation from your org file
 (global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-c r") 'counsel-rg)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
 (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
 (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
@@ -1552,9 +1553,40 @@ C-c C-e R =letter= to export a presentation from your org file
 (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
 (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 (global-set-key (kbd "C-x l") 'counsel-locate)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+)
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
 #+end_src
 
+~counsel-rg~ is my main way to search. Invoked with an argument, it
+allows you to specify the directory and search options.
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :bind (("C-c f" . counsel-rg)))
+#+END_SRC
+
+When I am investigating things, I like to see a preview of the
+results as I scroll down the search results. I do it with ~C-o~ then
+either ~g~ on the entry I want to preview or ~c~ to automatically
+preview results as I move through the result list.
+
+A trick I am learning is to use ~C-'~ to jump directly to a
+search results.
+
+*** When I need to narrow down my search to specific files
+
+**** Narrowing on the file-type
+
+Launch ~counsel-rg~ with a prefix and then I can use for example
+~-tjs~ as an argument to search only inside javascript files.
+~-Tjs~ searches inside files but javascript ones.
+
+**** From Dired
+~C-x d~ to launch dired . I mark the files I am interested in with
+~m~. Then I can grep those files with ~A~ and do a query replace
+with ~Q~.
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
 to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
 #+begin_src emacs-lisp
@@ -1652,6 +1684,7 @@ keybindings by default.
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs))
 #+end_src
 
@@ -1813,6 +1846,7 @@ A sample .dir-locals.el,
 (setq project-switch-commands 'project-dired)
 
 (global-set-key (kbd "C-c t") 'project-find-file)
+(global-set-key (kbd "M-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)
