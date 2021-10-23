@@ -472,6 +472,18 @@ cons cell (regexp . minor-mode)."
         prettier-js-command "prettier")
   (add-hook 'js2-mode-hook #'js2-imenu-extras-mode))
 
+(defun eslint-fix-file ()
+  (interactive)
+  (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
+  (shell-command (concat "eslint --quiet --fix " (buffer-file-name))))
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
+(add-hook 'js2-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
+
 (use-package context-coloring
   :ensure t
   :diminish context-coloring-mode
