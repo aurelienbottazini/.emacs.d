@@ -1,4 +1,4 @@
-x#+TITLE: Aurélien Bottazini's Emacs configuration
+#+TITLE: Aurélien Bottazini's Emacs configuration
 #+OPTIONS: toc:4 h:4
 #+PROPERTY: header-args :results silent :tangle yes
 
@@ -657,8 +657,8 @@ errors with ~next-error~ and ~previous-error~
   :mode "\\.coffee\\'"
   :config
   (use-package highlight-indentation)
-  (add-hook 'coffee-mode-hook '(lambda () (highlight-indentation-mode)))
-  (add-hook 'coffee-mode-hook '(lambda () (subword-mode +1)))
+  (add-hook 'coffee-mode-hook (lambda () (highlight-indentation-mode)))
+  (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
   (custom-set-variables '(coffee-tab-width 2)))
 
 (use-package typescript-mode
@@ -738,7 +738,7 @@ adjustments for JSX.
 
   (use-package prettier-js
     :config
-    (add-hook 'web-mode-hook #'(lambda ()
+    (add-hook 'web-mode-hook (lambda ()
                                  (enable-minor-mode
                                   '("\\.vue?\\'" . prettier-js-mode)))))
 
@@ -846,11 +846,11 @@ Another =M-x= without leaving the home row
    (global-set-key (kbd "C-c a") 'org-agenda)
    (global-set-key (kbd "C-c R") 'revert-buffer)
    (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
-   (global-set-key (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
-   (global-set-key (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
-   (global-set-key (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
-   (global-set-key (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
-   (global-set-key (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
+   (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
+   (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
+   (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
+   (global-set-key (kbd "C-c jn") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
+   (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
    (global-set-key (kbd "C-c jj") 'dired-jump)
    (global-set-key (kbd "C-c k") 'recompile)
    (global-set-key (kbd "C-c K") 'compile)
@@ -918,9 +918,9 @@ for org template captures.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-(require 'org-habit)
-(add-to-list 'org-modules "org-habit")
-(add-to-list 'org-modules "org-git-link")
+;; (require 'org-habit)
+;; (add-to-list 'org-modules "org-habit")
+;; (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 
 (setq org-todo-keywords
@@ -973,7 +973,7 @@ This is a must to capture ideas quickly.
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
-(global-set-key (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
+(global-set-key (kbd "C-c n") (lambda () (interactive) (org-capture nil "n")))
 #+END_SRC
 
 To launch an Emacs client with a capture frame selecting the ~n~ template
@@ -1771,7 +1771,7 @@ keybindings by default.
 (use-package evil
   :config
   (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1784,7 +1784,9 @@ keybindings by default.
 #+END_SRC
 
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-x o") 'ace-window)
+(use-package ace-window
+:config
+(global-set-key (kbd "C-x o") 'ace-window))
 #+end_src
 
 ** Find file in project
@@ -1903,6 +1905,19 @@ A sample .dir-locals.el,
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+#+end_src
+
+#+begin_src emacs-lisp
+(if (and (fboundp 'native-comp-available-p)
+       (native-comp-available-p))
+  (message "Native compilation is available")
+(message "Native complation is *not* available"))
+#+end_src
+
+#+begin_src emacs-lisp
+(if (functionp 'json-serialize)
+  (message "Native JSON is available")
+(message "Native JSON is *not* available"))
 #+end_src
 
 * Local variables

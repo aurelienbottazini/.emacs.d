@@ -1,4 +1,4 @@
-;;; scss-mode-autoloads.el --- automatically extracted autoloads
+;;; scss-mode-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -18,7 +18,7 @@ Special commands:
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "scss-mode" '("flymake-scss-init" "scss-")))
+(register-definition-prefixes "scss-mode" '("flymake-scss-init" "scss-"))
 
 ;;;***
 

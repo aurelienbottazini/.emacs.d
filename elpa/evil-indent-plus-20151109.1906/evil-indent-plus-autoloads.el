@@ -1,4 +1,4 @@
-;;; evil-indent-plus-autoloads.el --- automatically extracted autoloads
+;;; evil-indent-plus-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -19,7 +19,7 @@
 (autoload 'evil-indent-plus-default-bindings "evil-indent-plus" "\
 Set the default evil-indent-plus keybindings." nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "evil-indent-plus" '("evil-indent-plus--")))
+(register-definition-prefixes "evil-indent-plus" '("evil-indent-plus--"))
 
 ;;;***
 

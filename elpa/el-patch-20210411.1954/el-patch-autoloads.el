@@ -1,4 +1,4 @@
-;;; el-patch-autoloads.el --- automatically extracted autoloads
+;;; el-patch-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -257,7 +257,7 @@ patch's original definition. NAME and TYPE are as returned by
 
 \(fn NAME TYPE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "el-patch" '("el-patch-")))
+(register-definition-prefixes "el-patch" '("el-patch-"))
 
 ;;;***
 
@@ -351,7 +351,7 @@ Runs `el-patch-pre-validate-hook' and
 
 See `el-patch-validate-template'." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "el-patch-template" '("el-patch-")))
+(register-definition-prefixes "el-patch-template" '("el-patch-"))
 
 ;;;***
 

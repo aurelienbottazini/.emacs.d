@@ -1,4 +1,4 @@
-;;; coffee-mode-autoloads.el --- automatically extracted autoloads
+;;; coffee-mode-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -24,7 +24,7 @@ Major mode for editing CoffeeScript.
 
 (add-to-list 'interpreter-mode-alist '("coffee" . coffee-mode))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "coffee-mode" '("coffee-" "iced-coffee-cs-keywords" "js2coffee-command")))
+(register-definition-prefixes "coffee-mode" '("coffee-" "iced-coffee-cs-keywords" "js2coffee-command"))
 
 ;;;***
 

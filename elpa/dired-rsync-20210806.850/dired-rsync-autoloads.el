@@ -1,4 +1,4 @@
-;;; dired-rsync-autoloads.el --- automatically extracted autoloads
+;;; dired-rsync-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -21,7 +21,7 @@ ssh/scp tramp connections.
 
 \(fn DEST)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "dired-rsync" '("dired-r")))
+(register-definition-prefixes "dired-rsync" '("dired-r"))
 
 ;;;***
 

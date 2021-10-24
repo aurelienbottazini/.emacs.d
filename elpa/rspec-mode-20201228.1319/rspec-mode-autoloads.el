@@ -1,4 +1,4 @@
-;;; rspec-mode-autoloads.el --- automatically extracted autoloads
+;;; rspec-mode-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -12,10 +12,19 @@
 (autoload 'rspec-mode "rspec-mode" "\
 Minor mode for RSpec files
 
-If called interactively, enable Rspec mode if ARG is positive,
-and disable it if ARG is zero or negative.  If called from Lisp,
-also enable the mode if ARG is omitted or nil, and toggle it if
-ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the `RSpec
+mode' mode.  If the prefix argument is positive, enable the mode,
+and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `rspec-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \\{rspec-mode-map}
 
@@ -24,10 +33,20 @@ ARG is `toggle'; disable the mode otherwise.
 (autoload 'rspec-verifiable-mode "rspec-mode" "\
 Minor mode for Ruby files that have specs
 
-If called interactively, enable Rspec-Verifiable mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Rspec-Verifiable mode' mode.  If the prefix argument is
+positive, enable the mode, and if it is zero or negative, disable
+the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `rspec-verifiable-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \\{rspec-verifiable-mode-map}
 
@@ -36,10 +55,19 @@ toggle it if ARG is `toggle'; disable the mode otherwise.
 (autoload 'rspec-dired-mode "rspec-mode" "\
 Minor mode for Dired buffers with spec files
 
-If called interactively, enable Rspec-Dired mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Rspec-Dired mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `rspec-dired-mode'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \\{rspec-dired-mode-map}
 
@@ -54,7 +82,7 @@ Return true if the current buffer is a spec." nil nil)
 
 (add-hook 'rails-minor-mode-hook 'rspec-verifiable-mode)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rspec-mode" '("rspec")))
+(register-definition-prefixes "rspec-mode" '("rspec"))
 
 ;;;***
 

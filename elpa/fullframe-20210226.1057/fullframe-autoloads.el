@@ -1,4 +1,4 @@
-;;; fullframe-autoloads.el --- automatically extracted autoloads
+;;; fullframe-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -47,7 +47,7 @@ the window it generated is the only one in in the frame.
 
 \(fn COMMAND-ON COMMAND-OFF &optional KILL-ON-COFF AFTER-COMMAND-ON-FUNC)" nil t)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "fullframe" '("fullframe/")))
+(register-definition-prefixes "fullframe" '("fullframe/"))
 
 ;;;***
 

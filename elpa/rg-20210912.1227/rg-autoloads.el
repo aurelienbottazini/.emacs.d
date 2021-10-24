@@ -1,4 +1,4 @@
-;;; rg-autoloads.el --- automatically extracted autoloads
+;;; rg-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -119,21 +119,21 @@ files with the same name pattern still will be searched.
  (autoload 'rg-literal "rg.el" "" t)
  (autoload 'rg "rg.el" "" t)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg" '("kill-rg" "rg-")))
+(register-definition-prefixes "rg" '("kill-rg" "rg-"))
 
 ;;;***
 
 ;;;### (autoloads nil "rg-header" "rg-header.el" (0 0 0 0))
 ;;; Generated autoloads from rg-header.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-header" '("rg-")))
+(register-definition-prefixes "rg-header" '("rg-"))
 
 ;;;***
 
 ;;;### (autoloads nil "rg-history" "rg-history.el" (0 0 0 0))
 ;;; Generated autoloads from rg-history.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-history" '("rg-history-")))
+(register-definition-prefixes "rg-history" '("rg-history-"))
 
 ;;;***
 
@@ -143,7 +143,7 @@ files with the same name pattern still will be searched.
 (autoload 'rg-list-searches "rg-ibuffer" "\
 List all `rg-mode' buffers in `ibuffer'." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-ibuffer" '("rg-")))
+(register-definition-prefixes "rg-ibuffer" '("rg-"))
 
 ;;;***
 
@@ -153,7 +153,7 @@ List all `rg-mode' buffers in `ibuffer'." t nil)
  (autoload 'rg-isearch-current-dir "rg-isearch.el" "" t)
  (autoload 'rg-isearch-project "rg-isearch.el" "" t)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-isearch" '("rg-get-isearch-string")))
+(register-definition-prefixes "rg-isearch" '("rg-get-isearch-string"))
 
 ;;;***
 
@@ -167,14 +167,14 @@ If prefix is not supplied `rg-keymap-prefix' is used.
 
 \(fn &optional PREFIX)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-menu" '("rg-menu-")))
+(register-definition-prefixes "rg-menu" '("rg-menu-"))
 
 ;;;***
 
 ;;;### (autoloads nil "rg-result" "rg-result.el" (0 0 0 0))
 ;;; Generated autoloads from rg-result.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-result" '("rg-")))
+(register-definition-prefixes "rg-result" '("rg-"))
 
 ;;;***
 
@@ -186,7 +186,7 @@ Setup wgrep rg support." nil nil)
 
 (add-hook 'rg-mode-hook 'wgrep-rg-setup)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wgrep-rg" '("wgrep-rg-")))
+(register-definition-prefixes "wgrep-rg" '("wgrep-rg-"))
 
 ;;;***
 

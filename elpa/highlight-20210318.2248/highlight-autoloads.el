@@ -1,4 +1,4 @@
-;;; highlight-autoloads.el --- automatically extracted autoloads
+;;; highlight-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -602,7 +602,7 @@ Non-interactively, FACE = nil means unhighlight all faces.
 
 \(fn &optional FACE MSGP MOUSEP BUFFERS STRING)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "highlight" '("hlt-" "menu-bar-edit-menu")))
+(register-definition-prefixes "highlight" '("hlt-" "menu-bar-edit-menu"))
 
 ;;;***
 

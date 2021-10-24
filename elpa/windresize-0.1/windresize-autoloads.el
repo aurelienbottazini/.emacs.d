@@ -1,4 +1,4 @@
-;;; windresize-autoloads.el --- automatically extracted autoloads
+;;; windresize-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -45,7 +45,7 @@ will set the new window configuration and exit.
 
 \(fn &optional INCREMENT)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "windresize" '("windresize-")))
+(register-definition-prefixes "windresize" '("windresize-"))
 
 ;;;***
 

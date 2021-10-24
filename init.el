@@ -455,8 +455,8 @@ cons cell (regexp . minor-mode)."
   :mode "\\.coffee\\'"
   :config
   (use-package highlight-indentation)
-  (add-hook 'coffee-mode-hook '(lambda () (highlight-indentation-mode)))
-  (add-hook 'coffee-mode-hook '(lambda () (subword-mode +1)))
+  (add-hook 'coffee-mode-hook (lambda () (highlight-indentation-mode)))
+  (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
   (custom-set-variables '(coffee-tab-width 2)))
 
 (use-package typescript-mode
@@ -515,7 +515,7 @@ cons cell (regexp . minor-mode)."
 
   (use-package prettier-js
     :config
-    (add-hook 'web-mode-hook #'(lambda ()
+    (add-hook 'web-mode-hook (lambda ()
                                  (enable-minor-mode
                                   '("\\.vue?\\'" . prettier-js-mode)))))
 
@@ -597,11 +597,11 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
- (global-set-key (kbd "C-c je") '(lambda () (interactive) (find-file "~/.emacs.d/init.org")))
- (global-set-key (kbd "C-c jp") '(lambda () (interactive) (find-file "~/projects/")))
- (global-set-key (kbd "C-c jw") '(lambda () (interactive) (find-file "~/work")))
- (global-set-key (kbd "C-c jn") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
- (global-set-key (kbd "C-c jr") '(lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
+ (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
+ (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
+ (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
+ (global-set-key (kbd "C-c jn") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
+ (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
  (global-set-key (kbd "C-c jj") 'dired-jump)
  (global-set-key (kbd "C-c k") 'recompile)
  (global-set-key (kbd "C-c K") 'compile)
@@ -652,9 +652,9 @@ cons cell (regexp . minor-mode)."
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-(require 'org-habit)
-(add-to-list 'org-modules "org-habit")
-(add-to-list 'org-modules "org-git-link")
+;; (require 'org-habit)
+;; (add-to-list 'org-modules "org-habit")
+;; (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
 
 (setq org-todo-keywords
@@ -684,7 +684,7 @@ cons cell (regexp . minor-mode)."
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
-(global-set-key (kbd "C-c n") '(lambda () (interactive) (org-capture nil "n")))
+(global-set-key (kbd "C-c n") (lambda () (interactive) (org-capture nil "n")))
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
@@ -1143,7 +1143,7 @@ This command switches to browser."
 (use-package evil
   :config
   (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-j") 'eval-print-last-sexp))
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
 
 (use-package key-chord
   :defer 2
@@ -1152,7 +1152,9 @@ This command switches to browser."
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
-(global-set-key (kbd "C-x o") 'ace-window)
+(use-package ace-window
+:config
+(global-set-key (kbd "C-x o") 'ace-window))
 
 (setq project-switch-commands 'project-dired)
 
@@ -1189,3 +1191,12 @@ This command switches to browser."
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+
+(if (and (fboundp 'native-comp-available-p)
+       (native-comp-available-p))
+  (message "Native compilation is available")
+(message "Native complation is *not* available"))
+
+(if (functionp 'json-serialize)
+  (message "Native JSON is available")
+(message "Native JSON is *not* available"))

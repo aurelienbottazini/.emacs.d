@@ -1,4 +1,4 @@
-;;; ob-clojurescript-autoloads.el --- automatically extracted autoloads
+;;; ob-clojurescript-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -10,7 +10,7 @@
 ;;;;;;  0 0 0))
 ;;; Generated autoloads from ob-clojurescript.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ob-clojurescript" '("ob-clojurescript-escape-quotes" "org-babel-")))
+(register-definition-prefixes "ob-clojurescript" '("ob-clojurescript-escape-quotes" "org-babel-"))
 
 ;;;***
 

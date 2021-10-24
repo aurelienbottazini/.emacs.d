@@ -1,4 +1,4 @@
-;;; deft-autoloads.el --- automatically extracted autoloads
+;;; deft-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -25,7 +25,7 @@ non-nil and title is not from filename, use it as the title." t nil)
 (autoload 'deft "deft" "\
 Switch to *Deft* buffer and load files." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "deft" '("deft-" "org-deft-store-link")))
+(register-definition-prefixes "deft" '("deft-" "org-deft-store-link"))
 
 ;;;***
 

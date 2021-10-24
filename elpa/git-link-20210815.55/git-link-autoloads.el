@@ -1,4 +1,4 @@
-;;; git-link-autoloads.el --- automatically extracted autoloads
+;;; git-link-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -43,7 +43,7 @@ Defaults to \"origin\".
 
 \(fn REMOTE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "git-link" '("git-link-")))
+(register-definition-prefixes "git-link" '("git-link-"))
 
 ;;;***
 

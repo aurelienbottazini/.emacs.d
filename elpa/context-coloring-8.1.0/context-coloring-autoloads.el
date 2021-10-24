@@ -1,4 +1,4 @@
-;;; context-coloring-autoloads.el --- automatically extracted autoloads
+;;; context-coloring-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -66,7 +66,7 @@ Feature inspired by Douglas Crockford.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "context-coloring" '("context-coloring-")))
+(register-definition-prefixes "context-coloring" '("context-coloring-"))
 
 ;;;***
 
@@ -87,7 +87,7 @@ Non-nil if the minibuffer is for `eval-expression'." nil nil)
 
 (puthash 'eval-expression (list :predicate #'context-coloring-eval-expression-predicate :colorizer #'context-coloring-eval-expression-colorize :setup #'context-coloring-setup-idle-change-detection :teardown #'context-coloring-teardown-idle-change-detection) context-coloring-dispatch-hash-table)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "context-coloring-emacs-lisp" '("context-coloring-")))
+(register-definition-prefixes "context-coloring-emacs-lisp" '("context-coloring-"))
 
 ;;;***
 
@@ -100,7 +100,7 @@ Color the buffer using the `js2-mode'." nil nil)
 
 (puthash 'javascript (list :modes '(js2-mode js2-jsx-mode) :colorizer #'context-coloring-js2-colorize :setup (lambda nil (add-hook 'js2-post-parse-callbacks #'context-coloring-colorize nil t)) :teardown (lambda nil (remove-hook 'js2-post-parse-callbacks #'context-coloring-colorize t))) context-coloring-dispatch-hash-table)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "context-coloring-javascript" '("context-coloring-")))
+(register-definition-prefixes "context-coloring-javascript" '("context-coloring-"))
 
 ;;;***
 

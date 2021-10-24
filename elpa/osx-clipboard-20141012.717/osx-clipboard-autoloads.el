@@ -1,4 +1,4 @@
-;;; osx-clipboard-autoloads.el --- automatically extracted autoloads
+;;; osx-clipboard-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -12,7 +12,7 @@
 (let ((loads (get 'osx-clipboard 'custom-loads))) (if (member '"osx-clipboard" loads) nil (put 'osx-clipboard 'custom-loads (cons '"osx-clipboard" loads))))
 
 (defvar osx-clipboard-mode nil "\
-Non-nil if Osx-Clipboard mode is enabled.
+Non-nil if OSX-Clipboard mode is enabled.
 See the `osx-clipboard-mode' command
 for a description of this minor mode.
 Setting this variable directly does not take effect;
@@ -24,10 +24,19 @@ or call the function `osx-clipboard-mode'.")
 (autoload 'osx-clipboard-mode "osx-clipboard" "\
 Kill and yank using the OS X clipboard when running in a text terminal.
 
-If called interactively, enable Osx-Clipboard mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`OSX-Clipboard mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='osx-clipboard-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 This mode allows Emacs to use the OS X system clipboard when
 running in the terminal, making killing and yanking behave
@@ -43,7 +52,7 @@ Consider also customizing the variable
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "osx-clipboard" '("osx-clipboard-")))
+(register-definition-prefixes "osx-clipboard" '("osx-clipboard-"))
 
 ;;;***
 

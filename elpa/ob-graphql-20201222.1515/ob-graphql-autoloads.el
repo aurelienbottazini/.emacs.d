@@ -1,4 +1,4 @@
-;;; ob-graphql-autoloads.el --- automatically extracted autoloads
+;;; ob-graphql-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -17,7 +17,7 @@ as type \"graphql.\"
 
 \(fn BODY PARAMS)" nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ob-graphql" '("org-babel-header-args:graphql")))
+(register-definition-prefixes "ob-graphql" '("org-babel-header-args:graphql"))
 
 ;;;***
 
