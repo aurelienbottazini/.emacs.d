@@ -79,6 +79,7 @@ You can get the time it took for emacs to start with.
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
+https://en.wikipedia.org/wiki/Wikipedia:Zenburn
 #+BEGIN_SRC emacs-lisp
 (use-package zenburn-theme
  :config
@@ -1926,6 +1927,11 @@ A sample .dir-locals.el,
 
 (tab-bar-history-mode +1)
 (global-tab-line-mode +1)
+#+end_src
+
+LSP (language server)
+#+begin_src emacs-lisp
+(use-package eglot)
 #+end_src
 
 * Local variables

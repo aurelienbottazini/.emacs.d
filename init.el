@@ -1197,3 +1197,5 @@ This command switches to browser."
 
 (tab-bar-history-mode +1)
 (global-tab-line-mode +1)
+
+(use-package eglot)
