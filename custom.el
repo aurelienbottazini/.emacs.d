@@ -178,5 +178,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
+ '(ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
+ '(ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
+ '(ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
+ '(tab-bar ((t (:inherit variable-pitch :background "#88b090" :foreground "#2e3330"))))
+ '(tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :box (:line-width (1 . 1) :style released-button)))))
+ '(tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
+ '(tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :slant italic))))
+ '(tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
+ '(tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+ '(tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
+ '(tab-line-tab-current ((t (:inherit tab-line-tab :background "#ccdc90" :foreground "#2e4340"))))
+ '(tab-line-tab-inactive ((t (:inherit tab-line-tab))))
  '(variable-pitch ((t (:family "Operator Mono AB"))))
  '(web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f")))))
