@@ -1191,12 +1191,3 @@ This command switches to browser."
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
-
-(if (and (fboundp 'native-comp-available-p)
-       (native-comp-available-p))
-  (message "Native compilation is available")
-(message "Native complation is *not* available"))
-
-(if (functionp 'json-serialize)
-  (message "Native JSON is available")
-(message "Native JSON is *not* available"))
