@@ -1920,6 +1920,14 @@ A sample .dir-locals.el,
 (message "Native JSON is *not* available"))
 #+end_src
 
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-[") 'tab-bar-history-back)
+(global-set-key (kbd "M-]") 'tab-bar-history-forward)
+
+(tab-bar-history-mode +1)
+(global-tab-line-mode +1)
+#+end_src
+
 * Local variables
 
 # Local Variables:

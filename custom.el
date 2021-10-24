@@ -143,6 +143,7 @@
  '(speedbar-show-unknown-files t)
  '(swiper-goto-start-of-match t)
  '(tab-bar-close-button-show nil)
+ '(tab-bar-history-mode t)
  '(tab-bar-tab-hints t)
  '(tool-bar-mode nil)
  '(treemacs-position 'right)

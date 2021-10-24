@@ -1191,3 +1191,9 @@ This command switches to browser."
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+
+(global-set-key (kbd "M-[") 'tab-bar-history-back)
+(global-set-key (kbd "M-]") 'tab-bar-history-forward)
+
+(tab-bar-history-mode +1)
+(global-tab-line-mode +1)

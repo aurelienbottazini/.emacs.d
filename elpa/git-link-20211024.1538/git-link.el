@@ -3,8 +3,8 @@
 ;; Copyright (C) 2013-2020 Skye Shaw and others
 ;; Author: Skye Shaw <skye.shaw@gmail.com>
 ;; Version: 0.8.4
-;; Package-Version: 20210815.55
-;; Package-Commit: c4cb0edc92013ae4e3660f94c0c0d4d13fca6ee6
+;; Package-Version: 20211024.1538
+;; Package-Commit: b2d803ad8764b896f5dd7f7e139ceb4903f7d8b6
 ;; Keywords: git, vc, github, bitbucket, gitlab, sourcehut, convenience
 ;; URL: http://github.com/sshaw/git-link
 ;; Package-Requires: ((emacs "24.3"))
@@ -245,7 +245,7 @@ As an example, \"gitlab\" will match with both \"gitlab.com\" and
     ("bitbucket" git-link-homepage-bitbucket)
     ("gitorious" git-link-homepage-github)
     ("gitlab" git-link-homepage-github)
-    ("git\\.\\(sv\\|savannah\\)\\.gnu\\.org" git-link-homepage-svannah)
+    ("git\\.\\(sv\\|savannah\\)\\.gnu\\.org" git-link-homepage-savannah)
     ("visualstudio\\|azure" git-link-homepage-github)
     ("sourcegraph" git-link-homepage-github))
   "Alist of host names and functions creating homepage links for those.
@@ -640,10 +640,13 @@ return (FILENAME . REVISION) otherwise nil."
 	  hostname
 	  dirname))
 
-(defun git-link-homepage-svannah (hostname dirname)
+(defun git-link-homepage-savannah (hostname dirname)
   (format "https://%s/cgit/%s.git/"
 	  hostname
 	  dirname))
+
+(define-obsolete-function-alias
+  'git-link-homepage-svannah 'git-link-homepage-savannah "cf947f9")
 
 (defun git-link--select-remote ()
   (if current-prefix-arg
