@@ -23,3 +23,4 @@ var/prescient-save.el
 /org-roam.db
 /.org-id-locations
 /eln-cache/
+/init.org.rej
