@@ -1924,9 +1924,9 @@ A sample .dir-locals.el,
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-[") 'tab-bar-history-back)
 (global-set-key (kbd "M-]") 'tab-bar-history-forward)
-
 (tab-bar-history-mode +1)
-(global-tab-line-mode +1)
+
+;; (global-tab-line-mode +1)
 #+end_src
 
 LSP (language server)

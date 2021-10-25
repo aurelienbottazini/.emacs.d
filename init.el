@@ -1194,8 +1194,8 @@ This command switches to browser."
 
 (global-set-key (kbd "M-[") 'tab-bar-history-back)
 (global-set-key (kbd "M-]") 'tab-bar-history-forward)
-
 (tab-bar-history-mode +1)
-(global-tab-line-mode +1)
+
+;; (global-tab-line-mode +1)
 
 (use-package eglot)
