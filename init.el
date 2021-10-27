@@ -1199,3 +1199,17 @@ This command switches to browser."
 ;; (global-tab-line-mode +1)
 
 (use-package eglot)
+
+(defun auray/project-guess-file ()
+  "Visit a file (with completion) in the current project.
+
+The filename at point (determined by `thing-at-point'), if any,
+is available as part of \"future history\"."
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf (current-word) (project-root (project-current t)))))
+
+(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
+
+(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
