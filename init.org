@@ -432,7 +432,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "PragmataPro Liga-16")))
+(setq default-frame-alist '((font . "Operator Mono AB-14")))
 #+end_src
 
 ** Code Folding
@@ -797,6 +797,11 @@ adjustments for JSX.
   "Cloudformation"
   "Cloudformation template mode.")
 (add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
+
+(use-package highlight-indentation
+:config
+(add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode))))
+
 (flycheck-define-checker cfn-lint
   "A Cloudformation linter using cfn-python-lint.
             See URL 'https://github.com/awslabs/cfn-python-lint'."
@@ -892,6 +897,8 @@ Another =M-x= without leaving the home row
     "drag"
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
+
+(use-package ivy-hydra)
 #+END_SRC
 
 ** Drag stuff
@@ -1936,10 +1943,7 @@ LSP (language server)
 
 #+begin_src emacs-lisp
 (defun auray/project-guess-file ()
-  "Visit a file (with completion) in the current project.
-
-The filename at point (determined by `thing-at-point'), if any,
-is available as part of \"future history\"."
+  "Find file using current word as a guess"
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr))))
@@ -1948,6 +1952,14 @@ is available as part of \"future history\"."
 (setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
 
 (evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
+
+
+(defun auray/project-find-file ()
+  "Visit a file (with completion) in the current project."
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf nil (project-root (project-current t)))))
 #+end_src
 
 * Local variables

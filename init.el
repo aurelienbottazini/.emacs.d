@@ -281,7 +281,7 @@ cons cell (regexp . minor-mode)."
          ("C-+" . 'default-text-scale-increase)
          ("C-M-+" . 'default-text-scale-decrease)))
 
-(setq default-frame-alist '((font . "PragmataPro Liga-16")))
+(setq default-frame-alist '((font . "Operator Mono AB-14")))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -561,6 +561,11 @@ cons cell (regexp . minor-mode)."
   "Cloudformation"
   "Cloudformation template mode.")
 (add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
+
+(use-package highlight-indentation
+:config
+(add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode))))
+
 (flycheck-define-checker cfn-lint
   "A Cloudformation linter using cfn-python-lint.
             See URL 'https://github.com/awslabs/cfn-python-lint'."
@@ -640,6 +645,8 @@ cons cell (regexp . minor-mode)."
     "drag"
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
+
+(use-package ivy-hydra)
 
 (use-package drag-stuff
   :diminish t
@@ -1201,10 +1208,7 @@ This command switches to browser."
 (use-package eglot)
 
 (defun auray/project-guess-file ()
-  "Visit a file (with completion) in the current project.
-
-The filename at point (determined by `thing-at-point'), if any,
-is available as part of \"future history\"."
+  "Find file using current word as a guess"
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr))))
@@ -1213,3 +1217,11 @@ is available as part of \"future history\"."
 (setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
 
 (evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
+
+
+(defun auray/project-find-file ()
+  "Visit a file (with completion) in the current project."
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf nil (project-root (project-current t)))))

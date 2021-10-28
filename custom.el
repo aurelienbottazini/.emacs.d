@@ -14,6 +14,8 @@
  '(company-minimum-prefix-length 1)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
+ '(counsel-rg-base-command
+   '("rg" "--hidden" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color" "never" "%s"))
  '(coverlay:tested-line-background-color "#2e3600")
  '(coverlay:untested-line-background-color "#8a1f1d")
  '(custom-safe-themes
