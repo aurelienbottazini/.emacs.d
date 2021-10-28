@@ -4,33 +4,35 @@
 
 ;; Author: Aurélien Bottazini
 
-(defun abott-fip-base-name (file-name)
+(defun auray/fip-base-name (file-name)
   "Extract the base name for current buffer. This base name will be used to find simlarly named files for the current project."
   (downcase
    (car (split-string
          (car (split-string (file-name-nondirectory file-name) "\\."))
          "_spec"))))
 
-(ert-deftest abott-fip-base-name-test ()
-  (should (string= "foo" (abott-fip-base-name "path/foo.el")))
-  (should (string= "foo" (abott-fip-base-name "path/foo_spec.rb"))))
+(ert-deftest auray/fip-base-name-test ()
+  (should (string= "foo" (auray/fip-base-name "path/foo.el")))
+  (should (string= "foo" (auray/fip-base-name "path/foo_spec.rb"))))
 
-(defun abott-alternate-files-for-current-buffer ()
+(defun auray/alternate-files-for-current-buffer ()
   (nbutlast
    (split-string
     (shell-command-to-string
      (concat
-      "fd --hidden "
-      (abott-fip-base-name buffer-file-name)
-      " $(git rev-parse --show-toplevel) | rg -v "
-      (file-name-nondirectory buffer-file-name)))
+      "fd --hidden --exclude "
+      (file-name-nondirectory buffer-file-name)
+      " "
+      (auray/fip-base-name buffer-file-name)
+      " (git rev-parse --show-toplevel)"
+      ))
     "\n")
    1))
 
-(defun abott-find-file-with-similar-name ()
+(defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
   (interactive)
-  (let ((alternate-files (abott-alternate-files-for-current-buffer)))
+  (let ((alternate-files (auray/alternate-files-for-current-buffer)))
     (cond
      ((zerop (length alternate-files))
       (message "There's no alternate files"))
@@ -40,4 +42,4 @@
                     "Alternate files: "
                     alternate-files))))))
 
-(provide 'abott-find-in-project)
+(provide 'auray/find-in-project)

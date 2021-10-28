@@ -504,7 +504,7 @@ Auto-fill comments in prog modes
   )
 #+END_SRC
 ** Ruby
-#+BEGIN_SRC emacs-lisp
+'#+BEGIN_SRC emacs-lisp
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
@@ -1182,11 +1182,8 @@ isearch and occur (~M-s o~)
 
 ** Search in project
 
-=C-c s=
 #+BEGIN_SRC emacs-lisp
-(use-package rg
-  :config
-  (rg-enable-default-bindings))
+(use-package rg)
 #+END_SRC
 
 *** From Dired
@@ -1196,7 +1193,8 @@ with ~Q~.
 ** Rename
 
 #+BEGIN_SRC emacs-lisp
-(use-package iedit)
+(use-package iedit
+:bind (("C-c i" . iedit-mode)))
 #+END_SRC
 
 * VCS
@@ -1281,6 +1279,8 @@ instead of splitting the current buffer.
   :config
   (fullframe magit-status magit-mode-quit-window))
 #+END_SRC
+
+
 
 ** gitsh
 
@@ -1960,6 +1960,11 @@ LSP (language server)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr))))
   (counsel-fzf nil (project-root (project-current t)))))
+#+end_src
+
+#+begin_src emacs-lisp
+(require 'auray/find-in-project)
+(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
 #+end_src
 
 * Local variables

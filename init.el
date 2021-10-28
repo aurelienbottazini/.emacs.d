@@ -811,11 +811,10 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package rg
-  :config
-  (rg-enable-default-bindings))
+(use-package rg)
 
-(use-package iedit)
+(use-package iedit
+:bind (("C-c i" . iedit-mode)))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
@@ -1225,3 +1224,6 @@ This command switches to browser."
   (let* ((pr (project-current t))
          (dirs (list (project-root pr))))
   (counsel-fzf nil (project-root (project-current t)))))
+
+(require 'auray/find-in-project)
+(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
