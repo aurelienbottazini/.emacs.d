@@ -1,6 +1,6 @@
-;;; abott-find-in-project.el --- Utilities to navigate files in a project  -*- lexical-binding: t; -*-
+;;; auray-find-in-project.el --- Utilities to navigate files in a project  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020  DESKTOP-2O67MQ6
+;; Copyright (C) 2021
 
 ;; Author: Aurélien Bottazini
 
