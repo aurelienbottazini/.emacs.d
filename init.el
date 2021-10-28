@@ -328,49 +328,6 @@ cons cell (regexp . minor-mode)."
   (setq cider-repl-display-help-banner nil)
   )
 
-(use-package yaml-mode
-  :mode "\\.ya?ml\\'")
-
-(use-package ruby-mode
-  :mode "\\.rake\\'"
-  :mode "Rakefile\\'"
-  :mode "\\.gemspec\\'"
-  :mode "\\.ru\\'"
-  :mode "Gemfile\\'"
-  :mode "Guardfile\\'"
-  :mode "Capfile\\'"
-  :mode "\\.cap\\'"
-  :mode "\\.thor\\'"
-  :mode "\\.rabl\\'"
-  :mode "Thorfile\\'"
-  :mode "Vagrantfile\\'"
-  :mode "\\.jbuilder\\'"
-  :mode "Podfile\\'"
-  :mode "\\.podspec\\'"
-  :mode "Puppetfile\\'"
-  :mode "Berksfile\\'"
-  :mode "Appraisals\\'"
-  :mode "\\.rb$"
-  :mode "ruby"
-  :config
-
-  (add-hook 'ruby-mode-hook 'subword-mode)
-
-  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-  (use-package ruby-interpolation
-    :diminish ruby-interpolation-mode)
-  (use-package ruby-end
-    :diminish ruby-end-mode
-    :config
-    (defun ruby-end-insert-end ()
-      "Closes block by inserting end."
-      (save-excursion
-        (newline)
-        (insert "end")
-        (indent-according-to-mode)))
-    )
-  (use-package rspec-mode))
-
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
     "If comment-dwim is successively called, add => mark."
@@ -811,6 +768,9 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
+(use-package counsel
+  :bind (("C-c f" . counsel-rg)))
+
 (use-package rg)
 
 (use-package iedit
@@ -1032,9 +992,6 @@ This command switches to browser."
   (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
 )
 
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
-
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -1161,69 +1118,3 @@ This command switches to browser."
 (use-package ace-window
 :config
 (global-set-key (kbd "C-x o") 'ace-window))
-
-(setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
-
-(use-package el-patch)
-(el-patch-defun project--files-in-directory (dir ignores &optional files)
-  (el-patch-remove
-    (require 'find-dired)
-    (require 'xref)
-    (defvar find-name-arg))
-  (let* ((default-directory dir)
-         ;; Make sure ~/ etc. in local directory name is
-         ;; expanded and not left for the shell command
-         ;; to interpret.
-         (localdir (file-local-name (expand-file-name dir)))
-         (command (el-patch-swap
-                    (format "%s %s %s -type f %s -print0"
-                            find-program
-                            localdir
-                            (xref--find-ignores-arguments ignores localdir)
-                            (if files
-                                (concat (shell-quote-argument "(")
-                                        " " find-name-arg " "
-                                        (mapconcat
-                                         #'shell-quote-argument
-                                         (split-string files)
-                                         (concat " -o " find-name-arg " "))
-                                        " "
-                                        (shell-quote-argument ")"))
-                              ""))
-                    (format "fd -t f -0 . %s" localdir))))
-    (project--remote-file-names
-     (sort (split-string (shell-command-to-string command) "\0" t)
-           #'string<))))
-
-(global-set-key (kbd "M-[") 'tab-bar-history-back)
-(global-set-key (kbd "M-]") 'tab-bar-history-forward)
-(tab-bar-history-mode +1)
-
-;; (global-tab-line-mode +1)
-
-(use-package eglot)
-
-(defun auray/project-guess-file ()
-  "Find file using current word as a guess"
-  (interactive)
-  (let* ((pr (project-current t))
-         (dirs (list (project-root pr))))
-  (counsel-fzf (current-word) (project-root (project-current t)))))
-
-(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
-
-(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
-
-
-(defun auray/project-find-file ()
-  "Visit a file (with completion) in the current project."
-  (interactive)
-  (let* ((pr (project-current t))
-         (dirs (list (project-root pr))))
-  (counsel-fzf nil (project-root (project-current t)))))
-
-(require 'auray/find-in-project)
-(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)

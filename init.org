@@ -1182,6 +1182,35 @@ isearch and occur (~M-s o~)
 
 ** Search in project
 
+~counsel-rg~ is my main way to search. Invoked with an argument, it
+allows you to specify the directory and search options.
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :bind (("C-c f" . counsel-rg)))
+#+END_SRC
+
+When I am investigating things, I like to see a preview of the
+results as I scroll down the search results. I do it with ~C-o~ then
+either ~g~ on the entry I want to preview or ~c~ to automatically
+preview results as I move through the result list.
+
+A trick I am learning is to use ~C-'~ to jump directly to a
+search results.
+
+*** When I need to narrow down my search to specific files
+
+**** Narrowing on the file-type
+
+Launch ~counsel-rg~ with a prefix and then I can use for example
+~-tjs~ as an argument to search only inside javascript files.
+~-Tjs~ searches inside files but javascript ones.
+
+**** From Dired
+~C-x d~ to launch dired . I mark the files I am interested in with
+~m~. Then I can grep those files with ~A~ and do a query replace
+with ~Q~.
+
+**** Another RG interface
 #+BEGIN_SRC emacs-lisp
 (use-package rg)
 #+END_SRC
@@ -1588,33 +1617,6 @@ C-c C-e R =letter= to export a presentation from your org file
 )
 #+end_src
 
-~counsel-rg~ is my main way to search. Invoked with an argument, it
-allows you to specify the directory and search options.
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
-#+END_SRC
-
-When I am investigating things, I like to see a preview of the
-results as I scroll down the search results. I do it with ~C-o~ then
-either ~g~ on the entry I want to preview or ~c~ to automatically
-preview results as I move through the result list.
-
-A trick I am learning is to use ~C-'~ to jump directly to a
-search results.
-
-*** When I need to narrow down my search to specific files
-
-**** Narrowing on the file-type
-
-Launch ~counsel-rg~ with a prefix and then I can use for example
-~-tjs~ as an argument to search only inside javascript files.
-~-Tjs~ searches inside files but javascript ones.
-
-**** From Dired
-~C-x d~ to launch dired . I mark the files I am interested in with
-~m~. Then I can grep those files with ~A~ and do a query replace
-with ~Q~.
 
 
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
@@ -1795,176 +1797,6 @@ keybindings by default.
 (use-package ace-window
 :config
 (global-set-key (kbd "C-x o") 'ace-window))
-#+end_src
-
-** Find file in project
-*** Examples
-#+BEGIN_SRC emacs-lisp :tangle no
-;; if the full path of current file is under SUBPROJECT1 or SUBPROJECT2
-;; OR if I'm reading my personal issue track document,
-(defun my-setup-develop-environment ()
-  (interactive)
-  (when (ffip-current-full-filename-match-pattern-p "\\(PROJECT_DIR\\|issue-track.org\\)")
-    ;; Though PROJECT_DIR is team's project, I care only its sub-directory "subproj1""
-    (setq-local ffip-project-root "~/projs/PROJECT_DIR/subproj1")
-    ;; well, I'm not interested in concatenated BIG js file or file in dist/
-    (setq-local ffip-find-options "-not -size +64k -not -iwholename '*/dist/*'")
-    ;; for this project, I'm only interested in certain types of files
-    (setq-local ffip-patterns '("*.html" "*.js" "*.css" "*.java" "*.xml" "*.js"))
-    ;; maybe you want to search files in `bin' directory?
-    (setq-local ffip-prune-patterns (delete "*/bin/*" ffip-prune-patterns))
-    ;; exclude `dist/' directory
-    (add-to-list 'ffip-prune-patterns "*/dist/*"))
-  ;; insert more WHEN statements below this line for other projects
-  )
-
-;; most major modes inherit from prog-mode, so below line is enough
-(add-hook 'prog-mode-hook 'my-setup-develop-environment)
-#+END_SRC
-
-All variables may be overridden on a per-directory basis in your
-.dir-locals.el. See (info “(Emacs) Directory Variables”) for
-details.
-
-You can place .dir-locals.el into your project root directory.
-
-A sample .dir-locals.el,
-
-#+BEGIN_SRC emacs-lisp :tangle no
-((nil . ((ffip-project-root . "~/projs/PROJECT_DIR")
-         ;; ignore files bigger than 64k and directory "dist/" when searching
-         (ffip-find-options . "-not -size +64k -not -iwholename '*/dist/*'")
-         ;; only search files with following extensions
-         (ffip-patterns . ("*.html" "*.js" "*.css" "*.java" "*.xml" "*.js"))
-         (eval . (progn
-                   (require 'find-file-in-project)
-                   ;; ignore directory ".tox/" when searching
-                   (setq ffip-prune-patterns `("*/.tox/*" ,@ffip-prune-patterns))
-                   ;; Do NOT ignore directory "bin/" when searching
-                   (setq ffip-prune-patterns `(delete "*/bin/*" ,@ffip-prune-patterns))))
-         )))
-#+END_SRC
-
-*** My configuration
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package find-file-in-project
-  :ensure t
-  :bind (("C-c T" . find-file-in-project-by-selected)
-         ("C-c t" . ffip)
-         ("M-p" . ffip)
-               :map evil-normal-state-map
-               ("gf" . find-file-in-project-at-point))
-  :config
-
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.png")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.jpeg")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.gif")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.bmp")) ffip-ignore-filenames))
-  (setq ffip-ignore-filenames (seq-remove (lambda (astring) (string= astring "*.ico")) ffip-ignore-filenames))
-  (setq ffip-prefer-ido-mode nil)
-  (setq ffip-use-rust-fd t)
-  (setq ffip-strip-file-name-regex "\\(\\.mock\\|_test\\|\\.test\\|\\.mockup\\|\\.spec\\)")
-  (add-to-list 'ffip-prune-patterns "*/.git/*")
-  (add-to-list 'ffip-prune-patterns "*/dist/*")
-  (add-to-list 'ffip-prune-patterns "*/.emacs.d/elpa/*")
-  (add-to-list 'ffip-prune-patterns "*/.nuxt/*")
-  (add-to-list 'ffip-prune-patterns "*/spec/coverage/*")
-  (add-to-list 'ffip-prune-patterns "*/public/*")
-  (add-to-list 'ffip-prune-patterns "*/.shadow-cljs/*")
-  (add-to-list 'ffip-prune-patterns "*/vendor/*")
-  (add-to-list 'ffip-prune-patterns "node_modules/*"))
-#+END_SRC
-
-#+begin_src emacs-lisp
-(setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
-
-(use-package el-patch)
-(el-patch-defun project--files-in-directory (dir ignores &optional files)
-  (el-patch-remove
-    (require 'find-dired)
-    (require 'xref)
-    (defvar find-name-arg))
-  (let* ((default-directory dir)
-         ;; Make sure ~/ etc. in local directory name is
-         ;; expanded and not left for the shell command
-         ;; to interpret.
-         (localdir (file-local-name (expand-file-name dir)))
-         (command (el-patch-swap
-                    (format "%s %s %s -type f %s -print0"
-                            find-program
-                            localdir
-                            (xref--find-ignores-arguments ignores localdir)
-                            (if files
-                                (concat (shell-quote-argument "(")
-                                        " " find-name-arg " "
-                                        (mapconcat
-                                         #'shell-quote-argument
-                                         (split-string files)
-                                         (concat " -o " find-name-arg " "))
-                                        " "
-                                        (shell-quote-argument ")"))
-                              ""))
-                    (format "fd -t f -0 . %s" localdir))))
-    (project--remote-file-names
-     (sort (split-string (shell-command-to-string command) "\0" t)
-           #'string<))))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(if (and (fboundp 'native-comp-available-p)
-       (native-comp-available-p))
-  (message "Native compilation is available")
-(message "Native complation is *not* available"))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(if (functionp 'json-serialize)
-  (message "Native JSON is available")
-(message "Native JSON is *not* available"))
-#+end_src
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "M-[") 'tab-bar-history-back)
-(global-set-key (kbd "M-]") 'tab-bar-history-forward)
-(tab-bar-history-mode +1)
-
-;; (global-tab-line-mode +1)
-#+end_src
-
-LSP (language server)
-#+begin_src emacs-lisp
-(use-package eglot)
-#+end_src
-
-#+begin_src emacs-lisp
-(defun auray/project-guess-file ()
-  "Find file using current word as a guess"
-  (interactive)
-  (let* ((pr (project-current t))
-         (dirs (list (project-root pr))))
-  (counsel-fzf (current-word) (project-root (project-current t)))))
-
-(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
-
-(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
-
-
-(defun auray/project-find-file ()
-  "Visit a file (with completion) in the current project."
-  (interactive)
-  (let* ((pr (project-current t))
-         (dirs (list (project-root pr))))
-  (counsel-fzf nil (project-root (project-current t)))))
-#+end_src
-
-#+begin_src emacs-lisp
-(require 'auray/find-in-project)
-(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
 #+end_src
 
 * Local variables
