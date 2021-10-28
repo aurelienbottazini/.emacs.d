@@ -771,6 +771,28 @@ This command switches to browser."
 (use-package counsel
   :bind (("C-c f" . counsel-rg)))
 
+(defun auray/project-guess-file ()
+  "Find file using current word as a guess"
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf (current-word) (project-root (project-current t)))))
+
+(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
+
+(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
+
+
+(defun auray/project-find-file ()
+  "Visit a file (with completion) in the current project."
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf nil (project-root (project-current t)))))
+
+(require 'auray/find-in-project)
+(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
+
 (use-package rg)
 
 (use-package iedit
@@ -961,7 +983,15 @@ This command switches to browser."
 (evil-mode 1))
 
 (use-package ivy
+:bind (:map ivy-minibuffer-map
+               ("C-c C-c" . ivy-restrict-to-matches)))
 :init
+(setq ivy-display-style 'fancy)
+(setq ivy-use-selectable-prompt t)
+(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
+(setq ivy-initial-inputs-alist nil)
+(setq ivy-re-builders-alist
+  '((t      . ivy--regex-plus)))
 (setq counsel-grep-base-command
  "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
 (setq ivy-use-virtual-buffers t)
@@ -984,6 +1014,9 @@ This command switches to browser."
 (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
 (global-set-key (kbd "C-x l") 'counsel-locate)
 (global-set-key (kbd "C-c b") 'counsel-bookmark)
+
+(global-set-key (kbd "C-c v") 'ivy-switch-view)
+(global-set-key (kbd "C-c V") 'ivy-push-view)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 )
 
@@ -1118,3 +1151,39 @@ This command switches to browser."
 (use-package ace-window
 :config
 (global-set-key (kbd "C-x o") 'ace-window))
+
+(setq project-switch-commands 'project-dired)
+
+(global-set-key (kbd "C-c t") 'project-find-file)
+(global-set-key (kbd "M-p") 'project-find-file)
+
+(use-package el-patch)
+(el-patch-defun project--files-in-directory (dir ignores &optional files)
+  (el-patch-remove
+    (require 'find-dired)
+    (require 'xref)
+    (defvar find-name-arg))
+  (let* ((default-directory dir)
+         ;; Make sure ~/ etc. in local directory name is
+         ;; expanded and not left for the shell command
+         ;; to interpret.
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (el-patch-swap
+                    (format "%s %s %s -type f %s -print0"
+                            find-program
+                            localdir
+                            (xref--find-ignores-arguments ignores localdir)
+                            (if files
+                                (concat (shell-quote-argument "(")
+                                        " " find-name-arg " "
+                                        (mapconcat
+                                         #'shell-quote-argument
+                                         (split-string files)
+                                         (concat " -o " find-name-arg " "))
+                                        " "
+                                        (shell-quote-argument ")"))
+                              ""))
+                    (format "fd -t f -0 . %s" localdir))))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
