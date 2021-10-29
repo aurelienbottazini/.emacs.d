@@ -1018,7 +1018,7 @@ This command switches to browser."
 (global-set-key (kbd "C-c v") 'ivy-switch-view)
 (global-set-key (kbd "C-c V") 'ivy-push-view)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-)
+
 
 (use-package evil
 :config
