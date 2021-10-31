@@ -232,13 +232,6 @@ cons cell (regexp . minor-mode)."
     (set-buffer-modified-p t)
     (message "Enabled org html export on save")))
 
-
-(defun abo-jump-to-note-file ()
-  "Jump to org note file for current buffer"
-  (interactive)
-  (find-file **local-note-file**))
-(global-set-key "\C-cn" 'abo-jump-to-note-file)
-
 (defun abo-change-line-endings-to-unix ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
@@ -577,18 +570,18 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
+ (global-display-line-numbers-mode)
+ (defun show-line-numbers ()
+   (interactive)
+   (setq display-line-numbers (quote absolute)))
+ (global-set-key (kbd "C-c oll") 'show-line-numbers)
  (defun hide-line-numbers ()
    (interactive)
    (setq display-line-numbers (quote nil)))
  (global-set-key (kbd "C-c olh") 'hide-line-numbers)
 
- (defun show-line-numbers ()
-   (interactive)
-   (setq display-line-numbers (quote absolute)))
- (global-set-key (kbd "C-c oll") 'show-line-numbers)
  (global-set-key (kbd "C-c ow") 'visual-line-mode)
  (global-set-key (kbd "C-c of") 'auto-fill-mode)
- (global-hl-line-mode t)
  (global-set-key (kbd "C-c og") 'global-hl-line-mode)
  (global-set-key (kbd "C-c op") 'show-paren-mode)
 
@@ -651,7 +644,7 @@ cons cell (regexp . minor-mode)."
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
-(global-set-key (kbd "C-c n") (lambda () (interactive) (org-capture nil "n")))
+(global-set-key (kbd "C-c n n") (lambda () (interactive) (org-capture nil "n")))
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
@@ -981,10 +974,6 @@ This command switches to browser."
 
 (use-package docker-tramp)
 
-(use-package evil
-:config
-(evil-mode 1))
-
 (use-package ivy
 :bind (:map ivy-minibuffer-map
                ("C-c C-c" . ivy-restrict-to-matches)))
@@ -1020,13 +1009,13 @@ This command switches to browser."
 
 (global-set-key (kbd "C-c v") 'ivy-switch-view)
 (global-set-key (kbd "C-c V") 'ivy-push-view)
+(global-set-key (kbd "C-c r") 'counsel-recentf)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
 
 (use-package evil
 :config
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
 
 (defun tmux-socket-command-string ()
   (interactive)
@@ -1190,3 +1179,19 @@ This command switches to browser."
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode))

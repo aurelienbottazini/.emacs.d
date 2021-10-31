@@ -363,13 +363,6 @@ cons cell (regexp . minor-mode)."
     (set-buffer-modified-p t)
     (message "Enabled org html export on save")))
 
-
-(defun abo-jump-to-note-file ()
-  "Jump to org note file for current buffer"
-  (interactive)
-  (find-file **local-note-file**))
-(global-set-key "\C-cn" 'abo-jump-to-note-file)
-
 (defun abo-change-line-endings-to-unix ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
@@ -846,53 +839,53 @@ Another =M-x= without leaving the home row
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
-   (use-package paredit
-     :diminish paredit-mode
-     :config
-     (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
+ (use-package paredit
+   :diminish paredit-mode
+   :config
+   (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
-   (use-package expand-region
-     :bind (("M-e" . er/expand-region)))
+ (use-package expand-region
+   :bind (("M-e" . er/expand-region)))
 
-   (global-set-key (kbd "C-c a") 'org-agenda)
-   (global-set-key (kbd "C-c R") 'revert-buffer)
-   (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
-   (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
-   (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
-   (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
-   (global-set-key (kbd "C-c jn") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
-   (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
-   (global-set-key (kbd "C-c jj") 'dired-jump)
-   (global-set-key (kbd "C-c k") 'recompile)
-   (global-set-key (kbd "C-c K") 'compile)
+ (global-set-key (kbd "C-c a") 'org-agenda)
+ (global-set-key (kbd "C-c R") 'revert-buffer)
+ (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
+ (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
+ (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
+ (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
+ (global-set-key (kbd "C-c jn") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
+ (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
+ (global-set-key (kbd "C-c jj") 'dired-jump)
+ (global-set-key (kbd "C-c k") 'recompile)
+ (global-set-key (kbd "C-c K") 'compile)
 
-   (global-set-key (kbd "<f5>") 'ispell-buffer)
-   (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
-   (global-set-key (kbd "C-c H") 'unhighlight-regexp)
+ (global-set-key (kbd "<f5>") 'ispell-buffer)
+ (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
+ (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
-   (defun hide-line-numbers ()
-     (interactive)
-     (setq display-line-numbers (quote nil)))
-   (global-set-key (kbd "C-c olh") 'hide-line-numbers)
+ (global-display-line-numbers-mode)
+ (defun show-line-numbers ()
+   (interactive)
+   (setq display-line-numbers (quote absolute)))
+ (global-set-key (kbd "C-c oll") 'show-line-numbers)
+ (defun hide-line-numbers ()
+   (interactive)
+   (setq display-line-numbers (quote nil)))
+ (global-set-key (kbd "C-c olh") 'hide-line-numbers)
 
-   (defun show-line-numbers ()
-     (interactive)
-     (setq display-line-numbers (quote absolute)))
-   (global-set-key (kbd "C-c oll") 'show-line-numbers)
-   (global-set-key (kbd "C-c ow") 'visual-line-mode)
-   (global-set-key (kbd "C-c of") 'auto-fill-mode)
-   (global-hl-line-mode t)
-   (global-set-key (kbd "C-c og") 'global-hl-line-mode)
-   (global-set-key (kbd "C-c op") 'show-paren-mode)
+ (global-set-key (kbd "C-c ow") 'visual-line-mode)
+ (global-set-key (kbd "C-c of") 'auto-fill-mode)
+ (global-set-key (kbd "C-c og") 'global-hl-line-mode)
+ (global-set-key (kbd "C-c op") 'show-paren-mode)
 
-   (use-package rainbow-mode
-     :diminish rainbow-mode
-     :bind (("C-c or" . rainbow-mode)))
+ (use-package rainbow-mode
+   :diminish rainbow-mode
+   :bind (("C-c or" . rainbow-mode)))
 
-  (global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
 
-   (use-package windresize
-     :bind (("C-c o h" . windresize)))
+ (use-package windresize
+   :bind (("C-c o h" . windresize)))
 #+END_SRC
 ** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -984,7 +977,7 @@ This is a must to capture ideas quickly.
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
       )
 
-(global-set-key (kbd "C-c n") (lambda () (interactive) (org-capture nil "n")))
+(global-set-key (kbd "C-c n n") (lambda () (interactive) (org-capture nil "n")))
 #+END_SRC
 
 To launch an Emacs client with a capture frame selecting the ~n~ template
@@ -1606,12 +1599,6 @@ C-c C-e R =letter= to export a presentation from your org file
 (use-package docker-tramp)
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package evil
-:config
-(evil-mode 1))
-#+end_src
-
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy
 :bind (:map ivy-minibuffer-map
@@ -1648,13 +1635,13 @@ C-c C-e R =letter= to export a presentation from your org file
 
 (global-set-key (kbd "C-c v") 'ivy-switch-view)
 (global-set-key (kbd "C-c V") 'ivy-push-view)
+(global-set-key (kbd "C-c r") 'counsel-recentf)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
 
 (use-package evil
 :config
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
 #+end_src
 
 
@@ -1875,6 +1862,24 @@ keybindings by default.
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode))
 #+end_src
 
 * Local variables
