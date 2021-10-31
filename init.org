@@ -81,8 +81,51 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn
 #+BEGIN_SRC emacs-lisp
 (use-package zenburn-theme
  :config
+ (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
  (load-theme 'zenburn t))
 #+END_SRC
+
+#+begin_src emacs-lisp :tangle no
+(use-package leuven-theme
+:config
+(setq auray/default-color '("#335ea8" "#85ceeb" . "yellow"))
+(load-theme 'leuven t))
+#+end_src
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package solarized-theme
+ :config
+(setq solarized-distinct-fringe-background t)
+(setq solarized-high-contrast-mode-line t)
+ (setq auray/default-color '("#eee8d5" "#657b83" . "#0087ff"))
+ (load-theme 'solarized-dark t))
+#+END_SRC
+
+Make my cursor match my modeline color
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  (setq evil-insert-state-cursor '(bar "#97d88a")
+        evil-visual-state-cursor '(box "#adcff1")
+        evil-emacs-state-cursor '(box "#ffa2cb")
+        evil-normal-state-cursor '(box "#d33682")))
+#+end_src
+
+Changes mode-line color depending on Evil state, if buffer is-  modified etc...
+#+begin_src emacs-lisp
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (color (cond ((minibufferp) auray/default-color)
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      (t auray/default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+    (set-face-foreground 'mode-line (cadr color)))))
+#+end_src
 
 It is important to load custom settings early. Those are the ones
 managed by Emacs through customization menus. They can impact the

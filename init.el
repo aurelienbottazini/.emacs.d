@@ -37,7 +37,28 @@
 
 (use-package zenburn-theme
  :config
+ (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
  (load-theme 'zenburn t))
+
+(use-package evil
+  :config
+  (setq evil-insert-state-cursor '(bar "#97d88a")
+        evil-visual-state-cursor '(box "#adcff1")
+        evil-emacs-state-cursor '(box "#ffa2cb")
+        evil-normal-state-cursor '(box "#d33682")))
+
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (color (cond ((minibufferp) auray/default-color)
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      (t auray/default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+    (set-face-foreground 'mode-line (cadr color)))))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
