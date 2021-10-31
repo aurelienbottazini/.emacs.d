@@ -14,8 +14,6 @@
         ("org"         . "https://orgmode.org/elpa/")
        ("gnu"         . "http://elpa.gnu.org/packages/")))
 
-(use-package org)
-
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
 ;; this tells package.el not to add those pesky customized variable settings at
@@ -112,19 +110,26 @@
     (buffer-disable-undo)))
 (add-hook 'find-file-hooks 'check-large-file-hook)
 
+(global-so-long-mode 1) ;; helps when visiting files with long lines
+
+;; only support left to right languages.
+;; this makes long lines in files not slow anymore.
+(setq-default bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
+
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
       tab-always-indent 'complete ; try to indent first, if already indented try to complete
       )
 
-(make-variable-buffer-local 'compile-command) ; makes the compile command be buffer specific.
+(make-variable-buffer-local 'compile-command) ; makes the compile command buffer specific.
 (defalias 'yes-or-no-p 'y-or-n-p) ; instead of typing yes or no, type y or n
 (setq ring-bell-function 'ignore) ; please don't startle me with a bell!
 
 (setq backup-by-copying t      ; don't clobber symlinks
       backup-directory-alist
-      '((".*" . "~/.local/share/emacs-saves"))    ; don't litter my fs tree
+      '((".*" . "~/.local/share/emacs-saves"))    ; don't litter my filesystem with saves
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -607,12 +612,10 @@ cons cell (regexp . minor-mode)."
 
 (use-package drag-stuff
   :diminish t
-  :bind (("C-M-<up>" . drag-stuff-up)
-         ("C-M-<down>" . drag-stuff-down))
   :config
   (drag-stuff-global-mode t))
 
-(setq org-directory **local-dropbox-folder**)
+(setq org-directory "~/Dropbox/org")
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
