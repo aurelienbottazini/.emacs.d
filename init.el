@@ -578,10 +578,11 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
+ (global-set-key (kbd "C-c jg") (lambda () (interactive) (find-file "~/Dropbox/org/gtd.org")))
  (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
  (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
  (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
- (global-set-key (kbd "C-c jn") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/notes.org"))))
+ (global-set-key (kbd "C-c ji") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/inbox.org"))))
  (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
  (global-set-key (kbd "C-c jj") 'dired-jump)
  (global-set-key (kbd "C-c k") 'recompile)
@@ -660,10 +661,9 @@ cons cell (regexp . minor-mode)."
   (add-hook 'org-mode-hook 'palimpsest-mode))
 
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline **local-note-file** "Inbox") "* %?\n")
-        ("t" "todo" entry (file+headline **local-note-file** "Inbox")
-         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n"))
-      )
+      '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
+        ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (global-set-key (kbd "C-c n n") (lambda () (interactive) (org-capture nil "n")))
 
