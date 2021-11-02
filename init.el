@@ -1114,7 +1114,10 @@ This command switches to browser."
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs))
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (use-package evil-commentary
   :after evil

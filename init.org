@@ -1800,8 +1800,13 @@ keybindings by default.
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs))
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
+
 #+end_src
+
 
   Comment things with ~gc~. Comment and copy with ~gy~
   #+BEGIN_SRC emacs-lisp
