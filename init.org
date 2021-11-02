@@ -1939,6 +1939,16 @@ keybindings by default.
   :config
   (org-roam-db-autosync-mode))
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package org-superstar
+:init
+(setq
+    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
+)
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+#+end_src
 * Local variables
 
 # Local Variables:

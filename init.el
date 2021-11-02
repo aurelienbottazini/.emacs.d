@@ -1222,3 +1222,11 @@ This command switches to browser."
          ("C-c n j" . org-roam-dailies-capture-today))
   :config
   (org-roam-db-autosync-mode))
+
+(use-package org-superstar
+:init
+(setq
+    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
+)
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
