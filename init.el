@@ -41,6 +41,8 @@
  (load-theme 'zenburn t))
 
 (use-package evil
+  :init
+  (setq evil-respect-visual-line-mode t)
   :config
   (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
@@ -175,7 +177,8 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines t) ; gives each line only one visual line and don't show a continuation on next line
+(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
+(global-visual-line-mode)
 
 (setq sentence-end-double-space nil)
 
