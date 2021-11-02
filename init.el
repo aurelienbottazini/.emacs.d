@@ -45,7 +45,7 @@
   (setq evil-insert-state-cursor '(bar "#97d88a")
         evil-visual-state-cursor '(box "#adcff1")
         evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#d33682")))
+        evil-normal-state-cursor '(box "#f0dfaf")))
 
 (add-hook 'post-command-hook '(lambda ()
   (let* (
