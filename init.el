@@ -419,32 +419,32 @@ cons cell (regexp . minor-mode)."
 (setq compilation-error-regexp-alist
       (cons 'node compilation-error-regexp-alist))
 
-(add-hook 'js2-mode-hook
+(add-hook 'js-mode-hook
           (lambda ()
             (set (make-local-variable 'compile-command)
                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
 
 (setq js-indent-level 2)
 
+(add-hook 'js-mode-hook (lambda() (subword-mode t)))
+
+(setq js2-mode-show-parse-errors nil
+      js2-mode-show-strict-warnings nil
+      js2-basic-offset 2
+      js2-highlight-level 3
+      css-indent-offset 2
+      web-mode-markup-indent-offset 2
+      web-mode-script-padding 0
+      web-mode-css-indent-offset 2
+      web-mode-style-padding 2
+      web-mode-code-indent-offset 2
+      web-mode-attr-indent-offset 2)
+
 (use-package js2-mode
   :mode "\\.js\\'"
   :mode "\\.jsx\\'"
   :config
-  (setq js2-mode-show-parse-errors nil
-        js2-mode-show-strict-warnings nil
-        js2-basic-offset 2
-        js2-highlight-level 3
-        css-indent-offset 2
-        web-mode-markup-indent-offset 2
-        web-mode-script-padding 0
-        web-mode-css-indent-offset 2
-        web-mode-style-padding 2
-        web-mode-code-indent-offset 2
-        web-mode-attr-indent-offset 2)
-  :config
-  (define-key js2-mode-map (kbd "M-.") 'xref-find-definitions)
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode))
-  (add-hook 'js2-mode-hook (lambda() (subword-mode t)))
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -468,8 +468,7 @@ cons cell (regexp . minor-mode)."
                         "--trailing-comma" "es5"
                         "--single-quote" "true"
                         )
-        prettier-js-command "prettier")
-  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode))
+        prettier-js-command "prettier"))
 
 (defun eslint-fix-file ()
   (interactive)
@@ -479,16 +478,14 @@ cons cell (regexp . minor-mode)."
   (interactive)
   (eslint-fix-file)
   (revert-buffer t t))
-(add-hook 'js2-mode-hook
+(add-hook 'js-mode-hook
           (lambda ()
             (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
 
 (use-package context-coloring
   :ensure t
   :diminish context-coloring-mode
-  :bind (("C-c oc" . context-coloring-mode))
-  :config
-  (add-hook 'js2-mode-hook 'context-coloring-mode))
+  :bind (("C-c oc" . context-coloring-mode)))
 
 (add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
 (defun my-jsx-hook ()
@@ -543,6 +540,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
+(with-eval-after-load 'flycheck
+  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
     "Find eslint in the closest node-modules folder"
