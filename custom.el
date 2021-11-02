@@ -180,10 +180,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
+ '(font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
  '(ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
+ '(org-block ((t (:extend t :background "#333333"))))
  '(org-drawer ((t (:foreground "#f0dfaf"))))
+ '(org-meta-line ((t (:inherit font-lock-comment-face))))
  '(tab-bar ((t (:inherit variable-pitch :background "#88b090" :foreground "#2e3330"))))
  '(tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :box (:line-width (1 . 1) :style released-button)))))
  '(tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
