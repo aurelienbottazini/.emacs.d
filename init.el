@@ -36,26 +36,6 @@
 (setq use-package-always-ensure t) ; Install package if it is missing
 
 (use-package zenburn-theme
- :custom-face
- (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
- (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
- (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
- (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
- (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
- (org-block ((t (:extend t :background "#333333"))))
- (org-drawer ((t (:foreground "#f0dfaf"))))
- (org-meta-line ((t (:inherit font-lock-comment-face))))
- (tab-bar ((t (:inherit variable-pitch :background "#88b090" :foreground "#2e3330"))))
- (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :box (:line-width (1 . 1) :style released-button)))))
- (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
- (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :slant italic))))
- (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
- (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
- (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
- (tab-line-tab-modified ((t (:foreground "#e89393"))))
- (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
  :config
  (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
  (load-theme 'zenburn t))
@@ -626,6 +606,7 @@ cons cell (regexp . minor-mode)."
 
  (global-set-key (kbd "C-c ow") 'visual-line-mode)
  (global-set-key (kbd "C-c of") 'auto-fill-mode)
+ (global-hl-line-mode t)
  (global-set-key (kbd "C-c og") 'global-hl-line-mode)
  (global-set-key (kbd "C-c op") 'show-paren-mode)
 
