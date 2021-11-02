@@ -190,6 +190,7 @@
  '(org-level-2 ((t (:inherit default :extend nil :foreground "#BFEBBF" :slant italic :height 1.3))))
  '(org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
  '(org-meta-line ((t (:inherit font-lock-comment-face))))
+ '(region ((t (:extend t :background "#8faf9f" :foreground "black"))))
  '(tab-bar ((t (:inherit variable-pitch :background "#88b090" :foreground "#2e3330"))))
  '(tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :box (:line-width (1 . 1) :style released-button)))))
  '(tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
