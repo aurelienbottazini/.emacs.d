@@ -153,7 +153,7 @@ More information on Tron: https://en.wikipedia.org/wiki/Tron")
                        :foreground ,red
                        :background ,base00))))
 
-   `(outline-1 ((t (:foreground ,red :height 1.7))))
+   `(outline-1 ((t (:foreground ,red :height 1.5))))
    `(outline-2 ((t (:foreground ,orange :height 1.3))))
    `(outline-3 ((t (:foreground ,yellow :height 1.05))))
    `(outline-4 ((t (:foreground ,blue))))
