@@ -78,6 +78,8 @@
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-switch-project-action 'projectile-dired)
  '(projectile-tags-command "git ls-files | /usr/local/bin/ctags -e -L -")
+ '(pulse-delay 0.03)
+ '(pulse-iterations 20)
  '(require-final-newline t)
  '(ruby-align-chained-calls t)
  '(ruby-align-to-stmt-keywords t)
