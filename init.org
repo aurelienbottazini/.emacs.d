@@ -1740,6 +1740,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 
 (global-set-key (kbd "C-j") 'tmux-move-down)
 (define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-c m") 'org-refile)
 
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
