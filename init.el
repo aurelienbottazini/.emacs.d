@@ -1079,6 +1079,7 @@ This command switches to browser."
 
 (global-set-key (kbd "C-j") 'tmux-move-down)
 (define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-c m") 'org-refile)
 
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
