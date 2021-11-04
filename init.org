@@ -75,65 +75,6 @@ You can get the time it took for emacs to start with.
    (emacs-init-time)
 #+END_SRC
 
-Zenburn is one of the most complete theme out there. It also works
-well on the terminal.
-https://en.wikipedia.org/wiki/Wikipedia:Zenburn
-#+BEGIN_SRC emacs-lisp
-(use-package zenburn-theme
- :config
- (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
-#+END_SRC
-
-#+begin_src emacs-lisp :tangle no
-(load-theme 'tronesque)
-(tronesque-mode-line)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package leuven-theme
-:config
-(setq auray/default-color '("#335ea8" "#85ceeb" . "yellow"))
-(load-theme 'leuven t))
-#+end_src
-
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package solarized-theme
- :config
-(setq solarized-distinct-fringe-background t)
-(setq solarized-high-contrast-mode-line t)
- (setq auray/default-color '("#eee8d5" "#657b83" . "#0087ff"))
- (load-theme 'solarized-dark t))
-#+END_SRC
-
-Make my cursor match my modeline color
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :init
-  (setq evil-respect-visual-line-mode t)
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#f0dfaf")))
-#+end_src
-
-Changes mode-line color depending on Evil state, if buffer is-  modified etc...
-#+begin_src emacs-lisp
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) auray/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t auray/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
-#+end_src
-
 It is important to load custom settings early. Those are the ones
 managed by Emacs through customization menus. They can impact the
 loading of other packages.
@@ -234,10 +175,12 @@ It make things easier when the two match.
                   "/snap/bin"
                   "/usr/local/bin"
                   "/bin/"
+                  "/usr/bin/"
                   "/usr/local/sbin/"
-                  "/usr/bin/"))
+                  "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
       )
-  (setenv "PATH" (mapconcat 'identity my-paths ":" ))
+  (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
+  (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq exec-path my-paths))
 #+END_SRC
 
@@ -253,12 +196,13 @@ stick to fundamental mode and disable expensive minor modes.
     (buffer-disable-undo)))
 (add-hook 'find-file-hooks 'check-large-file-hook)
 
-(global-so-long-mode 1) ;; helps when visiting files with long lines
 
 ;; only support left to right languages.
-;; this makes long lines in files not slow anymore.
+;; this makes long lines in files not a problem anymore.
 (setq-default bidi-paragraph-direction 'left-to-right)
 (setq bidi-inhibit-bpa t)
+
+(global-so-long-mode 1) ;; helps when visiting files with long lines.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -351,6 +295,67 @@ Clean white space on save.
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 #+END_SRC
+
+* Colors
+
+Zenburn is one of the most complete theme out there. It also works
+well on the terminal.
+https://en.wikipedia.org/wiki/Wikipedia:Zenburn
+#+BEGIN_SRC emacs-lisp
+(use-package zenburn-theme
+ :config
+ (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+ (load-theme 'zenburn t))
+#+END_SRC
+
+#+begin_src emacs-lisp :tangle no
+(load-theme 'tronesque)
+(tronesque-mode-line)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package leuven-theme
+:config
+(setq auray/default-color '("#335ea8" "#85ceeb" . "yellow"))
+(load-theme 'leuven t))
+#+end_src
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(use-package solarized-theme
+ :config
+(setq solarized-distinct-fringe-background t)
+(setq solarized-high-contrast-mode-line t)
+ (setq auray/default-color '("#eee8d5" "#657b83" . "#0087ff"))
+ (load-theme 'solarized-dark t))
+#+END_SRC
+
+Make my cursor match my modeline color
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :init
+  (setq evil-respect-visual-line-mode t)
+  :config
+  (setq evil-insert-state-cursor '(bar "#97d88a")
+        evil-visual-state-cursor '(box "#adcff1")
+        evil-emacs-state-cursor '(box "#ffa2cb")
+        evil-normal-state-cursor '(box "#f0dfaf")))
+#+end_src
+
+Changes mode-line color depending on Evil state, if buffer is-  modified etc...
+#+begin_src emacs-lisp
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (color (cond ((minibufferp) auray/default-color)
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      (t auray/default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+    (set-face-foreground 'mode-line (cadr color)))))
+#+end_src
 
 * Utility functions
 

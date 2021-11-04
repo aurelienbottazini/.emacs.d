@@ -35,33 +35,6 @@
 (setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
 (setq use-package-always-ensure t) ; Install package if it is missing
 
-(use-package zenburn-theme
- :config
- (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
-
-(use-package evil
-  :init
-  (setq evil-respect-visual-line-mode t)
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#f0dfaf")))
-
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) auray/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t auray/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
-
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
@@ -118,10 +91,12 @@
                   "/snap/bin"
                   "/usr/local/bin"
                   "/bin/"
+                  "/usr/bin/"
                   "/usr/local/sbin/"
-                  "/usr/bin/"))
+                  "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
       )
-  (setenv "PATH" (mapconcat 'identity my-paths ":" ))
+  (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
+  (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq exec-path my-paths))
 
 (defun check-large-file-hook ()
@@ -133,12 +108,13 @@
     (buffer-disable-undo)))
 (add-hook 'find-file-hooks 'check-large-file-hook)
 
-(global-so-long-mode 1) ;; helps when visiting files with long lines
 
 ;; only support left to right languages.
-;; this makes long lines in files not slow anymore.
+;; this makes long lines in files not a problem anymore.
 (setq-default bidi-paragraph-direction 'left-to-right)
 (setq bidi-inhibit-bpa t)
+
+(global-so-long-mode 1) ;; helps when visiting files with long lines.
 
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
@@ -198,6 +174,33 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
+
+(use-package zenburn-theme
+ :config
+ (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+ (load-theme 'zenburn t))
+
+(use-package evil
+  :init
+  (setq evil-respect-visual-line-mode t)
+  :config
+  (setq evil-insert-state-cursor '(bar "#97d88a")
+        evil-visual-state-cursor '(box "#adcff1")
+        evil-emacs-state-cursor '(box "#ffa2cb")
+        evil-normal-state-cursor '(box "#f0dfaf")))
+
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (color (cond ((minibufferp) auray/default-color)
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      (t auray/default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+    (set-face-foreground 'mode-line (cadr color)))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
