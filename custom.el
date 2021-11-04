@@ -50,7 +50,7 @@
    '((ivy--regex-plus . "ivy")
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)
@@ -74,7 +74,7 @@
  '(org-startup-folded nil)
  '(org-startup-indented t)
  '(package-selected-packages
-   '(org-superstar ace-window docker-tramp counsel-fzf el-patch el-path evil-indent-plus evil-search-highlight-persist evil-matchit evil-surround org-roam evil-visualstar evil-visual-star evil-commentary counsel guru-mode evil embark-consult embark marginalia consult selectrum-prescient selectrum ivy-hydra ivy find-file-in-project ox-reveal which-key project osx-clipboard evil-mode solarized-theme flycheck-clj-kondo company-box org-reveal org-tree-slide ob-graphql rainbow-delimiters org-msg default-text-scale dracula-theme origami-mode origame-mode evil-leader smart-mode-line restclient engine-mode ruby zotxt zotxt-emacs eglot treemacs leuven prettier company-statistics writeroom-mode go-mode ob-clojurescript writegood-mode writegood osx-dictionary all-the-icons-dired-mode all-the-icons-dired all-the-icons dired-rsync docker xref-js2 js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode noflet lsp-css company-lsp lsp-javascript-typescript lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere hydra counsel-projectile iedit typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses evil-numbers exec-path-from-shell use-package))
+   '(treemacs-all-the-icons treemacs-magit treemacs-icons-dired treemacs-evil org-superstar ace-window docker-tramp counsel-fzf el-patch el-path evil-indent-plus evil-search-highlight-persist evil-matchit evil-surround org-roam evil-visualstar evil-visual-star evil-commentary counsel guru-mode evil embark-consult embark marginalia consult selectrum-prescient selectrum ivy-hydra ivy find-file-in-project ox-reveal which-key project osx-clipboard evil-mode solarized-theme flycheck-clj-kondo company-box org-reveal org-tree-slide ob-graphql rainbow-delimiters org-msg default-text-scale dracula-theme origami-mode origame-mode evil-leader smart-mode-line restclient engine-mode ruby zotxt zotxt-emacs eglot treemacs leuven prettier company-statistics writeroom-mode go-mode ob-clojurescript writegood-mode writegood osx-dictionary all-the-icons-dired-mode all-the-icons-dired all-the-icons dired-rsync docker xref-js2 js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode noflet lsp-css company-lsp lsp-javascript-typescript lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere hydra counsel-projectile iedit typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses evil-numbers exec-path-from-shell use-package))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-switch-project-action 'projectile-dired)
  '(projectile-tags-command "git ls-files | /usr/local/bin/ctags -e -L -")
@@ -174,8 +174,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
