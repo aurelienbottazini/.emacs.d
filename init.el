@@ -175,19 +175,6 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) auray/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t auray/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
-
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)
@@ -1326,7 +1313,7 @@ This command switches to browser."
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-vibrant t)
+  (load-theme 'doom-gruvbox t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
