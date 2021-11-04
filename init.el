@@ -175,20 +175,6 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-(use-package zenburn-theme
- :config
- (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
-
-(use-package evil
-  :init
-  (setq evil-respect-visual-line-mode t)
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#f0dfaf")))
-
 (add-hook 'post-command-hook '(lambda ()
   (let* (
          (color (cond ((minibufferp) auray/default-color)
@@ -1332,3 +1318,23 @@ This command switches to browser."
 )
 :config
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (setq auray/default-color '("#282c34" "#bbc2cf" . "#ecbe7b"))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
