@@ -175,30 +175,6 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-(add-hook 'post-command-hook '(lambda ()
-  (let* (
-         (color (cond ((minibufferp) auray/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t auray/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-
-    (set-face-foreground 'doom-modeline-evil-insert-state (cddr color))
-    (set-face-foreground 'doom-modeline-evil-visual-state (cddr color))
-    (set-face-foreground 'doom-modeline-evil-replace-state (cddr color))
-    (set-face-foreground 'doom-modeline-evil-operator-state (cddr color))
-    (set-face-foreground 'doom-modeline-evil-motion-state (cddr color))
-    (set-face-foreground 'doom-modeline-buffer-major-mode (cddr color))
-    (set-face-foreground 'doom-modeline-project-dir (cddr color))
-    (set-face-foreground 'doom-modeline-info (cddr color))
-
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-
-    (set-face-foreground 'mode-line (cadr color)))))
-
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)

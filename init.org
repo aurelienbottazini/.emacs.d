@@ -368,7 +368,7 @@ Make my cursor match my modeline color
 #+end_src
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (add-hook 'post-command-hook '(lambda ()
   (let* (
          (color (cond ((minibufferp) auray/default-color)
@@ -2121,4 +2121,3 @@ keybindings by default.
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
-
