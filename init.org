@@ -368,7 +368,7 @@ Make my cursor match my modeline color
 #+end_src
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (add-hook 'post-command-hook '(lambda ()
   (let* (
          (color (cond ((minibufferp) auray/default-color)
@@ -379,7 +379,18 @@ Changes mode-line color depending on Evil state, if buffer is-  modified etc...
          )
     (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
     (set-face-background 'mode-line (car color))
+
+    (set-face-foreground 'doom-modeline-evil-insert-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-visual-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-replace-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-operator-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-motion-state (cddr color))
+    (set-face-foreground 'doom-modeline-buffer-major-mode (cddr color))
+    (set-face-foreground 'doom-modeline-project-dir (cddr color))
+    (set-face-foreground 'doom-modeline-info (cddr color))
+
     (set-face-foreground 'mode-line-buffer-id (cddr color))
+
     (set-face-foreground 'mode-line (cadr color)))))
 #+end_src
 
