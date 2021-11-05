@@ -1333,10 +1333,10 @@ This command switches to browser."
 (use-package doom-themes
   :ensure t
   :config
-  (setq auray/default-color '("#282c34" "#bbc2cf" . "#ecbe7b"))
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
   (load-theme 'doom-zenburn t)
 
   ;; Enable flashing mode-line on errors
