@@ -175,6 +175,188 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
+(use-package ivy
+:bind (:map ivy-minibuffer-map
+               ("C-c C-c" . ivy-restrict-to-matches)))
+:init
+(setq ivy-display-style 'fancy)
+(setq ivy-use-selectable-prompt t)
+(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
+(setq ivy-initial-inputs-alist nil)
+(setq ivy-re-builders-alist
+  '((t      . ivy--regex-plus)))
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+:config
+(ivy-mode)
+(use-package counsel)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+
+(global-set-key (kbd "C-c v") 'ivy-switch-view)
+(global-set-key (kbd "C-c V") 'ivy-push-view)
+(global-set-key (kbd "C-c r") 'counsel-recentf)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+
+(use-package evil
+:config
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
+
+(defun tmux-socket-command-string ()
+  (interactive)
+  (concat "tmux -S "
+          (replace-regexp-in-string "\n\\'" ""
+                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
+
+(defun tmux-move-right ()
+  (interactive)
+  (condition-case nil
+      (evil-window-right 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
+
+(defun tmux-move-left ()
+  (interactive)
+  (condition-case nil
+      (evil-window-left 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
+
+(defun tmux-move-up ()
+  (interactive)
+  (condition-case nil
+      (evil-window-up 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
+
+(defun tmux-move-down ()
+  (interactive)
+  (condition-case nil
+      (evil-window-down 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
+
+(global-set-key (kbd "C-h") 'tmux-move-left)
+
+(global-set-key (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-c m") 'org-refile)
+
+(global-set-key (kbd "C-k") 'tmux-move-up)
+(global-set-key (kbd "C-l") 'tmux-move-right)
+
+(use-package evil
+  :config
+  (defun my-evil-record-macro ()
+    (interactive)
+    (if buffer-read-only
+        (quit-window)
+      (call-interactively 'evil-record-macro)))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
+
+(use-package evil-commentary
+  :after evil
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
+
+(use-package evil-visualstar
+  :after evil
+  :config
+  (global-evil-visualstar-mode t))
+
+(use-package evil-matchit
+  :defer 2
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package evil-search-highlight-persist
+  :bind  (("C-c oh" . (lambda ()
+                            (interactive)
+                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+               )
+              )
+  :config
+  (global-evil-search-highlight-persist t))
+
+(use-package evil
+  :config
+  (evil-mode 1)
+  (evil-ex-define-cmd "W" 'save-buffer))
+
+(use-package evil-indent-plus
+  :after evil
+  :config
+  (evil-indent-plus-default-bindings))
+
+(use-package evil
+  :config
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
+
+(use-package key-chord
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
+  (load-theme 'doom-zenburn t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)
@@ -281,6 +463,8 @@ cons cell (regexp . minor-mode)."
 
 (setq default-frame-alist '((font . "Operator Mono AB-14")))
 
+(use-package all-the-icons)
+
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -302,6 +486,14 @@ cons cell (regexp . minor-mode)."
     ;; (kbd "M-p") 'org-publish-current-project
     (kbd "TAB") 'org-cycle)
   )
+
+(use-package org-superstar
+:init
+(setq
+    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
+)
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
@@ -764,6 +956,22 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode))
+
 (use-package counsel
   :bind (("C-c f" . counsel-rg)))
 
@@ -831,8 +1039,141 @@ This command switches to browser."
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay        0.5
+          treemacs-directory-name-transformer      #'identity
+          treemacs-display-in-side-window          t
+          treemacs-eldoc-display                   t
+          treemacs-file-event-delay                5000
+          treemacs-file-extension-regex            treemacs-last-period-regex-value
+          treemacs-file-follow-delay               0.2
+          treemacs-file-name-transformer           #'identity
+          treemacs-follow-after-init               t
+          treemacs-expand-after-init               t
+          treemacs-git-command-pipe                ""
+          treemacs-goto-tag-strategy               'refetch-index
+          treemacs-indentation                     2
+          treemacs-indentation-string              " "
+          treemacs-is-never-other-window           nil
+          treemacs-max-git-entries                 5000
+          treemacs-missing-project-action          'ask
+          treemacs-move-forward-on-expand          nil
+          treemacs-no-png-images                   nil
+          treemacs-no-delete-other-windows         t
+          treemacs-project-follow-cleanup          nil
+          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                        'left
+          treemacs-read-string-input               'from-child-frame
+          treemacs-recenter-distance               0.1
+          treemacs-recenter-after-file-follow      nil
+          treemacs-recenter-after-tag-follow       nil
+          treemacs-recenter-after-project-jump     'always
+          treemacs-recenter-after-project-expand   'on-distance
+          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+          treemacs-show-cursor                     nil
+          treemacs-show-hidden-files               t
+          treemacs-silent-filewatch                nil
+          treemacs-silent-refresh                  nil
+          treemacs-sorting                         'alphabetic-asc
+          treemacs-select-when-already-in-treemacs 'move-back
+          treemacs-space-between-root-nodes        t
+          treemacs-tag-follow-cleanup              t
+          treemacs-tag-follow-delay                1.5
+          treemacs-text-scale                      nil
+          treemacs-user-mode-line-format           nil
+          treemacs-user-header-line-format         nil
+          treemacs-wide-toggle-width               70
+          treemacs-width                           35
+          treemacs-width-increment                 1
+          treemacs-width-is-initially-locked       t
+          treemacs-workspace-switch-cleanup        nil)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    (treemacs-resize-icons 10)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
+
+    (treemacs-hide-gitignored-files-mode nil))
+  :bind
+  (:map global-map
+  ;;       ("M-0"       . treemacs-select-window)
+  ;;       ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-c 1"   . treemacs)
+  ;;       ("C-x t B"   . treemacs-bookmark)
+  ;;       ("C-x t C-t" . treemacs-find-file)
+  ;;       ("C-x t M-t" . treemacs-find-tag)
+)
+)
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
+(use-package treemacs-all-the-icons
+:config
+(treemacs-load-theme "all-the-icons"))
+
 (setq speedbar-directory-unshown-regexp "^$")
 (global-set-key (kbd "C-c q") 'speedbar-get-focus)
+
+(setq project-switch-commands 'project-dired)
+
+(global-set-key (kbd "C-c t") 'project-find-file)
+(global-set-key (kbd "M-p") 'project-find-file)
+
+(use-package el-patch)
+(el-patch-defun project--files-in-directory (dir ignores &optional files)
+  (el-patch-remove
+    (require 'find-dired)
+    (require 'xref)
+    (defvar find-name-arg))
+  (let* ((default-directory dir)
+         ;; Make sure ~/ etc. in local directory name is
+         ;; expanded and not left for the shell command
+         ;; to interpret.
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (el-patch-swap
+                    (format "%s %s %s -type f %s -print0"
+                            find-program
+                            localdir
+                            (xref--find-ignores-arguments ignores localdir)
+                            (if files
+                                (concat (shell-quote-argument "(")
+                                        " " find-name-arg " "
+                                        (mapconcat
+                                         #'shell-quote-argument
+                                         (split-string files)
+                                         (concat " -o " find-name-arg " "))
+                                        " "
+                                        (shell-quote-argument ")"))
+                              ""))
+                    (format "fd -t f -0 . %s" localdir))))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list))
 (require 'mode-local)
@@ -934,6 +1275,8 @@ This command switches to browser."
 (use-package dired-rsync
 :bind (:map dired-mode-map ("p" . dired-rsync)))
 
+(use-package docker-tramp)
+
 (use-package engine-mode
   :bind (("C-c d c" . engine/search-caniuse)
          ("C-c d m" . engine/search-mdn)
@@ -972,356 +1315,6 @@ This command switches to browser."
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 
-(use-package docker-tramp)
-
-(use-package ivy
-:bind (:map ivy-minibuffer-map
-               ("C-c C-c" . ivy-restrict-to-matches)))
-:init
-(setq ivy-display-style 'fancy)
-(setq ivy-use-selectable-prompt t)
-(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-re-builders-alist
-  '((t      . ivy--regex-plus)))
-(setq counsel-grep-base-command
- "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-(setq ivy-use-virtual-buffers t)
-(setq enable-recursive-minibuffers t)
-;; enable this if you want `swiper' to use it
-;; (setq search-default-mode #'char-fold-to-regexp)
+(use-package winum
 :config
-(ivy-mode)
-(use-package counsel)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-c b") 'counsel-bookmark)
-
-(global-set-key (kbd "C-c v") 'ivy-switch-view)
-(global-set-key (kbd "C-c V") 'ivy-push-view)
-(global-set-key (kbd "C-c r") 'counsel-recentf)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-
-
-(use-package evil
-:config
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
-
-(defun tmux-socket-command-string ()
-  (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
-
-(defun tmux-move-left ()
-  (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
-
-(defun tmux-move-up ()
-  (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
-
-(defun tmux-move-down ()
-  (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(global-set-key (kbd "C-h") 'tmux-move-left)
-
-(global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-c m") 'org-refile)
-
-(global-set-key (kbd "C-k") 'tmux-move-up)
-(global-set-key (kbd "C-l") 'tmux-move-right)
-(use-package evil-commentary
-:config
-(evil-commentary-mode +1))
-
-(use-package evil-visualstar
-:config
-(global-evil-visualstar-mode +1))
-
-(use-package evil
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs)
-
-  ;; magit commit
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(use-package evil-commentary
-  :after evil
-  :diminish evil-commentary-mode
-  :config
-  (evil-commentary-mode))
-
-(use-package evil-visualstar
-  :after evil
-  :config
-  (global-evil-visualstar-mode t))
-
-(use-package evil-matchit
-  :defer 2
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil-search-highlight-persist
-  :bind  (("C-c oh" . (lambda ()
-                            (interactive)
-                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
-               )
-              )
-  :config
-  (global-evil-search-highlight-persist t))
-
-(use-package evil
-  :config
-  (evil-mode 1)
-  (evil-ex-define-cmd "W" 'save-buffer))
-
-(use-package evil-indent-plus
-  :after evil
-  :config
-  (evil-indent-plus-default-bindings))
-
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
-
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-
-(use-package ace-window
-:config
-(global-set-key (kbd "C-x o") 'ace-window))
-
-(setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
-
-(use-package el-patch)
-(el-patch-defun project--files-in-directory (dir ignores &optional files)
-  (el-patch-remove
-    (require 'find-dired)
-    (require 'xref)
-    (defvar find-name-arg))
-  (let* ((default-directory dir)
-         ;; Make sure ~/ etc. in local directory name is
-         ;; expanded and not left for the shell command
-         ;; to interpret.
-         (localdir (file-local-name (expand-file-name dir)))
-         (command (el-patch-swap
-                    (format "%s %s %s -type f %s -print0"
-                            find-program
-                            localdir
-                            (xref--find-ignores-arguments ignores localdir)
-                            (if files
-                                (concat (shell-quote-argument "(")
-                                        " " find-name-arg " "
-                                        (mapconcat
-                                         #'shell-quote-argument
-                                         (split-string files)
-                                         (concat " -o " find-name-arg " "))
-                                        " "
-                                        (shell-quote-argument ")"))
-                              ""))
-                    (format "fd -t f -0 . %s" localdir))))
-    (project--remote-file-names
-     (sort (split-string (shell-command-to-string command) "\0" t)
-           #'string<))))
-
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  (org-roam-db-autosync-mode))
-
-(use-package all-the-icons)
-(use-package treemacs
-  :ensure t
-  :defer t
-  :config
-  (progn
-    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-          treemacs-deferred-git-apply-delay        0.5
-          treemacs-directory-name-transformer      #'identity
-          treemacs-display-in-side-window          t
-          treemacs-eldoc-display                   t
-          treemacs-file-event-delay                5000
-          treemacs-file-extension-regex            treemacs-last-period-regex-value
-          treemacs-file-follow-delay               0.2
-          treemacs-file-name-transformer           #'identity
-          treemacs-follow-after-init               t
-          treemacs-expand-after-init               t
-          treemacs-git-command-pipe                ""
-          treemacs-goto-tag-strategy               'refetch-index
-          treemacs-indentation                     2
-          treemacs-indentation-string              " "
-          treemacs-is-never-other-window           nil
-          treemacs-max-git-entries                 5000
-          treemacs-missing-project-action          'ask
-          treemacs-move-forward-on-expand          nil
-          treemacs-no-png-images                   nil
-          treemacs-no-delete-other-windows         t
-          treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-          treemacs-position                        'left
-          treemacs-read-string-input               'from-child-frame
-          treemacs-recenter-distance               0.1
-          treemacs-recenter-after-file-follow      nil
-          treemacs-recenter-after-tag-follow       nil
-          treemacs-recenter-after-project-jump     'always
-          treemacs-recenter-after-project-expand   'on-distance
-          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-          treemacs-show-cursor                     nil
-          treemacs-show-hidden-files               t
-          treemacs-silent-filewatch                nil
-          treemacs-silent-refresh                  nil
-          treemacs-sorting                         'alphabetic-asc
-          treemacs-select-when-already-in-treemacs 'move-back
-          treemacs-space-between-root-nodes        t
-          treemacs-tag-follow-cleanup              t
-          treemacs-tag-follow-delay                1.5
-          treemacs-text-scale                      nil
-          treemacs-user-mode-line-format           nil
-          treemacs-user-header-line-format         nil
-          treemacs-wide-toggle-width               70
-          treemacs-width                           35
-          treemacs-width-increment                 1
-          treemacs-width-is-initially-locked       t
-          treemacs-workspace-switch-cleanup        nil)
-
-    ;; The default width and height of the icons is 22 pixels. If you are
-    ;; using a Hi-DPI display, uncomment this to double the icon size.
-    (treemacs-resize-icons 10)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode 'always)
-
-    (pcase (cons (not (null (executable-find "git")))
-                 (not (null treemacs-python-executable)))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple)))
-
-    (treemacs-hide-gitignored-files-mode nil))
-  :bind
-  (:map global-map
-  ;;       ("M-0"       . treemacs-select-window)
-  ;;       ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-c 1"   . treemacs)
-  ;;       ("C-x t B"   . treemacs-bookmark)
-  ;;       ("C-x t C-t" . treemacs-find-file)
-  ;;       ("C-x t M-t" . treemacs-find-tag)
-)
-)
-
-(use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
-
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
-
-(use-package treemacs-magit
-  :after (treemacs magit)
-  :ensure t)
-
-(use-package treemacs-all-the-icons
-:config
-(treemacs-load-theme "all-the-icons"))
-
-(use-package org-superstar
-:init
-(setq
-    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
-)
-:config
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
-  (load-theme 'doom-zenburn t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+(winum-mode 1))

@@ -39,9 +39,7 @@ If a command is slow you can investigate with
 (profiler-report)
 #+end_src
 
-* Setup
-
-** Package library initialization
+* Package library initialization
 #+BEGIN_SRC emacs-lisp
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
@@ -104,7 +102,7 @@ added to the Emacs load-path.
     (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
-** Local variables
+* Local variables
 Local variables are useful to customize your settings for different
 projects/directories. The built in ~make-local-variable~ is
 convenient in helping you create those variables.
@@ -129,7 +127,7 @@ with the reloading of those locals.
         (my-reload-dir-locals-for-current-buffer)))))
 #+END_SRC
 
-** Better Defaults
+* Better Defaults
 #+begin_src emacs-lisp
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
@@ -296,49 +294,264 @@ Clean white space on save.
 (setq recentf-max-saved-items 200)
 #+END_SRC
 
+* Improved emacs commands
+#+begin_src emacs-lisp :tangle yes
+(use-package ivy
+:bind (:map ivy-minibuffer-map
+               ("C-c C-c" . ivy-restrict-to-matches)))
+:init
+(setq ivy-display-style 'fancy)
+(setq ivy-use-selectable-prompt t)
+(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
+(setq ivy-initial-inputs-alist nil)
+(setq ivy-re-builders-alist
+  '((t      . ivy--regex-plus)))
+(setq counsel-grep-base-command
+ "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+:config
+(ivy-mode)
+(use-package counsel)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-c b") 'counsel-bookmark)
+
+(global-set-key (kbd "C-c v") 'ivy-switch-view)
+(global-set-key (kbd "C-c V") 'ivy-push-view)
+(global-set-key (kbd "C-c r") 'counsel-recentf)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+
+
+(use-package evil
+:config
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
+#+end_src
+
+* Movement
+Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
+to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
+#+begin_src emacs-lisp
+(defun tmux-socket-command-string ()
+  (interactive)
+  (concat "tmux -S "
+          (replace-regexp-in-string "\n\\'" ""
+                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
+
+(defun tmux-move-right ()
+  (interactive)
+  (condition-case nil
+      (evil-window-right 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
+
+(defun tmux-move-left ()
+  (interactive)
+  (condition-case nil
+      (evil-window-left 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
+
+(defun tmux-move-up ()
+  (interactive)
+  (condition-case nil
+      (evil-window-up 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
+
+(defun tmux-move-down ()
+  (interactive)
+  (condition-case nil
+      (evil-window-down 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
+
+(global-set-key (kbd "C-h") 'tmux-move-left)
+
+(global-set-key (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-c m") 'org-refile)
+
+(global-set-key (kbd "C-k") 'tmux-move-up)
+(global-set-key (kbd "C-l") 'tmux-move-right)
+#+END_SRC
+* VIM
+
+I started using Vim to help me prevent [[https://www.emacswiki.org/emacs/RepeatedStrainInjury][emacs RSI.]]
+Now I am sticking with it because It makes me feel like beethoven
+manipulating text :-)
+
+Here is an awesome [[https://github.com/noctuid/evil-guide][Evil Guide]]
+
+Quit read-only windows with Q instead of trying to register a Vim
+Macro.
+This is mainly to restore emacs behavior with help windows.
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  (defun my-evil-record-macro ()
+    (interactive)
+    (if buffer-read-only
+        (quit-window)
+      (call-interactively 'evil-record-macro)))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+
+#+END_SRC
+
+Surround things with
+- ~S~ in visual mode
+- ~ys<text-object>~ in normal mode
+  You can also change surroundings ~cs~ or delete surroundings ~ds~.
+#+BEGIN_SRC emacs-lisp
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+#+END_SRC
+
+I use Vim keybindings everywhere except with special modes
+
+like Magit, Dired... I setup those special modes to start with Emacs
+keybindings by default.
+#+begin_src emacs-lisp
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
+
+#+end_src
+
+
+  Comment things with ~gc~. Comment and copy with ~gy~
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-commentary
+    :after evil
+    :diminish evil-commentary-mode
+    :config
+    (evil-commentary-mode))
+  #+END_SRC
+
+  Start a search from visual selection with ~*~ or ~#~ (backward).
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-visualstar
+    :after evil
+    :config
+    (global-evil-visualstar-mode t))
+  #+END_SRC
+
+  Jump to matching pairs with ~%~.
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-matchit
+    :defer 2
+    :after evil
+    :config
+    (global-evil-matchit-mode 1))
+  #+END_SRC
+
+  Persist highlight from ~evil search~ and ~isearch~
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-search-highlight-persist
+    :bind  (("C-c oh" . (lambda ()
+                              (interactive)
+                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+                 )
+                )
+    :config
+    (global-evil-search-highlight-persist t))
+  #+END_SRC
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :config
+    (evil-mode 1)
+    (evil-ex-define-cmd "W" 'save-buffer))
+  #+END_SRC
+
+  Add text objects to select, copy things based on indentation level.
+  Use it with ~vii~ and ~yii~.
+  #+BEGIN_SRC emacs-lisp
+  (use-package evil-indent-plus
+    :after evil
+    :config
+    (evil-indent-plus-default-bindings))
+  #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package key-chord
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+#+END_SRC
+
 * Colors
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
-https://en.wikipedia.org/wiki/Wikipedia:Zenburn
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package zenburn-theme
-:faces
- (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
- (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
- (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
- (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
- (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
- (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
- (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
- (org-block ((t (:extend t :background "#333333"))))
- (org-drawer ((t (:foreground "#f0dfaf"))))
- (org-level-1 ((t (:inherit default :extend nil :foreground "#DFAF8F" :slant italic :height 1.5))))
- (org-level-2 ((t (:inherit default :extend nil :foreground "#BFEBBF" :slant italic :height 1.3))))
- (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
- (org-meta-line ((t (:inherit font-lock-comment-face))))
- (region ((t (:extend t :background "#adcff1" :foreground "black"))))
- (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.1))))
- (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90"))))
- (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
- (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :slant italic))))
- (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
- (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
- (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
- (tab-line-tab-modified ((t (:foreground "#e89393"))))
- (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
- config
- (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
-#+END_SRC
+https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
+I use zenburn version from /doom-themes/ as I like the broad coverage
+of uses cases covered by /doom-emacs/.
 
+#+begin_src emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
+  (load-theme 'doom-zenburn t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+#+end_src
+
+This is a theme I started years ago and that I don't use anymore.
 #+begin_src emacs-lisp :tangle no
 (load-theme 'tronesque)
 (tronesque-mode-line)
 #+end_src
 
+This is my favorite light theme
 #+begin_src emacs-lisp :tangle no
 (use-package leuven-theme
 :config
@@ -346,6 +559,7 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn
 (load-theme 'leuven t))
 #+end_src
 
+This is another dark and light theme I like a lot.
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package solarized-theme
  :config
@@ -355,7 +569,7 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn
  (load-theme 'solarized-dark t))
 #+END_SRC
 
-Make my cursor match my modeline color
+Makes my evil cursor match my modeline color
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package evil
   :init
@@ -368,6 +582,8 @@ Make my cursor match my modeline color
 #+end_src
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
+I don't use this with doom-modelines as I find the indicators from
+doom-modeline good enough.
 #+begin_src emacs-lisp :tangle no
 (add-hook 'post-command-hook '(lambda ()
   (let* (
@@ -529,6 +745,12 @@ light weights. Medium and Light conflict with the Regular and Book versions
 ** Code Folding
 =set-selective-display=
 
+** Icons
+
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+#+end_src
+
 * Regex
 
 ~C-c C-w~ to copy regex
@@ -561,6 +783,15 @@ light weights. Medium and Light conflict with the Regular and Book versions
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-superstar
+:init
+(setq
+    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
+)
+:config
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+#+end_src
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
@@ -1263,6 +1494,24 @@ This command switches to browser."
     ))
 #+END_SRC
 
+** Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode))
+#+end_src
 * Search
 Searching is probably the most important thing in a code editor.
 Here is how I search.
@@ -1480,8 +1729,146 @@ IDE code analysis but it works surprisingly well.
 
 ** Navigation tree
 #+begin_src emacs-lisp
- (setq speedbar-directory-unshown-regexp "^$")
- (global-set-key (kbd "C-c q") 'speedbar-get-focus)
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay        0.5
+          treemacs-directory-name-transformer      #'identity
+          treemacs-display-in-side-window          t
+          treemacs-eldoc-display                   t
+          treemacs-file-event-delay                5000
+          treemacs-file-extension-regex            treemacs-last-period-regex-value
+          treemacs-file-follow-delay               0.2
+          treemacs-file-name-transformer           #'identity
+          treemacs-follow-after-init               t
+          treemacs-expand-after-init               t
+          treemacs-git-command-pipe                ""
+          treemacs-goto-tag-strategy               'refetch-index
+          treemacs-indentation                     2
+          treemacs-indentation-string              " "
+          treemacs-is-never-other-window           nil
+          treemacs-max-git-entries                 5000
+          treemacs-missing-project-action          'ask
+          treemacs-move-forward-on-expand          nil
+          treemacs-no-png-images                   nil
+          treemacs-no-delete-other-windows         t
+          treemacs-project-follow-cleanup          nil
+          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                        'left
+          treemacs-read-string-input               'from-child-frame
+          treemacs-recenter-distance               0.1
+          treemacs-recenter-after-file-follow      nil
+          treemacs-recenter-after-tag-follow       nil
+          treemacs-recenter-after-project-jump     'always
+          treemacs-recenter-after-project-expand   'on-distance
+          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
+          treemacs-show-cursor                     nil
+          treemacs-show-hidden-files               t
+          treemacs-silent-filewatch                nil
+          treemacs-silent-refresh                  nil
+          treemacs-sorting                         'alphabetic-asc
+          treemacs-select-when-already-in-treemacs 'move-back
+          treemacs-space-between-root-nodes        t
+          treemacs-tag-follow-cleanup              t
+          treemacs-tag-follow-delay                1.5
+          treemacs-text-scale                      nil
+          treemacs-user-mode-line-format           nil
+          treemacs-user-header-line-format         nil
+          treemacs-wide-toggle-width               70
+          treemacs-width                           35
+          treemacs-width-increment                 1
+          treemacs-width-is-initially-locked       t
+          treemacs-workspace-switch-cleanup        nil)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    (treemacs-resize-icons 10)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
+
+    (treemacs-hide-gitignored-files-mode nil))
+  :bind
+  (:map global-map
+  ;;       ("M-0"       . treemacs-select-window)
+  ;;       ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-c 1"   . treemacs)
+  ;;       ("C-x t B"   . treemacs-bookmark)
+  ;;       ("C-x t C-t" . treemacs-find-file)
+  ;;       ("C-x t M-t" . treemacs-find-tag)
+)
+)
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
+(use-package treemacs-all-the-icons
+:config
+(treemacs-load-theme "all-the-icons"))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq speedbar-directory-unshown-regexp "^$")
+(global-set-key (kbd "C-c q") 'speedbar-get-focus)
+#+end_src
+
+** Find file in project
+#+begin_src emacs-lisp
+(setq project-switch-commands 'project-dired)
+
+(global-set-key (kbd "C-c t") 'project-find-file)
+(global-set-key (kbd "M-p") 'project-find-file)
+
+(use-package el-patch)
+(el-patch-defun project--files-in-directory (dir ignores &optional files)
+  (el-patch-remove
+    (require 'find-dired)
+    (require 'xref)
+    (defvar find-name-arg))
+  (let* ((default-directory dir)
+         ;; Make sure ~/ etc. in local directory name is
+         ;; expanded and not left for the shell command
+         ;; to interpret.
+         (localdir (file-local-name (expand-file-name dir)))
+         (command (el-patch-swap
+                    (format "%s %s %s -type f %s -print0"
+                            find-program
+                            localdir
+                            (xref--find-ignores-arguments ignores localdir)
+                            (if files
+                                (concat (shell-quote-argument "(")
+                                        " " find-name-arg " "
+                                        (mapconcat
+                                         #'shell-quote-argument
+                                         (split-string files)
+                                         (concat " -o " find-name-arg " "))
+                                        " "
+                                        (shell-quote-argument ")"))
+                              ""))
+                    (format "fd -t f -0 . %s" localdir))))
+    (project--remote-file-names
+     (sort (split-string (shell-command-to-string command) "\0" t)
+           #'string<))))
 #+end_src
 
 * Completion
@@ -1622,6 +2009,10 @@ To play a video, with cursor on video file in dired =! vlc=
 :bind (:map dired-mode-map ("p" . dired-rsync)))
 #+END_SRC
 
+** Docker
+#+begin_src emacs-lisp
+(use-package docker-tramp)
+#+end_src
 * 24 bits Emacs
 
 Run this command to know if your Emacs display 24 bits colors.
@@ -1690,431 +2081,11 @@ C-c C-e R =letter= to export a presentation from your org file
 
 * Testing
 
+/C-x w NUMBER/ to select a window by number. Numbers appear in the modeline.
 #+begin_src emacs-lisp
-(use-package docker-tramp)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(use-package ivy
-:bind (:map ivy-minibuffer-map
-               ("C-c C-c" . ivy-restrict-to-matches)))
-:init
-(setq ivy-display-style 'fancy)
-(setq ivy-use-selectable-prompt t)
-(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-re-builders-alist
-  '((t      . ivy--regex-plus)))
-(setq counsel-grep-base-command
- "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-(setq ivy-use-virtual-buffers t)
-(setq enable-recursive-minibuffers t)
-;; enable this if you want `swiper' to use it
-;; (setq search-default-mode #'char-fold-to-regexp)
+(use-package winum
 :config
-(ivy-mode)
-(use-package counsel)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-c b") 'counsel-bookmark)
-
-(global-set-key (kbd "C-c v") 'ivy-switch-view)
-(global-set-key (kbd "C-c V") 'ivy-push-view)
-(global-set-key (kbd "C-c r") 'counsel-recentf)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-
-
-(use-package evil
-:config
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
-#+end_src
-
-
-
-Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
-to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
-#+begin_src emacs-lisp
-(defun tmux-socket-command-string ()
-  (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
-
-(defun tmux-move-left ()
-  (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
-
-(defun tmux-move-up ()
-  (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
-
-(defun tmux-move-down ()
-  (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(global-set-key (kbd "C-h") 'tmux-move-left)
-
-(global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-c m") 'org-refile)
-
-(global-set-key (kbd "C-k") 'tmux-move-up)
-(global-set-key (kbd "C-l") 'tmux-move-right)
-(use-package evil-commentary
-:config
-(evil-commentary-mode +1))
-
-(use-package evil-visualstar
-:config
-(global-evil-visualstar-mode +1))
-
-#+END_SRC
-
-I started using Vim to help me prevent [[https://www.emacswiki.org/emacs/RepeatedStrainInjury][emacs RSI.]]
-Now I am sticking with it because It makes me feel like beethoven
-manipulating text :-)
-
-Here is an awesome [[https://github.com/noctuid/evil-guide][Evil Guide]]
-
-Quit read-only windows with Q instead of trying to register a Vim
-Macro.
-This is mainly to restore emacs behavior with help windows.
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-
-#+END_SRC
-
-Surround things with
-- ~S~ in visual mode
-- ~ys<text-object>~ in normal mode
-  You can also change surroundings ~cs~ or delete surroundings ~ds~.
-#+BEGIN_SRC emacs-lisp
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-#+END_SRC
-
-I use Vim keybindings everywhere except with special modes
-
-like Magit, Dired... I setup those special modes to start with Emacs
-keybindings by default.
-#+begin_src emacs-lisp
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs)
-
-  ;; magit commit
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-#+end_src
-
-
-  Comment things with ~gc~. Comment and copy with ~gy~
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-commentary
-    :after evil
-    :diminish evil-commentary-mode
-    :config
-    (evil-commentary-mode))
-  #+END_SRC
-
-  Start a search from visual selection with ~*~ or ~#~ (backward).
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-visualstar
-    :after evil
-    :config
-    (global-evil-visualstar-mode t))
-  #+END_SRC
-
-  Jump to matching pairs with ~%~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-matchit
-    :defer 2
-    :after evil
-    :config
-    (global-evil-matchit-mode 1))
-  #+END_SRC
-
-  Persist highlight from ~evil search~ and ~isearch~
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-search-highlight-persist
-    :bind  (("C-c oh" . (lambda ()
-                              (interactive)
-                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
-                 )
-                )
-    :config
-    (global-evil-search-highlight-persist t))
-  #+END_SRC
-
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :config
-    (evil-mode 1)
-    (evil-ex-define-cmd "W" 'save-buffer))
-  #+END_SRC
-
-  Add text objects to select, copy things based on indentation level.
-  Use it with ~vii~ and ~yii~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-indent-plus
-    :after evil
-    :config
-    (evil-indent-plus-default-bindings))
-  #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package key-chord
-  :defer 2
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-#+END_SRC
-
-#+begin_src emacs-lisp
-(use-package ace-window
-:config
-(global-set-key (kbd "C-x o") 'ace-window))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
-
-(use-package el-patch)
-(el-patch-defun project--files-in-directory (dir ignores &optional files)
-  (el-patch-remove
-    (require 'find-dired)
-    (require 'xref)
-    (defvar find-name-arg))
-  (let* ((default-directory dir)
-         ;; Make sure ~/ etc. in local directory name is
-         ;; expanded and not left for the shell command
-         ;; to interpret.
-         (localdir (file-local-name (expand-file-name dir)))
-         (command (el-patch-swap
-                    (format "%s %s %s -type f %s -print0"
-                            find-program
-                            localdir
-                            (xref--find-ignores-arguments ignores localdir)
-                            (if files
-                                (concat (shell-quote-argument "(")
-                                        " " find-name-arg " "
-                                        (mapconcat
-                                         #'shell-quote-argument
-                                         (split-string files)
-                                         (concat " -o " find-name-arg " "))
-                                        " "
-                                        (shell-quote-argument ")"))
-                              ""))
-                    (format "fd -t f -0 . %s" localdir))))
-    (project--remote-file-names
-     (sort (split-string (shell-command-to-string command) "\0" t)
-           #'string<))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  (org-roam-db-autosync-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package all-the-icons)
-(use-package treemacs
-  :ensure t
-  :defer t
-  :config
-  (progn
-    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-          treemacs-deferred-git-apply-delay        0.5
-          treemacs-directory-name-transformer      #'identity
-          treemacs-display-in-side-window          t
-          treemacs-eldoc-display                   t
-          treemacs-file-event-delay                5000
-          treemacs-file-extension-regex            treemacs-last-period-regex-value
-          treemacs-file-follow-delay               0.2
-          treemacs-file-name-transformer           #'identity
-          treemacs-follow-after-init               t
-          treemacs-expand-after-init               t
-          treemacs-git-command-pipe                ""
-          treemacs-goto-tag-strategy               'refetch-index
-          treemacs-indentation                     2
-          treemacs-indentation-string              " "
-          treemacs-is-never-other-window           nil
-          treemacs-max-git-entries                 5000
-          treemacs-missing-project-action          'ask
-          treemacs-move-forward-on-expand          nil
-          treemacs-no-png-images                   nil
-          treemacs-no-delete-other-windows         t
-          treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-          treemacs-position                        'left
-          treemacs-read-string-input               'from-child-frame
-          treemacs-recenter-distance               0.1
-          treemacs-recenter-after-file-follow      nil
-          treemacs-recenter-after-tag-follow       nil
-          treemacs-recenter-after-project-jump     'always
-          treemacs-recenter-after-project-expand   'on-distance
-          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-          treemacs-show-cursor                     nil
-          treemacs-show-hidden-files               t
-          treemacs-silent-filewatch                nil
-          treemacs-silent-refresh                  nil
-          treemacs-sorting                         'alphabetic-asc
-          treemacs-select-when-already-in-treemacs 'move-back
-          treemacs-space-between-root-nodes        t
-          treemacs-tag-follow-cleanup              t
-          treemacs-tag-follow-delay                1.5
-          treemacs-text-scale                      nil
-          treemacs-user-mode-line-format           nil
-          treemacs-user-header-line-format         nil
-          treemacs-wide-toggle-width               70
-          treemacs-width                           35
-          treemacs-width-increment                 1
-          treemacs-width-is-initially-locked       t
-          treemacs-workspace-switch-cleanup        nil)
-
-    ;; The default width and height of the icons is 22 pixels. If you are
-    ;; using a Hi-DPI display, uncomment this to double the icon size.
-    (treemacs-resize-icons 10)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode 'always)
-
-    (pcase (cons (not (null (executable-find "git")))
-                 (not (null treemacs-python-executable)))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple)))
-
-    (treemacs-hide-gitignored-files-mode nil))
-  :bind
-  (:map global-map
-  ;;       ("M-0"       . treemacs-select-window)
-  ;;       ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-c 1"   . treemacs)
-  ;;       ("C-x t B"   . treemacs-bookmark)
-  ;;       ("C-x t C-t" . treemacs-find-file)
-  ;;       ("C-x t M-t" . treemacs-find-tag)
-)
-)
-
-(use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
-
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
-
-(use-package treemacs-magit
-  :after (treemacs magit)
-  :ensure t)
-
-(use-package treemacs-all-the-icons
-:config
-(treemacs-load-theme "all-the-icons"))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package org-superstar
-:init
-(setq
-    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
-)
-:config
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
-  (load-theme 'doom-zenburn t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+(winum-mode 1))
 #+end_src
 * Local variables
 

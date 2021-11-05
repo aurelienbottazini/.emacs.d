@@ -1,4 +1,4 @@
-(define-package "org-roam" "20211030.821" "A database abstraction layer for Org-mode"
+(define-package "org-roam" "20211101.639" "A database abstraction layer for Org-mode"
   '((emacs "26.1")
     (dash "2.13")
     (f "0.17.2")
@@ -6,7 +6,7 @@
     (emacsql "3.0.0")
     (emacsql-sqlite "1.0.0")
     (magit-section "3.0.0"))
-  :commit "c789531e368f440f554601790747f10003d1796b" :authors
+  :commit "3e47f198c7b6c3254944d98357e41840e5e1b102" :authors
   '(("Jethro Kuan" . "jethrokuan95@gmail.com"))
   :maintainer
   '("Jethro Kuan" . "jethrokuan95@gmail.com")
