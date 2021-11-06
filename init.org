@@ -102,6 +102,10 @@ added to the Emacs load-path.
     (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (require 'org)
+#+END_SRC
+
 * Local variables
 Local variables are useful to customize your settings for different
 projects/directories. The built in ~make-local-variable~ is
@@ -2080,13 +2084,6 @@ C-c C-e R =letter= to export a presentation from your org file
 #+end_src
 
 * Testing
-
-/C-x w NUMBER/ to select a window by number. Numbers appear in the modeline.
-#+begin_src emacs-lisp
-(use-package winum
-:config
-(winum-mode 1))
-#+end_src
 * Local variables
 
 # Local Variables:

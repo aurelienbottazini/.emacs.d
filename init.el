@@ -45,6 +45,8 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
+(require 'org)
+
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
   (interactive)
@@ -1314,7 +1316,3 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
-(use-package winum
-:config
-(winum-mode 1))
