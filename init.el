@@ -840,13 +840,24 @@ cons cell (regexp . minor-mode)."
     :keymaps 'override
     "f" 'counsel-rg
     "g" 'magit-file-dispatch
-   )
+    "p" 'project-find-file
+    "i" 'counsel-imenu
+    "b" 'counsel-buffer-or-recentf
+    "s" 'auray/find-file-with-similar-name
+    )
 
   (general-define-key
    :states 'normal
    "[e" 'previous-error
    "]e" 'next-error)
 
+
+  ;; (general-define-key
+  ;;  :states 'normal
+  ;;  :keymaps 'emacs-lisp-mode-map
+  ;;  ;; or xref equivalent
+  ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
+  ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
   )
 
 (use-package hydra
@@ -1041,7 +1052,6 @@ This command switches to browser."
   (counsel-fzf nil (project-root (project-current t)))))
 
 (require 'auray/find-in-project)
-(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
 
 (use-package rg)
 
@@ -1182,9 +1192,6 @@ This command switches to browser."
 (global-set-key (kbd "C-c q") 'speedbar-get-focus)
 
 (setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-p") 'project-find-file)
-(evil-global-set-key 'normal (kbd "C-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)

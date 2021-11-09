@@ -1242,13 +1242,24 @@ Another =M-x= without leaving the home row
      :keymaps 'override
      "f" 'counsel-rg
      "g" 'magit-file-dispatch
-    )
+     "p" 'project-find-file
+     "i" 'counsel-imenu
+     "b" 'counsel-buffer-or-recentf
+     "s" 'auray/find-file-with-similar-name
+     )
 
    (general-define-key
     :states 'normal
     "[e" 'previous-error
     "]e" 'next-error)
 
+
+   ;; (general-define-key
+   ;;  :states 'normal
+   ;;  :keymaps 'emacs-lisp-mode-map
+   ;;  ;; or xref equivalent
+   ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
+   ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
    )
 #+end_src
 ** Hydra
@@ -1579,7 +1590,6 @@ search results.
 
 #+begin_src emacs-lisp
 (require 'auray/find-in-project)
-(global-set-key (kbd "C-c s") 'auray/find-file-with-similar-name)
 #+end_src
 
 *** When I need to narrow down my search to specific files
@@ -1850,9 +1860,6 @@ IDE code analysis but it works surprisingly well.
 ** Find file in project
 #+begin_src emacs-lisp
 (setq project-switch-commands 'project-dired)
-
-(global-set-key (kbd "C-p") 'project-find-file)
-(evil-global-set-key 'normal (kbd "C-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)
