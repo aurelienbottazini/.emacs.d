@@ -789,6 +789,27 @@ cons cell (regexp . minor-mode)."
  (use-package windresize
    :bind (("C-c o h" . windresize)))
 
+(use-package general
+  :config
+
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
+
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "f" 'counsel-rg
+    "g" 'magit-file-dispatch
+   )
+
+  (general-define-key
+   :states 'normal
+   "[e" 'previous-error
+   "]e" 'next-error)
+
+  )
+
 (use-package hydra
   :config
   (defhydra hydra-utils (global-map "<f8>")
@@ -1002,10 +1023,6 @@ This command switches to browser."
   (fullframe vc-annotate quit-window))
 
 (use-package magit
-  :bind (("C-c gs" . magit-status)
-         ("C-c gc" . magit-commit)
-         ("C-c gp" . magit-push-current)
-         ("C-c gf" . magit-file-dispatch))
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
