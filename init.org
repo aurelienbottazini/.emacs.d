@@ -1218,6 +1218,27 @@ Another =M-x= without leaving the home row
  (use-package windresize
    :bind (("C-c o h" . windresize)))
 #+END_SRC
+
+** #+begin_src emacs-lisp
+(use-package general
+  :config
+
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
+
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "f" 'counsel-rg)
+
+  (general-define-key
+   :states 'normal
+   "[e" 'previous-error
+   "]e" 'next-error)
+
+  )
+#+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
 (use-package hydra
@@ -1498,24 +1519,6 @@ This command switches to browser."
     ))
 #+END_SRC
 
-** Roam
-#+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  (org-roam-db-autosync-mode))
-#+end_src
 * Search
 Searching is probably the most important thing in a code editor.
 Here is how I search.
@@ -1840,8 +1843,8 @@ IDE code analysis but it works surprisingly well.
 #+begin_src emacs-lisp
 (setq project-switch-commands 'project-dired)
 
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
+(global-set-key (kbd "C-p") 'project-find-file)
+(evil-global-set-key 'normal (kbd "C-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)

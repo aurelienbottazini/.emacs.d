@@ -24,7 +24,7 @@
       (file-name-nondirectory buffer-file-name)
       " "
       (auray/fip-base-name buffer-file-name)
-      " (git rev-parse --show-toplevel)"
+      " $(git rev-parse --show-toplevel)"
       ))
     "\n")
    1))

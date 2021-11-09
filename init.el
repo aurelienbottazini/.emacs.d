@@ -958,22 +958,6 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  (org-roam-db-autosync-mode))
-
 (use-package counsel
   :bind (("C-c f" . counsel-rg)))
 
@@ -1143,8 +1127,8 @@ This command switches to browser."
 
 (setq project-switch-commands 'project-dired)
 
-(global-set-key (kbd "C-c t") 'project-find-file)
-(global-set-key (kbd "M-p") 'project-find-file)
+(global-set-key (kbd "C-p") 'project-find-file)
+(evil-global-set-key 'normal (kbd "C-p") 'project-find-file)
 
 (use-package el-patch)
 (el-patch-defun project--files-in-directory (dir ignores &optional files)
