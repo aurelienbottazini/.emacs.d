@@ -536,6 +536,25 @@ cons cell (regexp . minor-mode)."
 :config
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
+  :bind (
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today)
+         ("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n t" . org-roam-tag-add)
+         ("C-c n i" . org-roam-node-insert)
+)
+  :config
+  (org-roam-db-autosync-mode))
+
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
@@ -848,9 +867,12 @@ cons cell (regexp . minor-mode)."
 
   (general-define-key
    :states 'normal
+   "C-w 0" 'delete-window
+   "C-w o" 'delete-other-windows
+   "[[" 'next-buffer
+   "]]" 'previous-buffer
    "[e" 'previous-error
    "]e" 'next-error)
-
 
   ;; (general-define-key
   ;;  :states 'normal
