@@ -339,25 +339,64 @@
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (setq auray/default-color '("#2b2b2b" "#dcdcdc" . "#ecbe7b"))
-  (load-theme 'doom-zenburn t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+(use-package zenburn-theme
+:custom-face
+ (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
+ (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
+ (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
+ (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
+ (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
+ (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
+ (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
+ (org-block ((t (:extend t :background "#333333"))))
+ (org-drawer ((t (:foreground "#f0dfaf"))))
+ (org-level-1 ((t (:inherit default :extend nil :foreground "#DFAF8F" :slant italic :height 1.5))))
+ (org-level-2 ((t (:inherit default :extend nil :foreground "#BFEBBF" :slant italic :height 1.3))))
+ (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
+ (org-meta-line ((t (:inherit font-lock-comment-face))))
+ (region ((t (:extend t :background "#adcff1" :foreground "black"))))
+ (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.1))))
+ (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90"))))
+ (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
+ (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :slant italic))))
+ (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
+ (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+ (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
+ (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
+ (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
+ (tab-line-tab-modified ((t (:foreground "#e89393"))))
+ (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
+ :config
+ (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+ (load-theme 'zenburn t))
 
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1))
+
+(add-hook 'post-command-hook '(lambda ()
+  (let* (
+         (color (cond ((minibufferp) auray/default-color)
+                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                      (t auray/default-color)))
+         )
+    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+    (set-face-background 'mode-line (car color))
+
+    (set-face-foreground 'doom-modeline-evil-insert-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-visual-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-replace-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-operator-state (cddr color))
+    (set-face-foreground 'doom-modeline-evil-motion-state (cddr color))
+    (set-face-foreground 'doom-modeline-buffer-major-mode (cddr color))
+    (set-face-foreground 'doom-modeline-project-dir (cddr color))
+    (set-face-foreground 'doom-modeline-info (cddr color))
+
+    (set-face-foreground 'mode-line-buffer-id (cddr color))
+
+    (set-face-foreground 'mode-line (cadr color)))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
