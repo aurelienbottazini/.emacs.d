@@ -1440,8 +1440,7 @@ To get a preview
 I run ~toggle-html-export-on-save~ when i work on a particular org file.
 I use ~npm install -g simple-autoreload-server~ to auto-reload files
 in my browser.
-
-I have a [[https://github.com/aurelienbottazini/dotfiles/blob/c071cf2ca49ca9a98da815f17d500980f95873da/tmux/.config/tmuxinator/blog.yml#L9][tmuxinator configuration file]] to quickly launch my blog server
+~autoreload-server -d ./ -p 1313~
 
 #+BEGIN_SRC emacs-lisp
 (setq
@@ -2066,7 +2065,9 @@ To play a video, with cursor on video file in dired =! vlc=
 Run this command to know if your Emacs display 24 bits colors.
 Result should be 16777216
 #+begin_src emacs-lisp :tangle no
-(display-color-cells)
+(if (= 16777216 (display-color-cells))
+  (message "24 bits color emacs")
+ (message "Not 24 bits emacs"))
 #+end_src
 
 On Ubuntu 20.04 I had to [[https://github.com/aurelienbottazini/dotfiles/blob/dc400917364c9cc61d804e6d88c2c11b63da1c3c/home/.config/shell/aliases#L29][add a TERM env variable]] and add the
