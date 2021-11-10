@@ -40,6 +40,12 @@ If a command is slow you can investigate with
 #+end_src
 
 * Package library initialization
+
+Silence deprecated cl warnings
+#+begin_src emacs-lisp
+(setq byte-compile-warnings '(cl-functions))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
@@ -599,7 +605,7 @@ Makes my evil cursor match my modeline color
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'post-command-hook '(lambda ()
+(add-hook 'post-command-hook (lambda ()
   (let* (
          (color (cond ((minibufferp) auray/default-color)
                       ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))

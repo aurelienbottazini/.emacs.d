@@ -9,6 +9,8 @@
                                       gc-cons-percentage 0.1
                                       file-name-handler-alist last-file-name-handler-alist)))
 
+(setq byte-compile-warnings '(cl-functions))
+
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
         ("org"         . "https://orgmode.org/elpa/")
@@ -374,7 +376,7 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
-(add-hook 'post-command-hook '(lambda ()
+(add-hook 'post-command-hook (lambda ()
   (let* (
          (color (cond ((minibufferp) auray/default-color)
                       ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
