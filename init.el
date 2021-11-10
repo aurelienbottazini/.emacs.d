@@ -804,8 +804,7 @@ cons cell (regexp . minor-mode)."
    :config
    (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
- (use-package expand-region
-   :bind (("M-e" . er/expand-region)))
+ (use-package expand-region)
 
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
@@ -865,16 +864,19 @@ cons cell (regexp . minor-mode)."
     "i" 'counsel-imenu
     "b" 'counsel-buffer-or-recentf
     "s" 'auray/find-file-with-similar-name
-    )
+    "e" 'flycheck-list-errors
+    "r" 'er/expand-region)
 
   (general-define-key
    :states 'normal
    "C-w 0" 'delete-window
    "C-w o" 'delete-other-windows
-   "[[" 'next-buffer
-   "]]" 'previous-buffer
-   "[e" 'previous-error
-   "]e" 'next-error)
+   "[ [" 'next-buffer
+   "] ]" 'previous-buffer
+   "[ c" 'flycheck-previous-error
+   "] c" 'flycheck-next-error
+   "[ e" 'previous-error
+   "] e" 'next-error)
 
   ;; (general-define-key
   ;;  :states 'normal
