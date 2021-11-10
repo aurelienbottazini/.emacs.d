@@ -2135,6 +2135,14 @@ C-c C-e R =letter= to export a presentation from your org file
 #+end_src
 
 * Testing
+
+#+begin_src emacs-lisp
+(use-package ivy-posframe
+:config
+(ivy-posframe-mode 1)
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+(setq ivy-posframe-height-alist '((t      . 40))))
+#+end_src
 * Local variables
 
 # Local Variables:

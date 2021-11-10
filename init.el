@@ -1387,3 +1387,9 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
+
+(use-package ivy-posframe
+:config
+(ivy-posframe-mode 1)
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+(setq ivy-posframe-height-alist '((t      . 40))))
