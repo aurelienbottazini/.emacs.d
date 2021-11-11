@@ -871,8 +871,8 @@ cons cell (regexp . minor-mode)."
    :states 'normal
    "C-w 0" 'delete-window
    "C-w o" 'delete-other-windows
-   "[ [" 'next-buffer
-   "] ]" 'previous-buffer
+   "[ [" 'previous-buffer
+   "] ]" 'next-buffer
    "[ c" 'flycheck-previous-error
    "] c" 'flycheck-next-error
    "[ e" 'previous-error
