@@ -198,7 +198,6 @@
 :config
 (ivy-mode)
 (use-package counsel)
-(global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
 (global-set-key (kbd "<f6>") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
@@ -312,11 +311,6 @@
   (global-evil-matchit-mode 1))
 
 (use-package evil-search-highlight-persist
-  :bind  (("C-c oh" . (lambda ()
-                            (interactive)
-                            (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
-               )
-              )
   :config
   (global-evil-search-highlight-persist t))
 
@@ -865,10 +859,13 @@ cons cell (regexp . minor-mode)."
     "b" 'counsel-buffer-or-recentf
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
-    "r" 'er/expand-region)
+    "r" 'er/expand-region
+    "oh" (lambda () (interactive)
+                             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
 
   (general-define-key
    :states 'normal
+   "/" 'counsel-grep-or-swiper
    "C-w 0" 'delete-window
    "C-w o" 'delete-other-windows
    "[ [" 'previous-buffer
@@ -877,6 +874,9 @@ cons cell (regexp . minor-mode)."
    "] c" 'flycheck-next-error
    "[ e" 'previous-error
    "] e" 'next-error)
+
+  (general-define-key
+    "C-s" 'counsel-grep-or-swiper)
 
   ;; (general-define-key
   ;;  :states 'normal
