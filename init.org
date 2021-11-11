@@ -1061,6 +1061,8 @@ efficiently.
 (use-package context-coloring
   :ensure t
   :diminish context-coloring-mode
+  :hook ((js2-mode . context-coloring-mode)
+         (emacs-lisp-mode .context-coloring-mode))
   :bind (("C-c oc" . context-coloring-mode)))
 #+END_SRC
 
@@ -1252,49 +1254,51 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
-   (use-package general
-     :config
+ (use-package general
+   :config
 
-     (general-create-definer my-leader-def
-       ;; :prefix my-leader
-       :prefix "SPC")
+   (general-create-definer my-leader-def
+     ;; :prefix my-leader
+     :prefix "SPC")
 
-     (my-leader-def
-       :states 'normal
-       :keymaps 'override
-       "f" 'counsel-rg
-       "g" 'magit-file-dispatch
-       "p" 'project-find-file
-       "i" 'counsel-imenu
-       "b" 'counsel-buffer-or-recentf
-       "s" 'auray/find-file-with-similar-name
-       "e" 'flycheck-list-errors
-       "r" 'er/expand-region
-       "oh" (lambda () (interactive)
-                                (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
+   (my-leader-def
+     :states 'normal
+     :keymaps 'override
+     "f" 'counsel-rg
+     "g" 'magit-file-dispatch
+     "p" 'project-find-file
+     "i" 'counsel-imenu
+     "b" 'counsel-buffer-or-recentf
+     "s" 'auray/find-file-with-similar-name
+     "e" 'flycheck-list-errors
+     "r" 'er/expand-region
 
-     (general-define-key
-      :states 'normal
-      "/" 'evil-search-forward
-      "C-w 0" 'delete-window
-      "C-w o" 'delete-other-windows
-      "[ [" 'previous-buffer
-      "] ]" 'next-buffer
-      "[ c" 'flycheck-previous-error
-      "] c" 'flycheck-next-error
-      "[ e" 'previous-error
-      "] e" 'next-error)
+     "h" 'highlight-symbol-at-point
+     "H" (lambda () (interactive)
+                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
 
-     (general-define-key
-       "C-s" 'evil-search-forward)
+   (general-define-key
+    :states 'normal
+    "/" 'evil-search-forward
+    "C-w 0" 'delete-window
+    "C-w o" 'delete-other-windows
+    "[ [" 'previous-buffer
+    "] ]" 'next-buffer
+    "[ c" 'flycheck-previous-error
+    "] c" 'flycheck-next-error
+    "[ e" 'previous-error
+    "] e" 'next-error)
 
-     ;; (general-define-key
-     ;;  :states 'normal
-     ;;  :keymaps 'emacs-lisp-mode-map
-     ;;  ;; or xref equivalent
-     ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
-     ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
-     )
+   (general-define-key
+     "C-s" 'evil-search-forward)
+
+   ;; (general-define-key
+   ;;  :states 'normal
+   ;;  :keymaps 'emacs-lisp-mode-map
+   ;;  ;; or xref equivalent
+   ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
+   ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
+   )
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -2146,6 +2150,7 @@ C-c C-e R =letter= to export a presentation from your org file
 (setq ivy-posframe-height-alist '(
 (t      . 40))))
 #+end_src
+
 * Local variables
 
 # Local Variables:

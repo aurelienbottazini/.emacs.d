@@ -689,6 +689,8 @@ cons cell (regexp . minor-mode)."
 (use-package context-coloring
   :ensure t
   :diminish context-coloring-mode
+  :hook ((js2-mode . context-coloring-mode)
+         (emacs-lisp-mode .context-coloring-mode))
   :bind (("C-c oc" . context-coloring-mode)))
 
 (add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
@@ -860,7 +862,9 @@ cons cell (regexp . minor-mode)."
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
     "r" 'er/expand-region
-    "oh" (lambda () (interactive)
+
+    "h" 'highlight-symbol-at-point
+    "H" (lambda () (interactive)
                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
 
   (general-define-key
