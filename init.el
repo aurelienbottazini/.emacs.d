@@ -918,7 +918,7 @@ cons cell (regexp . minor-mode)."
  :init
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory (concat **local-dropbox-folder** "org/")))
+       deft-directory "~/Dropbox/org/"))
 
 (use-package markdown-mode
  :mode "\\.md\\'")
@@ -1393,5 +1393,5 @@ This command switches to browser."
 (use-package ivy-posframe
 :config
 (ivy-posframe-mode 1)
-(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
 (setq ivy-posframe-height-alist '((t      . 40))))
