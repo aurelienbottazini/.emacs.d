@@ -1275,7 +1275,7 @@ Another =M-x= without leaving the home row
 
      (general-define-key
       :states 'normal
-      "/" 'counsel-grep-or-swiper
+      "/" 'evil-search-forward
       "C-w 0" 'delete-window
       "C-w o" 'delete-other-windows
       "[ [" 'previous-buffer
@@ -1286,7 +1286,7 @@ Another =M-x= without leaving the home row
       "] e" 'next-error)
 
      (general-define-key
-       "C-s" 'counsel-grep-or-swiper)
+       "C-s" 'evil-search-forward)
 
      ;; (general-define-key
      ;;  :states 'normal
@@ -2143,7 +2143,8 @@ C-c C-e R =letter= to export a presentation from your org file
 :config
 (ivy-posframe-mode 1)
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-(setq ivy-posframe-height-alist '((t      . 40))))
+(setq ivy-posframe-height-alist '(
+(t      . 40))))
 #+end_src
 * Local variables
 

@@ -865,7 +865,7 @@ cons cell (regexp . minor-mode)."
 
   (general-define-key
    :states 'normal
-   "/" 'counsel-grep-or-swiper
+   "/" 'evil-search-forward
    "C-w 0" 'delete-window
    "C-w o" 'delete-other-windows
    "[ [" 'previous-buffer
@@ -876,7 +876,7 @@ cons cell (regexp . minor-mode)."
    "] e" 'next-error)
 
   (general-define-key
-    "C-s" 'counsel-grep-or-swiper)
+    "C-s" 'evil-search-forward)
 
   ;; (general-define-key
   ;;  :states 'normal
@@ -1394,4 +1394,5 @@ This command switches to browser."
 :config
 (ivy-posframe-mode 1)
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-(setq ivy-posframe-height-alist '((t      . 40))))
+(setq ivy-posframe-height-alist '(
+(t      . 40))))
