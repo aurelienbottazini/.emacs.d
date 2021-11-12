@@ -865,9 +865,9 @@ cons cell (regexp . minor-mode)."
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
     "r" 'er/expand-region
-    "c" (lambda () (interactive) (org-capture nil "n")))
+    "c" (lambda () (interactive) (org-capture nil "n"))
     "h" 'highlight-symbol-at-point
-    )
+    ))
 
   (general-define-key
    :states 'normal
