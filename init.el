@@ -326,7 +326,7 @@
 
 (use-package evil
   :config
-  (setq evil-want-C-i-jump nil)
+  (setq evil-want-C-i-jump t)
   (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
 
 (use-package key-chord
@@ -688,7 +688,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package context-coloring
   :ensure t
-  :diminish context-coloring-mode
   :hook ((js2-mode . context-coloring-mode)
          (emacs-lisp-mode .context-coloring-mode))
   :bind (("C-c oc" . context-coloring-mode)))
@@ -1260,7 +1259,9 @@ This command switches to browser."
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-complete-lisp-symbol-partially try-complete-lisp-symbol))
 
 (use-package company
+  :demand t
   :diminish company-mode
+  :bind (:map company-active-map ("<tab>" . company-complete-selection))
   :config
   (setq company-idle-delay 0.2
         company-tooltip-limit 10
@@ -1281,26 +1282,7 @@ This command switches to browser."
     :config
     (setq company-statistics-file "~/.emacs.d/company-stats-cache.el")
     (company-statistics-mode +1))
-      ;;; Prevent suggestions from being triggered automatically. In particular,
-  ;;; this makes it so that:
-  ;;; - TAB will always complete the current selection.
-  ;;; - RET will only complete the current selection if the user has explicitly
-  ;;;   interacted with Company.
-  ;;; - SPC will never complete the current selection.
-  ;;;
-  (dolist (key '("<return>" "RET"))
-    ;; Here we are using an advanced feature of define-key that lets
-    ;; us pass an "extended menu item" instead of an interactive
-    ;; function. Doing this allows RET to regain its usual
-    ;; functionality when the user has not explicitly interacted with
-    ;; Company.
-    (define-key company-active-map (kbd key)
-      `(menu-item nil company-complete
-                  :filter ,(lambda (cmd)
-                             (when (company-explicit-action-p)
-                               cmd)))))
-  (define-key company-active-map (kbd "TAB") #'company-complete-selection)
-  (define-key company-active-map (kbd "SPC") nil)
+
   (autoload 'company-capf "company-capf")
   (autoload 'company-yasnippet "company-yasnippet")
   (autoload 'company-elisp "company-elisp")
