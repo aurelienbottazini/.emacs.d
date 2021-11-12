@@ -797,7 +797,9 @@ cons cell (regexp . minor-mode)."
 (use-package paredit
    :diminish paredit-mode
    :config
-   (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
+   (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+   (add-hook 'clojure-mode-hook #'paredit-mode)
+   )
 
  (use-package expand-region)
 
@@ -834,6 +836,8 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c og") 'global-hl-line-mode)
  (global-set-key (kbd "C-c op") 'show-paren-mode)
 
+ (global-set-key (kbd "C-c oh") (lambda () (interactive)
+                                 (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
  (use-package rainbow-mode
    :diminish rainbow-mode
    :bind (("C-c or" . rainbow-mode)))
@@ -841,7 +845,7 @@ cons cell (regexp . minor-mode)."
 (global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
 
  (use-package windresize
-   :bind (("C-c o h" . windresize)))
+   :bind (("C-c w r" . windresize)))
 
 (use-package general
   :config
@@ -863,8 +867,7 @@ cons cell (regexp . minor-mode)."
     "r" 'er/expand-region
     "c" (lambda () (interactive) (org-capture nil "n")))
     "h" 'highlight-symbol-at-point
-    "H" (lambda () (interactive)
-                             (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
+    )
 
   (general-define-key
    :states 'normal
