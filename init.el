@@ -861,7 +861,7 @@ cons cell (regexp . minor-mode)."
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
     "r" 'er/expand-region
-
+    "c" (lambda () (interactive) (org-capture nil "n")))
     "h" 'highlight-symbol-at-point
     "H" (lambda () (interactive)
                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
@@ -877,6 +877,10 @@ cons cell (regexp . minor-mode)."
    "] c" 'flycheck-next-error
    "[ e" 'previous-error
    "] e" 'next-error)
+
+  (general-define-key
+   :states 'insert
+   "s-/" 'hippie-expand)
 
   (general-define-key
     "C-s" 'evil-search-forward)
@@ -937,8 +941,6 @@ cons cell (regexp . minor-mode)."
       '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
         ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
-
-(global-set-key (kbd "C-c n n") (lambda () (interactive) (org-capture nil "n")))
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
@@ -1269,7 +1271,7 @@ This command switches to browser."
         company-require-match 'never
         company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-capf))
+          company-backends '((company-files company-capf))
         company-transformers '(company-sort-by-occurrence))
 
   (add-hook 'after-init-hook 'global-company-mode)
@@ -1288,6 +1290,7 @@ This command switches to browser."
   (autoload 'company-elisp "company-elisp")
   (autoload 'company-files "company-files"))
 
+  ;; icons for some company completions
 (use-package company-box
   :hook (company-mode . company-box-mode))
 

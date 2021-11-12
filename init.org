@@ -1253,51 +1253,55 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
- (use-package general
-   :config
+   (use-package general
+     :config
 
-   (general-create-definer my-leader-def
-     ;; :prefix my-leader
-     :prefix "SPC")
+     (general-create-definer my-leader-def
+       ;; :prefix my-leader
+       :prefix "SPC")
 
-   (my-leader-def
-     :states 'normal
-     :keymaps 'override
-     "f" 'counsel-rg
-     "g" 'magit-file-dispatch
-     "p" 'project-find-file
-     "i" 'counsel-imenu
-     "b" 'counsel-buffer-or-recentf
-     "s" 'auray/find-file-with-similar-name
-     "e" 'flycheck-list-errors
-     "r" 'er/expand-region
+     (my-leader-def
+       :states 'normal
+       :keymaps 'override
+       "f" 'counsel-rg
+       "g" 'magit-file-dispatch
+       "p" 'project-find-file
+       "i" 'counsel-imenu
+       "b" 'counsel-buffer-or-recentf
+       "s" 'auray/find-file-with-similar-name
+       "e" 'flycheck-list-errors
+       "r" 'er/expand-region
+       "c" (lambda () (interactive) (org-capture nil "n")))
+       "h" 'highlight-symbol-at-point
+       "H" (lambda () (interactive)
+                                (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
 
-     "h" 'highlight-symbol-at-point
-     "H" (lambda () (interactive)
-                              (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
+     (general-define-key
+      :states 'normal
+      "/" 'evil-search-forward
+      "C-w 0" 'delete-window
+      "C-w o" 'delete-other-windows
+      "[ [" 'previous-buffer
+      "] ]" 'next-buffer
+      "[ c" 'flycheck-previous-error
+      "] c" 'flycheck-next-error
+      "[ e" 'previous-error
+      "] e" 'next-error)
 
-   (general-define-key
-    :states 'normal
-    "/" 'evil-search-forward
-    "C-w 0" 'delete-window
-    "C-w o" 'delete-other-windows
-    "[ [" 'previous-buffer
-    "] ]" 'next-buffer
-    "[ c" 'flycheck-previous-error
-    "] c" 'flycheck-next-error
-    "[ e" 'previous-error
-    "] e" 'next-error)
+     (general-define-key
+      :states 'insert
+      "s-/" 'hippie-expand)
 
-   (general-define-key
-     "C-s" 'evil-search-forward)
+     (general-define-key
+       "C-s" 'evil-search-forward)
 
-   ;; (general-define-key
-   ;;  :states 'normal
-   ;;  :keymaps 'emacs-lisp-mode-map
-   ;;  ;; or xref equivalent
-   ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
-   ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
-   )
+     ;; (general-define-key
+     ;;  :states 'normal
+     ;;  :keymaps 'emacs-lisp-mode-map
+     ;;  ;; or xref equivalent
+     ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
+     ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
+     )
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -1387,16 +1391,15 @@ This is a must to capture ideas quickly.
       '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
         ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
-
-(global-set-key (kbd "C-c n n") (lambda () (interactive) (org-capture nil "n")))
 #+END_SRC
 
 To launch an Emacs client with a capture frame selecting the ~n~ template
 ~emacsclient -ca "" --frame-parameters='(quote (name .
 "global-org-capture"))' -e '(org-capture nil "n")'~.
 
-It works nicely on Linux, however on Mac the focus and input focus
-is sketchy and is not reliable.
+It works nicely on Linux and gives focus immediately.
+On Mac I have an ~Alfred.app~ workflow to launch the command and give
+focus to emacs.
 
 The following takes advantage that I name those capture frame
 ~global-org-capture~ to do some housekeeping around them
@@ -1949,6 +1952,7 @@ company shows a popup where you can select completions with a number
 or with ~enter~. You can also invoke the popup manually with ~C-x
 C-o~
 
+compa
 Use =company-diag= to debug completion problems
 #+BEGIN_SRC emacs-lisp
 (use-package company
@@ -1962,7 +1966,7 @@ Use =company-diag= to debug completion problems
         company-require-match 'never
         company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-capf))
+          company-backends '((company-files company-capf))
         company-transformers '(company-sort-by-occurrence))
 
   (add-hook 'after-init-hook 'global-company-mode)
@@ -1981,6 +1985,7 @@ Use =company-diag= to debug completion problems
   (autoload 'company-elisp "company-elisp")
   (autoload 'company-files "company-files"))
 
+  ;; icons for some company completions
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
