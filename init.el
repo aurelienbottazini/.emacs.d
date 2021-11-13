@@ -1312,7 +1312,12 @@ This command switches to browser."
 
 (use-package paredit-everywhere
   :config
-  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
+  (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
+  (global-set-key (kbd "C-c 9") 'paredit-backward-slurp-sexp)
+  (global-set-key (kbd "C-c 0") 'paredit-forward-slurp-sexp)
+  (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
+  (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
+)
 
 (use-package evil-lispy
   :config
