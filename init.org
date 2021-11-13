@@ -2065,6 +2065,19 @@ C-c C-e R =letter= to export a presentation from your org file
   (evil-set-initial-state 'deadgrep-mode 'emacs))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package paredit-everywhere
+  :config
+  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package evil-lispy
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
+  (add-hook 'clojure-mode-hook #'evil-lispy-mode))
+#+end_src
+
 * Local variables
 
 # Local Variables:

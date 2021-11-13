@@ -1309,3 +1309,12 @@ This command switches to browser."
 (use-package deadgrep
   :config
   (evil-set-initial-state 'deadgrep-mode 'emacs))
+
+(use-package paredit-everywhere
+  :config
+  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
+
+(use-package evil-lispy
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
+  (add-hook 'clojure-mode-hook #'evil-lispy-mode))
