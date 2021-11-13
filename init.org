@@ -251,8 +251,8 @@ stick to fundamental mode and disable expensive minor modes.
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
-(global-visual-line-mode)
+(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
+;; (global-visual-line-mode)
 #+END_SRC
 
 Sentences end with one space after point. The default two space is
@@ -753,7 +753,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB-14")))
+(setq default-frame-alist '((font . "Jetbrains Mono-14")))
 #+end_src
 
 ** Code Folding
@@ -1235,7 +1235,7 @@ Another =M-x= without leaving the home row
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (global-display-line-numbers-mode)
+ ;; (global-display-line-numbers-mode)
  (defun show-line-numbers ()
    (interactive)
    (setq display-line-numbers (quote absolute)))
@@ -2000,17 +2000,19 @@ Other =terminfo= examples are available on the [[https://www.gnu.org/software/em
 
 * Documentation
 #+BEGIN_SRC emacs-lisp
-  (use-package engine-mode
-    :bind (("C-c d c" . engine/search-caniuse)
-           ("C-c d m" . engine/search-mdn)
-           ("C-c d ra" . engine/search-rails)
-           ("C-c d rr" . engine/search-ruby))
-    :config
-    (defengine ruby "https://apidock.com/ruby/search?query=%s")
-    (defengine rails "https://api.rubyonrails.org/?q=%s")
-    (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-    (defengine caniuse "https://caniuse.com/#search=%s")
-    )
+(use-package engine-mode
+  :bind (("C-c d c" . engine/search-caniuse)
+         ("C-c d m" . engine/search-mdn)
+         ("C-c d s" . engine/search-css)
+         ("C-c d ra" . engine/search-rails)
+         ("C-c d rr" . engine/search-ruby))
+  :config
+  (defengine ruby "https://apidock.com/ruby/search?query=%s")
+  (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
+  (defengine rails "https://api.rubyonrails.org/?q=%s")
+  (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
+  (defengine caniuse "https://caniuse.com/#search=%s")
+  )
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

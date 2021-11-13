@@ -157,8 +157,8 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
-(global-visual-line-mode)
+(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
+;; (global-visual-line-mode)
 
 (setq sentence-end-double-space nil)
 
@@ -498,7 +498,7 @@ cons cell (regexp . minor-mode)."
          ("C-+" . 'default-text-scale-increase)
          ("C-M-+" . 'default-text-scale-decrease)))
 
-(setq default-frame-alist '((font . "Operator Mono AB-14")))
+(setq default-frame-alist '((font . "Jetbrains Mono-14")))
 
 (use-package all-the-icons)
 
@@ -827,7 +827,7 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (global-display-line-numbers-mode)
+ ;; (global-display-line-numbers-mode)
  (defun show-line-numbers ()
    (interactive)
    (setq display-line-numbers (quote absolute)))
@@ -1264,10 +1264,12 @@ This command switches to browser."
 (use-package engine-mode
   :bind (("C-c d c" . engine/search-caniuse)
          ("C-c d m" . engine/search-mdn)
+         ("C-c d s" . engine/search-css)
          ("C-c d ra" . engine/search-rails)
          ("C-c d rr" . engine/search-ruby))
   :config
   (defengine ruby "https://apidock.com/ruby/search?query=%s")
+  (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
   (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
   (defengine caniuse "https://caniuse.com/#search=%s")
