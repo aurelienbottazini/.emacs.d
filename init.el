@@ -593,7 +593,14 @@ cons cell (regexp . minor-mode)."
   :mode "\\.html\\'"
   :mode "\\.gohtml\\'"
   :config
-  (setq web-mode-enable-auto-closing t))
+  (setq web-mode-enable-auto-closing t)
+(add-hook
+   'web-mode-hook
+   (lambda ()
+      (setq-local
+       electric-pair-pairs
+       (append electric-pair-pairs '((?< . ?>))))))
+  )
 
 (use-package emmet-mode
   :hook (css-mode sgml-mode web-mode)
