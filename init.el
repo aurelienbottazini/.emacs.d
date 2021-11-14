@@ -181,7 +181,10 @@
 
 (use-package ivy
 :bind (:map ivy-minibuffer-map
-               ("C-c C-c" . ivy-restrict-to-matches)))
+               ("C-c C-c" . ivy-restrict-to-matches)
+               ("C-j" . ivy-next-line-and-call)
+               ("C-k" . ivy-previous-line-and-call)
+))
 :init
 (setq ivy-display-style 'fancy)
 (setq ivy-use-selectable-prompt t)
@@ -695,8 +698,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package context-coloring
   :ensure t
-  :hook ((js2-mode . context-coloring-mode)
-         (emacs-lisp-mode .context-coloring-mode))
+  :hook ((js2-mode . context-coloring-mode))
   :bind (("C-c oc" . context-coloring-mode)))
 
 (add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
@@ -1174,7 +1176,6 @@ This command switches to browser."
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
-
 
 (ivy-add-actions #'project-find-file '(("o" find-file "open")))
 
