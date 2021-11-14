@@ -1773,7 +1773,7 @@ See in the fringe lines added, changed and removed since last commit.
 #+END_SRC
 
 * Projects
-Emacs is not an IDE but I can be pretty close to one.
+Emacs is not an IDE but It can be pretty close to one.
 Here are some tools I use that are IDE oriented.
 
 Emacs now includes ~project.el~ which helps managing projects
@@ -1850,6 +1850,9 @@ IDE code analysis but it works surprisingly well.
     (project--remote-file-names
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
+
+
+(ivy-add-actions #'project-find-file '(("o" find-file "open")))
 #+end_src
 
 * Completion

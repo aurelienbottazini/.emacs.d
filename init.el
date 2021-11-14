@@ -1175,6 +1175,9 @@ This command switches to browser."
      (sort (split-string (shell-command-to-string command) "\0" t)
            #'string<))))
 
+
+(ivy-add-actions #'project-find-file '(("o" find-file "open")))
+
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list))
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol))
