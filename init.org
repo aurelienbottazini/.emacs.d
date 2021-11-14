@@ -1276,11 +1276,12 @@ Another =M-x= without leaving the home row
    (my-leader-def
      :states 'normal
      :keymaps 'override
-     "f" 'deadgrep
+     "f" 'counsel-rg
+     "F" 'deadgrep
      "g" 'magit-file-dispatch
      "p" 'project-find-file
      "i" 'counsel-imenu
-     "b" 'counsel-buffer-or-recentf
+     "b" 'ido-switch-buffer
      "s" 'auray/find-file-with-similar-name
      "e" 'flycheck-list-errors
      "r" 'er/expand-region
@@ -1999,7 +2000,7 @@ corresponding =terminfo= entry
 tic -o ~/.terminfo -x ~/.emacs.d/terminfo-emacs-rgb.src
 #+end_src
 
-Other =terminfo= examples are available on the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
+Other =terminfo= examples are available in the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
 
 * Documentation
 #+BEGIN_SRC emacs-lisp

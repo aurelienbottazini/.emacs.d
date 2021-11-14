@@ -866,11 +866,12 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'normal
     :keymaps 'override
-    "f" 'deadgrep
+    "f" 'counsel-rg
+    "F" 'deadgrep
     "g" 'magit-file-dispatch
     "p" 'project-find-file
     "i" 'counsel-imenu
-    "b" 'counsel-buffer-or-recentf
+    "b" 'ido-switch-buffer
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
     "r" 'er/expand-region
