@@ -1,4 +1,4 @@
-e+title: Aurélien Bottazini's Emacs configuration
+#+title: Aurélien Bottazini's Emacs configuration
 #+OPTIONS: toc:4 h:4
 #+PROPERTY: header-args :results silent :tangle yes
 
