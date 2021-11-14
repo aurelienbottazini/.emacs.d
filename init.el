@@ -839,7 +839,7 @@ cons cell (regexp . minor-mode)."
 
  (global-set-key (kbd "C-c ow") 'visual-line-mode)
  (global-set-key (kbd "C-c of") 'auto-fill-mode)
- (global-hl-line-mode t)
+ (global-hl-line-mode -1)
  (global-set-key (kbd "C-c og") 'global-hl-line-mode)
  (global-set-key (kbd "C-c op") 'show-paren-mode)
 
@@ -876,31 +876,31 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     ))
 
-  (general-define-key
-   :states 'normal
-   "/" 'evil-search-forward
-   "C-w 0" 'delete-window
-   "C-w o" 'delete-other-windows
-   "[ [" 'previous-buffer
-   "] ]" 'next-buffer
-   "[ c" 'flycheck-previous-error
-   "] c" 'flycheck-next-error
-   "[ e" 'previous-error
-   "] e" 'next-error)
+(general-define-key
+ :states 'normal
+ "/" 'evil-search-forward
+ "C-w 0" 'delete-window
+ "C-w o" 'delete-other-windows
+ "[ [" 'previous-buffer
+ "] ]" 'next-buffer
+ "[ c" 'flycheck-previous-error
+ "] c" 'flycheck-next-error
+ "[ e" 'previous-error
+ "] e" 'next-error)
 
-  (general-define-key
-   :states 'insert
-   "s-/" 'hippie-expand)
+(general-define-key
+ :states 'insert
+ "s-/" 'hippie-expand)
 
-  (general-define-key
-    "C-s" 'evil-search-forward)
+(general-define-key
+ :keymaps 'override
+ "C-s" 'evil-search-forward)
 
-  ;; (general-define-key
-  ;;  :states 'normal
-  ;;  :keymaps 'emacs-lisp-mode-map
-  ;;  ;; or xref equivalent
-  ;;  "K" 'elisp-slime-nav-describe-elisp-thing-at-point)
-  ;; ;; `general-def' can be used instead for `evil-define-key'-like syntax
+(general-define-key
+ :keymaps 'evil-motion-state-map
+
+ "C-o" 'previous-buffer
+ "C-i" 'next-buffer)
 
 (use-package hydra
   :config
