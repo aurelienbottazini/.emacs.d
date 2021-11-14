@@ -2010,7 +2010,7 @@ Other =terminfo= examples are available on the [[https://www.gnu.org/software/em
   (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
   (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-  (defengine caniuse "https://caniuse.com/#search=%s")
+  (defengine caniuse "https://caniuse.com/?search=%s")
   )
 #+END_SRC
 
@@ -2050,15 +2050,6 @@ C-c C-e R =letter= to export a presentation from your org file
 #+end_src
 
 * Testing
-
-#+begin_src emacs-lisp
-(use-package ivy-posframe
-:config
-(ivy-posframe-mode 1)
-(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-(setq ivy-posframe-height-alist '(
-(t      . 40))))
-#+end_src
 
 #+begin_src emacs-lisp
 (use-package deadgrep

@@ -36,6 +36,7 @@
  '(electric-pair-mode nil)
  '(electric-quote-string t)
  '(emamux:use-nearest-pane t)
+ '(engine/browser-function 'eww)
  '(evil-mode-line-format nil)
  '(evil-toggle-key "C-c e")
  '(evil-undo-system 'undo-redo)
@@ -59,7 +60,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)
@@ -183,8 +184,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

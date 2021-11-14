@@ -1272,7 +1272,7 @@ This command switches to browser."
   (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
   (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-  (defengine caniuse "https://caniuse.com/#search=%s")
+  (defengine caniuse "https://caniuse.com/?search=%s")
   )
 
 (use-package restclient
@@ -1300,13 +1300,6 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
-(use-package ivy-posframe
-:config
-(ivy-posframe-mode 1)
-(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-(setq ivy-posframe-height-alist '(
-(t      . 40))))
 
 (use-package deadgrep
   :config
