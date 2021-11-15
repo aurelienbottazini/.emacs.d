@@ -866,7 +866,7 @@ Auto-fill comments in prog modes
   )
 #+END_SRC
 ** Ruby
-'#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
@@ -1296,10 +1296,8 @@ Another =M-x= without leaving the home row
     "C-w o" 'delete-other-windows
     "[ [" 'previous-buffer
     "] ]" 'next-buffer
-    "[ c" 'flycheck-previous-error
-    "] c" 'flycheck-next-error
-    "[ e" 'previous-error
-    "] e" 'next-error
+    "[ e" 'flycheck-previous-error
+    "] e" 'flycheck-next-error
     "[ q" 'previous-error
     "] q" 'next-error)
 

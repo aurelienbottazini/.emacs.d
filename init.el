@@ -577,6 +577,49 @@ cons cell (regexp . minor-mode)."
   (setq cider-repl-display-help-banner nil)
   )
 
+(use-package yaml-mode
+  :mode "\\.ya?ml\\'")
+
+(use-package ruby-mode
+  :mode "\\.rake\\'"
+  :mode "Rakefile\\'"
+  :mode "\\.gemspec\\'"
+  :mode "\\.ru\\'"
+  :mode "Gemfile\\'"
+  :mode "Guardfile\\'"
+  :mode "Capfile\\'"
+  :mode "\\.cap\\'"
+  :mode "\\.thor\\'"
+  :mode "\\.rabl\\'"
+  :mode "Thorfile\\'"
+  :mode "Vagrantfile\\'"
+  :mode "\\.jbuilder\\'"
+  :mode "Podfile\\'"
+  :mode "\\.podspec\\'"
+  :mode "Puppetfile\\'"
+  :mode "Berksfile\\'"
+  :mode "Appraisals\\'"
+  :mode "\\.rb$"
+  :mode "ruby"
+  :config
+
+  (add-hook 'ruby-mode-hook 'subword-mode)
+
+  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+  (use-package ruby-interpolation
+    :diminish ruby-interpolation-mode)
+  (use-package ruby-end
+    :diminish ruby-end-mode
+    :config
+    (defun ruby-end-insert-end ()
+      "Closes block by inserting end."
+      (save-excursion
+        (newline)
+        (insert "end")
+        (indent-according-to-mode)))
+    )
+  (use-package rspec-mode))
+
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
     "If comment-dwim is successively called, add => mark."
@@ -886,10 +929,8 @@ cons cell (regexp . minor-mode)."
  "C-w o" 'delete-other-windows
  "[ [" 'previous-buffer
  "] ]" 'next-buffer
- "[ c" 'flycheck-previous-error
- "] c" 'flycheck-next-error
- "[ e" 'previous-error
- "] e" 'next-error
+ "[ e" 'flycheck-previous-error
+ "] e" 'flycheck-next-error
  "[ q" 'previous-error
  "] q" 'next-error)
 
