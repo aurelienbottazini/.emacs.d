@@ -858,12 +858,8 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
- (global-set-key (kbd "C-c jg") (lambda () (interactive) (find-file "~/Dropbox/org/gtd.org")))
- (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
  (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
  (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
- (global-set-key (kbd "C-c ji") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "/org/inbox.org"))))
- (global-set-key (kbd "C-c jr") (lambda () (interactive) (find-file (concat **local-dropbox-folder** "org/references-notes"))))
  (global-set-key (kbd "C-c jj") 'dired-jump)
  (global-set-key (kbd "C-c k") 'recompile)
  (global-set-key (kbd "C-c K") 'compile)
@@ -980,7 +976,7 @@ cons cell (regexp . minor-mode)."
  :init
  (setq deft-extensions '("org" "md")
        deft-recursive t
-       deft-directory "~/Dropbox/org/"))
+       deft-directory "~/Dropbox/notes/"))
 
 (use-package markdown-mode
  :mode "\\.md\\'")
