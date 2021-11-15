@@ -889,7 +889,9 @@ cons cell (regexp . minor-mode)."
  "[ c" 'flycheck-previous-error
  "] c" 'flycheck-next-error
  "[ e" 'previous-error
- "] e" 'next-error)
+ "] e" 'next-error
+ "[ q" 'previous-error
+ "] q" 'next-error)
 
 (general-define-key
  :states 'insert

@@ -1266,54 +1266,56 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
- (use-package general
-   :config
+   (use-package general
+     :config
 
-   (general-create-definer my-leader-def
-     ;; :prefix my-leader
-     :prefix "SPC")
+     (general-create-definer my-leader-def
+       ;; :prefix my-leader
+       :prefix "SPC")
 
-   (my-leader-def
-     :states 'normal
-     :keymaps 'override
-     "f" 'counsel-rg
-     "F" 'deadgrep
-     "g" 'magit-file-dispatch
-     "p" 'project-find-file
-     "i" 'counsel-imenu
-     "b" 'ido-switch-buffer
-     "s" 'auray/find-file-with-similar-name
-     "e" 'flycheck-list-errors
-     "r" 'er/expand-region
-     "c" (lambda () (interactive) (org-capture nil "n"))
-     "h" 'highlight-symbol-at-point
-     ))
+     (my-leader-def
+       :states 'normal
+       :keymaps 'override
+       "f" 'counsel-rg
+       "F" 'deadgrep
+       "g" 'magit-file-dispatch
+       "p" 'project-find-file
+       "i" 'counsel-imenu
+       "b" 'ido-switch-buffer
+       "s" 'auray/find-file-with-similar-name
+       "e" 'flycheck-list-errors
+       "r" 'er/expand-region
+       "c" (lambda () (interactive) (org-capture nil "n"))
+       "h" 'highlight-symbol-at-point
+       ))
 
- (general-define-key
-  :states 'normal
-  "/" 'evil-search-forward
-  "C-w 0" 'delete-window
-  "C-w o" 'delete-other-windows
-  "[ [" 'previous-buffer
-  "] ]" 'next-buffer
-  "[ c" 'flycheck-previous-error
-  "] c" 'flycheck-next-error
-  "[ e" 'previous-error
-  "] e" 'next-error)
+   (general-define-key
+    :states 'normal
+    "/" 'evil-search-forward
+    "C-w 0" 'delete-window
+    "C-w o" 'delete-other-windows
+    "[ [" 'previous-buffer
+    "] ]" 'next-buffer
+    "[ c" 'flycheck-previous-error
+    "] c" 'flycheck-next-error
+    "[ e" 'previous-error
+    "] e" 'next-error
+    "[ q" 'previous-error
+    "] q" 'next-error)
 
- (general-define-key
-  :states 'insert
-  "s-/" 'hippie-expand)
+   (general-define-key
+    :states 'insert
+    "s-/" 'hippie-expand)
 
- (general-define-key
-  :keymaps 'override
-  "C-s" 'evil-search-forward)
+   (general-define-key
+    :keymaps 'override
+    "C-s" 'evil-search-forward)
 
- (general-define-key
-  :keymaps 'evil-motion-state-map
+   (general-define-key
+    :keymaps 'evil-motion-state-map
 
-  "C-o" 'previous-buffer
-  "C-i" 'next-buffer)
+    "C-o" 'previous-buffer
+    "C-i" 'next-buffer)
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
