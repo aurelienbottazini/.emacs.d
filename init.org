@@ -525,7 +525,7 @@ keybindings by default.
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package zenburn-theme
 :custom-face
  (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
@@ -556,6 +556,16 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
  :config
  (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
  (load-theme 'zenburn t))
+#+end_src
+
+https://github.com/greduan/emacs-theme-gruvbox
+#+begin_src emacs-lisp
+(use-package gruvbox-theme
+ :config
+  (setq auray/default-color '("#504945" "#afaf00" . "#ffaf00"))
+  (load-theme 'gruvbox)
+)
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1223,6 +1233,7 @@ Another =M-x= without leaving the home row
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
+ (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
  (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
  (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
  (global-set-key (kbd "C-c jj") 'dired-jump)

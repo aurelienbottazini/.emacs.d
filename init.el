@@ -338,36 +338,11 @@
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
-(use-package zenburn-theme
-:custom-face
- (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
- (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
- (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
- (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
- (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
- (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
- (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
- (org-block ((t (:extend t :background "#333333"))))
- (org-drawer ((t (:foreground "#f0dfaf"))))
- (org-level-1 ((t (:inherit default :extend nil :foreground "#DFAF8F" :slant italic :height 1.5))))
- (org-level-2 ((t (:inherit default :extend nil :foreground "#BFEBBF" :slant italic :height 1.3))))
- (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
- (org-meta-line ((t (:inherit font-lock-comment-face))))
- (region ((t (:extend t :background "#adcff1" :foreground "black"))))
- (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.1))))
- (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90"))))
- (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
- (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :slant italic))))
- (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
- (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
- (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
- (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
- (tab-line-tab-modified ((t (:foreground "#e89393"))))
- (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
+(use-package gruvbox-theme
  :config
- (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
- (load-theme 'zenburn t))
+  (setq auray/default-color '("#504945" "#afaf00" . "#ffaf00"))
+  (load-theme 'gruvbox)
+)
 
 (use-package doom-modeline
   :ensure t
@@ -858,6 +833,7 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
+ (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
  (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
  (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
  (global-set-key (kbd "C-c jj") 'dired-jump)
