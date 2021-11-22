@@ -1,3 +1,4 @@
+
 ;;; auray-find-in-project.el --- Utilities to navigate files in a project  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021
@@ -41,5 +42,34 @@
      (t (find-file (ido-completing-read
                     "Alternate files: "
                     alternate-files))))))
+
+(defun auray/project-guess-file ()
+  "Find file using current word as a guess"
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr)))
+         (results
+                    (split-string
+                     (shell-command-to-string
+                      (concat
+                       "fd --hidden -p '.*" (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))) ".*' $(git rev-parse --show-toplevel)"
+                       )))))
+
+    (cond
+     ((zerop (length results)) (message "Cannot guess"))
+     ((equal 1 (length results)) (find-file (car results)))
+     (t (find-file (ido-completing-read "Guessed files: " results)))
+     )
+
+    ))
+
+(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
+
+(defun auray/project-find-file ()
+  "Visit a file (with completion) in the current project."
+  (interactive)
+  (let* ((pr (project-current t))
+         (dirs (list (project-root pr))))
+  (counsel-fzf nil (project-root (project-current t)))))
 
 (provide 'auray/find-in-project)
