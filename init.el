@@ -849,7 +849,6 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (setq-default display-line-numbers 'relative)
  (global-display-line-numbers-mode 1)
  (defun show-line-numbers ()
    (interactive)
