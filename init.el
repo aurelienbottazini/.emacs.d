@@ -849,8 +849,8 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (global-display-line-numbers-mode)
- (setq display-line-numbers 'relative)
+ (setq-default display-line-numbers 'relative)
+ (global-display-line-numbers-mode 1)
  (defun show-line-numbers ()
    (interactive)
    (setq display-line-numbers 'absolute))
@@ -906,6 +906,7 @@ cons cell (regexp . minor-mode)."
 (general-define-key
  :states 'normal
  "/" 'evil-search-forward
+ (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
  "[ [" 'previous-buffer

@@ -1260,8 +1260,8 @@ Another =M-x= without leaving the home row
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (global-display-line-numbers-mode)
- (setq display-line-numbers 'relative)
+ (setq-default display-line-numbers 'relative)
+ (global-display-line-numbers-mode 1)
  (defun show-line-numbers ()
    (interactive)
    (setq display-line-numbers 'absolute))
@@ -1293,48 +1293,49 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
-    (use-package general
-      :config
+ (use-package general
+   :config
 
-      (general-create-definer my-leader-def
-        ;; :prefix my-leader
-        :prefix "SPC")
+   (general-create-definer my-leader-def
+     ;; :prefix my-leader
+     :prefix "SPC")
 
-      (my-leader-def
-        :states 'normal
-        :keymaps 'override
-        "f" 'counsel-rg
-        "F" 'deadgrep
-        "g" 'magit-file-dispatch
-        "p" 'project-find-file
-        "i" 'counsel-imenu
-        "b" 'ido-switch-buffer
-        "s" 'auray/find-file-with-similar-name
-        "e" 'flycheck-list-errors
-        "r" 'er/expand-region
-        "c" (lambda () (interactive) (org-capture nil "n"))
-        "h" 'highlight-symbol-at-point
-        ))
-
-    (general-define-key
+   (my-leader-def
      :states 'normal
-     "/" 'evil-search-forward
-     "C-w 0" 'delete-window
-     "C-w o" 'delete-other-windows
-     "[ [" 'previous-buffer
-     "] ]" 'next-buffer
-     "[ e" 'flycheck-previous-error
-     "] e" 'flycheck-next-error
-     "[ q" 'previous-error
-     "] q" 'next-error)
-
-    (general-define-key
-     :states 'insert
-     "s-/" 'hippie-expand)
-
-    (general-define-key
      :keymaps 'override
-     "C-s" 'evil-search-forward)
+     "f" 'counsel-rg
+     "F" 'deadgrep
+     "g" 'magit-file-dispatch
+     "p" 'project-find-file
+     "i" 'counsel-imenu
+     "b" 'ido-switch-buffer
+     "s" 'auray/find-file-with-similar-name
+     "e" 'flycheck-list-errors
+     "r" 'er/expand-region
+     "c" (lambda () (interactive) (org-capture nil "n"))
+     "h" 'highlight-symbol-at-point
+     ))
+
+ (general-define-key
+  :states 'normal
+  "/" 'evil-search-forward
+  (kbd "DEL") 'evil-switch-to-windows-last-buffer
+  "C-w 0" 'delete-window
+  "C-w o" 'delete-other-windows
+  "[ [" 'previous-buffer
+  "] ]" 'next-buffer
+  "[ e" 'flycheck-previous-error
+  "] e" 'flycheck-next-error
+  "[ q" 'previous-error
+  "] q" 'next-error)
+
+ (general-define-key
+  :states 'insert
+  "s-/" 'hippie-expand)
+
+ (general-define-key
+  :keymaps 'override
+  "C-s" 'evil-search-forward)
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp

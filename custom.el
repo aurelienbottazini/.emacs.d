@@ -25,7 +25,7 @@
  '(deft-use-filename-as-title t)
  '(deft-use-filter-string-for-filename t)
  '(delete-trailing-lines nil)
- '(display-line-numbers nil)
+ '(display-line-numbers 'visual)
  '(display-line-numbers-type t)
  '(doom-modeline-buffer-encoding t)
  '(doom-modeline-buffer-modification-icon t)
@@ -60,7 +60,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)
@@ -191,4 +191,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(doom-modeline-buffer-modified ((t (:background "#ffaf00" :foreground "#1d2021")))))
+ '(doom-modeline-buffer-modified ((t (:background "#ffaf00" :foreground "#1d2021"))))
+ '(evil-search-highlight-persist-highlight-face ((t (:background "yellow1" :foreground "black")))))
