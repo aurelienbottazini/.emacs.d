@@ -4,6 +4,7 @@
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
+
 (add-hook 'emacs-startup-hook (lambda ()
                                 (setq gc-cons-threshold 16777216
                                       gc-cons-percentage 0.1
@@ -921,12 +922,6 @@ cons cell (regexp . minor-mode)."
 (general-define-key
  :keymaps 'override
  "C-s" 'evil-search-forward)
-
-(general-define-key
- :keymaps 'evil-motion-state-map
-
- "C-o" 'previous-buffer
- "C-i" 'next-buffer)
 
 (use-package hydra
   :config

@@ -11,6 +11,7 @@ Adjusts garbage collector for faster startup.
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
+
 (add-hook 'emacs-startup-hook (lambda ()
                                 (setq gc-cons-threshold 16777216
                                       gc-cons-percentage 0.1
@@ -1292,54 +1293,48 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
-   (use-package general
-     :config
+    (use-package general
+      :config
 
-     (general-create-definer my-leader-def
-       ;; :prefix my-leader
-       :prefix "SPC")
+      (general-create-definer my-leader-def
+        ;; :prefix my-leader
+        :prefix "SPC")
 
-     (my-leader-def
-       :states 'normal
-       :keymaps 'override
-       "f" 'counsel-rg
-       "F" 'deadgrep
-       "g" 'magit-file-dispatch
-       "p" 'project-find-file
-       "i" 'counsel-imenu
-       "b" 'ido-switch-buffer
-       "s" 'auray/find-file-with-similar-name
-       "e" 'flycheck-list-errors
-       "r" 'er/expand-region
-       "c" (lambda () (interactive) (org-capture nil "n"))
-       "h" 'highlight-symbol-at-point
-       ))
+      (my-leader-def
+        :states 'normal
+        :keymaps 'override
+        "f" 'counsel-rg
+        "F" 'deadgrep
+        "g" 'magit-file-dispatch
+        "p" 'project-find-file
+        "i" 'counsel-imenu
+        "b" 'ido-switch-buffer
+        "s" 'auray/find-file-with-similar-name
+        "e" 'flycheck-list-errors
+        "r" 'er/expand-region
+        "c" (lambda () (interactive) (org-capture nil "n"))
+        "h" 'highlight-symbol-at-point
+        ))
 
-   (general-define-key
-    :states 'normal
-    "/" 'evil-search-forward
-    "C-w 0" 'delete-window
-    "C-w o" 'delete-other-windows
-    "[ [" 'previous-buffer
-    "] ]" 'next-buffer
-    "[ e" 'flycheck-previous-error
-    "] e" 'flycheck-next-error
-    "[ q" 'previous-error
-    "] q" 'next-error)
+    (general-define-key
+     :states 'normal
+     "/" 'evil-search-forward
+     "C-w 0" 'delete-window
+     "C-w o" 'delete-other-windows
+     "[ [" 'previous-buffer
+     "] ]" 'next-buffer
+     "[ e" 'flycheck-previous-error
+     "] e" 'flycheck-next-error
+     "[ q" 'previous-error
+     "] q" 'next-error)
 
-   (general-define-key
-    :states 'insert
-    "s-/" 'hippie-expand)
+    (general-define-key
+     :states 'insert
+     "s-/" 'hippie-expand)
 
-   (general-define-key
-    :keymaps 'override
-    "C-s" 'evil-search-forward)
-
-   (general-define-key
-    :keymaps 'evil-motion-state-map
-
-    "C-o" 'previous-buffer
-    "C-i" 'next-buffer)
+    (general-define-key
+     :keymaps 'override
+     "C-s" 'evil-search-forward)
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
