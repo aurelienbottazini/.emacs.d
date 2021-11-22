@@ -157,8 +157,8 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
-;; (global-visual-line-mode)
+(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
+(global-visual-line-mode)
 
 (setq sentence-end-double-space nil)
 
@@ -268,6 +268,7 @@
 (global-set-key (kbd "C-l") 'tmux-move-right)
 
 (use-package evil
+  :init
   :config
   (defun my-evil-record-macro ()
     (interactive)
@@ -305,6 +306,8 @@
 (use-package evil-visualstar
   :after evil
   :config
+  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (global-evil-visualstar-mode t))
 
 (use-package evil-matchit
@@ -700,19 +703,7 @@ cons cell (regexp . minor-mode)."
                         "--trailing-comma" "es5"
                         "--single-quote" "true"
                         )
-        prettier-js-command "prettier"))
-
-(defun eslint-fix-file ()
-  (interactive)
-  (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
-  (shell-command (concat "eslint --quiet --fix " (buffer-file-name))))
-(defun eslint-fix-file-and-revert ()
-  (interactive)
-  (eslint-fix-file)
-  (revert-buffer t t))
-(add-hook 'js-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
+        prettier-js-command "/home/auray/.local/share/npm/bin/prettier"))
 
 (use-package context-coloring
   :ensure t
@@ -781,11 +772,24 @@ cons cell (regexp . minor-mode)."
                   (or (buffer-file-name) default-directory)
                   "node_modules"))
            (eslint (and root
-                        (expand-file-name "node_modules/eslint/bin/eslint.js"
+                        (expand-file-name "node_modules/.bin/eslint"
                                           root))))
       (when (and eslint (file-executable-p eslint))
         (setq-local flycheck-javascript-eslint-executable eslint))))
   (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
+(defun eslint-fix-file ()
+  (interactive)
+  (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
+  (shell-command (concat flycheck-javascript-eslint-executable " --quiet --fix " (buffer-file-name))))
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
+(add-hook 'js-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
+
 
 (define-derived-mode cfn-mode yaml-mode
   "Cloudformation"
@@ -844,16 +848,20 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- ;; (global-display-line-numbers-mode)
+ (global-display-line-numbers-mode)
+ (setq display-line-numbers 'relative)
  (defun show-line-numbers ()
    (interactive)
-   (setq display-line-numbers (quote absolute)))
+   (setq display-line-numbers 'absolute))
  (global-set-key (kbd "C-c oll") 'show-line-numbers)
  (defun hide-line-numbers ()
    (interactive)
-   (setq display-line-numbers (quote nil)))
+   (setq display-line-numbers 'nil))
  (global-set-key (kbd "C-c olh") 'hide-line-numbers)
-
+ (defun show-relative-line-numbers ()
+   (interactive)
+   (setq display-line-numbers 'relative))
+ (global-set-key (kbd "C-c olr") 'show-relative-line-numbers)
  (global-set-key (kbd "C-c ow") 'visual-line-mode)
  (global-set-key (kbd "C-c of") 'auto-fill-mode)
  (global-hl-line-mode -1)

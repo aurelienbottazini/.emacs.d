@@ -60,7 +60,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)

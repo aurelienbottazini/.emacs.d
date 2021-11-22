@@ -24,3 +24,5 @@ var/prescient-save.el
 /.org-id-locations
 /eln-cache/
 /init.org.rej
+/elpa/gnupg/
+/elpa/archives/gnu/archive-contents.signed
