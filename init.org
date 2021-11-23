@@ -2100,13 +2100,13 @@ C-c C-e R =letter= to export a presentation from your org file
 (require 'tree-sitter-langs))
 
 (use-package multiple-cursors)
-;; (use-package combobulate
-;;   ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
-;;   :hook ((python-mode . combobulate-mode)
-;;          (js-mode . combobulate-mode)
-;;          (typescript-mode . combobulate-mode))
-;;   :load-path "./site-lisp/combobulate/"
-;;   )
+(use-package combobulate
+  ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
+  :hook ((python-mode . combobulate-mode)
+         (js-mode . combobulate-mode)
+         (typescript-mode . combobulate-mode))
+  :load-path "./site-lisp/combobulate/"
+  )
 #+end_src
 
 * Local variables

@@ -1342,10 +1342,10 @@ This command switches to browser."
 (require 'tree-sitter-langs))
 
 (use-package multiple-cursors)
-;; (use-package combobulate
-;;   ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
-;;   :hook ((python-mode . combobulate-mode)
-;;          (js-mode . combobulate-mode)
-;;          (typescript-mode . combobulate-mode))
-;;   :load-path "./site-lisp/combobulate/"
-;;   )
+(use-package combobulate
+  ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
+  :hook ((python-mode . combobulate-mode)
+         (js-mode . combobulate-mode)
+         (typescript-mode . combobulate-mode))
+  :load-path "./site-lisp/combobulate/"
+  )
