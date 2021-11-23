@@ -44,7 +44,7 @@
                     alternate-files))))))
 
 (defun auray/project-guess-file ()
-  "Find file using current word as a guess"
+  "Find file using current word as a guess. There are adjustements made from my workflow. For example this is made to navigate file imports. I rarely import test file so to make the navigation quicker I excluded test files from the results."
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr)))
@@ -52,7 +52,7 @@
                     (split-string
                      (shell-command-to-string
                       (concat
-                       "fd --hidden -p '.*" (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))) ".*' $(git rev-parse --show-toplevel)"
+                       "fd --hidden --exclude '*.spec.*' -p '.*" (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))) ".*' $(git rev-parse --show-toplevel)"
                        )))))
 
     (cond
