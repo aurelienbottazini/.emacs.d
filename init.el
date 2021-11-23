@@ -894,7 +894,8 @@ cons cell (regexp . minor-mode)."
     "g" 'magit-file-dispatch
     "p" 'project-find-file
     "i" 'counsel-imenu
-    "b" 'ido-switch-buffer
+    "b" 'project-switch-to-buffer
+    "B" 'ido-switch-buffer
     "s" 'auray/find-file-with-similar-name
     "e" 'flycheck-list-errors
     "r" 'er/expand-region
