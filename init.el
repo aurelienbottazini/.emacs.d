@@ -908,6 +908,7 @@ cons cell (regexp . minor-mode)."
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
+ "C-p" 'project-find-file
  "[ [" 'previous-buffer
  "] ]" 'next-buffer
  "[ e" 'flycheck-previous-error
@@ -921,6 +922,7 @@ cons cell (regexp . minor-mode)."
 
 (general-define-key
  :keymaps 'override
+ "C-p" 'project-find-file
  "C-s" 'evil-search-forward)
 
 (use-package hydra

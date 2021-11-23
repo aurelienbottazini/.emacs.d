@@ -1321,6 +1321,7 @@ Another =M-x= without leaving the home row
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
+  "C-p" 'project-find-file
   "[ [" 'previous-buffer
   "] ]" 'next-buffer
   "[ e" 'flycheck-previous-error
@@ -1334,6 +1335,7 @@ Another =M-x= without leaving the home row
 
  (general-define-key
   :keymaps 'override
+  "C-p" 'project-find-file
   "C-s" 'evil-search-forward)
 #+end_src
 ** Hydra
