@@ -2087,6 +2087,28 @@ C-c C-e R =letter= to export a presentation from your org file
   (add-hook 'clojure-mode-hook #'evil-lispy-mode))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package tree-sitter
+:config
+(require 'tree-sitter)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+)
+
+(use-package tree-sitter-langs
+:config
+(require 'tree-sitter-langs))
+
+(use-package multiple-cursors)
+;; (use-package combobulate
+;;   ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
+;;   :hook ((python-mode . combobulate-mode)
+;;          (js-mode . combobulate-mode)
+;;          (typescript-mode . combobulate-mode))
+;;   :load-path "./site-lisp/combobulate/"
+;;   )
+#+end_src
+
 * Local variables
 
 # Local Variables:

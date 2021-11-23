@@ -1329,3 +1329,23 @@ This command switches to browser."
   :config
   (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
   (add-hook 'clojure-mode-hook #'evil-lispy-mode))
+
+(use-package tree-sitter
+:config
+(require 'tree-sitter)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+)
+
+(use-package tree-sitter-langs
+:config
+(require 'tree-sitter-langs))
+
+(use-package multiple-cursors)
+;; (use-package combobulate
+;;   ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
+;;   :hook ((python-mode . combobulate-mode)
+;;          (js-mode . combobulate-mode)
+;;          (typescript-mode . combobulate-mode))
+;;   :load-path "./site-lisp/combobulate/"
+;;   )
