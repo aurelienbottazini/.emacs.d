@@ -886,22 +886,23 @@ cons cell (regexp . minor-mode)."
     ;; :prefix my-leader
     :prefix "SPC")
 
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "f" 'counsel-rg
-    "F" 'deadgrep
-    "g" 'magit-file-dispatch
-    "p" 'project-find-file
-    "i" 'counsel-imenu
-    "b" 'project-switch-to-buffer
-    "B" 'ido-switch-buffer
-    "s" 'auray/find-file-with-similar-name
-    "e" 'flycheck-list-errors
-    "r" 'er/expand-region
-    "c" (lambda () (interactive) (org-capture nil "n"))
-    "h" 'highlight-symbol-at-point
-    ))
+(setq evil-search-module 'evil-search)
+(my-leader-def
+  :states 'normal
+  :keymaps 'override
+  "f" 'counsel-rg
+  "F" 'deadgrep
+  "g" 'magit-file-dispatch
+  "p" 'project-find-file
+  "i" 'counsel-imenu
+  "b" 'project-switch-to-buffer
+  "B" 'switch-to-buffer
+  "s" 'auray/find-file-with-similar-name
+  "e" 'flycheck-list-errors
+  "r" 'er/expand-region
+  "c" (lambda () (interactive) (org-capture nil "n"))
+  "h" 'highlight-symbol-at-point
+  ))
 
 (general-define-key
  :states 'normal
@@ -924,6 +925,8 @@ cons cell (regexp . minor-mode)."
 (general-define-key
  :keymaps 'override
  "C-p" 'project-find-file
+ "C-x b" 'project-switch-to-buffer
+ "C-x B" 'switch-to-buffer
  "C-s" 'evil-search-forward)
 
 (use-package hydra
