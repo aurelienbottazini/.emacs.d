@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: readFileSync
+# key: rea
+# --
+const fs = require('fs')
+
+try {
+  const data = fs.readFileSync('$0', 'utf8')
+  console.log(data)
+} catch (err) {
+  console.error(err)
+}
