@@ -56,7 +56,7 @@
  '(ispell-highlight-face 'flyspell-incorrect)
  '(ispell-program-name "/usr/bin/hunspell")
  '(ivy-posframe-border-width 5)
- '(ivy-posframe-mode t nil (ivy-posframe))
+ '(ivy-posframe-mode t)
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy")
      (ivy--regex-ignore-order . "order")

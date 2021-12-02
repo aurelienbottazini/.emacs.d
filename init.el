@@ -262,7 +262,6 @@
 (global-set-key (kbd "C-h") 'tmux-move-left)
 
 (global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
 (define-key org-mode-map (kbd "C-j") 'tmux-move-down)
 (define-key org-mode-map (kbd "C-c m") 'org-refile)
 
@@ -868,6 +867,7 @@ cons cell (regexp . minor-mode)."
    :config
    (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
    (add-hook 'clojure-mode-hook #'paredit-mode)
+   (define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
    )
 
  (use-package expand-region)
