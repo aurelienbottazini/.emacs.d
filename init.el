@@ -929,7 +929,7 @@ cons cell (regexp . minor-mode)."
   "f" 'counsel-rg
   "F" 'deadgrep
   "g" 'magit-file-dispatch
-  "p" 'project-find-file
+  "p" 'projectile-command-map
   "i" 'counsel-imenu
   "b" 'project-switch-to-buffer
   "B" 'switch-to-buffer
@@ -941,6 +941,7 @@ cons cell (regexp . minor-mode)."
   "x" 'emamux:run-last-command
   "X" 'emamux:send-command
   )
+
 
 (my-leader-def
   :states 'visual
@@ -954,7 +955,7 @@ cons cell (regexp . minor-mode)."
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
- "C-p" 'project-find-file
+ "C-p" 'projectile-find-file
  "[ [" 'previous-buffer
  "] ]" 'next-buffer
  "[ e" 'flycheck-previous-error
@@ -1198,36 +1199,35 @@ This command switches to browser."
 
 (setq project-switch-commands 'project-dired)
 
-(use-package el-patch)
-(el-patch-defun project--files-in-directory (dir ignores &optional files)
-  (el-patch-remove
-    (require 'find-dired)
-    (require 'xref)
-    (defvar find-name-arg))
-  (let* ((default-directory dir)
-         ;; Make sure ~/ etc. in local directory name is
-         ;; expanded and not left for the shell command
-         ;; to interpret.
-         (localdir (file-local-name (expand-file-name dir)))
-         (command (el-patch-swap
-                    (format "%s %s %s -type f %s -print0"
-                            find-program
-                            localdir
-                            (xref--find-ignores-arguments ignores localdir)
-                            (if files
-                                (concat (shell-quote-argument "(")
-                                        " " find-name-arg " "
-                                        (mapconcat
-                                         #'shell-quote-argument
-                                         (split-string files)
-                                         (concat " -o " find-name-arg " "))
-                                        " "
-                                        (shell-quote-argument ")"))
-                              ""))
-                    (format "fd -t f -0 . %s" localdir))))
-    (project--remote-file-names
-     (sort (split-string (shell-command-to-string command) "\0" t)
-           #'string<))))
+;; (el-patch-defun project--files-in-directory (dir ignores &optional files)
+;;   (el-patch-remove
+;;     (require 'find-dired)
+;;     (require 'xref)
+;;     (defvar find-name-arg))
+;;   (let* ((default-directory dir)
+;;          ;; Make sure ~/ etc. in local directory name is
+;;          ;; expanded and not left for the shell command
+;;          ;; to interpret.
+;;          (localdir (file-local-name (expand-file-name dir)))
+;;          (command (el-patch-swap
+;;                     (format "%s %s %s -type f %s -print0"
+;;                             find-program
+;;                             localdir
+;;                             (xref--find-ignores-arguments ignores localdir)
+;;                             (if files
+;;                                 (concat (shell-quote-argument "(")
+;;                                         " " find-name-arg " "
+;;                                         (mapconcat
+;;                                          #'shell-quote-argument
+;;                                          (split-string files)
+;;                                          (concat " -o " find-name-arg " "))
+;;                                         " "
+;;                                         (shell-quote-argument ")"))
+;;                               ""))
+;;                     (format "fd -t f -0 . %s" localdir))))
+;;     (project--remote-file-names
+;;      (sort (split-string (shell-command-to-string command) "\0" t)
+;;            #'string<))))
 
 (ivy-add-actions #'project-find-file '(("o" find-file "open")))
 
@@ -1373,3 +1373,8 @@ This command switches to browser."
 (use-package emamux
 :init
 (setq emamux:use-nearest-pane 1))
+
+(use-package projectile
+:config
+(projectile-mode +1)
+)
