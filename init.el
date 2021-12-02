@@ -919,7 +919,6 @@ cons cell (regexp . minor-mode)."
   :config
 
   (general-create-definer my-leader-def
-    ;; :prefix my-leader
     :prefix "SPC")
 
 (setq evil-search-module 'evil-search)
@@ -939,8 +938,14 @@ cons cell (regexp . minor-mode)."
   "c" (lambda () (interactive) (org-capture nil "n"))
   "h" 'highlight-symbol-at-point
   "x" 'emamux:run-last-command
-  "X" 'emamux:send-region
-  ))
+  "X" 'emamux:send-command
+  )
+
+(my-leader-def
+  :states 'visual
+  :keymaps 'override
+  "x" 'emamux:send-region)
+
 
 (general-define-key
  :states 'normal
@@ -966,6 +971,7 @@ cons cell (regexp . minor-mode)."
  "C-x b" 'project-switch-to-buffer
  "C-x B" 'switch-to-buffer
  "C-s" 'evil-search-forward)
+)
 
 (use-package hydra
   :config
@@ -1362,31 +1368,6 @@ This command switches to browser."
   (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
   (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
 )
-
-(use-package evil-lispy
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-  (add-hook 'clojure-mode-hook #'evil-lispy-mode))
-
-(use-package tree-sitter
-:config
-(require 'tree-sitter)
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-)
-
-(use-package tree-sitter-langs
-:config
-(require 'tree-sitter-langs))
-
-(use-package multiple-cursors)
-(use-package combobulate
-  ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
-  :hook ((python-mode . combobulate-mode)
-         (js-mode . combobulate-mode)
-         (typescript-mode . combobulate-mode))
-  :load-path "./site-lisp/combobulate/"
-  )
 
 (use-package emamux
 :init

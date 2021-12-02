@@ -1293,57 +1293,63 @@ Another =M-x= without leaving the home row
 #+END_SRC
 
  #+begin_src emacs-lisp
- (use-package general
-   :config
+   (use-package general
+     :config
 
-   (general-create-definer my-leader-def
-     ;; :prefix my-leader
-     :prefix "SPC")
+     (general-create-definer my-leader-def
+       :prefix "SPC")
 
- (setq evil-search-module 'evil-search)
- (my-leader-def
-   :states 'normal
-   :keymaps 'override
-   "f" 'counsel-rg
-   "F" 'deadgrep
-   "g" 'magit-file-dispatch
-   "p" 'project-find-file
-   "i" 'counsel-imenu
-   "b" 'project-switch-to-buffer
-   "B" 'switch-to-buffer
-   "s" 'auray/find-file-with-similar-name
-   "e" 'flycheck-list-errors
-   "r" 'er/expand-region
-   "c" (lambda () (interactive) (org-capture nil "n"))
-   "h" 'highlight-symbol-at-point
-   "x" 'emamux:run-last-command
-   "X" 'emamux:send-region
-   ))
+   (setq evil-search-module 'evil-search)
+   (my-leader-def
+     :states 'normal
+     :keymaps 'override
+     "f" 'counsel-rg
+     "F" 'deadgrep
+     "g" 'magit-file-dispatch
+     "p" 'project-find-file
+     "i" 'counsel-imenu
+     "b" 'project-switch-to-buffer
+     "B" 'switch-to-buffer
+     "s" 'auray/find-file-with-similar-name
+     "e" 'flycheck-list-errors
+     "r" 'er/expand-region
+     "c" (lambda () (interactive) (org-capture nil "n"))
+     "h" 'highlight-symbol-at-point
+     "x" 'emamux:run-last-command
+     "X" 'emamux:send-command
+     )
 
- (general-define-key
-  :states 'normal
-  "/" 'evil-search-forward
-  (kbd "DEL") 'evil-switch-to-windows-last-buffer
-  "C-w 0" 'delete-window
-  "C-w o" 'delete-other-windows
-  "C-p" 'project-find-file
-  "[ [" 'previous-buffer
-  "] ]" 'next-buffer
-  "[ e" 'flycheck-previous-error
-  "] e" 'flycheck-next-error
-  "[ q" 'previous-error
-  "] q" 'next-error)
+   (my-leader-def
+     :states 'visual
+     :keymaps 'override
+     "x" 'emamux:send-region)
 
- (general-define-key
-  :states 'insert
-  "s-/" 'hippie-expand)
 
- (general-define-key
-  :keymaps 'override
-  "C-p" 'project-find-file
-  "C-x b" 'project-switch-to-buffer
-  "C-x B" 'switch-to-buffer
-  "C-s" 'evil-search-forward)
+   (general-define-key
+    :states 'normal
+    "/" 'evil-search-forward
+    (kbd "DEL") 'evil-switch-to-windows-last-buffer
+    "C-w 0" 'delete-window
+    "C-w o" 'delete-other-windows
+    "C-p" 'project-find-file
+    "[ [" 'previous-buffer
+    "] ]" 'next-buffer
+    "[ e" 'flycheck-previous-error
+    "] e" 'flycheck-next-error
+    "[ q" 'previous-error
+    "] q" 'next-error)
+
+   (general-define-key
+    :states 'insert
+    "s-/" 'hippie-expand)
+
+   (general-define-key
+    :keymaps 'override
+    "C-p" 'project-find-file
+    "C-x b" 'project-switch-to-buffer
+    "C-x B" 'switch-to-buffer
+    "C-s" 'evil-search-forward)
+   )
 #+end_src
 ** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -2083,14 +2089,14 @@ C-c C-e R =letter= to export a presentation from your org file
 )
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package evil-lispy
   :config
   (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
   (add-hook 'clojure-mode-hook #'evil-lispy-mode))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package tree-sitter
 :config
 (require 'tree-sitter)
