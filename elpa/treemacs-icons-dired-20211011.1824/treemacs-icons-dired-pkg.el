@@ -1,2 +1,0 @@
-;;; Generated package description from treemacs-icons-dired.el  -*- no-byte-compile: t -*-
-(define-package "treemacs-icons-dired" "20211011.1824" "Treemacs icons for dired" '((treemacs "0.0") (emacs "26.1")) :commit "e4b15841c9671f9b26f370a8cbaa61632b459db4" :authors '(("Alexander Miller" . "alexanderm@web.de")) :maintainer '("Alexander Miller" . "alexanderm@web.de") :url "https://github.com/Alexander-Miller/treemacs")
