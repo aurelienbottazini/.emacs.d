@@ -74,12 +74,6 @@
 
 (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 
-(setq select-enable-clipboard t)
-(use-package osx-clipboard
-  :diminish osx-clipboard-mode
-  :config
-  (osx-clipboard-mode t))
-
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
       (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
@@ -397,18 +391,7 @@
          )
     (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
     (set-face-background 'mode-line (car color))
-
-    ;; (set-face-foreground 'doom-modeline-evil-insert-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-visual-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-replace-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-operator-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-motion-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-buffer-major-mode (cddr color))
-    ;; (set-face-foreground 'doom-modeline-project-dir (cddr color))
-    ;; (set-face-foreground 'doom-modeline-info (cddr color))
-
     (set-face-foreground 'mode-line-buffer-id (cddr color))
-
     (set-face-foreground 'mode-line (cadr color)))))
 
 (defun sudo ()
@@ -517,8 +500,6 @@ cons cell (regexp . minor-mode)."
 
 (setq default-frame-alist '((font . "Jetbrains Mono-14")))
 
-(use-package all-the-icons)
-
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -548,25 +529,6 @@ cons cell (regexp . minor-mode)."
 )
 :config
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today)
-         ("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n t" . org-roam-tag-add)
-         ("C-c n i" . org-roam-node-insert)
-)
-  :config
-  (org-roam-db-autosync-mode))
 
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
@@ -955,7 +917,7 @@ cons cell (regexp . minor-mode)."
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
- "C-p" 'projectile-find-file
+ "C-p" 'counsel-projectile-find-file
  "[ [" 'previous-buffer
  "] ]" 'next-buffer
  "[ e" 'flycheck-previous-error
@@ -1148,8 +1110,6 @@ This command switches to browser."
 (require 'auray/find-in-project)
 (evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
 
-(use-package rg)
-
 (use-package iedit
 :bind (("C-c i" . iedit-mode)))
 
@@ -1167,6 +1127,7 @@ This command switches to browser."
   (fullframe vc-annotate quit-window))
 
 (use-package magit
+  :bind (("C-c gg" . magit-status))
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1185,14 +1146,6 @@ This command switches to browser."
   (setq dumb-jump-selector 'ivy)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
-
-(use-package treemacs-all-the-icons
-:config
-(treemacs-load-theme "all-the-icons"))
 
 (setq speedbar-directory-unshown-regexp "^$")
 (global-set-key (kbd "C-c q") 'speedbar-get-focus)

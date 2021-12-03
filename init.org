@@ -152,15 +152,6 @@ with the reloading of those locals.
 (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 #+end_src
 
-Enable osx clipboard in terminal
-#+begin_src emacs-lisp
-(setq select-enable-clipboard t)
-(use-package osx-clipboard
-  :diminish osx-clipboard-mode
-  :config
-  (osx-clipboard-mode t))
-#+end_src
-
 I like setting the path manually as other solutions like ~exec-path-from-shell~
 can slow down Emacs startup if the shells scripts do too many things.
 
@@ -576,46 +567,6 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
  (load-theme 'zenburn t))
 #+end_src
 
-https://github.com/greduan/emacs-theme-gruvbox
-#+begin_src emacs-lisp :tangle no
-(use-package gruvbox-theme
- :config
-  (setq auray/default-color '("#504945" "#afaf00" . "#ffaf00"))
-  (load-theme 'gruvbox)
-)
-
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
-#+end_src
-
-This is a theme I started years ago and that I don't use anymore.
-#+begin_src emacs-lisp :tangle no
-(load-theme 'tronesque)
-(tronesque-mode-line)
-#+end_src
-
-This is my favorite light theme
-#+begin_src emacs-lisp :tangle no
-(use-package leuven-theme
-:config
-(setq auray/default-color '("#335ea8" "#85ceeb" . "yellow"))
-(load-theme 'leuven t))
-#+end_src
-
-This is another dark and light theme I like a lot.
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package solarized-theme
- :config
-(setq solarized-distinct-fringe-background t)
-(setq solarized-high-contrast-mode-line t)
- (setq auray/default-color '("#eee8d5" "#657b83" . "#0087ff"))
- (load-theme 'solarized-dark t))
-#+END_SRC
-
 Makes my evil cursor match my modeline color
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package evil
@@ -640,18 +591,7 @@ Changes mode-line color depending on Evil state, if buffer is-  modified etc...
          )
     (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
     (set-face-background 'mode-line (car color))
-
-    ;; (set-face-foreground 'doom-modeline-evil-insert-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-visual-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-replace-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-operator-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-evil-motion-state (cddr color))
-    ;; (set-face-foreground 'doom-modeline-buffer-major-mode (cddr color))
-    ;; (set-face-foreground 'doom-modeline-project-dir (cddr color))
-    ;; (set-face-foreground 'doom-modeline-info (cddr color))
-
     (set-face-foreground 'mode-line-buffer-id (cddr color))
-
     (set-face-foreground 'mode-line (cadr color)))))
 #+end_src
 
@@ -790,11 +730,6 @@ light weights. Medium and Light conflict with the Regular and Book versions
 ** Code Folding
 =set-selective-display=
 
-** Icons
-
-#+begin_src emacs-lisp
-(use-package all-the-icons)
-#+end_src
 
 * Regex
 
@@ -838,28 +773,6 @@ light weights. Medium and Light conflict with the Regular and Book versions
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 #+end_src
 
-
-** Roam
-#+begin_src emacs-lisp
-(use-package org-roam
-  :ensure t
-  :init
-  (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory (file-truename "~/Dropbox/org/roam"))
-  :bind (
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today)
-         ("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n t" . org-roam-tag-add)
-         ("C-c n i" . org-roam-node-insert)
-)
-  :config
-  (org-roam-db-autosync-mode))
-#+end_src
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
@@ -1333,7 +1246,7 @@ Another =M-x= without leaving the home row
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
-  "C-p" 'projectile-find-file
+  "C-p" 'counsel-projectile-find-file
   "[ [" 'previous-buffer
   "] ]" 'next-buffer
   "[ e" 'flycheck-previous-error
@@ -1674,11 +1587,6 @@ Launch ~counsel-rg~ with a prefix and then I can use for example
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.
 
-**** Another RG interface
-#+BEGIN_SRC emacs-lisp
-(use-package rg)
-#+END_SRC
-
 *** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with
 ~m~. Then I can grep those files with ~A~ and do a query replace
@@ -1710,10 +1618,6 @@ To grab a link I can share with co-workers from the region or file.
 #+BEGIN_SRC emacs-lisp
 (use-package git-link :bind (("C-c gl" . git-link)))
 #+END_SRC
-
-Otherwise I launch a ~gitsh~ session and I use [[https://github.com/github/hub][hub]] to interact with
-github directly
-
 ** View History
 *** timemachine
 Allows to view previous versions of a file. It is not focused on the
@@ -1753,11 +1657,12 @@ porcelains.
 #+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :init
-    (setq magit-commit-show-diff nil
-          magit-auto-revert-mode nil
-          magit-commit-show-diff nil))
+(use-package magit
+  :bind (("C-c gg" . magit-status))
+  :init
+  (setq magit-commit-show-diff nil
+        magit-auto-revert-mode nil
+        magit-commit-show-diff nil))
 #+END_SRC
 
 When I use magit, I prefer to have it use the full emacs frame
@@ -1769,18 +1674,6 @@ instead of splitting the current buffer.
   (fullframe magit-status magit-mode-quit-window))
 #+END_SRC
 
-
-
-** gitsh
-
-#+BEGIN_QUOTE
-The [[https://github.com/thoughtbot/gitsh][gitsh]] program is an interactive shell for git. From within
-gitsh you can issue any git command, even using your local aliases
-and configuration
-#+END_QUOTE
-
-When I have to do git related things that are painful to do with
-magit, I just fire a terminal with /gitsh/ for the current project.
 
 ** Visual enhancements
 
@@ -1822,16 +1715,6 @@ IDE code analysis but it works surprisingly well.
 #+END_SRC
 
 ** Navigation tree
-#+begin_src emacs-lisp
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
-
-(use-package treemacs-all-the-icons
-:config
-(treemacs-load-theme "all-the-icons"))
-#+end_src
-
 #+begin_src emacs-lisp
 (setq speedbar-directory-unshown-regexp "^$")
 (global-set-key (kbd "C-c q") 'speedbar-get-focus)
@@ -2088,35 +1971,6 @@ C-c C-e R =letter= to export a presentation from your org file
   (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
   (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
 )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package evil-lispy
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-  (add-hook 'clojure-mode-hook #'evil-lispy-mode))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package tree-sitter
-:config
-(require 'tree-sitter)
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-)
-
-(use-package tree-sitter-langs
-:config
-(require 'tree-sitter-langs))
-
-(use-package multiple-cursors)
-(use-package combobulate
-  ;; Ensure `combobulate-mode` is activated when you launch a mode it supports
-  :hook ((python-mode . combobulate-mode)
-         (js-mode . combobulate-mode)
-         (typescript-mode . combobulate-mode))
-  :load-path "./site-lisp/combobulate/"
-  )
 #+end_src
 
 #+begin_src emacs-lisp
