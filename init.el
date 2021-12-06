@@ -219,49 +219,6 @@
 :config
   (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
 
-(defun tmux-socket-command-string ()
-  (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
-
-(defun tmux-move-left ()
-  (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
-
-(defun tmux-move-up ()
-  (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
-
-(defun tmux-move-down ()
-  (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(global-set-key (kbd "C-h") 'tmux-move-left)
-
-(global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-c m") 'org-refile)
-
-(global-set-key (kbd "C-k") 'tmux-move-up)
-(global-set-key (kbd "C-l") 'tmux-move-right)
-
 (use-package evil
   :init
   :config
@@ -551,7 +508,12 @@ cons cell (regexp . minor-mode)."
   :config
 
   (setq cider-repl-display-help-banner nil)
-  )
+  (defun my-cider-debug-toggle-insert-state ()
+    (if cider--debug-mode    ;; Checks if you're entering the debugger
+        (evil-insert-state)  ;; If so, turn on evil-insert-state
+      (evil-normal-state)))  ;; Otherwise, turn on normal-state
+
+   (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -834,6 +796,7 @@ cons cell (regexp . minor-mode)."
 
  (use-package expand-region)
 
+ (global-set-key (kbd "C-x o") 'ace-window)
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
@@ -1269,20 +1232,6 @@ This command switches to browser."
 :bind (:map dired-mode-map ("p" . dired-rsync)))
 
 (use-package docker-tramp)
-
-(use-package engine-mode
-  :bind (("C-c d c" . engine/search-caniuse)
-         ("C-c d m" . engine/search-mdn)
-         ("C-c d s" . engine/search-css)
-         ("C-c d ra" . engine/search-rails)
-         ("C-c d rr" . engine/search-ruby))
-  :config
-  (defengine ruby "https://apidock.com/ruby/search?query=%s")
-  (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
-  (defengine rails "https://api.rubyonrails.org/?q=%s")
-  (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-  (defengine caniuse "https://caniuse.com/?search=%s")
-  )
 
 (use-package restclient
   :demand t

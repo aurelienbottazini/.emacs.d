@@ -193,6 +193,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
  '(evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
  '(font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
  '(hi-aquamarine ((t (:background "aquamarine" :foreground "black"))))

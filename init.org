@@ -347,7 +347,7 @@ Clean white space on save.
 * Movement
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
 to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -386,7 +386,6 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 
 (global-set-key (kbd "C-j") 'tmux-move-down)
 (define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-c m") 'org-refile)
 
 (global-set-key (kbd "C-k") 'tmux-move-up)
 (global-set-key (kbd "C-l") 'tmux-move-right)
@@ -571,12 +570,7 @@ Makes my evil cursor match my modeline color
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package evil
   :init
-  (setq evil-respect-visual-line-mode t)
-  :config
-  (setq evil-insert-state-cursor '(bar "#97d88a")
-        evil-visual-state-cursor '(box "#adcff1")
-        evil-emacs-state-cursor '(box "#ffa2cb")
-        evil-normal-state-cursor '(box "#f0dfaf")))
+  (setq evil-respect-visual-line-mode t))
 #+end_src
 
 Changes mode-line color depending on Evil state, if buffer is-  modified etc...
@@ -804,7 +798,12 @@ Auto-fill comments in prog modes
   :config
 
   (setq cider-repl-display-help-banner nil)
-  )
+  (defun my-cider-debug-toggle-insert-state ()
+    (if cider--debug-mode    ;; Checks if you're entering the debugger
+        (evil-insert-state)  ;; If so, turn on evil-insert-state
+      (evil-normal-state)))  ;; Otherwise, turn on normal-state
+
+   (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state))
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
@@ -1161,6 +1160,7 @@ Another =M-x= without leaving the home row
 
  (use-package expand-region)
 
+ (global-set-key (kbd "C-x o") 'ace-window)
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
@@ -1903,7 +1903,7 @@ tic -o ~/.terminfo -x ~/.emacs.d/terminfo-emacs-rgb.src
 Other =terminfo= examples are available in the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
 
 * Documentation
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package engine-mode
   :bind (("C-c d c" . engine/search-caniuse)
          ("C-c d m" . engine/search-mdn)
