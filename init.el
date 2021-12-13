@@ -219,6 +219,48 @@
 :config
   (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
 
+(defun tmux-socket-command-string ()
+  (interactive)
+  (concat "tmux -S "
+          (replace-regexp-in-string "\n\\'" ""
+                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
+
+(defun tmux-move-right ()
+  (interactive)
+  (condition-case nil
+      (evil-window-right 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
+
+(defun tmux-move-left ()
+  (interactive)
+  (condition-case nil
+      (evil-window-left 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
+
+(defun tmux-move-up ()
+  (interactive)
+  (condition-case nil
+      (evil-window-up 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
+
+(defun tmux-move-down ()
+  (interactive)
+  (condition-case nil
+      (evil-window-down 1)
+    (error (unless window-system (shell-command (concat
+                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
+
+(global-set-key (kbd "C-h") 'tmux-move-left)
+
+(global-set-key (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+
+(global-set-key (kbd "C-k") 'tmux-move-up)
+(global-set-key (kbd "C-l") 'tmux-move-right)
+
 (use-package evil
   :init
   :config
@@ -880,7 +922,6 @@ cons cell (regexp . minor-mode)."
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
- "C-p" 'counsel-projectile-find-file
  "[ [" 'previous-buffer
  "] ]" 'next-buffer
  "[ e" 'flycheck-previous-error
@@ -894,7 +935,7 @@ cons cell (regexp . minor-mode)."
 
 (general-define-key
  :keymaps 'override
- "C-p" 'project-find-file
+ "C-c p" 'project-find-file
  "C-x b" 'project-switch-to-buffer
  "C-x B" 'switch-to-buffer
  "C-s" 'evil-search-forward)
@@ -1275,6 +1316,26 @@ This command switches to browser."
 (use-package emamux
 :init
 (setq emamux:use-nearest-pane 1))
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (js2-mode . lsp)
+         (css-mode . lsp)
+         (ruby-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; (use-package lsp-ui :commands lsp-ui-mode)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 (use-package projectile
 :config

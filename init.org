@@ -347,7 +347,7 @@ Clean white space on save.
 * Movement
 Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
 to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -723,7 +723,6 @@ light weights. Medium and Light conflict with the Regular and Book versions
 
 ** Code Folding
 =set-selective-display=
-
 
 * Regex
 
@@ -1246,7 +1245,6 @@ Another =M-x= without leaving the home row
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
-  "C-p" 'counsel-projectile-find-file
   "[ [" 'previous-buffer
   "] ]" 'next-buffer
   "[ e" 'flycheck-previous-error
@@ -1260,7 +1258,7 @@ Another =M-x= without leaving the home row
 
  (general-define-key
   :keymaps 'override
-  "C-p" 'project-find-file
+  "C-c p" 'project-find-file
   "C-x b" 'project-switch-to-buffer
   "C-x B" 'switch-to-buffer
   "C-s" 'evil-search-forward)
@@ -1977,6 +1975,28 @@ C-c C-e R =letter= to export a presentation from your org file
 (use-package emamux
 :init
 (setq emamux:use-nearest-pane 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (js2-mode . lsp)
+         (css-mode . lsp)
+         (ruby-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; (use-package lsp-ui :commands lsp-ui-mode)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 #+end_src
 
 #+begin_src emacs-lisp
