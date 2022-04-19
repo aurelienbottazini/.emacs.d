@@ -566,7 +566,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Jetbrains Mono-14")))
+(setq default-frame-alist '((font . "Operator Mono AB-14")))
 #+end_src
 
 ** Code Folding

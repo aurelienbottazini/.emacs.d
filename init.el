@@ -404,7 +404,7 @@ cons cell (regexp . minor-mode)."
          ("C-+" . 'default-text-scale-increase)
          ("C-M-+" . 'default-text-scale-decrease)))
 
-(setq default-frame-alist '((font . "Jetbrains Mono-14")))
+(setq default-frame-alist '((font . "Operator Mono AB-14")))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
