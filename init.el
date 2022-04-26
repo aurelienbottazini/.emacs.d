@@ -92,6 +92,7 @@
                   "/bin/"
                   "/usr/bin/"
                   "/usr/local/sbin/"
+                  "/opt/homebrew/bin"
                   "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
       )
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
@@ -1245,7 +1246,7 @@ This command switches to browser."
 ;; on mac there is some weird prefixing going on for GNU Tools like ls.
 ;; I favor GNU ls over MacOSX default ls
 (when (string-equal system-type "darwin")
-  (setq insert-directory-program "gls"))
+  (setq insert-directory-program "/opt/homebrew/bin/gls"))
 
 (require 'dired )
 (defun my-dired-mode-setup ()
