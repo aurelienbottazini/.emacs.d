@@ -138,7 +138,7 @@ with the reloading of those locals.
         (my-reload-dir-locals-for-current-buffer)))))
 #+END_SRC
 
-* COMMENT Better Defaults
+* Better Defaults
 #+begin_src emacs-lisp
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
@@ -184,7 +184,7 @@ It make things easier when the two match.
 
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
-(setq exec-path my-paths))
+  (setq exec-path my-paths))
 #+END_SRC
 
 Emacs can be really fast with large files too. The trick is to
@@ -707,7 +707,7 @@ Enable ligatures on mac
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 
-** Text size
+** COMMENT Text size
 Changes the size of the text. Useful when I pair program
 #+begin_src emacs-lisp
   (use-package default-text-scale
@@ -722,6 +722,7 @@ The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
 (setq default-frame-alist '((font . "Jetbrains Mono NL")))
+(set-face-attribute 'default nil :height 140)
 #+end_src
 
 ** Code Folding
@@ -1226,7 +1227,6 @@ Another =M-x= without leaving the home row
    "p" 'projectile-command-map
    "i" 'counsel-imenu
    "b" 'project-switch-to-buffer
-   "B" 'switch-to-buffer
    "s" 'auray/find-file-with-similar-name
    "e" 'flycheck-list-errors
    "r" 'er/expand-region
@@ -1245,7 +1245,7 @@ Another =M-x= without leaving the home row
 
  (general-define-key
   :states 'normal
-  "/" 'evil-search-forward
+  "/" 'swiper
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
@@ -1263,9 +1263,9 @@ Another =M-x= without leaving the home row
  (general-define-key
   :keymaps 'override
   "C-c p" 'project-find-file
-  "C-x b" 'project-switch-to-buffer
-  "C-x B" 'switch-to-buffer
-  "C-s" 'evil-search-forward)
+  "C-x b" 'switch-to-buffer
+  "C-x B" 'project-switch-to-buffer
+  "C-s" 'swiper)
  )
 #+end_src
 ** Hydra
@@ -1675,7 +1675,6 @@ instead of splitting the current buffer.
   :config
   (fullframe magit-status magit-mode-quit-window))
 #+END_SRC
-
 
 ** Visual enhancements
 
