@@ -199,8 +199,7 @@
 :config
 (ivy-mode)
 (use-package counsel)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "C-c C-SPC") 'ivy-resume)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -877,7 +876,7 @@ cons cell (regexp . minor-mode)."
 (global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
 
  (use-package windresize
-   :bind (("C-c w r" . windresize)))
+   :bind (("C-c w C-SPC" . windresize)))
 
 (use-package general
   :config
@@ -897,7 +896,7 @@ cons cell (regexp . minor-mode)."
   "b" 'project-switch-to-buffer
   "s" 'auray/find-file-with-similar-name
   "e" 'flycheck-list-errors
-  "r" 'er/expand-region
+  "C-SPC" 'er/expand-region
   "c" (lambda () (interactive) (org-capture nil "n"))
   "h" 'highlight-symbol-at-point
   "x" 'emamux:run-last-command
