@@ -355,7 +355,7 @@
  (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
  (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
  (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
- (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.3))))
+ (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
  (org-block ((t (:extend t :background "#333333"))))
@@ -912,7 +912,7 @@ cons cell (regexp . minor-mode)."
 
 (general-define-key
  :states 'normal
- "/" 'swiper
+ "/" 'swiper-isearch
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
@@ -932,7 +932,7 @@ cons cell (regexp . minor-mode)."
  "C-c p" 'project-find-file
  "C-x b" 'switch-to-buffer
  "C-x B" 'project-switch-to-buffer
- "C-s" 'swiper)
+ "C-s" 'swiper-isearch)
 )
 
 (use-package hydra
