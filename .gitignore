@@ -28,3 +28,4 @@ var/prescient-save.el
 /elpa/archives/gnu/archive-contents.signed
 /init.emamux
 elpa
+/forge-database.sqlite

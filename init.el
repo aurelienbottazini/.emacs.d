@@ -515,14 +515,6 @@ cons cell (regexp . minor-mode)."
     (kbd "TAB") 'org-cycle)
   )
 
-(use-package org-superstar
-:init
-(setq
-    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
-)
-:config
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
@@ -914,6 +906,7 @@ cons cell (regexp . minor-mode)."
  :states 'normal
  "/" 'swiper-isearch
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
+ "C-p" 'project-find-file
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
  "[ [" 'previous-buffer
@@ -1130,6 +1123,11 @@ This command switches to browser."
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
         magit-commit-show-diff nil))
+
+(setq auth-sources '("~/.authinfo"))
+
+(use-package forge
+  :after magit)
 
 (use-package fullframe
   :after magit

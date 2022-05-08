@@ -720,7 +720,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Jetbrains Mono NL")))
+(setq default-frame-alist '((font . "Operator Mono AB")))
 (set-face-attribute 'default nil :height 140)
 #+end_src
 
@@ -759,11 +759,11 @@ light weights. Medium and Light conflict with the Regular and Book versions
   )
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package org-superstar
 :init
 (setq
-    org-superstar-headline-bullets-list '("◉" "✸" "✿" "○")
+    org-superstar-headline-bullets-list '("●" "✸" "✿" "○")
 )
 :config
 (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
@@ -1246,6 +1246,7 @@ Another =M-x= without leaving the home row
   :states 'normal
   "/" 'swiper-isearch
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
+  "C-p" 'project-find-file
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
   "[ [" 'previous-buffer
@@ -1664,7 +1665,15 @@ porcelains.
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
         magit-commit-show-diff nil))
+
+(setq auth-sources '("~/.authinfo"))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package forge
+  :after magit)
+#+end_src
+
 
 When I use magit, I prefer to have it use the full emacs frame
 instead of splitting the current buffer.
@@ -2063,4 +2072,5 @@ C-c C-e R =letter= to export a presentation from your org file
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
+
 
