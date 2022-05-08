@@ -1219,7 +1219,51 @@ This command switches to browser."
 
   ;; icons for some company completions
 (use-package company-box
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+  :config
+
+(defun company-box-doc--make-buffer (object)
+  (let* ((buffer-list-update-hook nil)
+         (inhibit-modification-hooks t)
+         (string (cond ((stringp object) object)
+                       ((bufferp object) (with-current-buffer object (buffer-string))))))
+    (when (and string (> (length (string-trim string)) 0))
+      (with-current-buffer (company-box--get-buffer "doc")
+        (erase-buffer)
+        (insert string)
+        (setq mode-line-format nil
+              display-line-numbers nil
+              header-line-format nil
+              show-trailing-whitespace nil
+              cursor-in-non-selected-windows nil)
+
+        (toggle-truncate-lines -1) ;; PATCHED HERE
+
+        (current-buffer)))))
+)
+
+(defun company-box-doc--set-frame-position (frame)
+  (-let* ((box-position (frame-position (company-box--get-frame)))
+          (box-width (frame-pixel-width (company-box--get-frame)))
+          (window (frame-root-window frame))
+          (frame-resize-pixelwise t)
+          ((width . height) (window-text-pixel-size window nil nil 400 10000)) ;; PATCHED HERE
+          (bottom (+ company-box--bottom (window-pixel-top) (frame-border-width)))
+          (x (+ (car box-position) box-width (/ (frame-char-width) 2)))
+          (y (cdr box-position))
+          (y (if (> (+ y height 20) bottom)
+                 (- y (- (+ y height) bottom) 20)
+               y))
+          (space-right (- (frame-pixel-width) x))
+          (space-left (car box-position))
+          (x (or (let ((border (* (or (alist-get 'internal-border-width company-box-doc-frame-parameters) 0)
+                                  2)))
+                   (and (> width space-right)
+                        (> space-left (+ width border (/ (frame-char-width) 2)))
+                        (- (car box-position) width border (/ (frame-char-width) 2))))
+                 x)))
+    (set-frame-position frame (max x 0) (max y 0))
+    (set-frame-size frame width height t)))
 
 (use-package yasnippet
   :defer 3
@@ -1319,6 +1363,8 @@ This command switches to browser."
          (js2-mode . lsp)
          (css-mode . lsp)
          (ruby-mode . lsp)
+         (html-mode . lsp)
+         (web-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
