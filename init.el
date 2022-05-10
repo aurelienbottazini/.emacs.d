@@ -178,6 +178,7 @@
 (setq recentf-max-saved-items 200)
 
 (use-package ivy
+:diminish ivy-mode
 :bind (:map ivy-minibuffer-map
                ("C-c C-c" . ivy-restrict-to-matches)
                ("C-j" . ivy-next-line-and-call)
@@ -484,6 +485,8 @@ cons cell (regexp . minor-mode)."
     (eval-after-load "subword"
     '(diminish 'subword-mode))
   (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
   (diminish 'eldoc-mode))
 
 (setq blink-matching-paren 'jump-offscreen)
@@ -906,7 +909,6 @@ cons cell (regexp . minor-mode)."
  :states 'normal
  "/" 'swiper-isearch
  (kbd "DEL") 'evil-switch-to-windows-last-buffer
- "C-p" 'project-find-file
  "C-w 0" 'delete-window
  "C-w o" 'delete-other-windows
  "[ [" 'previous-buffer
@@ -938,7 +940,7 @@ cons cell (regexp . minor-mode)."
 (use-package ivy-hydra)
 
 (use-package drag-stuff
-  :diminish t
+  :diminish drag-stuff-mode
   :config
   (drag-stuff-global-mode t))
 
@@ -1217,6 +1219,7 @@ This command switches to browser."
 
   ;; icons for some company completions
 (use-package company-box
+  :diminish company-box-mode
   :hook (company-mode . company-box-mode)
   :config
 

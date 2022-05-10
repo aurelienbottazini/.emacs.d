@@ -302,6 +302,7 @@ Clean white space on save.
 * Improved emacs commands
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy
+:diminish ivy-mode
 :bind (:map ivy-minibuffer-map
                ("C-c C-c" . ivy-restrict-to-matches)
                ("C-j" . ivy-next-line-and-call)
@@ -694,6 +695,8 @@ Enable ligatures on mac
     (eval-after-load "subword"
     '(diminish 'subword-mode))
   (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
   (diminish 'eldoc-mode))
 #+END_SRC
 
@@ -1246,7 +1249,6 @@ Another =M-x= without leaving the home row
   :states 'normal
   "/" 'swiper-isearch
   (kbd "DEL") 'evil-switch-to-windows-last-buffer
-  "C-p" 'project-find-file
   "C-w 0" 'delete-window
   "C-w o" 'delete-other-windows
   "[ [" 'previous-buffer
@@ -1283,7 +1285,7 @@ Another =M-x= without leaving the home row
 ** Drag stuff
 #+BEGIN_SRC emacs-lisp
 (use-package drag-stuff
-  :diminish t
+  :diminish drag-stuff-mode
   :config
   (drag-stuff-global-mode t))
 #+END_SRC
@@ -1821,6 +1823,7 @@ Use =company-diag= to debug completion problems
 
   ;; icons for some company completions
 (use-package company-box
+  :diminish company-box-mode
   :hook (company-mode . company-box-mode)
   :config
 
