@@ -709,7 +709,7 @@ Enable ligatures on mac
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+end_src
 
-** COMMENT Text size
+** Text size
 Changes the size of the text. Useful when I pair program
 #+begin_src emacs-lisp
   (use-package default-text-scale
@@ -723,8 +723,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB")))
-(set-face-attribute 'default nil :height 140)
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
 #+end_src
 
 ** Code Folding

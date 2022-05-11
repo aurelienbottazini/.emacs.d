@@ -496,6 +496,14 @@ cons cell (regexp . minor-mode)."
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(use-package default-text-scale
+  :config
+  :bind (("C-=" . 'default-text-scale-reset)
+         ("C-+" . 'default-text-scale-increase)
+         ("C-M-+" . 'default-text-scale-decrease)))
+
+(setq default-frame-alist '((font . "Operator Mono AB-16")))
+
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
