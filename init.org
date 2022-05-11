@@ -1165,6 +1165,8 @@ Another =M-x= without leaving the home row
 
  (use-package expand-region)
 
+ (global-set-key (kbd "M-c") 'kill-ring-save) ; ⌘-c = Copy
+ (global-set-key (kbd "M-v") 'yank) ; ⌘-v = Paste
  (global-set-key (kbd "C-x o") 'other-window)
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
@@ -2047,7 +2049,15 @@ C-c C-e R =letter= to export a presentation from your org file
          (web-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  :commands lsp
+  :config
+
+(add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
+(lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "typescript-language-server")
+                     :major-modes '(js2-mode)
+                     :remote? t
+                     :server-id 'ts-remote)))
 
 (use-package lsp-ui :commands lsp-ui-mode
 :config
@@ -2062,9 +2072,8 @@ C-c C-e R =letter= to export a presentation from your org file
 
 #+begin_src emacs-lisp
 (use-package projectile
-:config
-(projectile-mode +1)
-)
+  :config
+  (projectile-mode +1))
 #+end_src
 
 #+begin_src emacs-lisp

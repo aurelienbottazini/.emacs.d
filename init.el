@@ -836,6 +836,8 @@ cons cell (regexp . minor-mode)."
 
  (use-package expand-region)
 
+ (global-set-key (kbd "M-c") 'kill-ring-save) ; ⌘-c = Copy
+ (global-set-key (kbd "M-v") 'yank) ; ⌘-v = Paste
  (global-set-key (kbd "C-x o") 'other-window)
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
@@ -1376,7 +1378,15 @@ This command switches to browser."
          (web-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  :commands lsp
+  :config
+
+(add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
+(lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "typescript-language-server")
+                     :major-modes '(js2-mode)
+                     :remote? t
+                     :server-id 'ts-remote)))
 
 (use-package lsp-ui :commands lsp-ui-mode
 :config
@@ -1389,9 +1399,8 @@ This command switches to browser."
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 (use-package projectile
-:config
-(projectile-mode +1)
-)
+  :config
+  (projectile-mode +1))
 
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
