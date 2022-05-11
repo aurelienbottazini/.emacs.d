@@ -155,8 +155,8 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
-(global-visual-line-mode)
+(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
+;; (global-visual-line-mode)
 
 (setq sentence-end-double-space nil)
 
@@ -828,7 +828,7 @@ cons cell (regexp . minor-mode)."
 
  (use-package expand-region)
 
- (global-set-key (kbd "C-x o") 'ace-window)
+ (global-set-key (kbd "C-x o") 'other-window)
  (global-set-key (kbd "C-c a") 'org-agenda)
  (global-set-key (kbd "C-c R") 'revert-buffer)
  (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
