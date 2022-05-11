@@ -1370,7 +1370,9 @@ This command switches to browser."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
-;; (use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ui :commands lsp-ui-mode
+:config
+(setq lsp-ui-sideline-enable t))
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
