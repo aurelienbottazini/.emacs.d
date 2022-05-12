@@ -213,6 +213,7 @@
  '(ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
+ '(lsp-modeline-code-actions-face ((t (:inherit warning))))
  '(lsp-ui-doc-background ((t (:background "#2b2b2b"))))
  '(minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
  '(mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.0))))

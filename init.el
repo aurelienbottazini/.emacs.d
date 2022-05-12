@@ -1385,6 +1385,22 @@ This command switches to browser."
 
   (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
 
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-stdio-connection
+                   #'lsp-solargraph--build-command)
+  :major-modes '(ruby-mode enh-ruby-mode)
+  :priority -1
+  :multi-root lsp-solargraph-multi-root
+  :library-folders-fn (lambda (_workspace) lsp-solargraph-library-directories)
+  :server-id 'ruby-ls-remote
+  :remote? t
+  :initialized-fn (lambda (workspace)
+                    (with-lsp-workspace workspace
+                      (lsp--set-configuration
+                       (lsp-configuration-section "solargraph"))))))
+
+
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-stdio-connection (lambda ()
                                                             `(,(lsp-package-path 'typescript-language-server)
