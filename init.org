@@ -2050,18 +2050,47 @@ C-c C-e R =letter= to export a presentation from your org file
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
+  :custom
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
   :config
 
-(add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
-(lsp-register-client
-    (make-lsp-client :new-connection (lsp-tramp-connection "typescript-language-server")
-                     :major-modes '(js2-mode)
-                     :remote? t
-                     :server-id 'ts-remote)))
+  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection (lambda ()
+                                                            `(,(lsp-package-path 'typescript-language-server)
+                                                              "--tsserver-path"
+                                                              ,(lsp-package-path 'typescript)
+                                                              ,@lsp-clients-typescript-server-args)))
+                    :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+                    :major-modes '(js2-mode)
+                    :completion-in-comments? t
+                    :remote? t
+                    :initialization-options (lambda ()
+                                              (list :disableAutomaticTypingAcquisition lsp-clients-typescript-disable-automatic-typing-acquisition
+                                                    :logVerbosity lsp-clients-typescript-log-verbosity
+
+                                                    :maxTsServerMemory lsp-clients-typescript-max-ts-server-memory
+                                                    :npmLocation lsp-clients-typescript-npm-location
+                                                    :plugins lsp-clients-typescript-plugins
+                                                    :preferences lsp-clients-typescript-preferences))
+                    :initialized-fn (lambda (workspace)
+                                      (with-lsp-workspace workspace
+                                        (lsp--set-configuration
+                                         (ht-merge (lsp-configuration-section "javascript")
+                                                   (lsp-configuration-section "typescript")))))
+                    :after-open-fn (lambda ()
+                                     (when lsp-javascript-display-inlay-hints
+                                       (lsp-javascript-inlay-hints-mode)))
+                    :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+                    :server-id 'ts-remote
+                    :request-handlers (ht ("_typescript.rename" #'lsp-javascript--rename))
+                    ))
+  )
 
 (use-package lsp-ui :commands lsp-ui-mode
-:config
-(setq lsp-ui-sideline-enable t))
+  :config
+  (setq lsp-ui-sideline-enable t))
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
