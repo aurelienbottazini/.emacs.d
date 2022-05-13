@@ -2050,8 +2050,8 @@ C-c C-e R =letter= to export a presentation from your org file
          (js2-mode . lsp)
          (css-mode . lsp)
          (ruby-mode . lsp)
-         ;; (html-mode . lsp)
-         ;; (web-mode . lsp)
+         (html-mode . lsp)
+         (web-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :custom
@@ -2059,65 +2059,6 @@ C-c C-e R =letter= to export a presentation from your org file
   :config
 
   (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
-
-;; tramp css
-(lsp-register-client
- (make-lsp-client
-  :new-connection (lsp-stdio-connection #'lsp-css--server-command)
-  :activation-fn (lsp-activate-on "css" "scss" "sass" "less")
-  :remote? t
-  :priority -1
-  :action-handlers (lsp-ht ("_css.applyCodeAction" #'lsp-css--apply-code-action))
-  :server-id 'css-ls
-   ))
-
-  ;; tramp ruby
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection
-                     '("solargraph" "stdio"))
-    :major-modes '(ruby-mode enh-ruby-mode)
-    :priority -1
-    :multi-root t
-    :library-folders-fn (lambda (_workspace) lsp-solargraph-library-directories)
-    :server-id 'ruby-ls-remote
-    :remote? t
-    :initialized-fn (lambda (workspace)
-                      (with-lsp-workspace workspace
-                        (lsp--set-configuration
-                         (lsp-configuration-section "solargraph"))))))
-
-  ;; tramp javascript typescript
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection (lambda ()
-                                                            `(,(lsp-package-path 'typescript-language-server)
-                                                              "--tsserver-path"
-                                                              ,(lsp-package-path 'typescript)
-                                                              ,@lsp-clients-typescript-server-args)))
-                    :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
-                    :major-modes '(js2-mode)
-                    :completion-in-comments? t
-                    :remote? t
-                    :initialization-options (lambda ()
-                                              (list :disableAutomaticTypingAcquisition lsp-clients-typescript-disable-automatic-typing-acquisition
-                                                    :logVerbosity lsp-clients-typescript-log-verbosity
-
-                                                    :maxTsServerMemory lsp-clients-typescript-max-ts-server-memory
-                                                    :npmLocation lsp-clients-typescript-npm-location
-                                                    :plugins lsp-clients-typescript-plugins
-                                                    :preferences lsp-clients-typescript-preferences))
-                    :initialized-fn (lambda (workspace)
-                                      (with-lsp-workspace workspace
-                                        (lsp--set-configuration
-                                         (ht-merge (lsp-configuration-section "javascript")
-                                                   (lsp-configuration-section "typescript")))))
-                    :after-open-fn (lambda ()
-                                     (when lsp-javascript-display-inlay-hints
-                                       (lsp-javascript-inlay-hints-mode)))
-                    :ignore-messages '("readFile .*? requested by TypeScript but content not available")
-                    :server-id 'ts-remote
-                    :request-handlers (ht ("_typescript.rename" #'lsp-javascript--rename))
-                    ))
   )
 
 (use-package lsp-ui :commands lsp-ui-mode
