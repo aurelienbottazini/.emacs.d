@@ -52,7 +52,9 @@
                     (split-string
                      (shell-command-to-string
                       (concat
-                       "fd --hidden --exclude '*.spec.*' -p '.*" (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))) ".*' $(git rev-parse --show-toplevel)"
+                       "fd --hidden --exclude '*.spec.*' -p '.*"
+                       (replace-regexp-in-string "\\.\\./" ""
+                                                 (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename)))) ".*' $(git rev-parse --show-toplevel)"
                        )))))
 
     (cond
