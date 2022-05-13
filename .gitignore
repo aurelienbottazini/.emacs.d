@@ -29,3 +29,4 @@ var/prescient-save.el
 /init.emamux
 elpa
 /forge-database.sqlite
+/.dap-breakpoints

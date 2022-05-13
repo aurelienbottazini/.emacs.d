@@ -1379,9 +1379,8 @@ This command switches to browser."
          (js2-mode . lsp)
          (css-mode . lsp)
          (ruby-mode . lsp)
-         (html-mode . lsp)
-         (web-mode . lsp)
-         ;; if you want which-key integration
+         ;; (html-mode . lsp)
+         ;; (web-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :custom
@@ -1390,22 +1389,34 @@ This command switches to browser."
 
   (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
 
-;; (lsp-register-client
-;;  (make-lsp-client
-;;   :new-connection (lsp-stdio-connection
-;;                    #'lsp-solargraph--build-command)
-;;   :major-modes '(ruby-mode enh-ruby-mode)
-;;   :priority -1
-;;   :multi-root lsp-solargraph-multi-root
-;;   :library-folders-fn (lambda (_workspace) lsp-solargraph-library-directories)
-;;   :server-id 'ruby-ls-remote
-;;   :remote? t
-;;   :initialized-fn (lambda (workspace)
-;;                     (with-lsp-workspace workspace
-;;                       (lsp--set-configuration
-;;                        (lsp-configuration-section "solargraph"))))))
+;; tramp css
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-stdio-connection #'lsp-css--server-command)
+  :activation-fn (lsp-activate-on "css" "scss" "sass" "less")
+  :remote? t
+  :priority -1
+  :action-handlers (lsp-ht ("_css.applyCodeAction" #'lsp-css--apply-code-action))
+  :server-id 'css-ls
+   ))
 
+  ;; tramp ruby
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection
+                     '("solargraph" "stdio"))
+    :major-modes '(ruby-mode enh-ruby-mode)
+    :priority -1
+    :multi-root t
+    :library-folders-fn (lambda (_workspace) lsp-solargraph-library-directories)
+    :server-id 'ruby-ls-remote
+    :remote? t
+    :initialized-fn (lambda (workspace)
+                      (with-lsp-workspace workspace
+                        (lsp--set-configuration
+                         (lsp-configuration-section "solargraph"))))))
 
+  ;; tramp javascript typescript
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-stdio-connection (lambda ()
                                                             `(,(lsp-package-path 'typescript-language-server)
@@ -1454,3 +1465,5 @@ This command switches to browser."
 
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+(desktop-save-mode 1)

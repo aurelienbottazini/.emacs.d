@@ -25,6 +25,7 @@
  '(deft-use-filename-as-title t)
  '(deft-use-filter-string-for-filename t)
  '(delete-trailing-lines nil)
+ '(desktop-files-not-to-save nil)
  '(display-line-numbers 'visual)
  '(display-line-numbers-current-absolute t)
  '(display-line-numbers-grow-only t)
