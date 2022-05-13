@@ -906,7 +906,7 @@ cons cell (regexp . minor-mode)."
   "b" 'project-switch-to-buffer
   "s" 'auray/find-file-with-similar-name
   "e" 'flycheck-list-errors
-  "C-SPC" 'er/expand-region
+  "t" 'tab-switch
   "c" (lambda () (interactive) (org-capture nil "n"))
   "h" 'highlight-symbol-at-point
   "x" 'emamux:run-last-command
@@ -940,6 +940,7 @@ cons cell (regexp . minor-mode)."
 (general-define-key
  :keymaps 'override
  "C-c p" 'project-find-file
+ "C-SPC" 'er/expand-region
  "C-x b" 'switch-to-buffer
  "C-x B" 'project-switch-to-buffer
  "C-s" 'swiper-isearch)
