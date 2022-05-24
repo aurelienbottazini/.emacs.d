@@ -274,6 +274,7 @@
       (call-interactively 'evil-record-macro)))
 
   (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "-") 'dired-jump)
     (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
 
 (use-package evil-surround
@@ -858,7 +859,7 @@ cons cell (regexp . minor-mode)."
  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
  (global-set-key (kbd "C-c H") 'unhighlight-regexp)
 
- (global-display-line-numbers-mode 1)
+ (global-display-line-numbers-mode -1)
  (defun show-line-numbers ()
    (interactive)
    (setq display-line-numbers 'absolute))
