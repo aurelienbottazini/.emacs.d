@@ -15,7 +15,7 @@
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
         ("org"         . "https://orgmode.org/elpa/")
-       ("gnu"         . "http://elpa.gnu.org/packages/")))
+        ("gnu"         . "http://elpa.gnu.org/packages/")))
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
@@ -42,7 +42,7 @@
 (load custom-file)
 
 (if (file-exists-p "~/.emacs.d/.emacs-local")
-  (load "~/.emacs.d/.emacs-local"))
+    (load "~/.emacs.d/.emacs-local"))
 
 (let ((default-directory  "~/.emacs.d/site-lisp/"))
   (normal-top-level-add-to-load-path '("."))
@@ -76,26 +76,26 @@
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
-      (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
-                  "/opt/homebrew/bin"
-                  ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
-                  ,(concat home-folder "/.local/share/n/bin")
-                  ,(concat home-folder "/work/dox-compose/bin/")
-                  ,(concat home-folder "/.rbenv/bin/")
-                  ,(concat home-folder "/.rbenv/shims/")
-                  ,(concat home-folder "/dotfiles/bin/")
-                  ,(concat home-folder "/.fzf/bin")
-                  ,(concat home-folder "/.local/bin")
-                  ,(concat home-folder "/.local/share/npm/bin/")
-                  ,(concat home-folder "/bin")
-                  "/snap/bin"
-                  "/usr/local/bin"
-                  "/bin/"
-                  "/usr/bin/"
-                  "/usr/local/sbin/"
-                  "/opt/homebrew/bin"
-                  "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
-      )
+       (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
+                   "/opt/homebrew/bin"
+                   ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
+                   ,(concat home-folder "/.local/share/n/bin")
+                   ,(concat home-folder "/work/dox-compose/bin/")
+                   ,(concat home-folder "/.rbenv/bin/")
+                   ,(concat home-folder "/.rbenv/shims/")
+                   ,(concat home-folder "/dotfiles/bin/")
+                   ,(concat home-folder "/.fzf/bin")
+                   ,(concat home-folder "/.local/bin")
+                   ,(concat home-folder "/.local/share/npm/bin/")
+                   ,(concat home-folder "/bin")
+                   "/snap/bin"
+                   "/usr/local/bin"
+                   "/bin/"
+                   "/usr/bin/"
+                   "/usr/local/sbin/"
+                   "/opt/homebrew/bin"
+                   "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
+       )
 
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
@@ -141,7 +141,7 @@
       version-control t ; use versioned backups
       create-lockfiles nil
       auto-save-file-name-transforms `((".*" ,"~/.local/share/emacs-saves" t))
-)
+      )
 
 (setq global-auto-revert-non-file-buffers t) ; also auto-revert dired buffers and other special buffers
 
@@ -178,21 +178,21 @@
 (setq recentf-max-saved-items 200)
 
 (use-package ivy
-:diminish ivy-mode
-:bind (:map ivy-minibuffer-map
-               ("C-c C-c" . ivy-restrict-to-matches)
-               ("C-j" . ivy-next-line-and-call)
-               ("C-k" . ivy-previous-line-and-call)
-))
+  :diminish ivy-mode
+  :bind (:map ivy-minibuffer-map
+              ("C-c C-c" . ivy-restrict-to-matches)
+              ("C-j" . ivy-next-line-and-call)
+              ("C-k" . ivy-previous-line-and-call)
+              ))
 :init
 (setq ivy-display-style 'fancy)
 (setq ivy-use-selectable-prompt t)
 (setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
 (setq ivy-initial-inputs-alist nil)
 (setq ivy-re-builders-alist
-  '((t      . ivy--regex-plus)))
+      '((t      . ivy--regex-plus)))
 (setq counsel-grep-base-command
- "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+      "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
 ;; enable this if you want `swiper' to use it
@@ -200,26 +200,10 @@
 :config
 (ivy-mode)
 (use-package counsel)
-(global-set-key (kbd "C-c C-SPC") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
-(global-set-key (kbd "<f1> l") 'counsel-find-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-c b") 'counsel-bookmark)
-
-(global-set-key (kbd "C-c v") 'ivy-switch-view)
-(global-set-key (kbd "C-c V") 'ivy-push-view)
-(global-set-key (kbd "C-c r") 'counsel-recentf)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
-
 (use-package evil
-:config
+  :config
   (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
 
 (defun tmux-socket-command-string ()
@@ -274,7 +258,6 @@
       (call-interactively 'evil-record-macro)))
 
   (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "-") 'dired-jump)
     (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
 
 (use-package evil-surround
@@ -304,8 +287,6 @@
 (use-package evil-visualstar
   :after evil
   :config
-  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (global-evil-visualstar-mode t))
 
 (use-package evil-matchit
@@ -390,17 +371,17 @@
   (load-theme 'zenburn t))
 
 (add-hook 'post-command-hook (lambda ()
-  (let* (
-         (color (cond ((minibufferp) auray/default-color)
-                      ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                      ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                      ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                      (t auray/default-color)))
-         )
-    (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-    (set-face-background 'mode-line (car color))
-    (set-face-foreground 'mode-line-buffer-id (cddr color))
-    (set-face-foreground 'mode-line (cadr color)))))
+                               (let* (
+                                      (color (cond ((minibufferp) auray/default-color)
+                                                   ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
+                                                   ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
+                                                   ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
+                                                   (t auray/default-color)))
+                                      )
+                                 (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
+                                 (set-face-background 'mode-line (car color))
+                                 (set-face-foreground 'mode-line-buffer-id (cddr color))
+                                 (set-face-foreground 'mode-line (cadr color)))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -465,13 +446,12 @@ cons cell (regexp . minor-mode)."
       (set-buffer-file-coding-system 'unix))))
 
 (if (fboundp 'mac-auto-operator-composition-mode)
-  (mac-auto-operator-composition-mode t))
+    (mac-auto-operator-composition-mode t))
 
 (blink-cursor-mode 0)
 (column-number-mode) ; column number in the mode line
 
 (electric-indent-mode t)
-(global-set-key (kbd "C-c oi") 'electric-indent-mode)
 
 (electric-pair-mode t)
 (defun inhibit-electric-pair-mode-in-minibuffer (char)
@@ -488,7 +468,7 @@ cons cell (regexp . minor-mode)."
   :config
   (eval-after-load "undo-tree"
     '(diminish 'undo-tree-mode))
-    (eval-after-load "subword"
+  (eval-after-load "subword"
     '(diminish 'subword-mode))
   (diminish 'auto-fill-function)
   (diminish 'org-indent-mode)
@@ -514,10 +494,10 @@ cons cell (regexp . minor-mode)."
 (setq reb-re-syntax 'string)
 
 (setq org-refile-targets '((nil :maxlevel . 3)
-                                (org-agenda-files :maxlevel . 3)))
+                           (org-agenda-files :maxlevel . 3)))
 (advice-add 'org-refile :after
-        (lambda (&rest _)
-        (org-save-all-org-buffers)))
+            (lambda (&rest _)
+              (org-save-all-org-buffers)))
 
 (use-package evil
   :init
@@ -559,7 +539,7 @@ cons cell (regexp . minor-mode)."
         (evil-insert-state)  ;; If so, turn on evil-insert-state
       (evil-normal-state)))  ;; Otherwise, turn on normal-state
 
-   (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state))
+  (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -606,15 +586,15 @@ cons cell (regexp . minor-mode)."
 
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
-    "If comment-dwim is successively called, add => mark."
-    (if (and (or (eq major-mode 'enh-ruby-mode)
-                 (eq major-mode 'ruby-mode))
-             (eq last-command 'comment-dwim))
-        (progn
-          (if (eq major-mode 'enh-ruby-mode)
-              (end-of-line))
-          (insert "=>"))
-      ad-do-it))
+  "If comment-dwim is successively called, add => mark."
+  (if (and (or (eq major-mode 'enh-ruby-mode)
+               (eq major-mode 'ruby-mode))
+           (eq last-command 'comment-dwim))
+      (progn
+        (if (eq major-mode 'enh-ruby-mode)
+            (end-of-line))
+        (insert "=>"))
+    ad-do-it))
 
 (use-package go-mode
   :mode "\\.go\\'")
@@ -624,12 +604,12 @@ cons cell (regexp . minor-mode)."
   :mode "\\.gohtml\\'"
   :config
   (setq web-mode-enable-auto-closing t)
-(add-hook
+  (add-hook
    'web-mode-hook
    (lambda ()
-      (setq-local
-       electric-pair-pairs
-       (append electric-pair-pairs '((?< . ?>))))))
+     (setq-local
+      electric-pair-pairs
+      (append electric-pair-pairs '((?< . ?>))))))
   )
 
 (use-package emmet-mode
@@ -741,8 +721,8 @@ cons cell (regexp . minor-mode)."
   (use-package prettier-js
     :config
     (add-hook 'web-mode-hook (lambda ()
-                                 (enable-minor-mode
-                                  '("\\.vue?\\'" . prettier-js-mode)))))
+                               (enable-minor-mode
+                                '("\\.vue?\\'" . prettier-js-mode)))))
 
   (add-hook 'web-mode-hook
             (lambda ()
@@ -769,8 +749,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'cfn-mode-hook 'flycheck-mode)
   (add-hook 'ruby-mode-hook 'flycheck-mode)
   :config
-(with-eval-after-load 'flycheck
-  (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
+  (with-eval-after-load 'flycheck
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (defun my/use-eslint-from-node-modules ()
     "Find eslint in the closest node-modules folder"
@@ -784,168 +764,43 @@ cons cell (regexp . minor-mode)."
         (setq-local flycheck-javascript-eslint-executable eslint))))
   (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 
-(defun eslint-fix-file ()
-  (interactive)
-  (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
-  (if flycheck-javascript-eslint-executable
-      (shell-command (concat flycheck-javascript-eslint-executable " --quiet --fix " (buffer-file-name)))))
-(defun eslint-fix-file-and-revert ()
-  (interactive)
-  (eslint-fix-file)
-  (revert-buffer t t))
-(add-hook 'js-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
+  (defun eslint-fix-file ()
+    (interactive)
+    (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
+    (if flycheck-javascript-eslint-executable
+        (shell-command (concat flycheck-javascript-eslint-executable " --quiet --fix " (buffer-file-name)))))
+  (defun eslint-fix-file-and-revert ()
+    (interactive)
+    (eslint-fix-file)
+    (revert-buffer t t))
+  (add-hook 'js-mode-hook
+            (lambda ()
+              (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
 
 
-(define-derived-mode cfn-mode yaml-mode
-  "Cloudformation"
-  "Cloudformation template mode.")
-(add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
+  (define-derived-mode cfn-mode yaml-mode
+    "Cloudformation"
+    "Cloudformation template mode.")
+  (add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
 
-(use-package highlight-indentation
-:config
-(add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode))))
+  (use-package highlight-indentation
+    :config
+    (add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode))))
 
-(flycheck-define-checker cfn-lint
-  "A Cloudformation linter using cfn-python-lint.
+  (flycheck-define-checker cfn-lint
+    "A Cloudformation linter using cfn-python-lint.
             See URL 'https://github.com/awslabs/cfn-python-lint'."
-  :command ("cfn-lint" "-f" "parseable" source)
-  :error-patterns (
-                   (warning line-start (file-name) ":" line ":" column
+    :command ("cfn-lint" "-f" "parseable" source)
+    :error-patterns (
+                     (warning line-start (file-name) ":" line ":" column
+                              ":" (one-or-more digit) ":" (one-or-more digit) ":"
+                              (id "W" (one-or-more digit)) ":" (message) line-end)
+                     (error line-start (file-name) ":" line ":" column
                             ":" (one-or-more digit) ":" (one-or-more digit) ":"
-                            (id "W" (one-or-more digit)) ":" (message) line-end)
-                   (error line-start (file-name) ":" line ":" column
-                          ":" (one-or-more digit) ":" (one-or-more digit) ":"
-                          (id "E" (one-or-more digit)) ":" (message) line-end)
-                   )
-  :modes (cfn-mode))
-(add-to-list 'flycheck-checkers 'cfn-lint))
-
-(use-package which-key
-  :diminish which-key-mode
-  :config
-  (which-key-mode))
-
-;; makes grep buffers writable and apply the changes to files.
-(use-package wgrep :defer t)
-
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
-
-(use-package paredit
-   :diminish paredit-mode
-   :config
-   (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-   (add-hook 'clojure-mode-hook #'paredit-mode)
-   (define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
-   )
-
- (use-package expand-region)
-
- (global-set-key (kbd "M-c") 'kill-ring-save) ; ⌘-c = Copy
- (global-set-key (kbd "M-v") 'yank) ; ⌘-v = Paste
- (global-set-key (kbd "C-x o") 'other-window)
- (global-set-key (kbd "C-c a") 'org-agenda)
- (global-set-key (kbd "C-c R") 'revert-buffer)
- (global-set-key (kbd "C-c jc") 'org-clock-jump-to-current-clock)
- (global-set-key (kbd "C-c je") (lambda () (interactive) (find-file "~/.emacs.d/init.org")))
- (global-set-key (kbd "C-c jp") (lambda () (interactive) (find-file "~/projects/")))
- (global-set-key (kbd "C-c jw") (lambda () (interactive) (find-file "~/work")))
- (global-set-key (kbd "C-c jj") 'dired-jump)
- (global-set-key (kbd "C-c k") 'recompile)
- (global-set-key (kbd "C-c K") 'compile)
-
- (global-set-key (kbd "<f5>") 'ispell-buffer)
- (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
- (global-set-key (kbd "C-c H") 'unhighlight-regexp)
-
- (global-display-line-numbers-mode -1)
- (defun show-line-numbers ()
-   (interactive)
-   (setq display-line-numbers 'absolute))
- (global-set-key (kbd "C-c oll") 'show-line-numbers)
- (defun hide-line-numbers ()
-   (interactive)
-   (setq display-line-numbers 'nil))
- (global-set-key (kbd "C-c olh") 'hide-line-numbers)
- (defun show-relative-line-numbers ()
-   (interactive)
-   (setq display-line-numbers 'relative))
- (global-set-key (kbd "C-c olr") 'show-relative-line-numbers)
- (global-set-key (kbd "C-c ow") 'visual-line-mode)
- (global-set-key (kbd "C-c of") 'auto-fill-mode)
- (global-hl-line-mode -1)
- (global-set-key (kbd "C-c og") 'global-hl-line-mode)
- (global-set-key (kbd "C-c op") 'show-paren-mode)
-
- (global-set-key (kbd "C-c oh") (lambda () (interactive)
-                                 (hi-lock-mode -1) (evil-search-highlight-persist-remove-all)))
- (use-package rainbow-mode
-   :diminish rainbow-mode
-   :bind (("C-c or" . rainbow-mode)))
-
-(global-set-key (kbd "C-c ot") 'toggle-truncate-lines)
-
- (use-package windresize
-   :bind (("C-c w C-SPC" . windresize)))
-
-(use-package general
-  :config
-
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-
-(setq evil-search-module 'evil-search)
-(my-leader-def
-  :states 'normal
-  :keymaps 'override
-  "f" 'counsel-rg
-  "F" 'deadgrep
-  "g" 'magit-file-dispatch
-  "p" 'projectile-command-map
-  "i" 'counsel-imenu
-  "b" 'project-switch-to-buffer
-  "s" 'auray/find-file-with-similar-name
-  "e" 'flycheck-list-errors
-  "t" 'tab-switch
-  "c" (lambda () (interactive) (org-capture nil "n"))
-  "h" 'highlight-symbol-at-point
-  "x" 'emamux:run-last-command
-  "X" 'emamux:send-command
-  )
-
-
-(my-leader-def
-  :states 'visual
-  :keymaps 'override
-  "x" 'emamux:send-region)
-
-
-(general-define-key
- :states 'normal
- "/" 'swiper-isearch
- (kbd "DEL") 'evil-switch-to-windows-last-buffer
- "C-w 0" 'delete-window
- "C-w o" 'delete-other-windows
- "[ [" 'previous-buffer
- "] ]" 'next-buffer
- "[ e" 'flycheck-previous-error
- "] e" 'flycheck-next-error
- "[ q" 'previous-error
- "] q" 'next-error)
-
-(general-define-key
- :states 'insert
- "s-/" 'hippie-expand)
-
-(general-define-key
- :keymaps 'override
- "C-c p" 'project-find-file
- "C-SPC" 'er/expand-region
- "C-x b" 'switch-to-buffer
- "C-x B" 'project-switch-to-buffer
- "C-s" 'swiper-isearch)
-)
+                            (id "E" (one-or-more digit)) ":" (message) line-end)
+                     )
+    :modes (cfn-mode))
+  (add-to-list 'flycheck-checkers 'cfn-lint))
 
 (use-package hydra
   :config
@@ -974,15 +829,14 @@ cons cell (regexp . minor-mode)."
       '((sequence "TODO(t)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(canceled@)")))
 
 (use-package deft
- :bind (("<f9>" . deft))
- :commands (deft)
- :init
- (setq deft-extensions '("org" "md")
-       deft-recursive t
-       deft-directory "~/Dropbox/notes/"))
+  :commands (deft)
+  :init
+  (setq deft-extensions '("org" "md")
+        deft-recursive t
+        deft-directory "~/Dropbox/notes/"))
 
 (use-package markdown-mode
- :mode "\\.md\\'")
+  :mode "\\.md\\'")
 
 (global-set-key "\C-cl" 'org-store-link)
 
@@ -1016,7 +870,7 @@ cons cell (regexp . minor-mode)."
           'delete-other-windows)
 
 (require 'ob-clojure) ;; run cider-jack-in from org buffer to be able to run
-                      ;; clojure code
+;; clojure code
 (use-package ob-clojurescript) ;; requires [[https://github.com/anmonteiro/lumo][lumo]]
 (setq org-babel-clojure-backend 'cider)
 (require 'ob-js)
@@ -1121,7 +975,7 @@ This command switches to browser."
 (evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
 
 (use-package iedit
-:bind (("C-c i" . iedit-mode)))
+  :bind (("C-c i" . iedit-mode)))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
@@ -1215,7 +1069,7 @@ This command switches to browser."
         company-require-match 'never
         company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
         company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-          company-backends '((company-files company-capf))
+        company-backends '((company-files company-capf))
         company-transformers '(company-sort-by-occurrence))
 
   (add-hook 'after-init-hook 'global-company-mode)
@@ -1234,31 +1088,31 @@ This command switches to browser."
   (autoload 'company-elisp "company-elisp")
   (autoload 'company-files "company-files"))
 
-  ;; icons for some company completions
+;; icons for some company completions
 (use-package company-box
   :diminish company-box-mode
   :hook (company-mode . company-box-mode)
   :config
 
-(defun company-box-doc--make-buffer (object)
-  (let* ((buffer-list-update-hook nil)
-         (inhibit-modification-hooks t)
-         (string (cond ((stringp object) object)
-                       ((bufferp object) (with-current-buffer object (buffer-string))))))
-    (when (and string (> (length (string-trim string)) 0))
-      (with-current-buffer (company-box--get-buffer "doc")
-        (erase-buffer)
-        (insert string)
-        (setq mode-line-format nil
-              display-line-numbers nil
-              header-line-format nil
-              show-trailing-whitespace nil
-              cursor-in-non-selected-windows nil)
+  (defun company-box-doc--make-buffer (object)
+    (let* ((buffer-list-update-hook nil)
+           (inhibit-modification-hooks t)
+           (string (cond ((stringp object) object)
+                         ((bufferp object) (with-current-buffer object (buffer-string))))))
+      (when (and string (> (length (string-trim string)) 0))
+        (with-current-buffer (company-box--get-buffer "doc")
+          (erase-buffer)
+          (insert string)
+          (setq mode-line-format nil
+                display-line-numbers nil
+                header-line-format nil
+                show-trailing-whitespace nil
+                cursor-in-non-selected-windows nil)
 
-        (toggle-truncate-lines -1) ;; PATCHED HERE
+          (toggle-truncate-lines -1) ;; PATCHED HERE
 
-        (current-buffer)))))
-)
+          (current-buffer)))))
+  )
 
 (defun company-box-doc--set-frame-position (frame)
   (-let* ((box-position (frame-position (company-box--get-frame)))
@@ -1326,7 +1180,7 @@ This command switches to browser."
      (define-key dired-mode-map "-" 'dired-up-directory)))
 
 (use-package dired-rsync
-:bind (:map dired-mode-map ("p" . dired-rsync)))
+  :bind (:map dired-mode-map ("p" . dired-rsync)))
 
 (use-package docker-tramp)
 
@@ -1367,11 +1221,11 @@ This command switches to browser."
   (global-set-key (kbd "C-c 0") 'paredit-forward-slurp-sexp)
   (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
   (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
-)
+  )
 
 (use-package emamux
-:init
-(setq emamux:use-nearest-pane 1))
+  :init
+  (setq emamux:use-nearest-pane 1))
 
 (use-package lsp-mode
   :init
