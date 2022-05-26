@@ -155,7 +155,7 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
+(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
 ;; (global-visual-line-mode)
 
 (setq sentence-end-double-space nil)
@@ -239,14 +239,6 @@
       (evil-window-down 1)
     (error (unless window-system (shell-command (concat
                                                  (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(global-set-key (kbd "C-h") 'tmux-move-left)
-
-(global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-
-(global-set-key (kbd "C-k") 'tmux-move-up)
-(global-set-key (kbd "C-l") 'tmux-move-right)
 
 (use-package evil
   :init
@@ -482,11 +474,7 @@ cons cell (regexp . minor-mode)."
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package default-text-scale
-  :config
-  :bind (("C-=" . 'default-text-scale-reset)
-         ("C-+" . 'default-text-scale-increase)
-         ("C-M-+" . 'default-text-scale-decrease)))
+(use-package default-text-scale)
 
 (setq default-frame-alist '((font . "Operator Mono AB-16")))
 
@@ -802,6 +790,180 @@ cons cell (regexp . minor-mode)."
     :modes (cfn-mode))
   (add-to-list 'flycheck-checkers 'cfn-lint))
 
+(use-package which-key
+  :diminish which-key-mode
+  :config
+  (which-key-mode))
+
+;; makes grep buffers writable and apply the changes to files.
+(use-package wgrep :defer t)
+
+(use-package paredit
+  :diminish paredit-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'paredit-mode))
+
+(use-package expand-region)
+
+(global-display-line-numbers-mode -1)
+(defun show-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'absolute))
+(defun hide-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'nil))
+(defun show-relative-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'relative))
+
+(global-hl-line-mode -1)
+
+(use-package rainbow-mode :diminish rainbow-mode)
+(use-package windresize)
+
+(define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
+
+(use-package general
+  :config
+
+  (general-create-definer my-leader-def
+    :prefix "SPC")
+
+  (setq evil-search-module 'evil-search)
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "b" 'project-switch-to-buffer
+    "c" (lambda () (interactive) (org-capture nil "n"))
+    "e" 'flycheck-list-errors
+    "f" 'counsel-rg
+    "F" 'deadgrep
+    "g" 'magit-file-dispatch
+    "h" 'highlight-symbol-at-point
+    "H" 'unhighlight-regexp
+    "i" 'counsel-imenu
+    "s" 'auray/find-file-with-similar-name
+    "t" 'tab-switch
+    "x" 'emamux:run-last-command
+    "X" 'emamux:send-command
+    )
+
+  (my-leader-def
+    :states 'visual
+    :keymaps 'override
+    "x" 'emamux:send-region)
+
+  (general-define-key
+   :states 'normal
+   "-" 'dired-jump
+   "/" 'swiper-isearch
+   "DEL" 'evil-switch-to-windows-last-buffer
+   "gf" 'auray/project-guess-file
+   "j" 'evil-next-visual-line
+   "k" 'evil-previous-visual-line
+   "[ [" 'previous-buffer
+   "] ]" 'next-buffer
+   "[ e" 'flycheck-previous-error
+   "] e" 'flycheck-next-error
+   "[ q" 'previous-error
+   "] q" 'next-error)
+
+  (general-define-key
+   :states 'insert
+   "s-/" 'hippie-expand
+   "M-/" 'hippie-expand)
+
+  (general-define-key
+   :keymaps 'override
+
+   "<f1> f" 'counsel-describe-function
+   "<f1> v" 'counsel-describe-variable
+   "<f1> o" 'counsel-describe-symbol
+   "<f1> l" 'counsel-find-library
+   "<f2> i" 'counsel-info-lookup-symbol
+   "<f2> u" 'counsel-unicode-char
+   "<f5>" 'ispell-buffer
+   "<f6>" 'iedit-mode
+   "<f7>" 'org-tree-slide-mode
+   "S-<f7>" 'org-tree-slide-skip-done-toggle
+   ;; Hydra on F8
+   "<f9>" 'deft
+
+   "M-." 'xref-find-definitions
+   "M-c" 'kill-ring-save ; ⌘-c = Copy
+   "M-v" 'yank ; ⌘-v = Paste
+   "M-x" 'counsel-M-x
+
+ "C-=" 'default-text-scale-reset
+ "C-+" 'default-text-scale-increase
+ "C-M-+" 'default-text-scale-decrease
+
+ "C-SPC" 'er/expand-region
+  "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-k" 'tmux-move-up
+   "C-l" 'tmux-move-right
+   "C-s" 'swiper-isearch
+   "C-c C-SPC" 'ivy-resume
+   "C-c 9" 'paredit-backward-slurp-sexp
+   "C-c 0" 'paredit-forward-slurp-sexp
+   "C-c [" 'paredit-backward-barf-sexp
+   "C-c ]" 'paredit-forward-barf-sexp
+   "C-c a" 'org-agenda
+   ;; C-c C-c "runs" what makes sense for a particular mode
+   "C-c b" 'counsel-bookmark
+   "C-c d c" 'engine/search-caniuse
+   "C-c d m" 'engine/search-mdn
+   "C-c d s" 'engine/search-css
+   "C-c d ra" 'engine/search-rails
+   "C-c d rr" 'engine/search-ruby
+   "C-c f" 'counsel-rg
+   "C-c gg" 'magit-status
+   "C-c gl" 'git-link
+   "C-c gt" 'git-timemachine-toggle
+   "C-c jc" 'org-clock-jump-to-current-clock
+   "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+   "C-c jp" (lambda () (interactive) (find-file "~/projects/"))
+   "C-c jw" (lambda () (interactive) (find-file "~/work"))
+   "C-c jj" 'dired-jump
+   "C-c k" 'recompile
+   "C-c K" 'compile
+   ;; C-c l -> lsp-keymap-prefix
+   "C-c L" 'org-store-link
+
+   "C-c of" 'auto-fill-mode
+   "C-c og" 'global-hl-line-mode
+   "C-c oh" (lambda () (interactive) (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
+   "C-c oi" 'electric-indent-mode
+   "C-c olh" 'hide-line-numbers
+   "C-c oll" 'show-line-numbers
+   "C-c olr" 'show-relative-line-numbers
+   "C-c op" 'show-paren-mode
+   "C-c or" 'rainbow-mode
+   "C-c ot" 'toggle-truncate-lines
+   "C-c ow" 'visual-line-mode
+
+   "C-c p" 'project-find-file
+   "C-c q" 'speedbar-get-focus
+   "C-c r" 'counsel-recentf
+   "C-c R" 'revert-buffer
+   "C-c v" 'ivy-switch-view
+   "C-c V" 'ivy-push-view
+   "C-c w r" 'windresize
+
+   "C-x C-f" 'counsel-find-file
+   "C-x b" 'switch-to-buffer
+   "C-x B" 'project-switch-to-buffer
+   "C-x l" 'counsel-locate
+   "C-x o" 'other-window
+   "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+
+   "C-w o" 'delete-other-window
+   "C-w 0" 'delete-window
+   ))
+
 (use-package hydra
   :config
   (defhydra hydra-utils (global-map "<f8>")
@@ -837,8 +999,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package markdown-mode
   :mode "\\.md\\'")
-
-(global-set-key "\C-cl" 'org-store-link)
 
 (use-package palimpsest
   :diminish palimpsest-mode
@@ -968,30 +1128,25 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
+(use-package counsel)
 
 (require 'auray/find-in-project)
-(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
 
-(use-package iedit
-  :bind (("C-c i" . iedit-mode)))
+(use-package iedit)
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 (setq ediff-split-window-function 'split-window-vertically)
 
-(use-package git-link :bind (("C-c gl" . git-link)))
+(use-package git-link)
 
-(use-package git-timemachine
-  :bind (("C-c gt" . git-timemachine-toggle)))
+(use-package git-timemachine)
 
 (use-package fullframe
   :config
   (fullframe vc-annotate quit-window))
 
 (use-package magit
-  :bind (("C-c gg" . magit-status))
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1009,7 +1164,6 @@ This command switches to browser."
 
 (require 'project)
 
-(global-set-key (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
@@ -1017,7 +1171,6 @@ This command switches to browser."
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (setq speedbar-directory-unshown-regexp "^$")
-(global-set-key (kbd "C-c q") 'speedbar-get-focus)
 
 (setq project-switch-commands 'project-dired)
 
@@ -1199,8 +1352,6 @@ This command switches to browser."
 (use-package org-tree-slide
   :hook ((org-tree-slide-play . abott/org-tree-slide-play)
          (org-tree-slide-stop . abott/org-tree-slide-stop))
-  :bind (("<f7>" . org-tree-slide-mode)
-         ("S-<f7>" . org-tree-slide-skip-done-toggle))
   :config
   (with-eval-after-load "org-tree-slide"
     (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
@@ -1216,12 +1367,7 @@ This command switches to browser."
 
 (use-package paredit-everywhere
   :config
-  (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
-  (global-set-key (kbd "C-c 9") 'paredit-backward-slurp-sexp)
-  (global-set-key (kbd "C-c 0") 'paredit-forward-slurp-sexp)
-  (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
-  (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
-  )
+  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
 
 (use-package emamux
   :init
@@ -1243,8 +1389,7 @@ This command switches to browser."
   (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
   :config
 
-  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
-  )
+  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/"))
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config
@@ -1263,4 +1408,4 @@ This command switches to browser."
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(desktop-save-mode 1)
+(desktop-save-mode -1)

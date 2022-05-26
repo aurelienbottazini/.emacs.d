@@ -246,7 +246,7 @@ stick to fundamental mode and disable expensive minor modes.
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines t) ; when true gives each line only one visual line and don't show a continuation on next line
+(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
 ;; (global-visual-line-mode)
 #+END_SRC
 
@@ -368,14 +368,6 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
       (evil-window-down 1)
     (error (unless window-system (shell-command (concat
                                                  (tmux-socket-command-string) " select-pane -D") nil)))))
-
-(global-set-key (kbd "C-h") 'tmux-move-left)
-
-(global-set-key (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-
-(global-set-key (kbd "C-k") 'tmux-move-up)
-(global-set-key (kbd "C-l") 'tmux-move-right)
 #+END_SRC
 * VIM
 
@@ -698,11 +690,7 @@ Enable ligatures on mac
 ** Text size
 Changes the size of the text. Useful when I pair program
 #+begin_src emacs-lisp
-(use-package default-text-scale
-  :config
-  :bind (("C-=" . 'default-text-scale-reset)
-         ("C-+" . 'default-text-scale-increase)
-         ("C-M-+" . 'default-text-scale-decrease)))
+(use-package default-text-scale)
 #+end_src
 
 Emacs makes it hard to select font with weight of Regular or Book.
@@ -1121,7 +1109,7 @@ adjustments for JSX.
 #+END_SRC
 * Bindings
 
-** COMMENT General
+** General
 Shows a key combination helper in the minibuffer
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
@@ -1164,6 +1152,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
 #+begin_src emacs-lisp
 (define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
+(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
 
 (use-package general
   :config
@@ -1200,6 +1189,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "-" 'dired-jump
    "/" 'swiper-isearch
    "DEL" 'evil-switch-to-windows-last-buffer
+   "gf" 'auray/project-guess-file
    "j" 'evil-next-visual-line
    "k" 'evil-previous-visual-line
    "[ [" 'previous-buffer
@@ -1224,18 +1214,44 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "<f2> i" 'counsel-info-lookup-symbol
    "<f2> u" 'counsel-unicode-char
    "<f5>" 'ispell-buffer
+   "<f6>" 'iedit-mode
+   "<f7>" 'org-tree-slide-mode
+   "S-<f7>" 'org-tree-slide-skip-done-toggle
    ;; Hydra on F8
    "<f9>" 'deft
 
+   "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
 
-   "C-SPC" 'er/expand-region
-   "C-s" 'swiper-isearch
+ "C-=" 'default-text-scale-reset
+ "C-+" 'default-text-scale-increase
+ "C-M-+" 'default-text-scale-decrease
 
+ "C-SPC" 'er/expand-region
+  "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-k" 'tmux-move-up
+   "C-l" 'tmux-move-right
+   "C-s" 'swiper-isearch
    "C-c C-SPC" 'ivy-resume
+   "C-c 9" 'paredit-backward-slurp-sexp
+   "C-c 0" 'paredit-forward-slurp-sexp
+   "C-c [" 'paredit-backward-barf-sexp
+   "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
+   ;; C-c C-c "runs" what makes sense for a particular mode
+   "C-c b" 'counsel-bookmark
+   "C-c d c" 'engine/search-caniuse
+   "C-c d m" 'engine/search-mdn
+   "C-c d s" 'engine/search-css
+   "C-c d ra" 'engine/search-rails
+   "C-c d rr" 'engine/search-ruby
+   "C-c f" 'counsel-rg
+   "C-c gg" 'magit-status
+   "C-c gl" 'git-link
+   "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
    "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
    "C-c jp" (lambda () (interactive) (find-file "~/projects/"))
@@ -1243,6 +1259,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c jj" 'dired-jump
    "C-c k" 'recompile
    "C-c K" 'compile
+   ;; C-c l -> lsp-keymap-prefix
+   "C-c L" 'org-store-link
 
    "C-c of" 'auto-fill-mode
    "C-c og" 'global-hl-line-mode
@@ -1257,18 +1275,12 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c ow" 'visual-line-mode
 
    "C-c p" 'project-find-file
+   "C-c q" 'speedbar-get-focus
+   "C-c r" 'counsel-recentf
    "C-c R" 'revert-buffer
    "C-c v" 'ivy-switch-view
    "C-c V" 'ivy-push-view
    "C-c w r" 'windresize
-
-
-
-   "C-c b" 'counsel-bookmark
-
-   "C-c r" 'counsel-recentf
-
-
 
    "C-x C-f" 'counsel-find-file
    "C-x b" 'switch-to-buffer
@@ -1347,9 +1359,6 @@ for org template captures.
 
 If you have a selection, it will be part of the link and Emacs will
 look for that selection If you visit the link.
-#+BEGIN_SRC emacs-lisp
-(global-set-key "\C-cl" 'org-store-link)
-#+END_SRC
 
 ~palimpsest~ makes it easier to quickly discard blocks of text.
 Main use is to just send the block of text at the bottom of the
@@ -1573,8 +1582,7 @@ isearch and occur (~M-s o~)
 ~counsel-rg~ is my main way to search. Invoked with an argument, it
 allows you to specify the directory and search options.
 #+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :bind (("C-c f" . counsel-rg)))
+(use-package counsel)
 #+END_SRC
 
 When I am investigating things, I like to see a preview of the
@@ -1587,7 +1595,6 @@ search results.
 
 #+begin_src emacs-lisp
 (require 'auray/find-in-project)
-(evil-define-key nil evil-normal-state-map (kbd "gf") 'auray/project-guess-file)
 #+end_src
 
 *** When I need to narrow down my search to specific files
@@ -1610,8 +1617,7 @@ with ~Q~.
 ** Rename
 
 #+BEGIN_SRC emacs-lisp
-(use-package iedit
-  :bind (("C-c i" . iedit-mode)))
+(use-package iedit)
 #+END_SRC
 
 * VCS
@@ -1632,7 +1638,7 @@ done.
 
 To grab a link I can share with co-workers from the region or file.
 #+BEGIN_SRC emacs-lisp
-(use-package git-link :bind (("C-c gl" . git-link)))
+(use-package git-link)
 #+END_SRC
 ** View History
 *** timemachine
@@ -1640,8 +1646,7 @@ Allows to view previous versions of a file. It is not focused on the
 diff but on the file itself. Use ~n~ and ~p~ to navigate between
 versions.
 #+BEGIN_SRC emacs-lisp
-(use-package git-timemachine
-  :bind (("C-c gt" . git-timemachine-toggle)))
+(use-package git-timemachine)
 #+END_SRC
 *** vc-annotate
 
@@ -1674,7 +1679,6 @@ porcelains.
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :bind (("C-c gg" . magit-status))
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1729,7 +1733,6 @@ IDE code analysis but it works surprisingly well.
 ~M-,~ to go back.
 ~M-?~ to find references
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-.") 'xref-find-definitions)
 (use-package dumb-jump
   :init
   (setq dumb-jump-selector 'ivy)
@@ -1740,7 +1743,6 @@ IDE code analysis but it works surprisingly well.
 ** Navigation tree
 #+begin_src emacs-lisp
 (setq speedbar-directory-unshown-regexp "^$")
-(global-set-key (kbd "C-c q") 'speedbar-get-focus)
 #+end_src
 
 ** Find file in project
@@ -1973,11 +1975,6 @@ Other =terminfo= examples are available in the [[https://www.gnu.org/software/em
 * Documentation
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package engine-mode
-  :bind (("C-c d c" . engine/search-caniuse)
-         ("C-c d m" . engine/search-mdn)
-         ("C-c d s" . engine/search-css)
-         ("C-c d ra" . engine/search-rails)
-         ("C-c d rr" . engine/search-ruby))
   :config
   (defengine ruby "https://apidock.com/ruby/search?query=%s")
   (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
@@ -2006,8 +2003,6 @@ Other =terminfo= examples are available in the [[https://www.gnu.org/software/em
 (use-package org-tree-slide
   :hook ((org-tree-slide-play . abott/org-tree-slide-play)
          (org-tree-slide-stop . abott/org-tree-slide-stop))
-  :bind (("<f7>" . org-tree-slide-mode)
-         ("S-<f7>" . org-tree-slide-skip-done-toggle))
   :config
   (with-eval-after-load "org-tree-slide"
     (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
@@ -2033,12 +2028,7 @@ C-c C-e R =letter= to export a presentation from your org file
 #+begin_src emacs-lisp
 (use-package paredit-everywhere
   :config
-  (add-hook 'prog-mode-hook 'paredit-everywhere-mode)
-  (global-set-key (kbd "C-c 9") 'paredit-backward-slurp-sexp)
-  (global-set-key (kbd "C-c 0") 'paredit-forward-slurp-sexp)
-  (global-set-key (kbd "C-c [") 'paredit-backward-barf-sexp)
-  (global-set-key (kbd "C-c ]") 'paredit-forward-barf-sexp)
-  )
+  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2064,8 +2054,7 @@ C-c C-e R =letter= to export a presentation from your org file
   (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
   :config
 
-  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/")
-  )
+  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/"))
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config
@@ -2091,7 +2080,7 @@ C-c C-e R =letter= to export a presentation from your org file
 
 Sessions
 #+begin_src emacs-lisp
-(desktop-save-mode 1)
+(desktop-save-mode -1)
 #+end_src
 * Local variables
 
