@@ -906,7 +906,10 @@ cons cell (regexp . minor-mode)."
    "C-k" 'tmux-move-up
    "C-l" 'tmux-move-right
    "C-s" 'swiper-isearch
+
    "C-c C-SPC" 'ivy-resume
+   "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+
    "C-c 9" 'paredit-backward-slurp-sexp
    "C-c 0" 'paredit-forward-slurp-sexp
    "C-c [" 'paredit-backward-barf-sexp
