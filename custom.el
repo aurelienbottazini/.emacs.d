@@ -66,7 +66,7 @@
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
  '(lsp-prefer-flymake :none)
- '(lsp-ui-doc-enable t)
+ '(lsp-ui-doc-enable nil)
  '(lsp-ui-doc-show-with-cursor t)
  '(lsp-ui-doc-use-childframe nil)
  '(lsp-ui-doc-use-webkit nil)

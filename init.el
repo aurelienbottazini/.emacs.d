@@ -470,10 +470,6 @@ cons cell (regexp . minor-mode)."
 (setq blink-matching-paren 'jump-offscreen)
 (show-paren-mode 1)
 
-(use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
 (use-package default-text-scale)
 
 (setq default-frame-alist '((font . "Operator Mono AB-16")))
@@ -840,7 +836,8 @@ cons cell (regexp . minor-mode)."
     "e" 'flycheck-list-errors
     "f" 'counsel-rg
     "F" 'deadgrep
-    "g" 'magit-file-dispatch
+    "g" 'magit-status
+    "G" 'magit-file-dispatch
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
@@ -896,11 +893,11 @@ cons cell (regexp . minor-mode)."
    "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
 
- "C-=" 'default-text-scale-reset
- "C-+" 'default-text-scale-increase
- "C-M-+" 'default-text-scale-decrease
+   "C-=" 'default-text-scale-reset
+   "C-+" 'default-text-scale-increase
+   "C-M-+" 'default-text-scale-decrease
 
- "C-SPC" 'er/expand-region
+  "C-SPC" 'er/expand-region
   "C-h" 'tmux-move-left
    "C-j" 'tmux-move-down
    "C-k" 'tmux-move-up
@@ -957,11 +954,12 @@ cons cell (regexp . minor-mode)."
    "C-c w r" 'windresize
 
    "C-x C-f" 'counsel-find-file
+   "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
    "C-x B" 'project-switch-to-buffer
    "C-x l" 'counsel-locate
    "C-x o" 'other-window
-   "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
    "C-w o" 'delete-other-window
    "C-w 0" 'delete-window
@@ -1209,17 +1207,16 @@ This command switches to browser."
 
 (ivy-add-actions #'project-find-file '(("o" find-file "open")))
 
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list))
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
-(setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol))
-(setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-complete-lisp-symbol-partially try-complete-lisp-symbol))
+(setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
 
 (use-package company
   :demand t
   :diminish company-mode
   :bind (:map company-active-map ("<tab>" . company-complete-selection))
   :config
-  (setq company-idle-delay 0.2
+  (setq company-idle-delay nil
         company-tooltip-limit 10
         company-tooltip-align-annotations t
         company-require-match 'never
