@@ -65,7 +65,7 @@
         (when (equal default-directory dir))
         (my-reload-dir-locals-for-current-buffer)))))
 
-(setq initial-major-mode 'org-mode)
+(setq initial-major-mode 'fundamental-mode)
 (setq initial-scratch-message nil)
 
 (setq vc-follow-symlinks t)
@@ -1042,8 +1042,6 @@ cons cell (regexp . minor-mode)."
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
 
-(use-package ob-graphql)
-
 (setq
  time-stamp-active t
  time-stamp-line-limit 30     ; check first 30 buffer lines for Time-stamp:
@@ -1142,13 +1140,12 @@ This command switches to browser."
 
 (use-package git-link)
 
-(use-package git-timemachine)
-
 (use-package fullframe
   :config
   (fullframe vc-annotate quit-window))
 
 (use-package magit
+  :commands magit-status
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1336,8 +1333,6 @@ This command switches to browser."
 (use-package dired-rsync
   :bind (:map dired-mode-map ("p" . dired-rsync)))
 
-(use-package docker-tramp)
-
 (use-package restclient
   :demand t
   :config
@@ -1371,6 +1366,7 @@ This command switches to browser."
   (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
 
 (use-package emamux
+  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init
   (setq emamux:use-nearest-pane 1))
 
@@ -1398,14 +1394,6 @@ This command switches to browser."
   (setq lsp-ui-sideline-enable t))
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-
-;; optionally if you want to use debugger
-(use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
-
-(use-package projectile
-  :config
-  (projectile-mode +1))
 
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)

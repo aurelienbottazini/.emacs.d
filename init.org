@@ -5,6 +5,7 @@
 * Faster startup
 Adjusts garbage collector for faster startup.
 #+begin_src emacs-lisp
+
 ;; -*- lexical-binding: t; -*-
 (defvar last-file-name-handler-alist file-name-handler-alist)
 (setq gc-cons-threshold 402653184
@@ -140,7 +141,7 @@ with the reloading of those locals.
 
 * Better Defaults
 #+begin_src emacs-lisp
-(setq initial-major-mode 'org-mode)
+(setq initial-major-mode 'fundamental-mode)
 (setq initial-scratch-message nil)
 #+end_src
 
@@ -1432,8 +1433,6 @@ This loads more programming languages to use with org-babel.
                              '((shell . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
-
-(use-package ob-graphql)
 #+END_SRC
 
 ** Publish
@@ -1644,13 +1643,6 @@ To grab a link I can share with co-workers from the region or file.
 (use-package git-link)
 #+END_SRC
 ** View History
-*** timemachine
-Allows to view previous versions of a file. It is not focused on the
-diff but on the file itself. Use ~n~ and ~p~ to navigate between
-versions.
-#+BEGIN_SRC emacs-lisp
-(use-package git-timemachine)
-#+END_SRC
 *** vc-annotate
 
 Bound to ~C-x v g~.
@@ -1682,6 +1674,7 @@ porcelains.
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
+  :commands magit-status
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1951,11 +1944,6 @@ To play a video, with cursor on video file in dired =! vlc=
 (use-package dired-rsync
   :bind (:map dired-mode-map ("p" . dired-rsync)))
 #+END_SRC
-
-** Docker
-#+begin_src emacs-lisp
-(use-package docker-tramp)
-#+end_src
 * 24 bits Emacs
 
 Run this command to know if your Emacs display 24 bits colors.
@@ -2035,6 +2023,7 @@ C-c C-e R =letter= to export a presentation from your org file
 
 #+begin_src emacs-lisp
 (use-package emamux
+  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init
   (setq emamux:use-nearest-pane 1))
 #+end_src
@@ -2064,16 +2053,6 @@ C-c C-e R =letter= to export a presentation from your org file
   (setq lsp-ui-sideline-enable t))
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-
-;; optionally if you want to use debugger
-(use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package projectile
-  :config
-  (projectile-mode +1))
 #+end_src
 
 #+begin_src emacs-lisp
