@@ -959,6 +959,7 @@ cons cell (regexp . minor-mode)."
    "C-x b" 'switch-to-buffer
    "C-x B" 'project-switch-to-buffer
    "C-x l" 'counsel-locate
+   "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window
 
    "C-w o" 'delete-other-window
@@ -1379,6 +1380,7 @@ This command switches to browser."
   (setq lsp-keymap-prefix "C-c l")
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (js2-mode . lsp)
+         (typescript-mode . lsp)
          (css-mode . lsp)
          (ruby-mode . lsp)
          (html-mode . lsp)
