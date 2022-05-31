@@ -38,11 +38,12 @@
  '(dumb-jump-mode t)
  '(electric-pair-mode nil)
  '(electric-quote-string t)
- '(emamux:use-nearest-pane t)
+ '(emamux:use-nearest-pane t t)
  '(engine/browser-function 'eww)
  '(evil-mode-line-format nil)
  '(evil-toggle-key "C-c e")
  '(evil-undo-system 'undo-redo)
+ '(expand-region-contract-fast-key "_")
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
@@ -88,6 +89,7 @@
 ")
  '(org-startup-folded nil)
  '(org-startup-indented t)
+ '(org-startup-truncated nil)
  '(package-selected-packages
    '(company-quickhelp-terminal dap-mode lsp-treemacs lsp-ivy helm-lsp lsp-ui lsp-mode projectile zenburn-theme emamux combobulate tree-sitter-langs tree-sitter treesitter-langs treesitter gruvbox-theme vertico deadgrep context-coloring-mode idle-highlight-mode idle-highlight ivy-posframe general winum doom-modeline doom-themes treemacs-all-the-icons treemacs-magit treemacs-icons-dired treemacs-evil org-superstar ace-window docker-tramp counsel-fzf el-patch el-path evil-indent-plus evil-search-highlight-persist evil-matchit evil-surround org-roam evil-visualstar evil-visual-star evil-commentary counsel guru-mode evil embark-consult embark marginalia consult selectrum-prescient selectrum ivy-hydra ivy find-file-in-project ox-reveal which-key project osx-clipboard evil-mode solarized-theme flycheck-clj-kondo company-box org-reveal org-tree-slide ob-graphql rainbow-delimiters org-msg default-text-scale dracula-theme origami-mode origame-mode evil-leader smart-mode-line restclient engine-mode ruby zotxt zotxt-emacs eglot treemacs leuven prettier company-statistics writeroom-mode go-mode ob-clojurescript writegood-mode writegood osx-dictionary all-the-icons-dired-mode all-the-icons-dired all-the-icons dired-rsync docker xref-js2 js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode noflet lsp-css company-lsp lsp-javascript-typescript lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere hydra counsel-projectile iedit typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses evil-numbers exec-path-from-shell use-package))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
@@ -167,7 +169,7 @@
  '(tab-bar-tab-hints t)
  '(tool-bar-mode nil)
  '(treemacs-position 'right)
- '(truncate-partial-width-windows nil)
+ '(truncate-lines nil)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    '((20 . "#BC8383")
@@ -190,8 +192,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

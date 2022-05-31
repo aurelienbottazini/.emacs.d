@@ -5,10 +5,9 @@
 * Faster startup
 Adjusts garbage collector for faster startup.
 #+begin_src emacs-lisp
-
 ;; -*- lexical-binding: t; -*-
 (defvar last-file-name-handler-alist file-name-handler-alist)
-(setq gc-cons-threshold 402653184
+(setq gc-cons-threshold 100000000
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
@@ -247,8 +246,7 @@ stick to fundamental mode and disable expensive minor modes.
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
-;; (global-visual-line-mode)
+(setq-default truncate-lines nil)
 #+END_SRC
 
 Sentences end with one space after point. The default two space is
@@ -695,7 +693,7 @@ Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 #+begin_src emacs-lisp
-(setq default-frame-alist '((font . "Operator Mono AB-16")))
+(setq default-frame-alist '((font . "PragmataPro-16")))
 #+end_src
 
 ** Code Folding
@@ -1189,6 +1187,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "/" 'swiper-isearch
    "DEL" 'evil-switch-to-windows-last-buffer
    "gf" 'auray/project-guess-file
+   "gr" 'er/expand-region
    "j" 'evil-next-visual-line
    "k" 'evil-previous-visual-line
    "[ [" 'previous-buffer
@@ -1228,7 +1227,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
 
-  "C-SPC" 'er/expand-region
   "C-h" 'tmux-move-left
    "C-j" 'tmux-move-down
    "C-k" 'tmux-move-up

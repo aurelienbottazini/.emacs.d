@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 (defvar last-file-name-handler-alist file-name-handler-alist)
-(setq gc-cons-threshold 402653184
+(setq gc-cons-threshold 100000000
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
@@ -155,8 +155,7 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(set-default 'truncate-lines nil) ; when true gives each line only one visual line and don't show a continuation on next line
-;; (global-visual-line-mode)
+(setq-default truncate-lines nil)
 
 (setq sentence-end-double-space nil)
 
@@ -472,7 +471,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package default-text-scale)
 
-(setq default-frame-alist '((font . "Operator Mono AB-16")))
+(setq default-frame-alist '((font . "PragmataPro-16")))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -858,6 +857,7 @@ cons cell (regexp . minor-mode)."
    "/" 'swiper-isearch
    "DEL" 'evil-switch-to-windows-last-buffer
    "gf" 'auray/project-guess-file
+   "gr" 'er/expand-region
    "j" 'evil-next-visual-line
    "k" 'evil-previous-visual-line
    "[ [" 'previous-buffer
@@ -897,7 +897,6 @@ cons cell (regexp . minor-mode)."
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
 
-  "C-SPC" 'er/expand-region
   "C-h" 'tmux-move-left
    "C-j" 'tmux-move-down
    "C-k" 'tmux-move-up
