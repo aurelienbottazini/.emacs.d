@@ -657,8 +657,6 @@ cons cell (regexp . minor-mode)."
 (use-package coffee-mode
   :mode "\\.coffee\\'"
   :config
-  (use-package highlight-indentation)
-  (add-hook 'coffee-mode-hook (lambda () (highlight-indentation-mode)))
   (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
   (custom-set-variables '(coffee-tab-width 2)))
 
@@ -766,9 +764,7 @@ cons cell (regexp . minor-mode)."
     "Cloudformation template mode.")
   (add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
 
-  (use-package highlight-indentation
-    :config
-    (add-hook 'yaml-mode-hook (lambda () (highlight-indentation-mode))))
+  (use-package highlight-indentation)
 
   (flycheck-define-checker cfn-lint
     "A Cloudformation linter using cfn-python-lint.
