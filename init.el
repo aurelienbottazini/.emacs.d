@@ -201,10 +201,6 @@
 (use-package counsel)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
-(use-package evil
-  :config
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs))
-
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -239,82 +235,9 @@
     (error (unless window-system (shell-command (concat
                                                  (tmux-socket-command-string) " select-pane -D") nil)))))
 
-(use-package evil
-  :init
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil
-  :config
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs)
-
-  ;; magit commit
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(use-package evil-commentary
-  :after evil
-  :diminish evil-commentary-mode
-  :config
-  (evil-commentary-mode))
-
-(use-package evil-visualstar
-  :after evil
-  :config
-  (global-evil-visualstar-mode t))
-
-(use-package evil-matchit
-  :defer 2
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil-search-highlight-persist
-  :config
-  (global-evil-search-highlight-persist t))
-
-(use-package evil
-  :config
-  (evil-mode 1)
-  (evil-ex-define-cmd "W" 'save-buffer))
-
-(use-package evil-indent-plus
-  :after evil
-  :config
-  (evil-indent-plus-default-bindings))
-
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump t)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
-
-(use-package key-chord
-  :after evil
-  :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
-
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
-  (evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
   (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
   (hi-aquamarine ((t (:background "aquamarine" :foreground "black"))))
   (hi-salmon ((t (:background "light salmon" :foreground "black"))))
@@ -360,19 +283,6 @@
   :config
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
   (load-theme 'zenburn t))
-
-(add-hook 'post-command-hook (lambda ()
-                               (let* (
-                                      (color (cond ((minibufferp) auray/default-color)
-                                                   ((evil-emacs-state-p)  '("#4c7073" "#dcdccc" . "#f0dfaf"))
-                                                   ((evil-visual-state-p) '("#adcff1" "#4c4e56" . "#4c4e56"))
-                                                   ((evil-insert-state-p)  '("#97d88a" "#4c4e56" . "#4c4e56"))
-                                                   (t auray/default-color)))
-                                      )
-                                 (set-face-attribute 'mode-line nil :box `(:line-width 2 :color ,(car color)))
-                                 (set-face-background 'mode-line (car color))
-                                 (set-face-foreground 'mode-line-buffer-id (cddr color))
-                                 (set-face-foreground 'mode-line (cadr color)))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -471,7 +381,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package default-text-scale)
 
-(setq default-frame-alist '((font . "PragmataPro-16")))
+(setq default-frame-alist '((font . "Operator Mono AB-14")))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -481,19 +391,6 @@ cons cell (regexp . minor-mode)."
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
-
-(use-package evil
-  :init
-  (setq org-use-speed-commands nil) ; they don't work well with Evil.
-  :config
-  (evil-define-key 'normal org-mode-map
-    (kbd "M-l") 'org-shiftmetaright
-    (kbd "M-h") 'org-shiftmetaleft
-    (kbd "M-k") 'org-move-subtree-up
-    (kbd "M-j") 'org-move-subtree-down
-    ;; (kbd "M-p") 'org-publish-current-project
-    (kbd "TAB") 'org-cycle)
-  )
 
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
@@ -516,13 +413,7 @@ cons cell (regexp . minor-mode)."
   :config
 
   (define-key cider-mode-map (kbd "C-c C-c") 'cider-eval-list-at-point)
-  (setq cider-repl-display-help-banner nil)
-  (defun my-cider-debug-toggle-insert-state ()
-    (if cider--debug-mode    ;; Checks if you're entering the debugger
-        (evil-insert-state)  ;; If so, turn on evil-insert-state
-      (evil-normal-state)))  ;; Otherwise, turn on normal-state
-
-  (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state))
+  (setq cider-repl-display-help-banner nil))
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
@@ -822,7 +713,6 @@ cons cell (regexp . minor-mode)."
   (general-create-definer my-leader-def
     :prefix "SPC")
 
-  (setq evil-search-module 'evil-search)
   (my-leader-def
     :states 'normal
     :keymaps 'override
@@ -847,21 +737,21 @@ cons cell (regexp . minor-mode)."
     :keymaps 'override
     "x" 'emamux:send-region)
 
+(winner-mode 1)
   (general-define-key
    :states 'normal
    "-" 'dired-jump
-   "/" 'swiper-isearch
-   "DEL" 'evil-switch-to-windows-last-buffer
    "gf" 'auray/project-guess-file
    "gr" 'er/expand-region
-   "j" 'evil-next-visual-line
-   "k" 'evil-previous-visual-line
    "[ [" 'previous-buffer
    "] ]" 'next-buffer
    "[ e" 'flycheck-previous-error
    "] e" 'flycheck-next-error
    "[ q" 'previous-error
-   "] q" 'next-error)
+   "] q" 'next-error
+   "]w" 'winner-redo
+   "[w" 'winner-undo
+)
 
   (general-define-key
    :states 'insert
@@ -889,15 +779,11 @@ cons cell (regexp . minor-mode)."
    "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
 
-   "C-=" 'default-text-scale-reset
+   "C-=" 'er/expand-region
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
 
-  "C-h" 'tmux-move-left
-   "C-j" 'tmux-move-down
-   "C-k" 'tmux-move-up
-   "C-l" 'tmux-move-right
-   "C-s" 'swiper-isearch
+   "C-r" 'isearch-backward
 
    "C-c C-SPC" 'ivy-resume
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
@@ -930,7 +816,6 @@ cons cell (regexp . minor-mode)."
 
    "C-c of" 'auto-fill-mode
    "C-c og" 'global-hl-line-mode
-   "C-c oh" (lambda () (interactive) (hi-lock-mode -1) (evil-search-highlight-persist-remove-all))
    "C-c oi" 'electric-indent-mode
    "C-c olh" 'hide-line-numbers
    "C-c oll" 'show-line-numbers
@@ -956,9 +841,6 @@ cons cell (regexp . minor-mode)."
    "C-x l" 'counsel-locate
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window
-
-   "C-w o" 'delete-other-window
-   "C-w 0" 'delete-window
    ))
 
 (use-package hydra
@@ -1323,7 +1205,8 @@ This command switches to browser."
 
 (eval-after-load "dired"
   '(progn
-     (define-key dired-mode-map "-" 'dired-up-directory)))
+     (define-key dired-mode-map "-" 'dired-up-directory)
+     ))
 
 (use-package dired-rsync
   :bind (:map dired-mode-map ("p" . dired-rsync)))
@@ -1352,9 +1235,7 @@ This command switches to browser."
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 
-(use-package deadgrep
-  :config
-  (evil-set-initial-state 'deadgrep-mode 'emacs))
+(use-package deadgrep)
 
 (use-package paredit-everywhere
   :config
@@ -1394,3 +1275,86 @@ This command switches to browser."
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (desktop-save-mode -1)
+
+(use-package evil
+  :config
+  (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
+  (define-key evil-normal-state-map (kbd "C-n") 'next-line)
+  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
+  (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+  (evil-mode 1))
+
+(use-package evil
+  :init
+  :config
+  (defun my-evil-record-macro ()
+    (interactive)
+    (if buffer-read-only
+        (quit-window)
+      (call-interactively 'evil-record-macro)))
+
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
+
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil
+  :config
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
+
+(use-package evil-commentary
+  :after evil
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
+
+(use-package evil-visualstar
+  :after evil
+  :config
+  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (global-evil-visualstar-mode t))
+
+(use-package evil-matchit
+  :defer 2
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package evil-search-highlight-persist
+  :config
+  (global-evil-search-highlight-persist t))
+
+(use-package evil
+  :config
+  (evil-mode 1)
+  (evil-ex-define-cmd "W" 'save-buffer))
+
+(use-package evil-indent-plus
+  :after evil
+  :config
+  (evil-indent-plus-default-bindings))
+
+(use-package evil
+  :config
+  (setq evil-want-C-i-jump nil)
+  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
+
+(use-package key-chord
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))

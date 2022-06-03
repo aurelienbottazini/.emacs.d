@@ -43,7 +43,6 @@
  '(evil-mode-line-format nil)
  '(evil-toggle-key "C-c e")
  '(evil-undo-system 'undo-redo)
- '(expand-region-contract-fast-key "_")
  '(fci-rule-color "#383838")
  '(flycheck-standard-error-navigation nil)
  '(frame-background-mode 'light)
@@ -192,8 +191,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -218,11 +217,13 @@
  '(ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
  '(lsp-modeline-code-actions-face ((t (:inherit warning))))
  '(lsp-ui-doc-background ((t (:background "#2b2b2b"))))
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :slant italic :weight bold))))
  '(minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
  '(mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.0))))
  '(mode-line-buffer-id ((t (:foreground "#f0dfaf" :slant italic :weight bold))))
  '(mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
  '(org-block ((t (:extend t :background "#333333"))))
+ '(org-code ((t (:inherit shadow))))
  '(org-document-info-keyword ((t (:inherit shadow :height 1.3))))
  '(org-document-title ((t (:inherit default :foreground "#8CD0D3" :weight bold :height 1.3))))
  '(org-drawer ((t (:foreground "#f0dfaf"))))
