@@ -381,8 +381,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package default-text-scale)
 
-(setq default-frame-alist '((font . "Operator Mono AB-14")))
-
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -407,6 +405,16 @@ cons cell (regexp . minor-mode)."
   :config
   (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
+
+(use-package clj-refactor
+  :config
+  (defun my-clojure-mode-hook ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1) ; for adding require/use/import statements
+    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+    (cljr-add-keybindings-with-prefix "C-c m"))
+
+  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
 (use-package cider
   :after clojure-mode
@@ -714,30 +722,31 @@ cons cell (regexp . minor-mode)."
     :prefix "SPC")
 
   (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "b" 'project-switch-to-buffer
-    "c" (lambda () (interactive) (org-capture nil "n"))
-    "e" 'flycheck-list-errors
-    "f" 'counsel-rg
-    "F" 'deadgrep
-    "g" 'magit-status
-    "G" 'magit-file-dispatch
-    "h" 'highlight-symbol-at-point
-    "H" 'unhighlight-regexp
-    "i" 'counsel-imenu
-    "s" 'auray/find-file-with-similar-name
-    "t" 'tab-switch
-    "x" 'emamux:run-last-command
-    "X" 'emamux:send-command
-    )
+   :states 'normal
+   :keymaps 'override
+   "b" 'project-switch-to-buffer
+   "c" (lambda () (interactive) (org-capture nil "n"))
+   "e" 'flycheck-list-errors
+   "f" 'counsel-rg
+   "F" 'deadgrep
+   "g" 'magit-status
+   "G" 'magit-file-dispatch
+   "h" 'highlight-symbol-at-point
+   "H" 'unhighlight-regexp
+   "i" 'counsel-imenu
+   "p" 'project-find-file
+   "s" 'auray/find-file-with-similar-name
+   "t" 'tab-switch
+   "x" 'emamux:run-last-command
+   "X" 'emamux:send-command
+   )
 
   (my-leader-def
-    :states 'visual
-    :keymaps 'override
-    "x" 'emamux:send-region)
+   :states 'visual
+   :keymaps 'override
+   "x" 'emamux:send-region)
 
-(winner-mode 1)
+  (winner-mode 1)
   (general-define-key
    :states 'normal
    "-" 'dired-jump
@@ -751,7 +760,7 @@ cons cell (regexp . minor-mode)."
    "] q" 'next-error
    "]w" 'winner-redo
    "[w" 'winner-undo
-)
+   )
 
   (general-define-key
    :states 'insert
@@ -844,8 +853,8 @@ cons cell (regexp . minor-mode)."
    "C-x B" 'project-switch-to-buffer
    "C-x l" 'counsel-locate
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
-   "C-x o" 'other-window
-   ))
+   "C-x o" 'other-window)
+  )
 
 (use-package hydra
   :config
