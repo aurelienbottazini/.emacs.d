@@ -600,16 +600,6 @@ Auto-fill comments in prog modes
   (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
-(use-package clj-refactor
-  :config
-  (defun my-clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    (yas-minor-mode 1) ; for adding require/use/import statements
-    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-    (cljr-add-keybindings-with-prefix "C-c m"))
-
-  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
-
 (use-package cider
   :after clojure-mode
   :config

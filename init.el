@@ -406,16 +406,6 @@ cons cell (regexp . minor-mode)."
   (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
-(use-package clj-refactor
-  :config
-  (defun my-clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    (yas-minor-mode 1) ; for adding require/use/import statements
-    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-    (cljr-add-keybindings-with-prefix "C-c m"))
-
-  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
-
 (use-package cider
   :after clojure-mode
   :config
@@ -792,9 +782,9 @@ cons cell (regexp . minor-mode)."
    "C-M-+" 'default-text-scale-decrease
 
    "C-h" 'tmux-move-left
-   "C-j" 'tmux-move-down
-   "C-k" 'tmux-move-up
-   "C-l" 'tmux-move-right
+"C-j" 'tmux-move-down
+"C-l" 'tmux-move-right
+"C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
 
