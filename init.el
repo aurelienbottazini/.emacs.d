@@ -778,10 +778,14 @@ cons cell (regexp . minor-mode)."
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
-
    "C-=" 'er/expand-region
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
+
+   "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-k" 'tmux-move-up
+   "C-l" 'tmux-move-right
 
    "C-r" 'isearch-backward
 
