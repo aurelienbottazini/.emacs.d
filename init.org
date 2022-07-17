@@ -1049,9 +1049,9 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-M-+" 'default-text-scale-decrease
 
    "C-h" 'tmux-move-left
-"C-j" 'tmux-move-down
-"C-l" 'tmux-move-right
-"C-k" 'tmux-move-up
+   "C-j" 'tmux-move-down
+   "C-l" 'tmux-move-right
+   "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
 
@@ -1858,10 +1858,7 @@ C-c C-e R =letter= to export a presentation from your org file
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :custom
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
-  :config
-
-  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/"))
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config
@@ -1882,6 +1879,7 @@ Sessions
 
 #+begin_src emacs-lisp
 (use-package evil
+  :init (setq evil-want-C-i-jump nil)
   :config
   (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
@@ -1979,6 +1977,7 @@ keybindings by default.
 
   #+BEGIN_SRC emacs-lisp
   (use-package evil
+    :init (setq evil-want-C-i-jump nil)
     :config
     (evil-mode 1)
     (evil-ex-define-cmd "W" 'save-buffer))

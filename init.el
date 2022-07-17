@@ -782,9 +782,9 @@ cons cell (regexp . minor-mode)."
    "C-M-+" 'default-text-scale-decrease
 
    "C-h" 'tmux-move-left
-"C-j" 'tmux-move-down
-"C-l" 'tmux-move-right
-"C-k" 'tmux-move-up
+   "C-j" 'tmux-move-down
+   "C-l" 'tmux-move-right
+   "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
 
@@ -1263,10 +1263,7 @@ This command switches to browser."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :custom
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr"))
-  :config
-
-  (add-to-list 'tramp-remote-path "/home/auray/.local/share/npm/bin/"))
+  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config
@@ -1280,6 +1277,7 @@ This command switches to browser."
 (desktop-save-mode -1)
 
 (use-package evil
+  :init (setq evil-want-C-i-jump nil)
   :config
   (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
@@ -1342,6 +1340,7 @@ This command switches to browser."
   (global-evil-search-highlight-persist t))
 
 (use-package evil
+  :init (setq evil-want-C-i-jump nil)
   :config
   (evil-mode 1)
   (evil-ex-define-cmd "W" 'save-buffer))
