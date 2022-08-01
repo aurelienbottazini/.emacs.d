@@ -19,13 +19,35 @@
              :custom (straight-use-package-by-default t))
 
 (menu-bar-mode -1)
+(tool-bar-mode -1)
 
-(load-theme 'tango-dark)
+(unless (display-graphic-p)
+  (load-theme 'tango-dark))
 
 (use-package paredit
-             :config
-             (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-             (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-             (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-             (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-             (add-hook 'scheme-mode-hook           #'enable-paredit-mode))
+  :hook
+  (paredit-mode . emacs-lisp-mode-hook)
+  (paredit-mode . ielm-mode-hook)
+  (paredit-mode . lisp-mode-hook)
+  (paredit-mode . lisp-interaction-mode-hook)
+  (paredit-mode . scheme-mode-hook))
+
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+(recentf-mode 1)
+
+(global-set-key (kbd "C-c r") 'recentf-open-files)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(visible-bell t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "White" :foreground "Black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Operator Mono SSm AB")))))
