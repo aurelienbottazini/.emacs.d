@@ -31,3 +31,6 @@ elpa
 straight
 
 \#init.el#
+
+.dap-breakpoints
+ido.last
