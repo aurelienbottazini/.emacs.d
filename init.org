@@ -1857,8 +1857,7 @@ C-c C-e R =letter= to export a presentation from your org file
          (web-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
-  :custom
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
+)
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config

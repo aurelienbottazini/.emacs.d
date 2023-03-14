@@ -30,3 +30,5 @@ var/prescient-save.el
 elpa
 /forge-database.sqlite
 /.dap-breakpoints
+/ido.last
+/straight/

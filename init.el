@@ -1262,8 +1262,7 @@ This command switches to browser."
          (web-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
-  :custom
-  (lsp-clients-typescript-server-args '("--stdio" "--tsserver-log-file" "/dev/stderr")))
+)
 
 (use-package lsp-ui :commands lsp-ui-mode
   :config
