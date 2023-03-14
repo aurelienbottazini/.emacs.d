@@ -969,9 +969,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-
 (use-package general
   :config
 
@@ -994,6 +991,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
+   "r" 'lsp-execute-code-action
    "x" 'emamux:run-last-command
    "X" 'emamux:send-command
    )

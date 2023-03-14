@@ -702,9 +702,6 @@ cons cell (regexp . minor-mode)."
 (use-package rainbow-mode :diminish rainbow-mode)
 (use-package windresize)
 
-(define-key paredit-mode-map (kbd "C-j") 'tmux-move-down)
-(define-key org-mode-map (kbd "C-j") 'tmux-move-down)
-
 (use-package general
   :config
 
@@ -727,6 +724,7 @@ cons cell (regexp . minor-mode)."
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
+   "r" 'lsp-execute-code-action
    "x" 'emamux:run-last-command
    "X" 'emamux:send-command
    )
