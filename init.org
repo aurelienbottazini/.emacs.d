@@ -1015,6 +1015,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "] q" 'next-error
    "]w" 'winner-redo
    "[w" 'winner-undo
+   "s-e" 'counsel-recentf
    )
 
   (general-define-key

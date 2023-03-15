@@ -748,6 +748,7 @@ cons cell (regexp . minor-mode)."
    "] q" 'next-error
    "]w" 'winner-redo
    "[w" 'winner-undo
+   "s-e" 'counsel-recentf
    )
 
   (general-define-key
