@@ -748,7 +748,6 @@ cons cell (regexp . minor-mode)."
    "] q" 'next-error
    "]w" 'winner-redo
    "[w" 'winner-undo
-   "s-e" 'counsel-recentf
    )
 
   (general-define-key
@@ -758,6 +757,9 @@ cons cell (regexp . minor-mode)."
 
   (general-define-key
    :keymaps 'override
+
+   "s-e" 'counsel-recentf
+   "s-t" 'project-find-file
 
    "<f1> f" 'counsel-describe-function
    "<f1> v" 'counsel-describe-variable

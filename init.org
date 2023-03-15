@@ -1015,7 +1015,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "] q" 'next-error
    "]w" 'winner-redo
    "[w" 'winner-undo
-   "s-e" 'counsel-recentf
    )
 
   (general-define-key
@@ -1025,6 +1024,9 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
   (general-define-key
    :keymaps 'override
+
+   "s-e" 'counsel-recentf
+   "s-t" 'project-find-file
 
    "<f1> f" 'counsel-describe-function
    "<f1> v" 'counsel-describe-variable
