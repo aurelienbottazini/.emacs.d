@@ -863,6 +863,11 @@ adjustments for JSX.
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 #+end_src
 
+** Elm
+#+begin_src emacs-lisp
+(use-package elm-mode)
+
+#+end_src
 * Flycheck
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
@@ -1856,6 +1861,7 @@ C-c C-e R =letter= to export a presentation from your org file
          (ruby-mode . lsp)
          (html-mode . lsp)
          (web-mode . lsp)
+         (elm-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
 )

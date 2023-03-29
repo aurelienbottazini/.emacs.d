@@ -611,6 +611,8 @@ cons cell (regexp . minor-mode)."
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 
+(use-package elm-mode)
+
 (use-package flycheck
   :diminish flycheck-mode
   :init
@@ -1261,6 +1263,7 @@ This command switches to browser."
          (ruby-mode . lsp)
          (html-mode . lsp)
          (web-mode . lsp)
+         (elm-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
 )
