@@ -1862,6 +1862,8 @@ C-c C-e R =letter= to export a presentation from your org file
          (html-mode . lsp)
          (web-mode . lsp)
          (elm-mode . lsp)
+         (clojure-mode . lsp)
+         (clojurescript-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
 )

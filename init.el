@@ -1264,6 +1264,8 @@ This command switches to browser."
          (html-mode . lsp)
          (web-mode . lsp)
          (elm-mode . lsp)
+         (clojure-mode . lsp)
+         (clojurescript-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
 )
