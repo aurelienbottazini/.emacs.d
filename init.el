@@ -38,6 +38,17 @@
 (setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
 (setq use-package-always-ensure t) ; Install package if it is missing
 
+(use-package diminish
+  :config
+  (eval-after-load "undo-tree"
+    '(diminish 'undo-tree-mode))
+  (eval-after-load "subword"
+    '(diminish 'subword-mode))
+  (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'eldoc-mode))
+
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
@@ -175,31 +186,6 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
-
-(use-package ivy
-  :diminish ivy-mode
-  :bind (:map ivy-minibuffer-map
-              ("C-c C-c" . ivy-restrict-to-matches)
-              ("C-j" . ivy-next-line-and-call)
-              ("C-k" . ivy-previous-line-and-call)
-              ))
-:init
-(setq ivy-display-style 'fancy)
-(setq ivy-use-selectable-prompt t)
-(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-re-builders-alist
-      '((t      . ivy--regex-plus)))
-(setq counsel-grep-base-command
-      "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-(setq ivy-use-virtual-buffers t)
-(setq enable-recursive-minibuffers t)
-;; enable this if you want `swiper' to use it
-;; (setq search-default-mode #'char-fold-to-regexp)
-:config
-(ivy-mode)
-(use-package counsel)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
 (defun tmux-socket-command-string ()
   (interactive)
@@ -364,17 +350,6 @@ cons cell (regexp . minor-mode)."
 ;; makes fringe big enough with HDPI
 (when (boundp 'fringe-mode)
   (fringe-mode 20))
-
-(use-package diminish
-  :config
-  (eval-after-load "undo-tree"
-    '(diminish 'undo-tree-mode))
-  (eval-after-load "subword"
-    '(diminish 'subword-mode))
-  (diminish 'auto-fill-function)
-  (diminish 'org-indent-mode)
-  (diminish 'visual-line-mode)
-  (diminish 'eldoc-mode))
 
 (setq blink-matching-paren 'jump-offscreen)
 (show-paren-mode 1)

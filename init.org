@@ -79,6 +79,18 @@ You can get the time it took for emacs to start with.
 #+BEGIN_SRC emacs-lisp :tangle no
 (emacs-init-time)
 #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package diminish
+  :config
+  (eval-after-load "undo-tree"
+    '(diminish 'undo-tree-mode))
+  (eval-after-load "subword"
+    '(diminish 'subword-mode))
+  (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'eldoc-mode))
+#+END_SRC
 
 It is important to load custom settings early. Those are the ones
 managed by Emacs through customization menus. They can impact the
@@ -299,7 +311,7 @@ Clean white space on save.
 #+END_SRC
 
 * Improved emacs commands
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package ivy
   :diminish ivy-mode
   :bind (:map ivy-minibuffer-map
@@ -512,19 +524,6 @@ Enable ligatures on mac
 ;; makes fringe big enough with HDPI
 (when (boundp 'fringe-mode)
   (fringe-mode 20))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package diminish
-  :config
-  (eval-after-load "undo-tree"
-    '(diminish 'undo-tree-mode))
-  (eval-after-load "subword"
-    '(diminish 'subword-mode))
-  (diminish 'auto-fill-function)
-  (diminish 'org-indent-mode)
-  (diminish 'visual-line-mode)
-  (diminish 'eldoc-mode))
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -1793,8 +1792,7 @@ Other =terminfo= examples are available in the [[https://www.gnu.org/software/em
   (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
   (defengine rails "https://api.rubyonrails.org/?q=%s")
   (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-  (defengine caniuse "https://caniuse.com/?search=%s")
-  )
+  (defengine caniuse "https://caniuse.com/?search=%s"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
