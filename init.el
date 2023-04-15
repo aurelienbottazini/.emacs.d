@@ -1242,6 +1242,8 @@ This command switches to browser."
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 
+(pixel-scroll-precision-mode)
+
 (use-package deadgrep)
 
 (use-package paredit-everywhere

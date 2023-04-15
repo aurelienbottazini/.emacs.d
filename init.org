@@ -1832,6 +1832,10 @@ C-c C-e R =letter= to export a presentation from your org file
 * Testing
 
 #+begin_src emacs-lisp
+(pixel-scroll-precision-mode)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package deadgrep)
 #+end_src
 
