@@ -1852,7 +1852,7 @@ C-c C-e R =letter= to export a presentation from your org file
   (setq emamux:use-nearest-pane 1))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package lsp-mode
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")

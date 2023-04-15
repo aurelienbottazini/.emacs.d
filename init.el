@@ -1255,30 +1255,6 @@ This command switches to browser."
   :init
   (setq emamux:use-nearest-pane 1))
 
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (js2-mode . lsp)
-         (typescript-mode . lsp)
-         (css-mode . lsp)
-         (ruby-mode . lsp)
-         (html-mode . lsp)
-         (web-mode . lsp)
-         (elm-mode . lsp)
-         (clojure-mode . lsp)
-         (clojurescript-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp
-)
-
-(use-package lsp-ui :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-sideline-enable t))
-;; if you are ivy user
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
