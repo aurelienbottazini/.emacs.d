@@ -311,14 +311,14 @@ Clean white space on save.
 #+END_SRC
 
 * Improved emacs commands
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package ivy
   :diminish ivy-mode
   :bind (:map ivy-minibuffer-map
               ("C-c C-c" . ivy-restrict-to-matches)
               ("C-j" . ivy-next-line-and-call)
               ("C-k" . ivy-previous-line-and-call)
-              ))
+              )
 :init
 (setq ivy-display-style 'fancy)
 (setq ivy-use-selectable-prompt t)
@@ -333,9 +333,10 @@ Clean white space on save.
 ;; enable this if you want `swiper' to use it
 ;; (setq search-default-mode #'char-fold-to-regexp)
 :config
-(ivy-mode)
+;; (ivy-mode)
 (use-package counsel)
 (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+)
 #+end_src
 
 * Movement
