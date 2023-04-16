@@ -759,9 +759,7 @@ Hooks put on js-mode are also run on js2-mode
 
 (use-package js2-mode
   :mode "\\.js\\'"
-  :mode "\\.jsx\\'"
-  :config
-  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode))
+  :mode "\\.jsx\\'")
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -2017,6 +2015,12 @@ keybindings by default.
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+#+end_src
 
 * Local variables
 

@@ -536,9 +536,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package js2-mode
   :mode "\\.js\\'"
-  :mode "\\.jsx\\'"
-  :config
-  (add-hook 'js2-mode-hook 'js2-imenu-extras-mode))
+  :mode "\\.jsx\\'")
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -1344,3 +1342,7 @@ This command switches to browser."
   :config
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
