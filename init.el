@@ -725,7 +725,10 @@ cons cell (regexp . minor-mode)."
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
-   "r" 'lsp-execute-code-action
+   "rr" 'eglot-code-actions
+   "rq" 'eglot-code-action-quickfix
+   "rn" 'eglot-rename
+   "rf" 'eglot-format
    "x" 'emamux:run-last-command
    "X" 'emamux:send-command
    )

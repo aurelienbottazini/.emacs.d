@@ -994,7 +994,10 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
-   "r" 'lsp-execute-code-action
+   "rr" 'eglot-code-actions
+   "rq" 'eglot-code-action-quickfix
+   "rn" 'eglot-rename
+   "rf" 'eglot-format
    "x" 'emamux:run-last-command
    "X" 'emamux:send-command
    )
@@ -1848,32 +1851,6 @@ C-c C-e R =letter= to export a presentation from your org file
   :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init
   (setq emamux:use-nearest-pane 1))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (js2-mode . lsp)
-         (typescript-mode . lsp)
-         (css-mode . lsp)
-         (ruby-mode . lsp)
-         (html-mode . lsp)
-         (web-mode . lsp)
-         (elm-mode . lsp)
-         (clojure-mode . lsp)
-         (clojurescript-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp
-)
-
-(use-package lsp-ui :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-sideline-enable t))
-;; if you are ivy user
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+end_src
 
 #+begin_src emacs-lisp
