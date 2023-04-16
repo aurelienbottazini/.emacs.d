@@ -520,7 +520,7 @@ cons cell (regexp . minor-mode)."
 
 (setq js-indent-level 2)
 
-(add-hook 'js-mode-hook (lambda() (subword-mode t)))
+(add-hook 'js-mode-hook (lambda () (subword-mode t)))
 
 (setq js2-mode-show-parse-errors nil
       js2-mode-show-strict-warnings nil
@@ -1057,38 +1057,9 @@ This command switches to browser."
 (setq speedbar-directory-unshown-regexp "^$")
 
 (setq project-switch-commands 'project-dired)
-
-;; (el-patch-defun project--files-in-directory (dir ignores &optional files)
-;;   (el-patch-remove
-;;     (require 'find-dired)
-;;     (require 'xref)
-;;     (defvar find-name-arg))
-;;   (let* ((default-directory dir)
-;;          ;; Make sure ~/ etc. in local directory name is
-;;          ;; expanded and not left for the shell command
-;;          ;; to interpret.
-;;          (localdir (file-local-name (expand-file-name dir)))
-;;          (command (el-patch-swap
-;;                     (format "%s %s %s -type f %s -print0"
-;;                             find-program
-;;                             localdir
-;;                             (xref--find-ignores-arguments ignores localdir)
-;;                             (if files
-;;                                 (concat (shell-quote-argument "(")
-;;                                         " " find-name-arg " "
-;;                                         (mapconcat
-;;                                          #'shell-quote-argument
-;;                                          (split-string files)
-;;                                          (concat " -o " find-name-arg " "))
-;;                                         " "
-;;                                         (shell-quote-argument ")"))
-;;                               ""))
-;;                     (format "fd -t f -0 . %s" localdir))))
-;;     (project--remote-file-names
-;;      (sort (split-string (shell-command-to-string command) "\0" t)
-;;            #'string<))))
-
 (ivy-add-actions #'project-find-file '(("o" find-file "open")))
+
+(add-hook 'js-mode-hook 'eglot-ensure)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
@@ -1320,20 +1291,11 @@ This command switches to browser."
   :config
   (global-evil-matchit-mode 1))
 
-(use-package evil-search-highlight-persist
-  :config
-  (global-evil-search-highlight-persist t))
-
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
   (evil-mode 1)
   (evil-ex-define-cmd "W" 'save-buffer))
-
-(use-package evil-indent-plus
-  :after evil
-  :config
-  (evil-indent-plus-default-bindings))
 
 (use-package evil
   :config
