@@ -1963,6 +1963,10 @@ keybindings by default.
   (global-treesit-auto-mode))
 #+end_src
 
+#+begin_src emacs-lisp
+(fido-mode t)
+#+end_src
+
 * Local variables
 
 # Local Variables:

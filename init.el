@@ -1311,3 +1311,5 @@ This command switches to browser."
 (use-package treesit-auto
   :config
   (global-treesit-auto-mode))
+
+(fido-mode t)
