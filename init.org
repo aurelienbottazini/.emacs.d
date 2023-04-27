@@ -502,10 +502,6 @@ Enable ligatures on mac
 #+end_src
 
 ** Text size
-Changes the size of the text. Useful when I pair program
-#+begin_src emacs-lisp
-(use-package default-text-scale)
-#+end_src
 
 Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
@@ -530,16 +526,6 @@ light weights. Medium and Light conflict with the Regular and Book versions
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package org-superstar
-  :init
-  (setq
-   org-superstar-headline-bullets-list '("●" "✸" "✿" "○")
-   )
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 #+end_src
 
 * Windows
@@ -1028,11 +1014,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
    ;; C-c C-c "runs" what makes sense for a particular mode
-   "C-c d c" 'engine/search-caniuse
-   "C-c d m" 'engine/search-mdn
-   "C-c d s" 'engine/search-css
-   "C-c d ra" 'engine/search-rails
-   "C-c d rr" 'engine/search-ruby
    "C-c gg" 'magit-status
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
@@ -1043,8 +1024,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c jj" 'dired-jump
    "C-c k" 'recompile
    "C-c K" 'compile
-   ;; C-c l -> lsp-keymap-prefix
-   "C-c L" 'org-store-link
+   "C-c l" 'org-store-link
 
    "C-c of" 'auto-fill-mode
    "C-c og" 'global-hl-line-mode
@@ -1685,16 +1665,6 @@ tic -o ~/.terminfo -x ~/.emacs.d/terminfo-emacs-rgb.src
 Other =terminfo= examples are available in the [[https://www.gnu.org/software/emacs/manual/html_mono/efaq.html#Colors-on-a-TTY][emacs manual]]
 
 * Documentation
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package engine-mode
-  :config
-  (defengine ruby "https://apidock.com/ruby/search?query=%s")
-  (defengine css "https://developer.mozilla.org/en-US/docs/Web/CSS/%s?raw&macros#content")
-  (defengine rails "https://api.rubyonrails.org/?q=%s")
-  (defengine mdn "https://developer.mozilla.org/en-US/search?q=%s")
-  (defengine caniuse "https://caniuse.com/?search=%s"))
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (use-package restclient
   :demand t
@@ -1810,6 +1780,7 @@ keybindings by default.
 #+begin_src emacs-lisp
 (use-package evil
   :config
+  (evil-set-initial-state 'deadgrep-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'insert)
   (evil-set-initial-state 'dired-mode 'normal)
   (evil-set-initial-state 'magit-mode 'emacs)

@@ -351,8 +351,6 @@ cons cell (regexp . minor-mode)."
 (setq blink-matching-paren 'jump-offscreen)
 (show-paren-mode 1)
 
-(use-package default-text-scale)
-
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -762,11 +760,6 @@ cons cell (regexp . minor-mode)."
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
    ;; C-c C-c "runs" what makes sense for a particular mode
-   "C-c d c" 'engine/search-caniuse
-   "C-c d m" 'engine/search-mdn
-   "C-c d s" 'engine/search-css
-   "C-c d ra" 'engine/search-rails
-   "C-c d rr" 'engine/search-ruby
    "C-c gg" 'magit-status
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
@@ -777,8 +770,7 @@ cons cell (regexp . minor-mode)."
    "C-c jj" 'dired-jump
    "C-c k" 'recompile
    "C-c K" 'compile
-   ;; C-c l -> lsp-keymap-prefix
-   "C-c L" 'org-store-link
+   "C-c l" 'org-store-link
 
    "C-c of" 'auto-fill-mode
    "C-c og" 'global-hl-line-mode
@@ -1208,6 +1200,7 @@ This command switches to browser."
 
 (use-package evil
   :config
+  (evil-set-initial-state 'deadgrep-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'insert)
   (evil-set-initial-state 'dired-mode 'normal)
   (evil-set-initial-state 'magit-mode 'emacs)
