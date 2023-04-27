@@ -187,32 +187,6 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-(use-package ivy
-  :diminish ivy-mode
-  :bind (:map ivy-minibuffer-map
-              ("C-c C-c" . ivy-restrict-to-matches)
-              ("C-j" . ivy-next-line-and-call)
-              ("C-k" . ivy-previous-line-and-call)
-              )
-:init
-(setq ivy-display-style 'fancy)
-(setq ivy-use-selectable-prompt t)
-(setq ivy-use-virtual-buffers t) ; enable bookmarks and recent-f
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-re-builders-alist
-      '((t      . ivy--regex-plus)))
-(setq counsel-grep-base-command
-      "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-(setq ivy-use-virtual-buffers t)
-(setq enable-recursive-minibuffers t)
-;; enable this if you want `swiper' to use it
-;; (setq search-default-mode #'char-fold-to-regexp)
-:config
-;; (ivy-mode)
-(use-package counsel)
-(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-)
-
 (defun tmux-socket-command-string ()
   (interactive)
   (concat "tmux -S "
@@ -262,9 +236,6 @@
   (hlt-regexp-level-6 ((t (:background "#E1E1FFFFF0F0" :foreground "black"))))
   (hlt-regexp-level-7 ((t (:background "#E1E1EAEAFFFF" :foreground "black"))))
   (hlt-regexp-level-8 ((t (:background "#F6F5FFFFE1E1" :foreground "black"))))
-  (ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
-  (ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
-  (ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
   (lsp-modeline-code-actions-face ((t (:inherit warning))))
   (lsp-ui-doc-background ((t (:background "#2b2b2b"))))
   (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
@@ -715,13 +686,11 @@ cons cell (regexp . minor-mode)."
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
    "e" 'flycheck-list-errors
-   "f" 'counsel-rg
    "F" 'deadgrep
    "g" 'magit-status
    "G" 'magit-file-dispatch
    "h" 'highlight-symbol-at-point
    "H" 'unhighlight-regexp
-   "i" 'counsel-imenu
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
@@ -762,15 +731,8 @@ cons cell (regexp . minor-mode)."
   (general-define-key
    :keymaps 'override
 
-   "s-e" 'counsel-recentf
    "s-t" 'project-find-file
 
-   "<f1> f" 'counsel-describe-function
-   "<f1> v" 'counsel-describe-variable
-   "<f1> o" 'counsel-describe-symbol
-   "<f1> l" 'counsel-find-library
-   "<f2> i" 'counsel-info-lookup-symbol
-   "<f2> u" 'counsel-unicode-char
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
    "<f7>" 'org-tree-slide-mode
@@ -781,7 +743,6 @@ cons cell (regexp . minor-mode)."
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
-   "M-x" 'counsel-M-x
    "C-=" 'er/expand-region
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
@@ -793,7 +754,6 @@ cons cell (regexp . minor-mode)."
 
    "C-r" 'isearch-backward
 
-   "C-c C-SPC" 'ivy-resume
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
    "C-c 9" 'paredit-backward-slurp-sexp
@@ -802,13 +762,11 @@ cons cell (regexp . minor-mode)."
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
    ;; C-c C-c "runs" what makes sense for a particular mode
-   "C-c b" 'counsel-bookmark
    "C-c d c" 'engine/search-caniuse
    "C-c d m" 'engine/search-mdn
    "C-c d s" 'engine/search-css
    "C-c d ra" 'engine/search-rails
    "C-c d rr" 'engine/search-ruby
-   "C-c f" 'counsel-rg
    "C-c gg" 'magit-status
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
@@ -835,18 +793,13 @@ cons cell (regexp . minor-mode)."
 
    "C-c p" 'project-find-file
    "C-c q" 'speedbar-get-focus
-   "C-c r" 'counsel-recentf
    "C-c R" 'revert-buffer
-   "C-c v" 'ivy-switch-view
-   "C-c V" 'ivy-push-view
    "C-c w r" 'windresize
 
-   "C-x C-f" 'counsel-find-file
    "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
    "C-x B" 'project-switch-to-buffer
-   "C-x l" 'counsel-locate
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
   )
@@ -857,8 +810,6 @@ cons cell (regexp . minor-mode)."
     "drag"
     ("j" drag-stuff-down "down")
     ("k" drag-stuff-up "up")))
-
-(use-package ivy-hydra)
 
 (use-package drag-stuff
   :diminish drag-stuff-mode
@@ -1013,8 +964,6 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
-(use-package counsel)
-
 (require 'auray/find-in-project)
 
 (use-package iedit)
@@ -1050,14 +999,12 @@ This command switches to browser."
 
 (use-package dumb-jump
   :init
-  (setq dumb-jump-selector 'ivy)
   :config
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 (setq speedbar-directory-unshown-regexp "^$")
 
 (setq project-switch-commands 'project-dired)
-(ivy-add-actions #'project-find-file '(("o" find-file "open")))
 
 (add-hook 'js-mode-hook 'eglot-ensure)
 
