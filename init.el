@@ -263,6 +263,7 @@
   (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
   (tab-line-tab-modified ((t (:foreground "#e89393"))))
   (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
+  (highlight ((t (:background "#f0dfaf" :foreground "black"))))
   :config
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
   (load-theme 'zenburn t))
