@@ -176,7 +176,7 @@
  indent-tabs-mode nil    ; no tabs
  c-basic-offset 2)
 
-(setq-default whitespace-style '(face trailing tabs tab-mark))
+(setq-default whitespace-style '(face trailing))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook 'whitespace-mode)
@@ -1208,6 +1208,7 @@ This command switches to browser."
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
 
   ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
@@ -1253,3 +1254,9 @@ This command switches to browser."
   (global-treesit-auto-mode))
 
 (fido-mode t)
+(fido-vertical-mode)
+
+(use-package vterm)
+(use-package multi-vterm)
+
+(global-treesit-auto-mode t)

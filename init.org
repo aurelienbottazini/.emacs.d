@@ -292,7 +292,7 @@ You can remove all tabs from your buffer with ~untabify~
 
 Makes trailing white space and tabs visible.
 #+BEGIN_SRC emacs-lisp
-(setq-default whitespace-style '(face trailing tabs tab-mark))
+(setq-default whitespace-style '(face trailing))
 #+END_SRC
 
 Clean white space on save.
@@ -1788,6 +1788,7 @@ keybindings by default.
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
 
   ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
@@ -1861,6 +1862,16 @@ keybindings by default.
 
 #+begin_src emacs-lisp
 (fido-mode t)
+(fido-vertical-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package vterm)
+(use-package multi-vterm)
+#+end_src
+
+#+begin_src emacs-lisp
+(global-treesit-auto-mode t)
 #+end_src
 
 * Local variables
