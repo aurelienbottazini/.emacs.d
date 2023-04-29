@@ -1000,6 +1000,8 @@ This command switches to browser."
 (setq project-switch-commands 'project-dired)
 
 (add-hook 'js-mode-hook 'eglot-ensure)
+(add-hook 'js2-mode-hook 'eglot-ensure)
+(add-hook 'js-ts-mode-hook 'eglot-ensure)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)

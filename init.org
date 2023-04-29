@@ -1479,6 +1479,8 @@ IDE code analysis but it works surprisingly well.
 ** LSP (with eglot)
 #+begin_src emacs-lisp
 (add-hook 'js-mode-hook 'eglot-ensure)
+(add-hook 'js2-mode-hook 'eglot-ensure)
+(add-hook 'js-ts-mode-hook 'eglot-ensure)
 #+end_src
 * Completion
 ** Hippie expand
@@ -1825,13 +1827,6 @@ keybindings by default.
     (global-evil-matchit-mode 1))
   #+END_SRC
 
-  Persist highlight from ~evil search~ and ~isearch~
-  #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package evil-search-highlight-persist
-    :config
-    (global-evil-search-highlight-persist t))
-  #+END_SRC
-
   #+BEGIN_SRC emacs-lisp
   (use-package evil
     :init (setq evil-want-C-i-jump nil)
@@ -1866,6 +1861,7 @@ keybindings by default.
 (fido-vertical-mode)
 #+end_src
 
+Faster terminal than ansi-term
 #+begin_src emacs-lisp
 (use-package vterm)
 (use-package multi-vterm)
