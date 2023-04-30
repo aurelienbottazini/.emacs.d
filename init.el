@@ -1263,3 +1263,5 @@ This command switches to browser."
 (use-package multi-vterm)
 
 (global-treesit-auto-mode t)
+
+(use-package haskell-mode)

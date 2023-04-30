@@ -1871,6 +1871,10 @@ Faster terminal than ansi-term
 (global-treesit-auto-mode t)
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package haskell-mode)
+#+end_src
+
 * Local variables
 
 # Local Variables:
