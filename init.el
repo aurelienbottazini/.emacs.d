@@ -1271,3 +1271,7 @@ This command switches to browser."
 (use-package rg)
 
 (use-package sqlite3)
+
+(use-package exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
