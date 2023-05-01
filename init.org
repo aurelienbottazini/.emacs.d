@@ -939,6 +939,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
    "e" 'flycheck-list-errors
+   "f" 'rg-projects
    "F" 'deadgrep
    "g" 'magit-status
    "G" 'magit-file-dispatch
@@ -1873,6 +1874,10 @@ Faster terminal than ansi-term
 
 #+begin_src emacs-lisp
 (use-package haskell-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rg)
 #+end_src
 
 * Local variables

@@ -685,6 +685,7 @@ cons cell (regexp . minor-mode)."
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
    "e" 'flycheck-list-errors
+   "f" 'rg-projects
    "F" 'deadgrep
    "g" 'magit-status
    "G" 'magit-file-dispatch
@@ -1265,3 +1266,5 @@ This command switches to browser."
 (global-treesit-auto-mode t)
 
 (use-package haskell-mode)
+
+(use-package rg)
