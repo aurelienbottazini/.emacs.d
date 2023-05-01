@@ -1205,6 +1205,7 @@ This command switches to browser."
 (use-package evil
   :config
   (evil-set-initial-state 'deadgrep-mode 'emacs)
+  (evil-set-initial-state 'rg-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'insert)
   (evil-set-initial-state 'dired-mode 'normal)
   (evil-set-initial-state 'magit-mode 'emacs)
