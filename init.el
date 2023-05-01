@@ -1268,3 +1268,5 @@ This command switches to browser."
 (use-package haskell-mode)
 
 (use-package rg)
+
+(use-package sqlite3)

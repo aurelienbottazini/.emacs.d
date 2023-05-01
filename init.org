@@ -1880,6 +1880,10 @@ Faster terminal than ansi-term
 (use-package rg)
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package sqlite3)
+#+end_src
+
 * Local variables
 
 # Local Variables:
