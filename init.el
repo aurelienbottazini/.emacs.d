@@ -684,13 +684,14 @@ cons cell (regexp . minor-mode)."
    :keymaps 'override
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
-   "e" 'flycheck-list-errors
-   "f" 'rg-projects
+   "e" 'recentf
+   "f" 'rg-project
    "F" 'deadgrep
    "g" 'magit-status
    "G" 'magit-file-dispatch
    "h" 'highlight-symbol-at-point
    "H" 'unhighlight-regexp
+   "l" 'flycheck-list-errors
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
