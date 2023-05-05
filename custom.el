@@ -279,7 +279,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#3F3F3F" :foreground "#DCDCCC" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Operator Mono SSm AB"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#3F3F3F" :foreground "#DCDCCC" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Monolisa Custom"))))
  '(cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))) t)
  '(evil-search-highlight-persist-highlight-face ((t (:background "#f8f893" :foreground "black"))))
  '(font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
@@ -294,7 +294,7 @@
  '(hlt-regexp-level-6 ((t (:background "#E1E1FFFFF0F0" :foreground "black"))) t)
  '(hlt-regexp-level-7 ((t (:background "#E1E1EAEAFFFF" :foreground "black"))) t)
  '(hlt-regexp-level-8 ((t (:background "#F6F5FFFFE1E1" :foreground "black"))) t)
- '(icomplete-selected-match ((t (:inherit highlight :underline t))))
+ '(icomplete-selected-match ((t (:underline t))))
  '(ivy-minibuffer-match-face-2 ((t (:background "#5F7F5F"))))
  '(ivy-minibuffer-match-face-3 ((t (:background "#7F9F7F" :foreground "black"))))
  '(ivy-minibuffer-match-face-4 ((t (:background "#8FB28F" :foreground "black"))))
