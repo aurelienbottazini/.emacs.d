@@ -939,8 +939,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
    "e" 'recentf
-   "f" 'rg-project
-   "F" 'deadgrep
+   "f" 'counsel-rg
+   "F" 'rg-project
    "g" 'magit-status
    "G" 'magit-file-dispatch
    "h" 'highlight-symbol-at-point
@@ -998,6 +998,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
+   "M-x" 'counsel-M-x
    "C-=" 'er/expand-region
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
@@ -1045,9 +1046,10 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
-   "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-x C-m" 'counsel-M-x ; Another =M-x= without leaving the home row
    "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
+   "C-x C-f" 'counsel-find-file
    "C-x B" 'project-switch-to-buffer
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
@@ -1859,7 +1861,7 @@ keybindings by default.
   (global-treesit-auto-mode))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (fido-mode t)
 (fido-vertical-mode)
 #+end_src
@@ -1890,6 +1892,13 @@ Faster terminal than ansi-term
 (use-package exec-path-from-shell)
 (exec-path-from-shell-copy-env "SSH_AGENT_PID")
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package counsel
+  :config
+  (ivy-mode t)
+  (counsel-mode t))
 #+end_src
 
 * Local variables

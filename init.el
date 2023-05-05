@@ -685,8 +685,8 @@ cons cell (regexp . minor-mode)."
    "b" 'project-switch-to-buffer
    "c" (lambda () (interactive) (org-capture nil "n"))
    "e" 'recentf
-   "f" 'rg-project
-   "F" 'deadgrep
+   "f" 'counsel-rg
+   "F" 'rg-project
    "g" 'magit-status
    "G" 'magit-file-dispatch
    "h" 'highlight-symbol-at-point
@@ -744,6 +744,7 @@ cons cell (regexp . minor-mode)."
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
+   "M-x" 'counsel-M-x
    "C-=" 'er/expand-region
    "C-+" 'default-text-scale-increase
    "C-M-+" 'default-text-scale-decrease
@@ -791,9 +792,10 @@ cons cell (regexp . minor-mode)."
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
-   "C-x C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-x C-m" 'counsel-M-x ; Another =M-x= without leaving the home row
    "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
+   "C-x C-f" 'counsel-find-file
    "C-x B" 'project-switch-to-buffer
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
@@ -1259,9 +1261,6 @@ This command switches to browser."
   :config
   (global-treesit-auto-mode))
 
-(fido-mode t)
-(fido-vertical-mode)
-
 (use-package vterm)
 (use-package multi-vterm)
 
@@ -1276,3 +1275,8 @@ This command switches to browser."
 (use-package exec-path-from-shell)
 (exec-path-from-shell-copy-env "SSH_AGENT_PID")
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+
+(use-package counsel
+  :config
+  (ivy-mode t)
+  (counsel-mode t))
