@@ -958,7 +958,7 @@ This command switches to browser."
               (buffer-substring-no-properties (region-beginning) (region-end))
             (current-word)))
     (setq word (replace-regexp-in-string " " "_" word))
-    (browse-url (concat "http://en.wikipedia.org/wiki/" word))
+    (xwidget-webkit-browse-url (concat "http://en.wikipedia.org/wiki/" word))
     ;; (eww myUrl) ; emacs's own browser
     ))
 
