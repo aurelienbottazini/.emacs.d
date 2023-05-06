@@ -506,6 +506,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package js2-mode
   :mode "\\.js\\'"
+  :mode "\\.mjs\\'"
   :mode "\\.jsx\\'")
 
 (use-package json-mode
@@ -1280,3 +1281,6 @@ This command switches to browser."
   :config
   (ivy-mode t)
   (counsel-mode t))
+
+(add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)

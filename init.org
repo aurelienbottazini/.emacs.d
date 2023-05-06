@@ -714,6 +714,7 @@ Hooks put on js-mode are also run on js2-mode
 
 (use-package js2-mode
   :mode "\\.js\\'"
+  :mode "\\.mjs\\'"
   :mode "\\.jsx\\'")
 
 (use-package json-mode
@@ -1899,6 +1900,11 @@ Faster terminal than ansi-term
   :config
   (ivy-mode t)
   (counsel-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 #+end_src
 
 * Local variables
