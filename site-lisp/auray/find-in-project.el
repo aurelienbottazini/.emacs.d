@@ -21,7 +21,7 @@
    (split-string
     (shell-command-to-string
      (concat
-      "fd --hidden --exclude "
+      "fd --hidden --exclude .git --exclude "
       (file-name-nondirectory buffer-file-name)
       " "
       (auray/fip-base-name buffer-file-name)
