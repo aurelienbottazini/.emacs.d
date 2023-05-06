@@ -1897,6 +1897,7 @@ Faster terminal than ansi-term
 
 #+begin_src emacs-lisp
 (use-package counsel
+  :diminish counsel-mode ivy-mode
   :config
   (ivy-mode t)
   (counsel-mode t))

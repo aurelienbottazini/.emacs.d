@@ -1278,6 +1278,7 @@ This command switches to browser."
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 
 (use-package counsel
+  :diminish counsel-mode ivy-mode
   :config
   (ivy-mode t)
   (counsel-mode t))
