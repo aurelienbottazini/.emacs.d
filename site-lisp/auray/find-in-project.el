@@ -38,10 +38,13 @@
      ((zerop (length alternate-files))
       (message "There's no alternate files"))
      ((equal 1 (length alternate-files))
-      (find-file (car alternate-files)))
-     (t (find-file (ido-completing-read
-                    "Alternate files: "
-                    alternate-files))))))
+      (find-file (concat (file-remote-p (buffer-file-name))
+                         (car alternate-files))))
+     (t (find-file (concat (file-remote-p (buffer-file-name))
+                           (ido-completing-read
+                            "Alternate files: "
+                            alternate-files)
+                           ))))))
 
 (defun auray/project-guess-file ()
   "Find file using current word as a guess. There are adjustements made from my workflow. For example this is made to navigate file imports. I rarely import test file so to make the navigation quicker I excluded test files from the results."
@@ -49,14 +52,15 @@
   (let* ((pr (project-current t))
          (dirs (list (project-root pr)))
          (results
-                    (split-string
-                     (shell-command-to-string
-                      (concat
-                       "fd --hidden --exclude '*.spec.*' -p '.*"
-                       (replace-regexp-in-string "\\.\\./" ""
-                                                 (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename)))) ".*' $(git rev-parse --show-toplevel)"
-                       )))))
+          (split-string
+           (shell-command-to-string
+            (concat
+             "fd --hidden --exclude '*.spec.*' -p '.*"
+             (replace-regexp-in-string "\\.\\./" ""
+                                       (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename)))) ".*' $(git rev-parse --show-toplevel)"
+             )))))
 
+    (message results)
     (cond
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
@@ -72,6 +76,6 @@
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr))))
-  (counsel-fzf nil (project-root (project-current t)))))
+    (counsel-fzf nil (project-root (project-current t)))))
 
 (provide 'auray/find-in-project)
