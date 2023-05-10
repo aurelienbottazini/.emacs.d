@@ -433,8 +433,7 @@ cons cell (regexp . minor-mode)."
   (format-time-string "%Y-%m-%d"))
 
 (defun add-date-to-filename ()
-  "Add current date in front of filename for current buffer. This is useful with some
-        Blog tools like Jekyll to publish new articles."
+  "Add current date in front of filename for current buffer. This is useful with some Blog tools like Jekyll to publish new articles."
   (interactive)
   (let* ((date (abott/today))
          (buffer-file (buffer-file-name))
@@ -443,6 +442,7 @@ cons cell (regexp . minor-mode)."
                                 "-"
                                 (file-name-nondirectory buffer-file)))
          )
+    (save-buffer)
     (rename-file buffer-file new-file-name)
     (set-visited-file-name new-file-name)
     (save-buffer)))
