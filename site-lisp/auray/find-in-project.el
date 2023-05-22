@@ -33,14 +33,15 @@
 (defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
   (interactive)
-  (let ((alternate-files (auray/alternate-files-for-current-buffer)))
+  (let ((alternate-files (auray/alternate-files-for-current-buffer))
+        (tramp-prefix (file-remote-p (buffer-file-name)))
+        )
     (cond
      ((zerop (length alternate-files))
       (message "There's no alternate files"))
      ((equal 1 (length alternate-files))
-      (find-file (concat (file-remote-p (buffer-file-name))
-                         (car alternate-files))))
-     (t (find-file (concat (file-remote-p (buffer-file-name))
+      (find-file (concat tramp-prefix (car alternate-files))))
+     (t (find-file (concat tramp-prefix
                            (ido-completing-read
                             "Alternate files: "
                             alternate-files)

@@ -579,6 +579,7 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 
+(add-to-list 'auto-mode-alist '("\\.el\\'" . emacs-lisp-mode))
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 
 (use-package elm-mode)
@@ -770,6 +771,7 @@ cons cell (regexp . minor-mode)."
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
    "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+   "C-c jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
    "C-c jp" (lambda () (interactive) (find-file "~/projects/"))
    "C-c jw" (lambda () (interactive) (find-file "~/work"))
    "C-c jj" 'dired-jump
