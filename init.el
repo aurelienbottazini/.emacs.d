@@ -289,13 +289,12 @@ cons cell (regexp . minor-mode)."
   (interactive)
   (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
 
-(defun abott/today ()
+(defun auray/today ()
   "Today's date as a string."
   (format-time-string "%Y-%m-%d"))
 
-(defun add-date-to-filename ()
-  "Add current date in front of filename for current buffer. This is useful with some
-        Blog tools like Jekyll to publish new articles."
+(defun auray/add-date-to-filename ()
+  "Add current date in front of filename for current buffer. This is useful with some Blog tools like Jekyll to publish new articles."
   (interactive)
   (let* ((date (abott/today))
          (buffer-file (buffer-file-name))
@@ -304,16 +303,17 @@ cons cell (regexp . minor-mode)."
                                 "-"
                                 (file-name-nondirectory buffer-file)))
          )
+    (save-buffer)
     (rename-file buffer-file new-file-name)
     (set-visited-file-name new-file-name)
     (save-buffer)))
 
-(defun abott/insert-date ()
+(defun auray/insert-date ()
   "Insert today's date in current buffer"
   (interactive)
   (insert (abott/today)))
 
-(defun toggle-html-export-on-save ()
+(defun auray/toggle-html-export-on-save ()
   "Enable or disable HTML export when saving current org buffer."
   (interactive)
   (when (not (eq major-mode 'org-mode))
@@ -325,7 +325,7 @@ cons cell (regexp . minor-mode)."
     (set-buffer-modified-p t)
     (message "Enabled org html export on save")))
 
-(defun abo-change-line-endings-to-unix ()
+(defun auray/change-line-endings-to-unix ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
       (set-buffer-file-coding-system 'unix))))
