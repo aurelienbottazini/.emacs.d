@@ -913,7 +913,6 @@ This command switches to browser."
   (fullframe vc-annotate quit-window))
 
 (use-package magit
-  :commands magit-status
   :init
   (setq magit-commit-show-diff nil
         magit-auto-revert-mode nil
@@ -1154,6 +1153,7 @@ This command switches to browser."
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-mode 'emacs)
 
   ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
