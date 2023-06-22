@@ -142,7 +142,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
@@ -156,6 +156,7 @@
  '(menu-bar-mode nil)
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+ '(ns-command-modifier 'meta)
  '(org-agenda-files '("~/Dropbox/org/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-html-doctype "html5")
@@ -279,8 +280,8 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -332,4 +333,4 @@
  '(tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))) t)
  '(tab-line-tab-inactive ((t (:inherit tab-line-tab))) t)
  '(tab-line-tab-modified ((t (:foreground "#e89393"))) t)
- '(web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))) t))
+ '(web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f")))))
