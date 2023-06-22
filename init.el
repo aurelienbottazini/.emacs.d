@@ -368,13 +368,9 @@ cons cell (regexp . minor-mode)."
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
 
 ;; First install the package:
-(use-package flycheck-clj-kondo
-  :ensure t)
-
 (use-package clojure-mode
   :mode "\\.clj\\'"
   :config
-  (require 'flycheck-clj-kondo)
   (add-hook 'clojure-mode-hook #'subword-mode))
 
 (use-package cider
@@ -584,65 +580,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package elm-mode)
 
-(use-package flycheck
-  :diminish flycheck-mode
-  :init
-  (add-hook 'web-mode-hook 'flycheck-mode)
-  (add-hook 'js2-mode-hook 'flycheck-mode)
-  (add-hook 'cfn-mode-hook 'flycheck-mode)
-  (add-hook 'ruby-mode-hook 'flycheck-mode)
-  :config
-  (with-eval-after-load 'flycheck
-    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t)))
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (defun my/use-eslint-from-node-modules ()
-    "Find eslint in the closest node-modules folder"
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (eslint (and root
-                        (expand-file-name "node_modules/.bin/eslint"
-                                          root))))
-      (when (and eslint (file-executable-p eslint))
-        (setq-local flycheck-javascript-eslint-executable eslint))))
-  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-
-  (defun eslint-fix-file ()
-    (interactive)
-    (message "eslint --fixing the file errors (not warning)" (buffer-file-name))
-    (if flycheck-javascript-eslint-executable
-        (shell-command (concat flycheck-javascript-eslint-executable " --quiet --fix " (buffer-file-name)))))
-  (defun eslint-fix-file-and-revert ()
-    (interactive)
-    (eslint-fix-file)
-    (revert-buffer t t))
-  (add-hook 'js-mode-hook
-            (lambda ()
-              (add-hook 'after-save-hook #'eslint-fix-file-and-revert nil 'make-it-local)))
-
-
-  (define-derived-mode cfn-mode yaml-mode
-    "Cloudformation"
-    "Cloudformation template mode.")
-  (add-to-list 'auto-mode-alist '(".template.yaml\\'" . cfn-mode))
-
-  (use-package highlight-indentation)
-
-  (flycheck-define-checker cfn-lint
-    "A Cloudformation linter using cfn-python-lint.
-            See URL 'https://github.com/awslabs/cfn-python-lint'."
-    :command ("cfn-lint" "-f" "parseable" source)
-    :error-patterns (
-                     (warning line-start (file-name) ":" line ":" column
-                              ":" (one-or-more digit) ":" (one-or-more digit) ":"
-                              (id "W" (one-or-more digit)) ":" (message) line-end)
-                     (error line-start (file-name) ":" line ":" column
-                            ":" (one-or-more digit) ":" (one-or-more digit) ":"
-                            (id "E" (one-or-more digit)) ":" (message) line-end)
-                     )
-    :modes (cfn-mode))
-  (add-to-list 'flycheck-checkers 'cfn-lint))
-
 (use-package which-key
   :diminish which-key-mode
   :config
@@ -693,7 +630,6 @@ cons cell (regexp . minor-mode)."
    "G" 'magit-file-dispatch
    "h" 'highlight-symbol-at-point
    "H" 'unhighlight-regexp
-   "l" 'flycheck-list-errors
    "p" 'project-find-file
    "s" 'auray/find-file-with-similar-name
    "t" 'tab-switch
@@ -718,8 +654,6 @@ cons cell (regexp . minor-mode)."
    "gr" 'er/expand-region
    "[ [" 'previous-buffer
    "] ]" 'next-buffer
-   "[ e" 'flycheck-previous-error
-   "] e" 'flycheck-next-error
    "[ q" 'previous-error
    "] q" 'next-error
    "]w" 'winner-redo
