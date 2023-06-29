@@ -1153,9 +1153,6 @@ This command switches to browser."
   :config
   (global-treesit-auto-mode))
 
-(use-package vterm)
-(use-package multi-vterm)
-
 (global-treesit-auto-mode t)
 
 (use-package haskell-mode)
@@ -1174,5 +1171,6 @@ This command switches to browser."
   (ivy-mode t)
   (counsel-mode t))
 
+(require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)

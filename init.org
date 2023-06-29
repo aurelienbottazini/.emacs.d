@@ -1806,12 +1806,6 @@ Jump to matching pairs with ~%~.
 (fido-vertical-mode)
 #+end_src
 
-Faster terminal than ansi-term
-#+begin_src emacs-lisp
-(use-package vterm)
-(use-package multi-vterm)
-#+end_src
-
 #+begin_src emacs-lisp
 (global-treesit-auto-mode t)
 #+end_src
@@ -1843,6 +1837,7 @@ Faster terminal than ansi-term
 #+end_src
 
 #+begin_src emacs-lisp
+(require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 #+end_src
