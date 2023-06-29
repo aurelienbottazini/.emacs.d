@@ -187,39 +187,33 @@
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
-(defun tmux-socket-command-string ()
+(defun auray/tmux-active-session ()
   (interactive)
-  (concat "tmux -S "
-          (replace-regexp-in-string "\n\\'" ""
-                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
+  (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
+
+(defun auray/tmux-select-pane (direction)
+  (shell-command (concat  "tmux select-pane -t " (auray/tmux-active-session) " -" direction)))
+
+(defun auray/tmux-move (direction)
+  (condition-case nil
+      (evil-window-right 1)
+    (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
   (interactive)
-  (condition-case nil
-      (evil-window-right 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -R") nil)))))
+  (auray/tmux-move "R"))
 
 (defun tmux-move-left ()
   (interactive)
-  (condition-case nil
-      (evil-window-left 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -L") nil)))))
+  (auray/tmux-move "L"))
 
 (defun tmux-move-up ()
   (interactive)
-  (condition-case nil
-      (evil-window-up 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -U") nil)))))
+  (auray/tmux-move "U"))
 
 (defun tmux-move-down ()
   (interactive)
-  (condition-case nil
-      (evil-window-down 1)
-    (error (unless window-system (shell-command (concat
-                                                 (tmux-socket-command-string) " select-pane -D") nil)))))
+  (auray/tmux-move "D"))
 
 (use-package zenburn-theme
   :custom-face
