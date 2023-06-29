@@ -196,11 +196,11 @@
 
 (defun auray/tmux-move (direction)
   (condition-case nil
-      (cond direction
-       "R" (evil-window-right 1)
-       "L" (evil-window-left 1)
-       "U" (evil-window-up 1)
-       "D" (evil-window-down 1))
+      (cond
+       ((string= "R" direction) (evil-window-right 1))
+       ((string= "L" direction) (evil-window-left 1))
+       ((string= "U" direction) (evil-window-up 1))
+       ((string= "D" direction) (evil-window-down 1)))
     (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
@@ -574,32 +574,32 @@ cons cell (regexp . minor-mode)."
     :prefix "SPC")
 
   (my-leader-def
-   :states 'normal
-   :keymaps 'override
-   "b" 'project-switch-to-buffer
-   "c" (lambda () (interactive) (org-capture nil "n"))
-   "e" 'recentf
-   "f" 'counsel-rg
-   "F" 'rg-project
-   "g" 'magit-status
-   "G" 'magit-file-dispatch
-   "h" 'highlight-symbol-at-point
-   "H" 'unhighlight-regexp
-   "p" 'project-find-file
-   "s" 'auray/find-file-with-similar-name
-   "t" 'tab-switch
-   "rr" 'eglot-code-actions
-   "rq" 'eglot-code-action-quickfix
-   "rn" 'eglot-rename
-   "rf" 'eglot-format
-   "x" 'emamux:run-last-command
-   "X" 'emamux:send-command
-   )
+    :states 'normal
+    :keymaps 'override
+    "b" 'project-switch-to-buffer
+    "c" (lambda () (interactive) (org-capture nil "n"))
+    "e" 'recentf
+    "f" 'counsel-rg
+    "F" 'rg-project
+    "g" 'magit-status
+    "G" 'magit-file-dispatch
+    "h" 'highlight-symbol-at-point
+    "H" 'unhighlight-regexp
+    "p" 'project-find-file
+    "s" 'auray/find-file-with-similar-name
+    "t" 'tab-switch
+    "rr" 'eglot-code-actions
+    "rq" 'eglot-code-action-quickfix
+    "rn" 'eglot-rename
+    "rf" 'eglot-format
+    "x" 'emamux:run-last-command
+    "X" 'emamux:send-command
+    )
 
   (my-leader-def
-   :states 'visual
-   :keymaps 'override
-   "x" 'emamux:send-region)
+    :states 'visual
+    :keymaps 'override
+    "x" 'emamux:send-region)
 
   (winner-mode 1)
   (general-define-key

@@ -324,11 +324,11 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 
 (defun auray/tmux-move (direction)
   (condition-case nil
-      (cond direction
-       "R" (evil-window-right 1)
-       "L" (evil-window-left 1)
-       "U" (evil-window-up 1)
-       "D" (evil-window-down 1))
+      (cond
+       ((string= "R" direction) (evil-window-right 1))
+       ((string= "L" direction) (evil-window-left 1))
+       ((string= "U" direction) (evil-window-up 1))
+       ((string= "D" direction) (evil-window-down 1)))
     (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
@@ -347,7 +347,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (interactive)
   (auray/tmux-move "D"))
 
-#+END_SRC
+  #+END_SRC
 * Colors
 
 #+begin_src emacs-lisp
@@ -876,32 +876,32 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     :prefix "SPC")
 
   (my-leader-def
-   :states 'normal
-   :keymaps 'override
-   "b" 'project-switch-to-buffer
-   "c" (lambda () (interactive) (org-capture nil "n"))
-   "e" 'recentf
-   "f" 'counsel-rg
-   "F" 'rg-project
-   "g" 'magit-status
-   "G" 'magit-file-dispatch
-   "h" 'highlight-symbol-at-point
-   "H" 'unhighlight-regexp
-   "p" 'project-find-file
-   "s" 'auray/find-file-with-similar-name
-   "t" 'tab-switch
-   "rr" 'eglot-code-actions
-   "rq" 'eglot-code-action-quickfix
-   "rn" 'eglot-rename
-   "rf" 'eglot-format
-   "x" 'emamux:run-last-command
-   "X" 'emamux:send-command
-   )
+    :states 'normal
+    :keymaps 'override
+    "b" 'project-switch-to-buffer
+    "c" (lambda () (interactive) (org-capture nil "n"))
+    "e" 'recentf
+    "f" 'counsel-rg
+    "F" 'rg-project
+    "g" 'magit-status
+    "G" 'magit-file-dispatch
+    "h" 'highlight-symbol-at-point
+    "H" 'unhighlight-regexp
+    "p" 'project-find-file
+    "s" 'auray/find-file-with-similar-name
+    "t" 'tab-switch
+    "rr" 'eglot-code-actions
+    "rq" 'eglot-code-action-quickfix
+    "rn" 'eglot-rename
+    "rf" 'eglot-format
+    "x" 'emamux:run-last-command
+    "X" 'emamux:send-command
+    )
 
   (my-leader-def
-   :states 'visual
-   :keymaps 'override
-   "x" 'emamux:send-region)
+    :states 'visual
+    :keymaps 'override
+    "x" 'emamux:send-region)
 
   (winner-mode 1)
   (general-define-key
@@ -994,7 +994,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
   )
-   #+END_SRC
+#+END_SRC
 
 ** Hydra
 
@@ -1744,41 +1744,41 @@ keybindings by default.
 #+end_src
 
 
-  Comment things with ~gc~. Comment and copy with ~gy~
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-commentary
-    :after evil
-    :diminish evil-commentary-mode
-    :config
-    (evil-commentary-mode))
-  #+END_SRC
+Comment things with ~gc~. Comment and copy with ~gy~
+#+BEGIN_SRC emacs-lisp
+(use-package evil-commentary
+  :after evil
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
+#+END_SRC
 
-  Start a search from visual selection with ~*~ or ~#~ (backward).
-  #+BEGIN_SRC emacs-lisp
-    (use-package evil-visualstar
-      :after evil
-      :config
-      (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-      (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-      (global-evil-visualstar-mode t))
-  #+END_SRC
+Start a search from visual selection with ~*~ or ~#~ (backward).
+#+BEGIN_SRC emacs-lisp
+(use-package evil-visualstar
+  :after evil
+  :config
+  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (global-evil-visualstar-mode t))
+#+END_SRC
 
-  Jump to matching pairs with ~%~.
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil-matchit
-    :defer 2
-    :after evil
-    :config
-    (global-evil-matchit-mode 1))
-  #+END_SRC
+Jump to matching pairs with ~%~.
+#+BEGIN_SRC emacs-lisp
+(use-package evil-matchit
+  :defer 2
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+#+END_SRC
 
-  #+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :init (setq evil-want-C-i-jump nil)
-    :config
-    (evil-mode 1)
-    (evil-ex-define-cmd "W" 'save-buffer))
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :init (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (evil-ex-define-cmd "W" 'save-buffer))
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
 (use-package evil
