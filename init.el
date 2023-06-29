@@ -567,6 +567,7 @@ cons cell (regexp . minor-mode)."
 (use-package rainbow-mode :diminish rainbow-mode)
 (use-package windresize)
 
+(use-package ivy-hydra)
 (use-package general
   :config
 
@@ -576,7 +577,7 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'normal
     :keymaps 'override
-    "b" 'project-switch-to-buffer
+    "b" 'counsel-switch-buffer
     "c" (lambda () (interactive) (org-capture nil "n"))
     "e" 'recentf
     "f" 'counsel-rg
@@ -585,6 +586,7 @@ cons cell (regexp . minor-mode)."
     "G" 'magit-file-dispatch
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "i" 'counsel-imenu
     "p" 'project-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switch

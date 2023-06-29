@@ -869,6 +869,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(use-package ivy-hydra)
 (use-package general
   :config
 
@@ -878,7 +879,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (my-leader-def
     :states 'normal
     :keymaps 'override
-    "b" 'project-switch-to-buffer
+    "b" 'counsel-switch-buffer
     "c" (lambda () (interactive) (org-capture nil "n"))
     "e" 'recentf
     "f" 'counsel-rg
@@ -887,6 +888,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "G" 'magit-file-dispatch
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "i" 'counsel-imenu
     "p" 'project-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switch
