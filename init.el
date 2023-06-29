@@ -396,6 +396,7 @@ cons cell (regexp . minor-mode)."
 (use-package web-mode
   :mode "\\.html\\'"
   :mode "\\.gohtml\\'"
+  :mode "\\.erb\\'"
   :config
   (setq web-mode-enable-auto-closing t)
   (add-hook
