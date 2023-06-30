@@ -189,7 +189,8 @@
 
 (defun auray/tmux-active-session ()
   (interactive)
-  (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
+  ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1)
+ (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
 
 (defun auray/tmux-select-pane (direction)
   (shell-command (concat  "tmux select-pane -t " (auray/tmux-active-session) " -" direction)))
