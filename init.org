@@ -361,7 +361,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
@@ -1856,7 +1856,6 @@ Speed up tramp
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 #+end_src
-
 * Local variables
 
 # Local Variables:
