@@ -190,7 +190,7 @@
 (defun auray/tmux-active-session ()
   (interactive)
   ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1)
- (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
+  (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
 
 (defun auray/tmux-select-pane (direction)
   (shell-command (concat  "tmux select-pane -t " (auray/tmux-active-session) " -" direction)))
@@ -198,10 +198,10 @@
 (defun auray/tmux-move (direction)
   (condition-case nil
       (cond
-       ((string= "R" direction) (evil-window-right 1))
-       ((string= "L" direction) (evil-window-left 1))
-       ((string= "U" direction) (evil-window-up 1))
-       ((string= "D" direction) (evil-window-down 1)))
+       ((string= "R" direction) (windmove-right))
+       ((string= "L" direction) (windmove-left))
+       ((string= "U" direction) (windmove-up))
+       ((string= "D" direction) (windmove-down)))
     (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
@@ -222,7 +222,8 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-dark-medium))
+  (when (not (display-graphic-p))
+    (load-theme 'gruvbox-dark-medium)))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -1178,3 +1179,8 @@ This command switches to browser."
 (require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
