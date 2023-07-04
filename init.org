@@ -326,10 +326,10 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 (defun auray/tmux-move (direction)
   (condition-case nil
       (cond
-       ((string= "R" direction) (evil-window-right 1))
-       ((string= "L" direction) (evil-window-left 1))
-       ((string= "U" direction) (evil-window-up 1))
-       ((string= "D" direction) (evil-window-down 1)))
+       ((string= "R" direction) (windmove-right))
+       ((string= "L" direction) (windmove-left))
+       ((string= "U" direction) (windmove-up))
+       ((string= "D" direction) (windmove-down)))
     (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
@@ -354,13 +354,14 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 #+begin_src emacs-lisp
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-dark-medium))
+  (when (not (display-graphic-p))
+    (load-theme 'gruvbox-dark-medium)))
 #+end_src
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
@@ -406,7 +407,8 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
   (highlight ((t (:background "#f0dfaf" :foreground "black"))))
   :config
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
-  (load-theme 'zenburn t))
+
+  (when (display-graphic-p) (load-theme 'zenburn t)))
 #+end_src
 
 * Utility functions
@@ -1846,6 +1848,14 @@ Jump to matching pairs with ~%~.
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 #+end_src
 
+
+Speed up tramp
+#+begin_src emacs-lisp
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+#+end_src
 * Local variables
 
 # Local Variables:

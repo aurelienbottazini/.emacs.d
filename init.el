@@ -198,10 +198,10 @@
 (defun auray/tmux-move (direction)
   (condition-case nil
       (cond
-       ((string= "R" direction) (evil-window-right 1))
-       ((string= "L" direction) (evil-window-left 1))
-       ((string= "U" direction) (evil-window-up 1))
-       ((string= "D" direction) (evil-window-down 1)))
+       ((string= "R" direction) (windmove-right))
+       ((string= "L" direction) (windmove-left))
+       ((string= "U" direction) (windmove-up))
+       ((string= "D" direction) (windmove-down)))
     (error (unless window-system (auray/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
@@ -222,7 +222,56 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-dark-medium))
+  (when (not (display-graphic-p))
+    (load-theme 'gruvbox-dark-medium)))
+
+(use-package zenburn-theme
+  :custom-face
+  (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
+  (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
+  (hi-aquamarine ((t (:background "aquamarine" :foreground "black"))))
+  (hi-salmon ((t (:background "light salmon" :foreground "black"))))
+  (hlt-property-highlight ((t (:background "Wheat" :foreground "black"))))
+  (hlt-regexp-level-1 ((t (:background "#FA6CC847FFFF" :foreground "black"))))
+  (hlt-regexp-level-2 ((t (:background "#C847FFFFE423" :foreground "black"))))
+  (hlt-regexp-level-3 ((t (:background "#C847D8FEFFFF" :foreground "black"))))
+  (hlt-regexp-level-4 ((t (:background "#EF47FFFFC847" :foreground "black"))))
+  (hlt-regexp-level-5 ((t (:background "#FCFCE1E1FFFF" :foreground "black"))))
+  (hlt-regexp-level-6 ((t (:background "#E1E1FFFFF0F0" :foreground "black"))))
+  (hlt-regexp-level-7 ((t (:background "#E1E1EAEAFFFF" :foreground "black"))))
+  (hlt-regexp-level-8 ((t (:background "#F6F5FFFFE1E1" :foreground "black"))))
+  (lsp-modeline-code-actions-face ((t (:inherit warning))))
+  (lsp-ui-doc-background ((t (:background "#2b2b2b"))))
+  (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
+  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.0))))
+  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
+  (mode-line-buffer-id ((t (:foreground "#f0dfaf" :slant italic :weight bold))))
+  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
+  (org-block ((t (:extend t :background "#333333"))))
+  (org-document-info-keyword ((t (:inherit shadow :height 1.3))))
+  (org-document-title ((t (:inherit default :foreground "#8CD0D3" :weight bold :height 1.3))))
+  (org-drawer ((t (:foreground "#f0dfaf"))))
+  (org-level-1 ((t (:inherit outline-1 :extend nil :height 1.3))))
+  (org-level-2 ((t (:inherit outline-2 :extend nil :height 1.1))))
+  (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
+  (org-meta-line ((t (:inherit font-lock-comment-face :height 1.1))))
+  (region ((t (:extend t :background "#adcff1" :foreground "black"))))
+  (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.1))))
+  (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style pressed-button) :weight bold))))
+  (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
+  (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style released-button) :slant normal))))
+  (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
+  (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+  (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
+  (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
+  (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
+  (tab-line-tab-modified ((t (:foreground "#e89393"))))
+  (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
+  (highlight ((t (:background "#f0dfaf" :foreground "black"))))
+  :config
+  (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+
+  (when (display-graphic-p) (load-theme 'zenburn t)))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -1178,3 +1227,8 @@ This command switches to browser."
 (require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
