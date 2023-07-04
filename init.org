@@ -317,7 +317,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 #+begin_src emacs-lisp :tangle yes
 (defun auray/tmux-active-session ()
   (interactive)
-  ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1)
+  ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
  (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
 
 (defun auray/tmux-select-pane (direction)
