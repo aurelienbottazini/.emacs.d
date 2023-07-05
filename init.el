@@ -432,7 +432,9 @@ cons cell (regexp . minor-mode)."
 (defadvice comment-dwim (around rct-hack activate)
   "If comment-dwim is successively called, add => mark."
   (if (and (or (eq major-mode 'enh-ruby-mode)
-               (eq major-mode 'ruby-mode))
+               (eq major-mode 'ruby-mode)
+               (eq major-mode 'ruby-ts-mode)
+               )
            (eq last-command 'comment-dwim))
       (progn
         (if (eq major-mode 'enh-ruby-mode)
