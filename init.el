@@ -387,6 +387,9 @@ cons cell (regexp . minor-mode)."
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
+(require 'ruby-ts-mode)
+(define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
+
 (use-package ruby-mode
   :mode "\\.rake\\'"
   :mode "Rakefile\\'"
