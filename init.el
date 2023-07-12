@@ -219,11 +219,13 @@
   (interactive)
   (auray/tmux-move "D"))
 
+(when (not (display-graphic-p))
 (use-package gruvbox-theme
   :config
-  (when (not (display-graphic-p))
-    (load-theme 'gruvbox-dark-medium)))
+  (load-theme 'gruvbox-dark-medium)
+  ))
 
+(when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
@@ -269,8 +271,8 @@
   (highlight ((t (:background "#f0dfaf" :foreground "black"))))
   :config
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
-
-  (when (display-graphic-p) (load-theme 'zenburn t)))
+  (load-theme 'zenburn t)
+  ))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."

@@ -351,16 +351,18 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 * Colors
 
 #+begin_src emacs-lisp
+(when (not (display-graphic-p))
 (use-package gruvbox-theme
   :config
-  (when (not (display-graphic-p))
-    (load-theme 'gruvbox-dark-medium)))
+  (load-theme 'gruvbox-dark-medium)
+  ))
 #+end_src
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
 #+begin_src emacs-lisp :tangle yes
+(when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
@@ -406,8 +408,8 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
   (highlight ((t (:background "#f0dfaf" :foreground "black"))))
   :config
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
-
-  (when (display-graphic-p) (load-theme 'zenburn t)))
+  (load-theme 'zenburn t)
+  ))
 #+end_src
 
 * Utility functions
