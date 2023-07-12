@@ -1858,6 +1858,10 @@ Speed up tramp
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package graphql-mode)
+#+end_src
 * Local variables
 
 # Local Variables:

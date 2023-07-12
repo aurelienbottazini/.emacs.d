@@ -15,7 +15,9 @@
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "auray-air.local")
+   '(((:application tramp :machine "auray-air.home")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "auray-air.local")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :machine "localhost")
       tramp-connection-local-darwin-ps-profile)
@@ -144,7 +146,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
@@ -282,11 +284,11 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t))
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 119 :width normal :foundry "nil" :family "Monolisa")))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Comic Code")))))

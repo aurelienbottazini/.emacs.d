@@ -1234,3 +1234,5 @@ This command switches to browser."
       (format "\\(%s\\)\\|\\(%s\\)"
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
+
+(use-package graphql-mode)
