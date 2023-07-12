@@ -87,8 +87,7 @@
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
-       (my-paths `("/home/linuxbrew/.linuxbrew/bin/"
-                   "/opt/homebrew/bin"
+       (my-paths `("/opt/homebrew/bin"
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
                    ,(concat home-folder "/work/dox-compose/bin/")
@@ -387,6 +386,9 @@ cons cell (regexp . minor-mode)."
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
+
+(require 'ruby-ts-mode)
+(define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
 
 (use-package ruby-mode
   :mode "\\.rake\\'"
