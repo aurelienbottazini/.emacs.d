@@ -705,6 +705,7 @@ cons cell (regexp . minor-mode)."
    "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
