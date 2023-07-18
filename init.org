@@ -351,17 +351,16 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 * Colors
 
 #+begin_src emacs-lisp
-(when (not (display-graphic-p))
 (use-package gruvbox-theme
   :config
   (load-theme 'gruvbox-dark-medium)
-  ))
+  )
 #+end_src
 
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
@@ -573,8 +572,8 @@ Auto-fill comments in prog modes
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
-(require 'ruby-ts-mode)
-(define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
+;; (require 'ruby-ts-mode)
+;;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
 
 (use-package ruby-mode
   :mode "\\.rake\\'"
@@ -601,7 +600,8 @@ Auto-fill comments in prog modes
 
   (add-hook 'ruby-mode-hook 'subword-mode)
 
-  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+
+  ;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
   (use-package ruby-interpolation
     :diminish ruby-interpolation-mode)
   (use-package ruby-end
@@ -1808,7 +1808,7 @@ Jump to matching pairs with ~%~.
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 #+END_SRC
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package treesit-auto
   :config
   (global-treesit-auto-mode))
@@ -1817,10 +1817,6 @@ Jump to matching pairs with ~%~.
 #+begin_src emacs-lisp :tangle no
 (fido-mode t)
 (fido-vertical-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(global-treesit-auto-mode t)
 #+end_src
 
 #+begin_src emacs-lisp

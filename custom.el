@@ -146,7 +146,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
@@ -189,7 +189,8 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1\\.spec\\.ts")
+   '((cider-clojure-cli-global-options . -M:dev:cider)
+     (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1\\.spec\\.ts")
      (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1.spec.ts")
      (eval progn
            (make-variable-buffer-local 'cider-jack-in-nrepl-middlewares)
@@ -284,11 +285,11 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Operator Mono Ssm AB")))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Operator Mono Ssm AB")))))
