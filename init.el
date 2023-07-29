@@ -1187,4 +1187,5 @@ This command switches to browser."
 
 (use-package graphql-mode)
 
-(use-package rainbow-delimiters)
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))

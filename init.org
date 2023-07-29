@@ -1865,7 +1865,8 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters)
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
 #+end_src
 * Local variables
 
