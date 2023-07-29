@@ -285,8 +285,14 @@
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
+ '(web-mode-auto-close-style 2)
  '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0))
+ '(web-mode-css-indent-offset 0)
+ '(web-mode-enable-auto-expanding t)
+ '(web-mode-enable-auto-opening t)
+ '(web-mode-enable-auto-pairing t)
+ '(web-mode-enable-comment-interpolation t)
+ '(web-mode-enable-front-matter-block t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
