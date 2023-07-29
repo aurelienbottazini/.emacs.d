@@ -1186,3 +1186,5 @@ This command switches to browser."
               tramp-file-name-regexp))
 
 (use-package graphql-mode)
+
+(use-package rainbow-delimiters)

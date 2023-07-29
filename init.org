@@ -1863,6 +1863,10 @@ Speed up tramp
 #+begin_src emacs-lisp
 (use-package graphql-mode)
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters)
+#+end_src
 * Local variables
 
 # Local Variables:
