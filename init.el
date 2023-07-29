@@ -368,7 +368,7 @@ cons cell (regexp . minor-mode)."
   (add-hook 'ruby-mode-hook 'subword-mode)
 
 
-  ;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
   (use-package ruby-interpolation
     :diminish ruby-interpolation-mode)
   (use-package ruby-end
@@ -406,6 +406,7 @@ cons cell (regexp . minor-mode)."
   :mode "\\.erb\\'"
   :config
   (setq web-mode-enable-auto-closing t)
+  (define-key web-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
   (add-hook
    'web-mode-hook
    (lambda ()
