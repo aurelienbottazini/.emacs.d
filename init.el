@@ -131,7 +131,6 @@
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
-      tab-always-indent 'complete ; try to indent first, if already indented try to complete
       )
 
 (make-variable-buffer-local 'compile-command) ; makes the compile command buffer specific.
@@ -959,6 +958,35 @@ This command switches to browser."
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
+
+(use-package company
+  :demand t
+  :diminish company-mode
+  :config
+  (setq company-idle-delay nil
+        company-tooltip-limit 10
+        company-tooltip-align-annotations t
+        company-require-match 'never
+        company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
+        company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
+        company-backends '((company-files company-capf))
+        company-transformers '(company-sort-by-occurrence))
+
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-dabbrev-downcase nil
+        company-dabbrev-ignore-case nil)
+  (setq company-show-numbers t)
+
+  (use-package company-statistics
+    :after company
+    :config
+    (setq company-statistics-file "~/.emacs.d/company-stats-cache.el")
+    (company-statistics-mode +1))
+
+  (autoload 'company-capf "company-capf")
+  (autoload 'company-yasnippet "company-yasnippet")
+  (autoload 'company-elisp "company-elisp")
+  (autoload 'company-files "company-files"))
 
 (use-package yasnippet
   :defer 3

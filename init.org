@@ -224,7 +224,6 @@ stick to fundamental mode and disable expensive minor modes.
 (setq help-window-select t ; if an help window appears, give it focus
       inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
-      tab-always-indent 'complete ; try to indent first, if already indented try to complete
       )
 
 (make-variable-buffer-local 'compile-command) ; makes the compile command buffer specific.
@@ -1454,19 +1453,17 @@ The description of all the hippie expand functions is inside
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
 #+END_SRC
 
-** COMMENT Auto-Completion
+** Auto-Completion
 
 company shows a popup where you can select completions with a number
 or with ~enter~. You can also invoke the popup manually with ~C-x
 C-o~
 
-compa
 Use =company-diag= to debug completion problems
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :demand t
   :diminish company-mode
-  :bind (:map company-active-map ("<tab>" . company-complete-selection))
   :config
   (setq company-idle-delay nil
         company-tooltip-limit 10
