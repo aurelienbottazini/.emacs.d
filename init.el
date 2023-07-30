@@ -219,10 +219,55 @@
   (interactive)
   (auray/tmux-move "D"))
 
-(use-package gruvbox-theme
+;; (when (display-graphic-p)
+(use-package zenburn-theme
+  :custom-face
+  (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
+  (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
+  (hi-aquamarine ((t (:background "aquamarine" :foreground "black"))))
+  (hi-salmon ((t (:background "light salmon" :foreground "black"))))
+  (hlt-property-highlight ((t (:background "Wheat" :foreground "black"))))
+  (hlt-regexp-level-1 ((t (:background "#FA6CC847FFFF" :foreground "black"))))
+  (hlt-regexp-level-2 ((t (:background "#C847FFFFE423" :foreground "black"))))
+  (hlt-regexp-level-3 ((t (:background "#C847D8FEFFFF" :foreground "black"))))
+  (hlt-regexp-level-4 ((t (:background "#EF47FFFFC847" :foreground "black"))))
+  (hlt-regexp-level-5 ((t (:background "#FCFCE1E1FFFF" :foreground "black"))))
+  (hlt-regexp-level-6 ((t (:background "#E1E1FFFFF0F0" :foreground "black"))))
+  (hlt-regexp-level-7 ((t (:background "#E1E1EAEAFFFF" :foreground "black"))))
+  (hlt-regexp-level-8 ((t (:background "#F6F5FFFFE1E1" :foreground "black"))))
+  (lsp-modeline-code-actions-face ((t (:inherit warning))))
+  (lsp-ui-doc-background ((t (:background "#2b2b2b"))))
+  (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
+  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.0))))
+  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
+  (mode-line-buffer-id ((t (:foreground "#f0dfaf" :slant italic :weight bold))))
+  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
+  (org-block ((t (:extend t :background "#333333"))))
+  (org-document-info-keyword ((t (:inherit shadow :height 1.3))))
+  (org-document-title ((t (:inherit default :foreground "#8CD0D3" :weight bold :height 1.3))))
+  (org-drawer ((t (:foreground "#f0dfaf"))))
+  (org-level-1 ((t (:inherit outline-1 :extend nil :height 1.3))))
+  (org-level-2 ((t (:inherit outline-2 :extend nil :height 1.1))))
+  (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
+  (org-meta-line ((t (:inherit font-lock-comment-face :height 1.1))))
+  (region ((t (:extend t :background "#adcff1" :foreground "black"))))
+  (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.1))))
+  (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style pressed-button) :weight bold))))
+  (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
+  (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style released-button) :slant normal))))
+  (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
+  (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+  (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
+  (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
+  (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
+  (tab-line-tab-modified ((t (:foreground "#e89393"))))
+  (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
+  (highlight ((t (:background "#f0dfaf" :foreground "black"))))
   :config
-  (load-theme 'gruvbox-dark-medium)
+  (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
+  (load-theme 'zenburn t)
   )
+;; )
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -419,6 +464,7 @@ cons cell (regexp . minor-mode)."
   :hook (css-mode sgml-mode web-mode)
   :diminish emmet-mode
   :config
+  (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
   (add-hook 'css-mode-hook
             (lambda ()
               (emmet-mode)
@@ -913,85 +959,6 @@ This command switches to browser."
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
-
-(use-package company
-  :demand t
-  :diminish company-mode
-  :bind (:map company-active-map ("<tab>" . company-complete-selection))
-  :config
-  (setq company-idle-delay nil
-        company-tooltip-limit 10
-        company-tooltip-align-annotations t
-        company-require-match 'never
-        company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
-        company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-capf))
-        company-transformers '(company-sort-by-occurrence))
-
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-dabbrev-downcase nil
-        company-dabbrev-ignore-case nil)
-  (setq company-show-numbers t)
-
-  (use-package company-statistics
-    :after company
-    :config
-    (setq company-statistics-file "~/.emacs.d/company-stats-cache.el")
-    (company-statistics-mode +1))
-
-  (autoload 'company-capf "company-capf")
-  (autoload 'company-yasnippet "company-yasnippet")
-  (autoload 'company-elisp "company-elisp")
-  (autoload 'company-files "company-files"))
-
-;; icons for some company completions
-(use-package company-box
-  :diminish company-box-mode
-  :hook (company-mode . company-box-mode)
-  :config
-
-  (defun company-box-doc--make-buffer (object)
-    (let* ((buffer-list-update-hook nil)
-           (inhibit-modification-hooks t)
-           (string (cond ((stringp object) object)
-                         ((bufferp object) (with-current-buffer object (buffer-string))))))
-      (when (and string (> (length (string-trim string)) 0))
-        (with-current-buffer (company-box--get-buffer "doc")
-          (erase-buffer)
-          (insert string)
-          (setq mode-line-format nil
-                display-line-numbers nil
-                header-line-format nil
-                show-trailing-whitespace nil
-                cursor-in-non-selected-windows nil)
-
-          (toggle-truncate-lines -1) ;; PATCHED HERE
-
-          (current-buffer)))))
-  )
-
-(defun company-box-doc--set-frame-position (frame)
-  (-let* ((box-position (frame-position (company-box--get-frame)))
-          (box-width (frame-pixel-width (company-box--get-frame)))
-          (window (frame-root-window frame))
-          (frame-resize-pixelwise t)
-          ((width . height) (window-text-pixel-size window nil nil 400 10000)) ;; PATCHED HERE
-          (bottom (+ company-box--bottom (window-pixel-top) (frame-border-width)))
-          (x (+ (car box-position) box-width (/ (frame-char-width) 2)))
-          (y (cdr box-position))
-          (y (if (> (+ y height 20) bottom)
-                 (- y (- (+ y height) bottom) 20)
-               y))
-          (space-right (- (frame-pixel-width) x))
-          (space-left (car box-position))
-          (x (or (let ((border (* (or (alist-get 'internal-border-width company-box-doc-frame-parameters) 0)
-                                  2)))
-                   (and (> width space-right)
-                        (> space-left (+ width border (/ (frame-char-width) 2)))
-                        (- (car box-position) width border (/ (frame-char-width) 2))))
-                 x)))
-    (set-frame-position frame (max x 0) (max y 0))
-    (set-frame-size frame width height t)))
 
 (use-package yasnippet
   :defer 3
