@@ -220,7 +220,7 @@
 
 (use-package solarized-theme
   :config
-  (load-theme 'solarized-selenized-dark))
+  (load-theme 'solarized-dark))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
