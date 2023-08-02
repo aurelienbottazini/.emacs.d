@@ -332,6 +332,13 @@ cons cell (regexp . minor-mode)."
   :config
 
   (define-key cider-mode-map (kbd "C-c C-c") 'cider-eval-list-at-point)
+  (add-hook 'clojure-mode-hook (lambda ()
+                                 (add-hook 'before-save-hook 'cider-format-buffer t t)
+        ))
+
+  (add-hook 'edn-mode-hook (lambda ()
+                                 (add-hook 'before-save-hook 'cider-format-edn-buffer t t)
+        ))
   (setq cider-repl-display-help-banner nil))
 
 (use-package yaml-mode
