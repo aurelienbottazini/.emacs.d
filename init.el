@@ -325,7 +325,11 @@ cons cell (regexp . minor-mode)."
 (use-package clojure-mode
   :mode "\\.clj\\'"
   :config
-  (add-hook 'clojure-mode-hook #'subword-mode))
+  (add-hook 'clojure-mode-hook #'subword-mode)
+
+  (use-package rainbow-blocks)
+  (add-hook 'clojure-mode-hook #'rainbow-blocks-mode))
+
 
 (use-package cider
   :after clojure-mode
