@@ -1835,6 +1835,11 @@ Speed up tramp
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)))
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package highlight-blocks)
+;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
+#+end_src
 * Local variables
 
 # Local Variables:

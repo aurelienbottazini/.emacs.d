@@ -1150,3 +1150,6 @@ This command switches to browser."
 
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(use-package highlight-blocks)
+;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
