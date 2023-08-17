@@ -349,7 +349,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   #+END_SRC
 * Colors
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package solarized-theme
   :config
   (load-theme 'solarized-dark))
@@ -365,7 +365,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 ;; (when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
@@ -615,7 +615,7 @@ Auto-fill comments in prog modes
   :mode "ruby"
   :config
 
-  (add-hook 'ruby-mode-hook 'subword-mode)
+  ;; (add-hook 'ruby-mode-hook 'subword-mode)
 
 
   (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
