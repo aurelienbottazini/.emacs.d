@@ -599,6 +599,8 @@ cons cell (regexp . minor-mode)."
     :keymaps 'override
     "b" 'counsel-switch-buffer
     "c" (lambda () (interactive) (org-capture nil "n"))
+    "d" 'flymake-show-buffer-diagnostics
+    "D" 'flymake-show-project-diagnostics
     "e" 'recentf
     "f" 'counsel-rg
     "F" 'rg-project
