@@ -1156,3 +1156,24 @@ This command switches to browser."
 
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
+
+(defun auray/bg-modeline-color-from-evil-state ()
+  (interactive)
+  (cond ((evil-insert-state-p) "#97d88a")
+        ((evil-visual-state-p) "#adcff1")
+        ((evil-emacs-state-p) "#4c7073")
+        (t nil)))
+
+(defun auray/fg-modeline-color-from-evil-state ()
+  (interactive)
+  (cond ((evil-insert-state-p) "#000000")
+        ((evil-visual-state-p) "#000000")
+        ((evil-emacs-state-p) "#000000")
+        (t nil)))
+
+(defun auray/post-command-evil-modeline-colors-hook ()
+  (interactive)
+  (set-face-background 'mode-line (auray/bg-modeline-color-from-evil-state))
+  (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
+
+(add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
