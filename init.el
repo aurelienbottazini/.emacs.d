@@ -1162,7 +1162,7 @@ This command switches to browser."
   (cond ((evil-insert-state-p) "#97d88a")
         ((evil-visual-state-p) "#adcff1")
         ((evil-emacs-state-p) "#4c7073")
-        (t nil)))
+        (t "#32302f")))
 
 (defun auray/fg-modeline-color-from-evil-state ()
   (interactive)
