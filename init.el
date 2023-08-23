@@ -429,10 +429,10 @@ cons cell (regexp . minor-mode)."
   :hook (css-mode sgml-mode web-mode)
   :diminish emmet-mode
   :config
-  (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
   (add-hook 'css-mode-hook
             (lambda ()
               (emmet-mode)
+              (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
               (setq emmet-expand-jsx-className? nil)))
 
   (add-hook 'sgml-mode-hook
