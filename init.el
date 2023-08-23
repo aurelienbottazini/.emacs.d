@@ -378,6 +378,7 @@ cons cell (regexp . minor-mode)."
   )
 
 (use-package robe
+  :diminish robe-mode
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-hook 'ruby-ts-mode-hook 'robe-mode)
