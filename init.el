@@ -349,10 +349,7 @@ cons cell (regexp . minor-mode)."
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
-;; (require 'ruby-ts-mode)
-;;(define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-
-(use-package ruby-mode
+(use-package ruby-ts-mode
   :mode "\\.rake\\'"
   :mode "Rakefile\\'"
   :mode "\\.gemspec\\'"
@@ -374,7 +371,20 @@ cons cell (regexp . minor-mode)."
   :mode "\\.rb$"
   :mode "ruby"
   :config
+  (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
+  )
 
+(use-package robe
+  :config
+  (add-hook 'ruby-mode-hook 'robe-mode)
+  (add-hook 'ruby-ts-mode-hook 'robe-mode)
+  (eval-after-load 'company
+  '(push 'company-robe company-backends))
+  (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
+  )
+
+(use-package ruby-mode
+  :config
   ;; (add-hook 'ruby-mode-hook 'subword-mode)
 
 
@@ -383,13 +393,6 @@ cons cell (regexp . minor-mode)."
     :diminish ruby-interpolation-mode)
   (use-package ruby-end
     :diminish ruby-end-mode
-    :config
-    (defun ruby-end-insert-end ()
-      "Closes block by inserting end."
-      (save-excursion
-        (newline)
-        (insert "end")
-        (indent-according-to-mode)))
     )
   (use-package rspec-mode))
 
@@ -922,6 +925,7 @@ This command switches to browser."
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
+(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
