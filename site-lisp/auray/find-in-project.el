@@ -61,7 +61,7 @@
                                        (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename)))) ".*' $(git rev-parse --show-toplevel)"
              )))))
 
-    (message results)
+    (message (car results))
     (cond
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
