@@ -372,6 +372,9 @@ cons cell (regexp . minor-mode)."
   :mode "ruby"
   :config
   (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
+  (add-hook 'ruby-ts-mode-hook (defun auray-ruby-ts-mode-hook ()
+             (modify-syntax-entry ?_ "w")       ; now '_' is not considered a word-delimiter
+             ))
   )
 
 (use-package robe
