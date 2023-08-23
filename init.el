@@ -812,15 +812,15 @@ cons cell (regexp . minor-mode)."
 (setq org-publish-project-alist
       `(
         ("blog-files"
-         :base-directory "~/project/blog"
+         :base-directory "~/perso/aurelienbottazini.github.io/_org"
          :base-extension "org"
-         :publishing-directory "~/project/blog_published"
+         :publishing-directory "~/perso/aurelienbottazini.github.io/"
          :recursive t
          :publishing-function org-html-publish-to-html
          :headline-levels 4             ; Just the default for this project.
          :auto-preamble t
          :html-head-extra nil
-         ;; :body-only nil
+         :body-only t
          )
         ;; ... add all the components here (see below)...
         ;; ("wiki" :components ("wiki-files"))
