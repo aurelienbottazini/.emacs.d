@@ -1644,12 +1644,6 @@ C-c C-e R =letter= to export a presentation from your org file
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package paredit-everywhere
-  :config
-  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package emamux
   :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init

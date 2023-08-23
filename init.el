@@ -1037,10 +1037,6 @@ This command switches to browser."
 
 (use-package deadgrep)
 
-(use-package paredit-everywhere
-  :config
-  (add-hook 'prog-mode-hook 'paredit-everywhere-mode))
-
 (use-package emamux
   :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init
