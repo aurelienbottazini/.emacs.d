@@ -11,11 +11,18 @@
   "Extract the base name for current buffer. This base name will be used to find simlarly named files for the current project."
   (downcase
    (car (split-string
-         (car (split-string (file-name-nondirectory (file-name-sans-extension file-name)) "\\."))
-         "_spec"))))
+         (car
+          (split-string
+           (car (split-string
+                 (file-name-nondirectory (file-name-sans-extension file-name))
+                 "_spec"))
+           ".test"))
+         ".jest"))))
 
 (ert-deftest auray/fip-base-name-test ()
   (should (string= "foo" (auray/fip-base-name "path/foo.el")))
+  (should (string= "foo.client" (auray/fip-base-name "path/foo.client.ts")))
+  (should (string= "foo.client" (auray/fip-base-name "path/foo.client.jest.ts")))
   (should (string= "foo" (auray/fip-base-name "path/foo.test.ts")))
   (should (string= "foo" (auray/fip-base-name "path/foo_spec.rb"))))
 
