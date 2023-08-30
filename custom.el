@@ -153,7 +153,7 @@
      (ivy--regex-ignore-order . "order")
      (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-headerline-breadcrumb-segments '(path-up-to-project file))
@@ -182,7 +182,7 @@
  '(org-startup-indented t)
  '(org-startup-truncated nil)
  '(package-selected-packages
-   '(robe edit-indirect highlight-blocks highlight-thing rainbow-blocks iyv-hydra sqlite3 multi-vterm treesit-auto swiper elm-mode vterm clj-refactor company-quickhelp-terminal dap-mode lsp-treemacs lsp-ivy helm-lsp lsp-ui lsp-mode projectile zenburn-theme emamux combobulate tree-sitter-langs tree-sitter treesitter-langs treesitter gruvbox-theme vertico deadgrep context-coloring-mode idle-highlight-mode idle-highlight ivy-posframe general winum doom-modeline doom-themes treemacs-all-the-icons treemacs-magit treemacs-icons-dired treemacs-evil org-superstar ace-window docker-tramp counsel-fzf el-patch el-path evil-indent-plus evil-search-highlight-persist evil-matchit evil-surround org-roam evil-visualstar evil-visual-star evil-commentary counsel guru-mode evil embark-consult embark marginalia consult selectrum-prescient selectrum ivy-hydra ivy find-file-in-project ox-reveal which-key project osx-clipboard evil-mode solarized-theme flycheck-clj-kondo company-box org-reveal org-tree-slide ob-graphql rainbow-delimiters org-msg default-text-scale dracula-theme origami-mode origame-mode evil-leader smart-mode-line restclient engine-mode ruby zotxt zotxt-emacs eglot treemacs leuven prettier company-statistics writeroom-mode go-mode ob-clojurescript writegood-mode writegood osx-dictionary all-the-icons-dired-mode all-the-icons-dired all-the-icons dired-rsync docker xref-js2 js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode noflet lsp-css company-lsp lsp-javascript-typescript lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere hydra counsel-projectile iedit typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses evil-numbers exec-path-from-shell use-package))
+   '(tramp robe edit-indirect highlight-blocks highlight-thing rainbow-blocks iyv-hydra sqlite3 multi-vterm treesit-auto swiper elm-mode vterm clj-refactor company-quickhelp-terminal dap-mode lsp-treemacs lsp-ivy helm-lsp lsp-ui lsp-mode projectile zenburn-theme emamux combobulate tree-sitter-langs tree-sitter treesitter-langs treesitter gruvbox-theme vertico deadgrep context-coloring-mode idle-highlight-mode idle-highlight ivy-posframe general winum doom-modeline doom-themes treemacs-all-the-icons treemacs-magit treemacs-icons-dired treemacs-evil org-superstar ace-window docker-tramp counsel-fzf el-patch el-path evil-indent-plus evil-search-highlight-persist evil-matchit evil-surround org-roam evil-visualstar evil-visual-star evil-commentary counsel guru-mode evil embark-consult embark marginalia consult selectrum-prescient selectrum ivy-hydra ivy find-file-in-project ox-reveal which-key project osx-clipboard evil-mode solarized-theme flycheck-clj-kondo company-box org-reveal org-tree-slide ob-graphql rainbow-delimiters org-msg default-text-scale dracula-theme origami-mode origame-mode evil-leader smart-mode-line restclient engine-mode ruby zotxt zotxt-emacs eglot treemacs leuven prettier company-statistics writeroom-mode go-mode ob-clojurescript writegood-mode writegood osx-dictionary all-the-icons-dired-mode all-the-icons-dired all-the-icons dired-rsync docker xref-js2 js2-refactor ruby-refactor parinfer ace-windows tide forge key-chord synonymous define-word htmlize esup inf-ruby ruby-additional counsel-etags rust-mode noflet lsp-css company-lsp lsp-javascript-typescript lsp-ruby js-comint skewer-mode nodejs-repl slime-js slime markdown-mode palimpsest-mode palimpsest palimpset-mode paredit 0xc evil-fringe-mark evil-fringe-marks enh-ruby-mode 0blayout org-bullets web-beautify graphql-mode haskell-mode flycheck drag-stuff col-highlight crosshairs rg eacl highlight-indentation evil-multiedit coverlay coverage coverage-mode evil-collection eyebrowse telephone-line magithub git-timemachine dash-at-point diminish yaml-mode lispyville x-clip xclip evil-mc multiple-cursors evil-lispy lispy windresize dumb-jump expand-region origami company-dict ac-js2 auto-complete indium less-css-mode sass-mode scss-mode dockerfile-mode emmet-mode yatemplate yasnippet company deft cider clojure-mode wgrep rainbow-mode rspec-mode ruby-end ruby-interpolation bundler paredit-everywhere hydra counsel-projectile iedit typescript-mode coffee-mode json-mode context-coloring prettier-js import-js js2-mode web-mode diff-hl fullframe evil-magit git-link magit highlight-parentheses evil-numbers exec-path-from-shell use-package))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-mode-line-prefix " Proj")
  '(projectile-switch-project-action 'projectile-dired)
@@ -196,7 +196,19 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((cider-clojure-cli-global-options . -M:dev:cider)
+   '((find-sibling-rules
+      ("\\([^/]+\\)\\.ts\\'" "\\1\\.test\\.ts"))
+     (find-sibling-rules
+      ("src/\\(.*)\\)\\.ts" "test/\\1\\.test\\.ts"))
+     (find-sibling-rules
+      ("src/\\(.*)\\)\\.ts" "test/\\1\\.test.ts"))
+     (find-sibling-rules
+      ("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts"))
+     (find-sibling-rules quote
+                         (("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts")))
+     (find-sibling-rules quote
+                         ("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts"))
+     (cider-clojure-cli-global-options . -M:dev:cider)
      (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1\\.spec\\.ts")
      (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1.spec.ts")
      (eval progn
@@ -295,8 +307,8 @@
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
  '(web-mode-auto-close-style 2)
- '(web-mode-code-indent-offset 0)
- '(web-mode-css-indent-offset 0)
+ '(web-mode-code-indent-offset 0 t)
+ '(web-mode-css-indent-offset 0 t)
  '(web-mode-enable-auto-expanding t)
  '(web-mode-enable-auto-opening t)
  '(web-mode-enable-auto-pairing t)

@@ -5,15 +5,18 @@
 
 ;; Author: Aurélien Bottazini
 
+(require 'cl-lib)
+
 (defun auray/fip-base-name (file-name)
   "Extract the base name for current buffer. This base name will be used to find simlarly named files for the current project."
   (downcase
    (car (split-string
-         (car (split-string (file-name-nondirectory file-name) "\\."))
+         (car (split-string (file-name-nondirectory (file-name-sans-extension file-name)) "\\."))
          "_spec"))))
 
 (ert-deftest auray/fip-base-name-test ()
   (should (string= "foo" (auray/fip-base-name "path/foo.el")))
+  (should (string= "foo" (auray/fip-base-name "path/foo.test.ts")))
   (should (string= "foo" (auray/fip-base-name "path/foo_spec.rb"))))
 
 (defun auray/alternate-files-for-current-buffer ()
@@ -28,12 +31,18 @@
       " $(git rev-parse --show-toplevel)"
       ))
     "\n")
-   1))
+ 1))
+
+(defun auray/filter-out-extra-files (a-file-string-list suffix)
+  (cl-remove-if-not (lambda (str) (string-suffix-p suffix str)) a-file-string-list))
+
+(ert-deftest auray/filter-out-extra-files-test ()
+  (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts"))))
 
 (defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
   (interactive)
-  (let ((alternate-files (auray/alternate-files-for-current-buffer))
+  (let ((alternate-files (auray/filter-out-extra-files (auray/alternate-files-for-current-buffer) (file-name-extension (buffer-file-name))))
         (tramp-prefix (file-remote-p (buffer-file-name)))
         )
     (cond

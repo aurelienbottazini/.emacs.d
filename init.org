@@ -618,6 +618,7 @@ Auto-fill comments in prog modes
   )
 
 (use-package robe
+  :after evil
   :diminish robe-mode
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
