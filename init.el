@@ -104,7 +104,8 @@
                    "/usr/bin/"
                    "/usr/local/sbin/"
                    "/opt/homebrew/bin"
-                   "/usr/bin/")) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
+                   "/usr/bin/"
+                   ,(concat home-folder "/.cargo/bin/"))) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
        )
 
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
@@ -617,7 +618,7 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
-    "p" 'project-find-file
+    "p" 'auray/project-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switch
     "rr" 'eglot-code-actions
