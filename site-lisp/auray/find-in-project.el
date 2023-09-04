@@ -11,11 +11,18 @@
   "Extract the base name for current buffer. This base name will be used to find simlarly named files for the current project."
   (downcase
    (car (split-string
-         (car (split-string (file-name-nondirectory (file-name-sans-extension file-name)) "\\."))
-         "_spec"))))
+         (car
+          (split-string
+           (car (split-string
+                 (file-name-nondirectory (file-name-sans-extension file-name))
+                 "_spec"))
+           ".test"))
+         ".jest"))))
 
 (ert-deftest auray/fip-base-name-test ()
   (should (string= "foo" (auray/fip-base-name "path/foo.el")))
+  (should (string= "foo.client" (auray/fip-base-name "path/foo.client.ts")))
+  (should (string= "foo.client" (auray/fip-base-name "path/foo.client.jest.ts")))
   (should (string= "foo" (auray/fip-base-name "path/foo.test.ts")))
   (should (string= "foo" (auray/fip-base-name "path/foo_spec.rb"))))
 
@@ -39,6 +46,22 @@
 (ert-deftest auray/filter-out-extra-files-test ()
   (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts"))))
 
+(defun auray/default-alternate-file (a-file-path)
+  (cond
+   ((string-match "test/" a-file-path) (concat "src/" (substring (file-name-directory a-file-path) (+ 1 (length "test"))) (auray/fip-base-name a-file-path)".clj"))
+   ((string-match "src/" a-file-path) (concat "test/" (substring (file-name-directory a-file-path) (+ 1 (length "src"))) (auray/fip-base-name a-file-path)"_test.clj"))
+   (t (message "can not guess a default alternate file"))))
+
+(ert-deftest auray/default-alternate-file-test ()
+  (should (string= "can not guess a default alternate file" (auray/default-alternate-file "")))
+  (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
+  (should (equal "test/bar_test.clj" (auray/default-alternate-file "src/bar.clj")))
+  (should (equal "src/foo.clj" (auray/default-alternate-file "test/foo_test.clj")))
+  (should (equal "src/bar.clj" (auray/default-alternate-file "test/bar_test.clj")))
+  (should (equal "src/nested/path/bar.clj" (auray/default-alternate-file "test/nested/path/bar_test.clj")))
+  (should (equal "src/nested/path/bar.clj" (auray/default-alternate-file "/home/auray/perso/vins-scrap/src/vins/gateway/chateau_primeur.clj")))
+  )
+
 (defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
   (interactive)
@@ -47,7 +70,8 @@
         )
     (cond
      ((zerop (length alternate-files))
-      (message "There's no alternate files"))
+      (find-file (auray/default-alternate-file (buffer-file-name)))
+      )
      ((equal 1 (length alternate-files))
       (find-file (concat tramp-prefix (car alternate-files))))
      (t (find-file (concat tramp-prefix
