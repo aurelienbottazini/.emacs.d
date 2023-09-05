@@ -609,7 +609,7 @@ cons cell (regexp . minor-mode)."
     "c" (lambda () (interactive) (org-capture nil "n"))
     "d" 'flymake-show-buffer-diagnostics
     "D" 'flymake-show-project-diagnostics
-    "e" 'recentf
+    "e" 'er/expand-region
     "f" 'counsel-rg
     "F" 'rg-project
     "g" 'magit-status
@@ -617,6 +617,7 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
+    "o" 'recentf ;; o for oldfiles
     "p" 'auray/project-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switch
@@ -668,9 +669,6 @@ cons cell (regexp . minor-mode)."
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
-   "C-=" 'er/expand-region
-   "C-+" 'default-text-scale-increase
-   "C-M-+" 'default-text-scale-decrease
 
    "C-h" 'tmux-move-left
    "C-j" 'tmux-move-down
