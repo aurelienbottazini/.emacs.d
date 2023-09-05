@@ -625,6 +625,7 @@ cons cell (regexp . minor-mode)."
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
+    "w" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
     )

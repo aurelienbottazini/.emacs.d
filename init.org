@@ -936,6 +936,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
+    "w" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
     )
