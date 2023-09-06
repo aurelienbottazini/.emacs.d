@@ -1087,6 +1087,7 @@ This command switches to browser."
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-set-initial-state 'shell-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-mode 'emacs)
 
   ;; magit commit
