@@ -1162,6 +1162,13 @@ This command switches to browser."
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 
+(setq evil-insert-state-cursor '((bar . 2) "#97d88a")
+      evil-normal-state-cursor '(box "#ffaf00")
+      evil-visual-state-cursor '(box "#afcff1")
+      evil-emacs-state-cursor '((bar . 2) "#ffffd7")
+
+        )
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#97d88a")

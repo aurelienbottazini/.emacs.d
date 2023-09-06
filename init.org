@@ -1845,6 +1845,16 @@ Speed up tramp
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 #+end_src
+
+#+begin_src emacs-lisp
+(setq evil-insert-state-cursor '((bar . 2) "#97d88a")
+      evil-normal-state-cursor '(box "#ffaf00")
+      evil-visual-state-cursor '(box "#afcff1")
+      evil-emacs-state-cursor '((bar . 2) "#ffffd7")
+
+        )
+#+end_src
+
 * Local variables
 
 #+begin_src emacs-lisp
