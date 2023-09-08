@@ -620,7 +620,7 @@ cons cell (regexp . minor-mode)."
     "o" 'recentf ;; o for oldfiles
     "p" 'auray/project-find-file
     "s" 'auray/find-file-with-similar-name
-    "t" 'tab-switch
+    "t" 'tab-switcher
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
@@ -1088,6 +1088,7 @@ This command switches to browser."
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
+  (evil-set-initial-state 'tab-switcher-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-mode 'emacs)
 
   ;; magit commit
