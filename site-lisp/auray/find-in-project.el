@@ -100,17 +100,22 @@ If FILE is nil, use the current buffer's file name."
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr)))
+         (filename (substring-no-properties (thing-at-point 'filename)))
          (results
           (split-string
            (shell-command-to-string
             (concat
              "fd --hidden --type file --exclude '*.spec.*' -p '.*"
              (replace-regexp-in-string "\\.\\./" ""
-                                       (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))))
+                                       (replace-regexp-in-string "^~" "" filename))
              "'")))))
     (cond
-     ((and (file-exists-p (substring-no-properties (thing-at-point 'filename)))
-           (not (file-directory-p (substring-no-properties (thing-at-point 'filename))))) (find-file (substring-no-properties (thing-at-point 'filename))))
+     ((and (file-exists-p filename)
+           (not (file-directory-p filename))) (find-file filename))
+     ((and (file-directory-p filename)
+           (file-exists-p (concat filename "/index.vue"))) (find-file (concat filename "/index.vue")))
+     ((and (file-directory-p filename)
+           (file-exists-p (concat filename "/index.js"))) (find-file (concat filename "/index.js")))
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
      (t (find-file (ido-completing-read "Guessed files: " results)))
