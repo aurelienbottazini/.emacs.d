@@ -329,8 +329,8 @@ cons cell (regexp . minor-mode)."
   :config
   (add-hook 'clojure-mode-hook #'subword-mode)
 
-  (use-package rainbow-blocks)
-  (add-hook 'clojure-mode-hook #'rainbow-blocks-mode))
+  ;; (use-package rainbow-blocks)
+  ;; (add-hook 'clojure-mode-hook #'rainbow-blocks-mode))
 
 
 (use-package cider
@@ -1046,7 +1046,7 @@ This command switches to browser."
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(desktop-save-mode -1)
+(desktop-save-mode 1)
 
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
