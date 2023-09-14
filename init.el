@@ -330,7 +330,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'clojure-mode-hook #'subword-mode)
 
   ;; (use-package rainbow-blocks)
-  ;; (add-hook 'clojure-mode-hook #'rainbow-blocks-mode))
+  ;; (add-hook 'clojure-mode-hook #'rainbow-blocks-mode)
+  )
 
 
 (use-package cider
