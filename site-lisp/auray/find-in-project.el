@@ -109,6 +109,8 @@ If FILE is nil, use the current buffer's file name."
                                        (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))))
              "'")))))
     (cond
+     ((and (file-exists-p (substring-no-properties (thing-at-point 'filename)))
+           (not (file-directory-p (substring-no-properties (thing-at-point 'filename))))) (find-file (substring-no-properties (thing-at-point 'filename))))
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
      (t (find-file (ido-completing-read "Guessed files: " results)))
