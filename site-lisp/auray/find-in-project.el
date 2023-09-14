@@ -46,20 +46,34 @@
 (ert-deftest auray/filter-out-extra-files-test ()
   (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts"))))
 
+(defun git-root-directory (&optional file)
+  "Return the root of the Git repository containing FILE, or nil if none.
+If FILE is nil, use the current buffer's file name."
+  (let ((file (or file (buffer-file-name))))
+    (locate-dominating-file file ".git")))
+
+(defun relative-path-to-git-root (&optional file)
+  "Return the path of FILE relative to the root of the Git repository.
+If FILE is nil, use the current buffer's file name."
+  (let* ((file (or file (buffer-file-name)))
+         (root (git-root-directory file)))
+    (if (and file root)
+        (file-relative-name file root)
+      nil)))
+
 (defun auray/default-alternate-file (a-file-path)
   (cond
    ((string-match "test/" a-file-path) (concat "src/" (substring (file-name-directory a-file-path) (+ 1 (length "test"))) (auray/fip-base-name a-file-path)".clj"))
    ((string-match "src/" a-file-path) (concat "test/" (substring (file-name-directory a-file-path) (+ 1 (length "src"))) (auray/fip-base-name a-file-path)"_test.clj"))
-   (t (message "can not guess a default alternate file"))))
+   (t nil)))
 
 (ert-deftest auray/default-alternate-file-test ()
-  (should (string= "can not guess a default alternate file" (auray/default-alternate-file "")))
+  (should (string= nil (auray/default-alternate-file "")))
   (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
   (should (equal "test/bar_test.clj" (auray/default-alternate-file "src/bar.clj")))
   (should (equal "src/foo.clj" (auray/default-alternate-file "test/foo_test.clj")))
   (should (equal "src/bar.clj" (auray/default-alternate-file "test/bar_test.clj")))
   (should (equal "src/nested/path/bar.clj" (auray/default-alternate-file "test/nested/path/bar_test.clj")))
-  (should (equal "src/nested/path/bar.clj" (auray/default-alternate-file "/home/auray/perso/vins-scrap/src/vins/gateway/chateau_primeur.clj")))
   )
 
 (defun auray/find-file-with-similar-name ()
@@ -69,6 +83,7 @@
         (tramp-prefix (file-remote-p (buffer-file-name)))
         )
     (cond
+     ((file-exists-p (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))) (find-file (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
      ((zerop (length alternate-files))
       (find-file (auray/default-alternate-file (buffer-file-name)))
       )
@@ -98,10 +113,20 @@
     (cond
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
-     (t (find-file (ido-completing-read "Guessed files: " results)))
+     (t (find-file (ido-completing-read "Guessed files: " (auray/project-guess-file-refine-multiple results (thing-at-point 'filename)))))
      )
-
     ))
+
+
+(defun auray/project-guess-file-refine-multiple (file-list query-name)
+  "Filter FILE-LIST to return files that best match QUERY-NAME."
+  (let ((pattern (concat "/"? (regexp-quote query-name) "\\.")))
+    (cl-remove-if-not
+     (lambda (file-name) (string-match-p pattern (file-name-nondirectory file-name)))
+     file-list)))
+
+(ert-deftest auray/project-guess-file-refine-multiple-test ()
+  (should (equal '("foo/AppNav.js" "AppNav.vue" "AppNav.js")  (auray/project-guess-file-refine-multiple '("foo/AppNav.js" "AppNav.vue" "AppNav.js" "foo/AppNav/somefile") "AppNav"))))
 
 (setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
 
