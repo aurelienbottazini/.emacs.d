@@ -104,18 +104,15 @@ If FILE is nil, use the current buffer's file name."
           (split-string
            (shell-command-to-string
             (concat
-             "fd --hidden --exclude '*.spec.*' -p '.*"
+             "fd --hidden --type file --exclude '*.spec.*' -p '.*"
              (replace-regexp-in-string "\\.\\./" ""
-                                       (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename)))) ".*' $(git rev-parse --show-toplevel)"
-             )))))
-
-    (message (car results))
+                                       (replace-regexp-in-string "^~" "" (substring-no-properties (thing-at-point 'filename))))
+             "'")))))
     (cond
      ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
-     (t (find-file (ido-completing-read "Guessed files: " (auray/project-guess-file-refine-multiple results (thing-at-point 'filename)))))
-     )
-    ))
+     (t (find-file (ido-completing-read "Guessed files: " results)))
+     )))
 
 
 (defun auray/project-guess-file-refine-multiple (file-list query-name)
