@@ -678,7 +678,7 @@ cons cell (regexp . minor-mode)."
    "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
-   "C-s" 'swiper
+   "C-s" 'isearch-forward
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1064,7 +1064,7 @@ This command switches to browser."
 
 (add-hook 'prog-mode-hook 'my-enable-evil-in-prog-mode)
 (add-hook 'org-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'markdown-mode 'my-enable-evil-in-prog-mode)
+(add-hook 'markdown-mode-hook 'my-enable-evil-in-prog-mode)
 (add-hook 'fundamental-mode-hook 'my-enable-evil-in-prog-mode))
 
 (use-package evil
