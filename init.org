@@ -1581,7 +1581,7 @@ To play a video, with cursor on video file in dired =! vlc=
      ))
 
 (use-package dired-rsync
-  :bind (:map dired-mode-map ("p" . dired-rsync)))
+  :bind (:map dired-mode-map ("b" . dired-rsync)))
 #+END_SRC
 * 24 bits Emacs
 
@@ -1716,7 +1716,7 @@ I use Vim keybindings everywhere except with special modes
 
 like Magit, Dired... I setup those special modes to start with Emacs
 keybindings by default.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package evil
   :config
   (evil-set-initial-state 'deadgrep-mode 'emacs)
@@ -1771,7 +1771,6 @@ Jump to matching pairs with ~%~.
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
-  (evil-mode 1)
   (evil-ex-define-cmd "W" 'save-buffer))
 #+END_SRC
 

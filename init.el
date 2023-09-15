@@ -1009,7 +1009,7 @@ This command switches to browser."
      ))
 
 (use-package dired-rsync
-  :bind (:map dired-mode-map ("p" . dired-rsync)))
+  :bind (:map dired-mode-map ("b" . dired-rsync)))
 
 (use-package restclient
   :demand t
@@ -1083,25 +1083,6 @@ This command switches to browser."
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil
-  :config
-  (evil-set-initial-state 'deadgrep-mode 'emacs)
-  (evil-set-initial-state 'rg-mode 'emacs)
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs)
-  (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'shell-mode 'emacs)
-  (evil-set-initial-state 'tab-switcher-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-mode 'emacs)
-
-  ;; magit commit
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
 (use-package evil-commentary
   :after evil
   :diminish evil-commentary-mode
@@ -1124,7 +1105,6 @@ This command switches to browser."
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
-  (evil-mode 1)
   (evil-ex-define-cmd "W" 'save-buffer))
 
 (use-package evil
