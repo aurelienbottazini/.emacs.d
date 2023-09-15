@@ -1064,6 +1064,7 @@ This command switches to browser."
 
 (add-hook 'prog-mode-hook 'my-enable-evil-in-prog-mode)
 (add-hook 'org-mode-hook 'my-enable-evil-in-prog-mode)
+(add-hook 'markdown-mode 'my-enable-evil-in-prog-mode)
 (add-hook 'fundamental-mode-hook 'my-enable-evil-in-prog-mode))
 
 (use-package evil
