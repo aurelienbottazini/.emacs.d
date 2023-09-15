@@ -1057,7 +1057,14 @@ This command switches to browser."
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  (evil-mode 1))
+  ;; (evil-mode 1)
+(defun my-enable-evil-in-prog-mode ()
+  "Enable `evil-local-mode' in `prog-mode'."
+  (evil-local-mode 1))
+
+(add-hook 'prog-mode-hook 'my-enable-evil-in-prog-mode)
+(add-hook 'org-mode-hook 'my-enable-evil-in-prog-mode)
+(add-hook 'fundamental-mode-hook 'my-enable-evil-in-prog-mode))
 
 (use-package evil
   :init
