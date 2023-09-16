@@ -585,6 +585,10 @@ Auto-fill comments in prog modes
                                  (add-hook 'before-save-hook 'cider-format-edn-buffer t t)
         ))
   (setq cider-repl-display-help-banner nil))
+
+(use-package flymake-kondor
+  :ensure t
+  :hook (clojure-mode . flymake-kondor-setup))
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp

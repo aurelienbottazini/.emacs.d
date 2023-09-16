@@ -348,6 +348,10 @@ cons cell (regexp . minor-mode)."
         ))
   (setq cider-repl-display-help-banner nil))
 
+(use-package flymake-kondor
+  :ensure t
+  :hook (clojure-mode . flymake-kondor-setup))
+
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
