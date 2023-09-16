@@ -1675,15 +1675,8 @@ Sessions
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  ;; (evil-mode 1)
-(defun my-enable-evil-in-prog-mode ()
-  "Enable `evil-local-mode' in `prog-mode'."
-  (evil-local-mode 1))
-
-(add-hook 'prog-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'org-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'markdown-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'fundamental-mode-hook 'my-enable-evil-in-prog-mode))
+  (evil-mode 1)
+)
 #+end_src
 
 Here is an awesome [[https://github.com/noctuid/evil-guide][Evil Guide]]
@@ -1721,7 +1714,7 @@ I use Vim keybindings everywhere except with special modes
 
 like Magit, Dired... I setup those special modes to start with Emacs
 keybindings by default.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package evil
   :config
   (evil-set-initial-state 'deadgrep-mode 'emacs)

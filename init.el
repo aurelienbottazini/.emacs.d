@@ -1061,15 +1061,8 @@ This command switches to browser."
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  ;; (evil-mode 1)
-(defun my-enable-evil-in-prog-mode ()
-  "Enable `evil-local-mode' in `prog-mode'."
-  (evil-local-mode 1))
-
-(add-hook 'prog-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'org-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'markdown-mode-hook 'my-enable-evil-in-prog-mode)
-(add-hook 'fundamental-mode-hook 'my-enable-evil-in-prog-mode))
+  (evil-mode 1)
+)
 
 (use-package evil
   :init
@@ -1087,6 +1080,25 @@ This command switches to browser."
   :after evil
   :config
   (global-evil-surround-mode 1))
+
+(use-package evil
+  :config
+  (evil-set-initial-state 'deadgrep-mode 'emacs)
+  (evil-set-initial-state 'rg-mode 'emacs)
+  (evil-set-initial-state 'deft-mode 'insert)
+  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'use-package-statistics 'emacs)
+  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'ert-results-mode 'emacs)
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-set-initial-state 'shell-mode 'emacs)
+  (evil-set-initial-state 'tab-switcher-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-mode 'emacs)
+
+  ;; magit commit
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (use-package evil-commentary
   :after evil
