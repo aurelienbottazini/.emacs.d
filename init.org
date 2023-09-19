@@ -785,7 +785,7 @@ Auto-format JavaScript on save
                         "--trailing-comma" "es5"
                         "--single-quote" "true"
                         )
-        prettier-js-command "/home/auray/.local/share/npm/bin/prettier"))
+        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
 #+END_SRC
 
 Context-coloring highlights code based on closures.
@@ -1891,6 +1891,11 @@ Speed up tramp
   (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
 
 (add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
+#+end_src
+
+#+begin_src emacs-lisp
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 #+end_src
 
 # Local Variables:

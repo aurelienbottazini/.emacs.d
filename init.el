@@ -514,7 +514,7 @@ cons cell (regexp . minor-mode)."
                         "--trailing-comma" "es5"
                         "--single-quote" "true"
                         )
-        prettier-js-command "/home/auray/.local/share/npm/bin/prettier"))
+        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
 
 (use-package context-coloring
   :ensure t
@@ -1201,3 +1201,6 @@ This command switches to browser."
   (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
 
 (add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
