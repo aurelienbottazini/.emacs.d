@@ -949,6 +949,10 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (my-leader-def
     :states 'visual
     :keymaps 'override
+    "rr" 'eglot-code-actions
+    "rq" 'eglot-code-action-quickfix
+    "rn" 'eglot-rename
+    "rf" 'eglot-format
     "x" 'emamux:send-region)
 
   (winner-mode 1)

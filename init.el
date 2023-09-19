@@ -638,6 +638,10 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'visual
     :keymaps 'override
+    "rr" 'eglot-code-actions
+    "rq" 'eglot-code-action-quickfix
+    "rn" 'eglot-rename
+    "rf" 'eglot-format
     "x" 'emamux:send-region)
 
   (winner-mode 1)
