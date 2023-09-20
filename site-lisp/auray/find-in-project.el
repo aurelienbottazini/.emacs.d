@@ -134,7 +134,7 @@ If FILE is nil, use the current buffer's file name."
 (ert-deftest auray/project-guess-file-refine-multiple-test ()
   (should (equal '("foo/AppNav.js" "AppNav.vue" "AppNav.js")  (auray/project-guess-file-refine-multiple '("foo/AppNav.js" "AppNav.vue" "AppNav.js" "foo/AppNav/somefile") "AppNav"))))
 
-(setq counsel-fzf-cmd "fd --type f | fzf -f \"%s\"")
+(setq counsel-fzf-cmd "fd --hidden --type f | fzf -f \"%s\"")
 
 (defun auray/project-find-file ()
   "Visit a file (with completion) in the current project."

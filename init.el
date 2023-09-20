@@ -935,6 +935,7 @@ This command switches to browser."
 
 (setq project-switch-commands 'project-dired)
 
+(add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
@@ -1054,8 +1055,6 @@ This command switches to browser."
 
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-(desktop-save-mode 1)
 
 (use-package evil
   :init (setq evil-want-C-i-jump nil)

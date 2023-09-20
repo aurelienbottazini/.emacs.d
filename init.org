@@ -1471,6 +1471,7 @@ IDE code analysis but it works surprisingly well.
 
 ** LSP (with eglot)
 #+begin_src emacs-lisp
+(add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
@@ -1666,8 +1667,8 @@ C-c C-e R =letter= to export a presentation from your org file
 #+end_src
 
 Sessions
-#+begin_src emacs-lisp
-(desktop-save-mode 1)
+#+begin_src emacs-lisp :tangle no
+(desktop-save-mode)
 #+end_src
 
 #+begin_src emacs-lisp
