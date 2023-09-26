@@ -198,7 +198,21 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((find-sibling-rules
+   '((eval add-hook 'after-save-hook
+           (lambda nil
+             (ert-run-tests-interactively t)
+             (other-window))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil
+             (ert-run-tests-interactively t)
+             (switch-to-buffer "find-in-project.el"))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil
+             (ert-run-tests-interactively t))
+           nil t)
+     (find-sibling-rules
       ("\\([^/]+\\)\\.ts\\'" "\\1\\.test\\.ts"))
      (find-sibling-rules
       ("src/\\(.*)\\)\\.ts" "test/\\1\\.test\\.ts"))

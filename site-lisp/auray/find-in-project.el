@@ -127,7 +127,7 @@ If FILE is nil, use the current buffer's file name."
 
 (defun auray/project-guess-file-refine-multiple (file-list query-name)
   "Filter FILE-LIST to return files that best match QUERY-NAME."
-  (let ((pattern (concat "/"? (regexp-quote query-name) "\\.")))
+  (let ((pattern (concat "/?" query-name "[^/]*")))
     (cl-remove-if-not
      (lambda (file-name) (string-match-p pattern (file-name-nondirectory file-name)))
      file-list)))
@@ -145,3 +145,7 @@ If FILE is nil, use the current buffer's file name."
     (counsel-fzf nil (project-root (project-current t)))))
 
 (provide 'auray/find-in-project)
+
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook (lambda () (ert-run-tests-interactively t)) nil t)
+;; End:
