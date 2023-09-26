@@ -114,6 +114,7 @@ If FILE is nil, use the current buffer's file name."
            (not (file-directory-p filename))) (find-file filename))
      ((file-exists-p (concat filename ".js")) (find-file (concat filename ".js")))
      ((file-exists-p (concat filename ".mjs")) (find-file (concat filename ".mjs")))
+     ((file-exists-p (concat filename ".rb")) (find-file (concat filename ".rb")))
      ((and (file-directory-p filename)
            (file-exists-p (concat filename "/index.vue"))) (find-file (concat filename "/index.vue")))
      ((and (file-directory-p filename)
