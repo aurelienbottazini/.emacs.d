@@ -1100,6 +1100,7 @@ This command switches to browser."
   (evil-set-initial-state 'tab-switcher-mode 'emacs)
   (evil-set-initial-state 'cider-inspector-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-mode 'emacs)
+  (evil-set-initial-state 'info-mode 'emacs)
 
   ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))

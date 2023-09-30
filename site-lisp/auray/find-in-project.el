@@ -81,9 +81,9 @@ If FILE is nil, use the current buffer's file name."
   (interactive)
   (let ((alternate-files (auray/filter-out-extra-files (auray/alternate-files-for-current-buffer) (file-name-extension (buffer-file-name))))
         (tramp-prefix (file-remote-p (buffer-file-name)))
-        )
+        (default-alternative-filepath (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
     (cond
-     ((file-exists-p (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))) (find-file (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
+     ((and (not (file-directory-p default-alternative-filepath)) (file-exists-p default-alternative-filepath)) (find-file default-alternative-filepath))
      ((zerop (length alternate-files))
       (find-file (auray/default-alternate-file (buffer-file-name)))
       )
