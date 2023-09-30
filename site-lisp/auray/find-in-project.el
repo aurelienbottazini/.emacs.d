@@ -148,5 +148,5 @@ If FILE is nil, use the current buffer's file name."
 (provide 'auray/find-in-project)
 
 ;; Local Variables:
-;; eval: (add-hook 'after-save-hook (lambda () (ert-run-tests-interactively t)) nil t)
+;; eval: (add-hook 'after-save-hook (lambda () (eval-buffer) (ert-run-tests-interactively t)) nil t)
 ;; End:
