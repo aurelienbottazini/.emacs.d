@@ -64,6 +64,10 @@ If FILE is nil, use the current buffer's file name."
 (defun auray/default-alternate-file (a-file-path)
   (cond
    ((not (stringp a-file-path)) "")
+
+   ((string-match "spec/" a-file-path) (concat (substring (file-name-directory a-file-path) (+ 1 (length "spec"))) (auray/fip-base-name a-file-path)".rb"))
+   ((string-match "app/" a-file-path) (concat "spec/" (substring (file-name-directory a-file-path)) (auray/fip-base-name a-file-path)"_spec.rb"))
+
    ((string-match "test/" a-file-path) (concat "src/" (substring (file-name-directory a-file-path) (+ 1 (length "test"))) (auray/fip-base-name a-file-path)".clj"))
    ((string-match "src/" a-file-path) (concat "test/" (substring (file-name-directory a-file-path) (+ 1 (length "src"))) (auray/fip-base-name a-file-path)"_test.clj"))
    (t "")))
@@ -71,12 +75,40 @@ If FILE is nil, use the current buffer's file name."
 (ert-deftest auray/default-alternate-file-test ()
   (should (string= "" (auray/default-alternate-file nil)))
   (should (string= "" (auray/default-alternate-file "")))
+  (should (equal "app/foo.rb" (auray/default-alternate-file "spec/app/foo.rb")))
+  (should (equal "spec/app/foo_spec.rb" (auray/default-alternate-file "app/foo.rb")))
   (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
   (should (equal "test/bar_test.clj" (auray/default-alternate-file "src/bar.clj")))
   (should (equal "src/foo.clj" (auray/default-alternate-file "test/foo_test.clj")))
   (should (equal "src/bar.clj" (auray/default-alternate-file "test/bar_test.clj")))
   (should (equal "src/nested/path/bar.clj" (auray/default-alternate-file "test/nested/path/bar_test.clj")))
   )
+
+(defhydra auray/hydra-alternate-files (:color blue)
+  "Choose action"
+  ("c" (auray/create-alternate-file) "Create alternate file")
+  ("s" (auray/search-for-alternate-files-with-ido) "Search for alternate files with ido")
+  ("q" nil "Quit"))
+
+(defun auray/create-alternate-file ()
+  (interactive)
+  ;; Your code for creating an alternate file here
+  (let ((default-alternative-filepath (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
+    (cond
+     ((or (string-empty-p default-alternative-filepath)
+          (file-directory-p default-alternative-filepath)) (message "don't know how to choose a default alternate file"))
+     (t (find-file default-alternative-filepath)))))
+
+(defun auray/search-for-alternate-files-with-ido ()
+  (interactive)
+  (let ((alternate-files (auray/filter-out-extra-files (auray/alternate-files-for-current-buffer) (file-name-extension (buffer-file-name)))))
+    (cond
+     ((null alternate-files) (message "no alternate files"))
+     (t (find-file (concat tramp-prefix
+                           (ido-completing-read
+                            "Alternate files: "
+                            alternate-files)
+                           ))))))
 
 (defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
@@ -88,13 +120,9 @@ If FILE is nil, use the current buffer's file name."
      ((and (not (file-directory-p default-alternative-filepath)) (file-exists-p default-alternative-filepath)) (find-file default-alternative-filepath))
      ((equal 1 (length alternate-files))
       (find-file (concat tramp-prefix (car alternate-files))))
-     ((null alternate-files) (message "no alternate files"))
+     (t (auray/hydra-alternate-files/body))
 
-     (t (find-file (concat tramp-prefix
-                           (ido-completing-read
-                            "Alternate files: "
-                            alternate-files)
-                           ))))))
+     )))
 
 (defun auray/project-guess-file ()
   "Find file using current word as a guess. There are adjustements made from my workflow. For example this is made to navigate file imports. I rarely import test file so to make the navigation quicker I excluded test files from the results."
