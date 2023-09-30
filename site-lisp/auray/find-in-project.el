@@ -63,12 +63,14 @@ If FILE is nil, use the current buffer's file name."
 
 (defun auray/default-alternate-file (a-file-path)
   (cond
+   ((not (stringp a-file-path)) "")
    ((string-match "test/" a-file-path) (concat "src/" (substring (file-name-directory a-file-path) (+ 1 (length "test"))) (auray/fip-base-name a-file-path)".clj"))
    ((string-match "src/" a-file-path) (concat "test/" (substring (file-name-directory a-file-path) (+ 1 (length "src"))) (auray/fip-base-name a-file-path)"_test.clj"))
-   (t nil)))
+   (t "")))
 
 (ert-deftest auray/default-alternate-file-test ()
-  (should (string= nil (auray/default-alternate-file "")))
+  (should (string= "" (auray/default-alternate-file nil)))
+  (should (string= "" (auray/default-alternate-file "")))
   (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
   (should (equal "test/bar_test.clj" (auray/default-alternate-file "src/bar.clj")))
   (should (equal "src/foo.clj" (auray/default-alternate-file "test/foo_test.clj")))
@@ -84,11 +86,10 @@ If FILE is nil, use the current buffer's file name."
         (default-alternative-filepath (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
     (cond
      ((and (not (file-directory-p default-alternative-filepath)) (file-exists-p default-alternative-filepath)) (find-file default-alternative-filepath))
-     ((zerop (length alternate-files))
-      (find-file (auray/default-alternate-file (buffer-file-name)))
-      )
      ((equal 1 (length alternate-files))
       (find-file (concat tramp-prefix (car alternate-files))))
+     ((null alternate-files) (message "no alternate files"))
+
      (t (find-file (concat tramp-prefix
                            (ido-completing-read
                             "Alternate files: "
