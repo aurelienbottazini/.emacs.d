@@ -200,6 +200,11 @@
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
            (lambda nil
+             (eval-buffer)
+             (ert-run-tests-interactively t))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil
              (ert-run-tests-interactively t)
              (other-window))
            nil t)
@@ -324,8 +329,8 @@
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
  '(web-mode-auto-close-style 2)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t)
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0)
  '(web-mode-enable-auto-expanding t)
  '(web-mode-enable-auto-opening t)
  '(web-mode-enable-auto-pairing t)

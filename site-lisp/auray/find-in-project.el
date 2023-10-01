@@ -41,10 +41,24 @@
  1))
 
 (defun auray/filter-out-extra-files (a-file-string-list suffix)
-  (cl-remove-if-not (lambda (str) (string-suffix-p suffix str)) a-file-string-list))
+  "Filter out files that do not end with any of the given SUFFIX-LIST from A-FILE-STRING-LIST."
+  (let ((suffix-list (cond
+                      ((or (string= "ts" suffix)
+                           (string= "vue" suffix)
+                           (string= "js" suffix)
+                           ) '("vue" "js" "ts"))
+                      (t (list suffix))
+                      )))
+    (cl-remove-if-not (lambda (str)
+                        (some (lambda (suff)
+                                (string-suffix-p suff str)) suffix-list))
+                      a-file-string-list)))
+
 
 (ert-deftest auray/filter-out-extra-files-test ()
-  (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts"))))
+  (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts")))
+  (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "ts")))
+  )
 
 (defun git-root-directory (&optional file)
   "Return the root of the Git repository containing FILE, or nil if none.
