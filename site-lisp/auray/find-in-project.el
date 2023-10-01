@@ -58,6 +58,8 @@
 (ert-deftest auray/filter-out-extra-files-test ()
   (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts")))
   (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "ts")))
+  (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "vue")))
+  (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "js")))
   )
 
 (defun git-root-directory (&optional file)
