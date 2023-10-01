@@ -129,7 +129,7 @@ If FILE is nil, use the current buffer's file name."
   (interactive)
   (let* ((pr (project-current t))
          (dirs (list (project-root pr)))
-         (filename (substring-no-properties (thing-at-point 'filename)))
+         (filename (replace-regexp-in-string "~/" (git-root-directory) (substring-no-properties (thing-at-point 'filename))))
          (results
           (split-string
            (shell-command-to-string
@@ -141,6 +141,7 @@ If FILE is nil, use the current buffer's file name."
     (cond
      ((and (file-exists-p filename)
            (not (file-directory-p filename))) (find-file filename))
+     ((file-exists-p (concat filename ".vue")) (find-file (concat filename ".vue")))
      ((file-exists-p (concat filename ".js")) (find-file (concat filename ".js")))
      ((file-exists-p (concat filename ".mjs")) (find-file (concat filename ".mjs")))
      ((file-exists-p (concat filename ".rb")) (find-file (concat filename ".rb")))
@@ -148,7 +149,6 @@ If FILE is nil, use the current buffer's file name."
            (file-exists-p (concat filename "/index.vue"))) (find-file (concat filename "/index.vue")))
      ((and (file-directory-p filename)
            (file-exists-p (concat filename "/index.js"))) (find-file (concat filename "/index.js")))
-     ((zerop (length results)) (message "Cannot guess"))
      ((equal 1 (length results)) (find-file (car results)))
      (t (find-file (ido-completing-read "Guessed files: " results)))
      )))
