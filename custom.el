@@ -125,6 +125,7 @@
  '(doom-modeline-checker-simple-format t)
  '(dumb-jump-force-searcher 'ag)
  '(dumb-jump-mode t)
+ '(eglot-confirm-server-initiated-edits nil)
  '(eglot-ignored-server-capabilities '(:hoverProvider))
  '(electric-pair-mode nil)
  '(electric-quote-string t)
