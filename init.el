@@ -295,9 +295,13 @@ cons cell (regexp . minor-mode)."
 (electric-indent-mode t)
 
 (electric-pair-mode t)
-(defun inhibit-electric-pair-mode-in-minibuffer (char)
-  (minibufferp))
-(setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
+(setq electric-pair-inhibit-predicate
+      (lambda (c)
+        (or (minibufferp)
+            (not (or
+                  (char-equal c ?\s)
+                  (char-equal c ?\t)
+                  (eolp))))))
 
 (setq frame-title-format "emacs")
 
