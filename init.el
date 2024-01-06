@@ -298,6 +298,7 @@ cons cell (regexp . minor-mode)."
 (setq electric-pair-inhibit-predicate
       (lambda (c)
         (or (minibufferp)
+            (eq major-mode 'org-mode)
             (not (or
                   (char-equal c ?\s)
                   (char-equal c ?\t)
@@ -753,6 +754,8 @@ cons cell (regexp . minor-mode)."
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+(require 'org-tempo) ;; shortcuts like <s <q to insert org block;
+
 ;; (require 'org-habit)
 ;; (add-to-list 'org-modules "org-habit")
 ;; (add-to-list 'org-modules "org-git-link")
@@ -943,6 +946,7 @@ This command switches to browser."
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
 (add-hook 'ruby-ts-mode-hook 'eglot-ensure)
+(add-hook 'ruby-mode-hook 'eglot-ensure)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
