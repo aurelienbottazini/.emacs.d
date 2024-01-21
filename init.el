@@ -103,7 +103,7 @@
                    "/bin/"
                    "/usr/bin/"
                    "/usr/local/sbin/"
-                   "/opt/homebrew/bin"
+                   "/opt/homebrew/opt/openjdk/bin/"
                    "/usr/bin/"
                    ,(concat home-folder "/.cargo/bin/"))) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
        )

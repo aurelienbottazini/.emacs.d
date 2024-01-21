@@ -190,7 +190,7 @@ It make things easier when the two match.
                    "/bin/"
                    "/usr/bin/"
                    "/usr/local/sbin/"
-                   "/opt/homebrew/bin"
+                   "/opt/homebrew/opt/openjdk/bin/"
                    "/usr/bin/"
                    ,(concat home-folder "/.cargo/bin/"))) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
        )
@@ -504,6 +504,7 @@ Enable ligatures on mac
 (setq electric-pair-inhibit-predicate
       (lambda (c)
         (or (minibufferp)
+            (eq major-mode 'org-mode)
             (not (or
                   (char-equal c ?\s)
                   (char-equal c ?\t)
@@ -1084,6 +1085,8 @@ for org template captures.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+(require 'org-tempo) ;; shortcuts like <s <q to insert org block;
+
 ;; (require 'org-habit)
 ;; (add-to-list 'org-modules "org-habit")
 ;; (add-to-list 'org-modules "org-git-link")
@@ -1479,6 +1482,7 @@ IDE code analysis but it works surprisingly well.
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
 (add-hook 'ruby-ts-mode-hook 'eglot-ensure)
+(add-hook 'ruby-mode-hook 'eglot-ensure)
 #+end_src
 * Completion
 ** Hippie expand
