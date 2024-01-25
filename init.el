@@ -1069,6 +1069,7 @@ This command switches to browser."
   (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
   (evil-mode 1)
