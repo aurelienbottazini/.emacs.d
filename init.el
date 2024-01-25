@@ -1262,7 +1262,7 @@ This command switches to browser."
    ;; citre-global-program "/path/to/global"
    ;; Set this if you use project management plugin like projectile.  It's
    ;; used for things like displaying paths relatively, see its docstring.
-   citre-project-root-function #'projectile-project-root
+   ;; citre-project-root-function #'projectile-project-root
    ;; Set this if you want to always use one location to create a tags file.
    ;; citre-default-create-tags-file-location 'global-cache
    ;; See the "Create tags file" section above to know these options
