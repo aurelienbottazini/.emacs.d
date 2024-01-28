@@ -737,10 +737,10 @@ Hooks put on js-mode are also run on js2-mode
 (setq compilation-error-regexp-alist
       (cons 'node compilation-error-regexp-alist))
 
-(add-hook 'js-mode-hook
-          (lambda ()
-            (set (make-local-variable 'compile-command)
-                 (format "node %s" (file-name-nondirectory buffer-file-name)))))
+;; (add-hook 'js-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'compile-command)
+;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
 
 #+END_SRC
 
@@ -938,7 +938,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'auray/project-find-file
+    "p" 'projectile-find-file-dwim
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switcher
     "rr" 'eglot-code-actions

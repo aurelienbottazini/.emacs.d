@@ -473,10 +473,10 @@ cons cell (regexp . minor-mode)."
 (setq compilation-error-regexp-alist
       (cons 'node compilation-error-regexp-alist))
 
-(add-hook 'js-mode-hook
-          (lambda ()
-            (set (make-local-variable 'compile-command)
-                 (format "node %s" (file-name-nondirectory buffer-file-name)))))
+;; (add-hook 'js-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'compile-command)
+;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
 
 (setq js-indent-level 2)
 
@@ -628,7 +628,7 @@ cons cell (regexp . minor-mode)."
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'auray/project-find-file
+    "p" 'projectile-find-file-dwim
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
