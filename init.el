@@ -1162,6 +1162,7 @@ This command switches to browser."
   :diminish counsel-mode ivy-mode
   :config
   (ivy-mode t)
+  (define-key ivy-minibuffer-map (kbd "C-c r") 'ivy-restrict-to-matches)
   (counsel-mode t))
 
 (require 'tramp)
