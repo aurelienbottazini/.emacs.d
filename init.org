@@ -939,7 +939,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'projectile-find-file-dwim
+    "p" 'projectile-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
@@ -1481,8 +1481,6 @@ IDE code analysis but it works surprisingly well.
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
-(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
-(add-hook 'ruby-mode-hook 'eglot-ensure)
 #+end_src
 * Completion
 ** Hippie expand
@@ -1965,6 +1963,15 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (add-hook 'prog-mode-hook 'outline-minor-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rubocopfmt
+  :hook
+  (ruby-mode . rubocopfmt-mode)
+  (ruby-ts-mode . rubocopfmt-mode)
+  )
+ )
 #+end_src
 
 # Local Variables:

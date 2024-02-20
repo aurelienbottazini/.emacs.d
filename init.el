@@ -629,7 +629,7 @@ cons cell (regexp . minor-mode)."
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'projectile-find-file-dwim
+    "p" 'projectile-find-file
     "s" 'auray/find-file-with-similar-name
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
@@ -946,8 +946,6 @@ This command switches to browser."
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
-(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
-(add-hook 'ruby-mode-hook 'eglot-ensure)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
 (require 'mode-local)
@@ -1264,3 +1262,10 @@ This command switches to browser."
 )
 
 (add-hook 'prog-mode-hook 'outline-minor-mode)
+
+(use-package rubocopfmt
+  :hook
+  (ruby-mode . rubocopfmt-mode)
+  (ruby-ts-mode . rubocopfmt-mode)
+  )
+ )
