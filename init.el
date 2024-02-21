@@ -1256,7 +1256,8 @@ This command switches to browser."
 )
 )
 
-(add-hook 'prog-mode-hook 'outline-minor-mode)
+(use-package origami)
+(add-hook 'prog-mode-hook 'origami-minor-mode)
 
 (use-package rubocopfmt
   :hook
