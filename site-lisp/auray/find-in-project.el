@@ -44,9 +44,10 @@
   "Filter out files that do not end with any of the given SUFFIX-LIST from A-FILE-STRING-LIST."
   (let ((suffix-list (cond
                       ((or (string= "ts" suffix)
+                           (string= "tsx" suffix)
                            (string= "vue" suffix)
                            (string= "js" suffix)
-                           ) '("vue" "js" "ts"))
+                           ) '("vue" "js" "ts" "tsx"))
                       (t (list suffix))
                       )))
     (cl-remove-if-not (lambda (str)
@@ -57,6 +58,7 @@
 
 (ert-deftest auray/filter-out-extra-files-test ()
   (should (equal '("foo.ts")  (auray/filter-out-extra-files '("foo.clj" "foo.ts") "ts")))
+  (should (equal '("foo.tsx")  (auray/filter-out-extra-files '("foo.clj" "foo.tsx") "tsx")))
   (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "ts")))
   (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "vue")))
   (should (equal '("foo.vue" "foo.ts")  (auray/filter-out-extra-files '("foo.vue" "foo.ts") "js")))
