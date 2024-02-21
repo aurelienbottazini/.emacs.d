@@ -437,12 +437,6 @@ cons cell (regexp . minor-mode)."
   :config
   (setq web-mode-enable-auto-closing t)
   (define-key web-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
-  (add-hook
-   'web-mode-hook
-   (lambda ()
-     (setq-local
-      electric-pair-pairs
-      (append electric-pair-pairs '((?< . ?>))))))
   )
 
 (use-package emmet-mode
