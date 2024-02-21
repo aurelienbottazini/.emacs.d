@@ -538,6 +538,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package web-mode
   :mode "\\.vue\\'"
+  :mode "\\.tsx\\'"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -692,7 +693,7 @@ cons cell (regexp . minor-mode)."
    "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
-   "C-s" 'isearch-forward
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1233,7 +1234,7 @@ This command switches to browser."
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t
-  :hook (prog-mode . copilot-mode)
+  ;; :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)

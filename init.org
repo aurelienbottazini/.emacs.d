@@ -823,6 +823,7 @@ adjustments for JSX.
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
   :mode "\\.vue\\'"
+  :mode "\\.tsx\\'"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -1002,7 +1003,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-k" 'tmux-move-up
 
    "C-r" 'isearch-backward
-   "C-s" 'isearch-forward
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1930,7 +1931,7 @@ Speed up tramp
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :ensure t
-  :hook (prog-mode . copilot-mode)
+  ;; :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
