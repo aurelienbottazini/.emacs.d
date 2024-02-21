@@ -1263,4 +1263,3 @@ This command switches to browser."
   (ruby-mode . rubocopfmt-mode)
   (ruby-ts-mode . rubocopfmt-mode)
   )
- )

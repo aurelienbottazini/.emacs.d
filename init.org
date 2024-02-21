@@ -1966,7 +1966,7 @@ Speed up tramp
   (ruby-mode . rubocopfmt-mode)
   (ruby-ts-mode . rubocopfmt-mode)
   )
- )
+
 #+end_src
 
 # Local Variables:
