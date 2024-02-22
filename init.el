@@ -1152,6 +1152,7 @@ This command switches to browser."
 (exec-path-from-shell-copy-env "SSH_AGENT_PID")
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 
+(use-package multiple-cursors)
 (use-package counsel
   :diminish counsel-mode ivy-mode
   :config

@@ -1825,6 +1825,7 @@ Jump to matching pairs with ~%~.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package multiple-cursors)
 (use-package counsel
   :diminish counsel-mode ivy-mode
   :config
