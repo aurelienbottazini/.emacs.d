@@ -505,16 +505,26 @@ cons cell (regexp . minor-mode)."
   (custom-set-variables '(coffee-tab-width 2)))
 
 (use-package typescript-mode
-  :mode "\\.ts\\'")
-
-(use-package prettier-js
-  :diminish prettier-js-mode
+  :after tree-sitter
+  :mode "\\.ts\\'"
   :config
-  (setq prettier-args '(
-                        "--trailing-comma" "es5"
-                        "--single-quote" "true"
-                        )
-        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
+  (define-derived-mode typescriptreact-mode typescript-mode
+    "TypeScript TSX")
+   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode) )
+   (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx))
+  )
+
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
+;; (use-package prettier-js
+;;   :diminish prettier-js-mode
+;;   :config
+;;   (setq prettier-args '(
+;;                         "--trailing-comma" "es5"
+;;                         "--single-quote" "true"
+;;                         )
+;;         prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
 
 (use-package context-coloring
   :ensure t
@@ -544,11 +554,11 @@ cons cell (regexp . minor-mode)."
           (custom-imenu (imenu--generic-function imenu-generic-expression)))
       (append custom-imenu mode-imenu)))
 
-  (use-package prettier-js
-    :config
-    (add-hook 'web-mode-hook (lambda ()
-                               (enable-minor-mode
-                                '("\\.vue?\\'" . prettier-js-mode)))))
+  ;; (use-package prettier-js
+  ;;   :config
+  ;;   (add-hook 'web-mode-hook (lambda ()
+  ;;                              (enable-minor-mode
+  ;;                               '("\\.vue?\\'" . prettier-js-mode)))))
 
   (add-hook 'web-mode-hook
             (lambda ()
@@ -1258,7 +1268,7 @@ This command switches to browser."
 )
 
 (use-package origami)
-(add-hook 'prog-mode-hook 'origami-minor-mode)
+(add-hook 'prog-mode-hook 'origami-mode)
 
 (use-package rubocopfmt
   :hook
