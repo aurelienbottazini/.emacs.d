@@ -47,6 +47,7 @@
   (diminish 'auto-fill-function)
   (diminish 'org-indent-mode)
   (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
   (diminish 'eldoc-mode))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -515,6 +516,7 @@ cons cell (regexp . minor-mode)."
   )
 
 (use-package apheleia
+  :diminish apheleia-mode
   :config
   (apheleia-global-mode +1))
 ;; (use-package prettier-js

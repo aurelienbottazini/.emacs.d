@@ -89,6 +89,7 @@ You can get the time it took for emacs to start with.
   (diminish 'auto-fill-function)
   (diminish 'org-indent-mode)
   (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
   (diminish 'eldoc-mode))
 #+END_SRC
 
@@ -785,6 +786,7 @@ Hooks put on js-mode are also run on js2-mode
 Auto-format JavaScript on save
 #+BEGIN_SRC emacs-lisp
 (use-package apheleia
+  :diminish apheleia-mode
   :config
   (apheleia-global-mode +1))
 ;; (use-package prettier-js
