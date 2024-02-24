@@ -490,6 +490,7 @@ cons cell (regexp . minor-mode)."
       web-mode-attr-indent-offset 2)
 
 (use-package js2-mode
+  :hook (js2-mode . flycheck-mode)
   :mode "\\.js\\'"
   :mode "\\.mjs\\'"
   :mode "\\.jsx\\'")
@@ -506,6 +507,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package typescript-mode
   :after tree-sitter
+  :hook (js2-mode . flycheck-mode)
   :mode "\\.ts\\'"
   :config
   (define-derived-mode typescriptreact-mode typescript-mode
