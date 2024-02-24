@@ -2,6 +2,25 @@
 #+OPTIONS: toc:4 h:4
 #+PROPERTY: header-args :results silent :tangle yes
 
+* Advanced patterns
+** filter with rg
+With counsel-rg you can pass arguments
+#+begin_src
+ foo -- -g!*.el
+#+end_src
+** filter with ivy
+You can negate filter with ivy too
+#+begin_src
+foo ! .el$
+#+end_src
+** grep with dired
+mark files with m and grep with A and Q to grep replace
+** ivy-occur
+C-o from an ivy completion and C-x C-q to modify results
+** replace in buffer
+M-%
+
+
 * Faster startup
 Adjusts garbage collector for faster startup.
 #+begin_src emacs-lisp
@@ -175,6 +194,7 @@ It make things easier when the two match.
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
+                   "/Applications/Postgres.app/Contents/Versions/latest/bin"
                    ,(concat home-folder "/.asdf/shims/")
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
@@ -946,8 +966,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'projectile-find-file
-    "s" 'auray/find-file-with-similar-name
+    "p" 'project-find-file
+    "s" 'projectile-toggle-between-implementation-and-test
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -1191,6 +1211,7 @@ This loads more programming languages to use with org-babel.
 (setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
 (org-babel-do-load-languages 'org-babel-load-languages
                              '((shell . t)
+                               (sql . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
 #+END_SRC
@@ -1982,6 +2003,7 @@ Speed up tramp
   (ruby-ts-mode . rubocopfmt-mode)
   )
 #+end_src
+
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:

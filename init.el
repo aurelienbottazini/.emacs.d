@@ -89,6 +89,7 @@
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
+                   "/Applications/Postgres.app/Contents/Versions/latest/bin"
                    ,(concat home-folder "/.asdf/shims/")
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
@@ -636,8 +637,8 @@ cons cell (regexp . minor-mode)."
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
-    "p" 'projectile-find-file
-    "s" 'auray/find-file-with-similar-name
+    "p" 'project-find-file
+    "s" 'projectile-toggle-between-implementation-and-test
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -819,6 +820,7 @@ cons cell (regexp . minor-mode)."
 (setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
 (org-babel-do-load-languages 'org-babel-load-languages
                              '((shell . t)
+                               (sql . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
 
