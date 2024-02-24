@@ -356,10 +356,6 @@ cons cell (regexp . minor-mode)."
         ))
   (setq cider-repl-display-help-banner nil))
 
-(use-package flymake-kondor
-  :ensure t
-  :hook (clojure-mode . flymake-kondor-setup))
-
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
@@ -397,6 +393,8 @@ cons cell (regexp . minor-mode)."
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-hook 'ruby-ts-mode-hook 'robe-mode)
+  (add-hook 'ruby-mode-hook 'flycheck-mode)
+  (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
   (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
@@ -516,18 +514,15 @@ cons cell (regexp . minor-mode)."
    (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx))
   )
 
-(use-package apheleia
-  :diminish apheleia-mode
+(use-package prettier-js
+  :diminish prettier-js-mode
+  :hook (js2-mode . prettier-js-mode)
   :config
-  (apheleia-global-mode +1))
-;; (use-package prettier-js
-;;   :diminish prettier-js-mode
-;;   :config
-;;   (setq prettier-args '(
-;;                         "--trailing-comma" "es5"
-;;                         "--single-quote" "true"
-;;                         )
-;;         prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
+  (setq prettier-args '(
+                        "--trailing-comma" "es5"
+                        "--single-quote" "true"
+                        )
+        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
 
 (use-package context-coloring
   :ensure t
@@ -626,8 +621,7 @@ cons cell (regexp . minor-mode)."
     :states 'normal
     :keymaps 'override
     "c" (lambda () (interactive) (org-capture nil "n"))
-    "d" 'flymake-show-buffer-diagnostics
-    "D" 'flymake-show-project-diagnostics
+    "d" 'flycheck-list-errors
     "e" 'er/expand-region
     "f" 'counsel-rg
     "F" 'rg-project
@@ -666,6 +660,9 @@ cons cell (regexp . minor-mode)."
    "gr" 'er/expand-region
    "[ [" 'previous-buffer
    "] ]" 'next-buffer
+   "] e" 'flycheck-next-error
+   "[ e" 'flycheck-previous-error
+
    "[ q" 'previous-error
    "] q" 'next-error
    "]w" 'winner-redo

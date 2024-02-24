@@ -611,10 +611,6 @@ Auto-fill comments in prog modes
                                  (add-hook 'before-save-hook 'cider-format-edn-buffer t t)
         ))
   (setq cider-repl-display-help-banner nil))
-
-(use-package flymake-kondor
-  :ensure t
-  :hook (clojure-mode . flymake-kondor-setup))
 #+END_SRC
 ** Ruby
 #+BEGIN_SRC emacs-lisp
@@ -655,6 +651,8 @@ Auto-fill comments in prog modes
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-hook 'ruby-ts-mode-hook 'robe-mode)
+  (add-hook 'ruby-mode-hook 'flycheck-mode)
+  (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
   (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
@@ -805,18 +803,16 @@ Hooks put on js-mode are also run on js2-mode
 
 Auto-format JavaScript on save
 #+BEGIN_SRC emacs-lisp
-(use-package apheleia
-  :diminish apheleia-mode
+(use-package prettier-js
+  :diminish prettier-js-mode
+  :hook (js2-mode . prettier-js-mode)
   :config
-  (apheleia-global-mode +1))
-;; (use-package prettier-js
-;;   :diminish prettier-js-mode
-;;   :config
-;;   (setq prettier-args '(
-;;                         "--trailing-comma" "es5"
-;;                         "--single-quote" "true"
-;;                         )
-;;         prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
+  (setq prettier-args '(
+                        "--trailing-comma" "es5"
+                        "--single-quote" "true"
+                        )
+        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
+
 #+END_SRC
 
 Context-coloring highlights code based on closures.
@@ -955,8 +951,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     :states 'normal
     :keymaps 'override
     "c" (lambda () (interactive) (org-capture nil "n"))
-    "d" 'flymake-show-buffer-diagnostics
-    "D" 'flymake-show-project-diagnostics
+    "d" 'flycheck-list-errors
     "e" 'er/expand-region
     "f" 'counsel-rg
     "F" 'rg-project
@@ -995,6 +990,9 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "gr" 'er/expand-region
    "[ [" 'previous-buffer
    "] ]" 'next-buffer
+   "] e" 'flycheck-next-error
+   "[ e" 'flycheck-previous-error
+
    "[ q" 'previous-error
    "] q" 'next-error
    "]w" 'winner-redo
