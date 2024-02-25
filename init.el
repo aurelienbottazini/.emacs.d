@@ -168,7 +168,7 @@
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(setq-default truncate-lines nil)
+(setq-default truncate-lines t)
 
 (setq sentence-end-double-space nil)
 

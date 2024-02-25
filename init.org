@@ -279,7 +279,7 @@ stick to fundamental mode and disable expensive minor modes.
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
-(setq-default truncate-lines nil)
+(setq-default truncate-lines t)
 #+END_SRC
 
 Sentences end with one space after point. The default two space is
