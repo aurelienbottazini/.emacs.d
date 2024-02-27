@@ -192,6 +192,8 @@ can slow down Emacs startup if the shells scripts do too many things.
 It make things easier when the two match.
 #+BEGIN_SRC emacs-lisp
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
+(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES")
+
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
@@ -224,7 +226,9 @@ stick to fundamental mode and disable expensive minor modes.
 #+BEGIN_SRC emacs-lisp
 (defun check-large-file-hook ()
   "If a file is over a given size, turn off minor modes."
-  (when (> (buffer-size) (* 1024 100)) ; 100K
+  (when (and (> (buffer-size) (* 1024 100)) ;; 100K
+             (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
+        )
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
