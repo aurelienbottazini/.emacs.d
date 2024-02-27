@@ -638,7 +638,7 @@ cons cell (regexp . minor-mode)."
     "i" 'counsel-imenu
     "o" 'recentf ;; o for oldfiles
     "p" 'project-find-file
-    "s" 'projectile-toggle-between-implementation-and-test
+    "s" 'auray/find-file-with-similar-name
     "t" 'tab-switcher
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix

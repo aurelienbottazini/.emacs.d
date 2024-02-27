@@ -34,7 +34,7 @@
       "fd --color never --hidden --exclude .git --exclude "
       (file-name-nondirectory buffer-file-name)
       " "
-      (auray/fip-base-name buffer-file-name)
+      (string-replace "_controller" nil (auray/fip-base-name buffer-file-name))
       " $(git rev-parse --show-toplevel)"
       ))
     "\n")
@@ -83,7 +83,10 @@ If FILE is nil, use the current buffer's file name."
   (cond
    ((not (stringp a-file-path)) "")
 
+   ((string-match "spec/requests" a-file-path) (concat "app/controllers/" (auray/fip-base-name a-file-path) "_controller.rb"))
    ((string-match "spec/" a-file-path) (concat (substring (file-name-directory a-file-path) (+ 1 (length "spec"))) (auray/fip-base-name a-file-path)".rb"))
+   ((string-match "app/controllers" a-file-path) (concat "spec/requests/" (string-replace "_controller" nil  (auray/fip-base-name a-file-path))"_spec.rb"))
+
    ((string-match "app/" a-file-path) (concat "spec/" (substring (file-name-directory a-file-path)) (auray/fip-base-name a-file-path)"_spec.rb"))
 
    ((string-match "test/" a-file-path) (concat "src/" (substring (file-name-directory a-file-path) (+ 1 (length "test"))) (auray/fip-base-name a-file-path)".clj"))
@@ -94,6 +97,8 @@ If FILE is nil, use the current buffer's file name."
   (should (string= "" (auray/default-alternate-file nil)))
   (should (string= "" (auray/default-alternate-file "")))
   (should (equal "app/foo.rb" (auray/default-alternate-file "spec/app/foo.rb")))
+  (should (equal "spec/requests/contacts_spec.rb" (auray/default-alternate-file "app/controllers/contacts_controller.rb")))
+  (should (equal "app/controllers/contacts_controller.rb" (auray/default-alternate-file "spec/requests/contacts_spec.rb")))
   (should (equal "spec/app/foo_spec.rb" (auray/default-alternate-file "app/foo.rb")))
   (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
   (should (equal "test/bar_test.clj" (auray/default-alternate-file "src/bar.clj")))
@@ -122,22 +127,20 @@ If FILE is nil, use the current buffer's file name."
   (let ((alternate-files (auray/filter-out-extra-files (auray/alternate-files-for-current-buffer) (file-name-extension (buffer-file-name)))))
     (cond
      ((null alternate-files) (message "no alternate files"))
-     (t (find-file (concat tramp-prefix
-                           (ido-completing-read
-                            "Alternate files: "
-                            alternate-files)
-                           ))))))
+     (t (find-file (ido-completing-read
+                    "Alternate files: "
+                    alternate-files)
+)))))
 
 (defun auray/find-file-with-similar-name ()
   "Find file with similar name in project."
   (interactive)
   (let ((alternate-files (auray/filter-out-extra-files (auray/alternate-files-for-current-buffer) (file-name-extension (buffer-file-name))))
-        (tramp-prefix (file-remote-p (buffer-file-name)))
         (default-alternative-filepath (concat (git-root-directory) (auray/default-alternate-file (relative-path-to-git-root)))))
     (cond
      ((and (not (file-directory-p default-alternative-filepath)) (file-exists-p default-alternative-filepath)) (find-file default-alternative-filepath))
      ((equal 1 (length alternate-files))
-      (find-file (concat tramp-prefix (car alternate-files))))
+      (find-file (car alternate-files)))
      (t (auray/hydra-alternate-files/body))
 
      )))
