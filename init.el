@@ -87,6 +87,8 @@
 (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
+(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES")
+
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
@@ -115,7 +117,9 @@
 
 (defun check-large-file-hook ()
   "If a file is over a given size, turn off minor modes."
-  (when (> (buffer-size) (* 1024 100)) ; 100K
+  (when (and (> (buffer-size) (* 1024 100)) ;; 100K
+             (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
+        )
     (fundamental-mode)
     (font-lock-mode -1)
     (setq buffer-read-only t)
