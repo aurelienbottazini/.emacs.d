@@ -199,8 +199,6 @@ It make things easier when the two match.
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
                    ,(concat home-folder "/work/dox-compose/bin/")
-                   ,(concat home-folder "/.rbenv/bin/")
-                   ,(concat home-folder "/.rbenv/shims/")
                    ,(concat home-folder "/dotfiles/bin/")
                    ,(concat home-folder "/.fzf/bin")
                    ,(concat home-folder "/.local/bin")
@@ -2004,6 +2002,12 @@ Speed up tramp
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package projectile-rails
+  :config
+  (projectile-rails-global-mode)
+(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
+#+end_src
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
