@@ -406,12 +406,17 @@ cons cell (regexp . minor-mode)."
 
 
   (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+  (define-key rspec-mode-map (kbd "C-c r") 'rspec-rerun)
+  (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
+  (define-key ruby-ts-mode-map (kbd "C-c r") 'rspec-rerun)
   (use-package ruby-interpolation
     :diminish ruby-interpolation-mode)
   (use-package ruby-end
     :diminish ruby-end-mode
     )
-  (use-package rspec-mode))
+  (use-package rspec-mode
+    :config
+    (add-hook 'after-init-hook 'inf-ruby-switch-setup) ;When you've hit the breakpoint, hit C-x C-q to enable inf-ruby))
 
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
@@ -509,6 +514,7 @@ cons cell (regexp . minor-mode)."
   :after tree-sitter
   :hook (js2-mode . flycheck-mode)
   :mode "\\.ts\\'"
+  :mode "\\.mts\\'"
   :config
   (define-derived-mode typescriptreact-mode typescript-mode
     "TypeScript TSX")
@@ -1104,7 +1110,7 @@ This command switches to browser."
   (evil-set-initial-state 'deadgrep-mode 'emacs)
   (evil-set-initial-state 'rg-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'normal)
+  (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
@@ -1116,7 +1122,9 @@ This command switches to browser."
   (evil-set-initial-state 'cider-inspector-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-  (evil-set-initial-state 'info-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
+  (evil-set-initial-state 'inf-ruby-mode 'emacs)
+  (evil-set-initial-state 'compilation-mode 'emacs)
 
   ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
