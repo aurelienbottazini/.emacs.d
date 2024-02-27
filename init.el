@@ -94,8 +94,6 @@
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
                    ,(concat home-folder "/work/dox-compose/bin/")
-                   ,(concat home-folder "/.rbenv/bin/")
-                   ,(concat home-folder "/.rbenv/shims/")
                    ,(concat home-folder "/dotfiles/bin/")
                    ,(concat home-folder "/.fzf/bin")
                    ,(concat home-folder "/.local/bin")
@@ -1287,3 +1285,8 @@ This command switches to browser."
   (ruby-mode . rubocopfmt-mode)
   (ruby-ts-mode . rubocopfmt-mode)
   )
+
+(use-package projectile-rails
+  :config
+  (projectile-rails-global-mode)
+(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
