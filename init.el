@@ -635,8 +635,6 @@ cons cell (regexp . minor-mode)."
     "e" 'er/expand-region
     "f" 'counsel-rg
     "F" 'rg-project
-    "g" 'magit-status
-    "G" 'magit-file-dispatch
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
@@ -718,6 +716,9 @@ cons cell (regexp . minor-mode)."
    "C-c a" 'org-agenda
    ;; C-c C-c "runs" what makes sense for a particular mode
    "C-c gg" 'magit-status
+
+   "C-c gg" 'magit-status
+   "C-c gf" 'magit-file-dispatch
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
