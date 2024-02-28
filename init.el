@@ -395,8 +395,6 @@ cons cell (regexp . minor-mode)."
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-hook 'ruby-ts-mode-hook 'robe-mode)
-  (add-hook 'ruby-mode-hook 'flycheck-mode)
-  (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
   (define-key ruby-mode-map (kbd "C-c .") 'robe-jump)
@@ -497,7 +495,6 @@ cons cell (regexp . minor-mode)."
       web-mode-attr-indent-offset 2)
 
 (use-package js2-mode
-  :hook (js2-mode . flycheck-mode)
   :mode "\\.js\\'"
   :mode "\\.mjs\\'"
   :mode "\\.jsx\\'")
@@ -514,7 +511,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package typescript-mode
   :after tree-sitter
-  :hook (js2-mode . flycheck-mode)
   :mode "\\.ts\\'"
   :mode "\\.mts\\'"
   :config
@@ -631,7 +627,6 @@ cons cell (regexp . minor-mode)."
     :states 'normal
     :keymaps 'override
     "c" (lambda () (interactive) (org-capture nil "n"))
-    "d" 'flycheck-list-errors
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
@@ -655,21 +650,6 @@ cons cell (regexp . minor-mode)."
     "x" 'emamux:send-region)
 
   (winner-mode 1)
-  (general-define-key
-   :states 'normal
-   "-" 'dired-jump
-   "gf" 'auray/project-guess-file
-   "gr" 'er/expand-region
-   "[ [" 'previous-buffer
-   "] ]" 'next-buffer
-   "] e" 'flycheck-next-error
-   "[ e" 'flycheck-previous-error
-
-   "[ q" 'previous-error
-   "] q" 'next-error
-   "]w" 'winner-redo
-   "[w" 'winner-undo
-   )
 
   (general-define-key
    :states 'insert
@@ -708,6 +688,8 @@ cons cell (regexp . minor-mode)."
    "C-c [" 'paredit-backward-barf-sexp
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
+   "C-c d" 'flymake-show-buffer-diagnostics
+   "C-c e" 'er/expand-region
    ;; C-c C-c "runs" what makes sense for a particular mode
    "C-c gg" 'magit-status
 
@@ -961,7 +943,22 @@ This command switches to browser."
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
 
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
+(require 'eglot)
+(add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
+(add-to-list 'eglot-server-programs '(ruby-ts-mode . ("bundle" "exec" "rubocop" "--lsp")))
+(add-hook 'ruby-mode-hook 'eglot-ensure)
+(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
+(add-hook 'ruby-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
+(add-hook 'ruby-ts-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
+
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-from-kill
+                                         try-expand-all-abbrevs
+                                         try-expand-dabbrev-all-buffers
+                                         try-complete-list-symbol-partially
+                                         try-compilete-list-symbol
+                                         try-complete-file-name-partially
+                                         try-complete-file-name))
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
 
@@ -1167,12 +1164,6 @@ This command switches to browser."
 
 (use-package origami)
 (add-hook 'prog-mode-hook 'origami-mode)
-
-(use-package rubocopfmt
-  :hook
-  (ruby-mode . rubocopfmt-mode)
-  (ruby-ts-mode . rubocopfmt-mode)
-  )
 
 (use-package projectile-rails
   :config

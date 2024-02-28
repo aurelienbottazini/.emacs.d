@@ -653,8 +653,6 @@ Auto-fill comments in prog modes
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
   (add-hook 'ruby-ts-mode-hook 'robe-mode)
-  (add-hook 'ruby-mode-hook 'flycheck-mode)
-  (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
   (define-key ruby-mode-map (kbd "C-c .") 'robe-jump)
@@ -783,7 +781,6 @@ Hooks put on js-mode are also run on js2-mode
       web-mode-attr-indent-offset 2)
 
 (use-package js2-mode
-  :hook (js2-mode . flycheck-mode)
   :mode "\\.js\\'"
   :mode "\\.mjs\\'"
   :mode "\\.jsx\\'")
@@ -800,7 +797,6 @@ Hooks put on js-mode are also run on js2-mode
 
 (use-package typescript-mode
   :after tree-sitter
-  :hook (js2-mode . flycheck-mode)
   :mode "\\.ts\\'"
   :mode "\\.mts\\'"
   :config
@@ -961,7 +957,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     :states 'normal
     :keymaps 'override
     "c" (lambda () (interactive) (org-capture nil "n"))
-    "d" 'flycheck-list-errors
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
@@ -985,21 +980,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "x" 'emamux:send-region)
 
   (winner-mode 1)
-  (general-define-key
-   :states 'normal
-   "-" 'dired-jump
-   "gf" 'auray/project-guess-file
-   "gr" 'er/expand-region
-   "[ [" 'previous-buffer
-   "] ]" 'next-buffer
-   "] e" 'flycheck-next-error
-   "[ e" 'flycheck-previous-error
-
-   "[ q" 'previous-error
-   "] q" 'next-error
-   "]w" 'winner-redo
-   "[w" 'winner-undo
-   )
 
   (general-define-key
    :states 'insert
@@ -1038,6 +1018,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c [" 'paredit-backward-barf-sexp
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
+   "C-c d" 'flymake-show-buffer-diagnostics
+   "C-c e" 'er/expand-region
    ;; C-c C-c "runs" what makes sense for a particular mode
    "C-c gg" 'magit-status
 
@@ -1515,6 +1497,14 @@ IDE code analysis but it works surprisingly well.
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
+
+(require 'eglot)
+(add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
+(add-to-list 'eglot-server-programs '(ruby-ts-mode . ("bundle" "exec" "rubocop" "--lsp")))
+(add-hook 'ruby-mode-hook 'eglot-ensure)
+(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
+(add-hook 'ruby-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
+(add-hook 'ruby-ts-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
 #+end_src
 * Completion
 ** Hippie expand
@@ -1524,7 +1514,14 @@ You can customize its behaviour by choosing different expand functions.
 The description of all the hippie expand functions is inside
 [[https://github.com/emacs-mirror/emacs/blob/master/lisp/hippie-exp.el#L63][~hippie-exp.el~]] (location can vary on your system)
 #+BEGIN_SRC emacs-lisp
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-all-abbrevs try-expand-list try-complete-file-name))
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-from-kill
+                                         try-expand-all-abbrevs
+                                         try-expand-dabbrev-all-buffers
+                                         try-complete-list-symbol-partially
+                                         try-compilete-list-symbol
+                                         try-complete-file-name-partially
+                                         try-complete-file-name))
 (require 'mode-local)
 (setq-mode-local elisp-mode hippie-expand-try-functions-list '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
 #+END_SRC
@@ -1848,14 +1845,6 @@ Speed up tramp
 #+begin_src emacs-lisp
 (use-package origami)
 (add-hook 'prog-mode-hook 'origami-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package rubocopfmt
-  :hook
-  (ruby-mode . rubocopfmt-mode)
-  (ruby-ts-mode . rubocopfmt-mode)
-  )
 #+end_src
 
 #+begin_src emacs-lisp
