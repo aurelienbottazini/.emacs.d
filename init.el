@@ -383,6 +383,7 @@ cons cell (regexp . minor-mode)."
   :mode "\\.rb$"
   :mode "ruby"
   :config
+  (define-key ruby-ts-mode-map (kbd "C-c .") 'robe-jump)
   (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
   (add-hook 'ruby-ts-mode-hook (defun auray-ruby-ts-mode-hook ()
              (modify-syntax-entry ?_ "w")       ; now '_' is not considered a word-delimiter
@@ -390,7 +391,6 @@ cons cell (regexp . minor-mode)."
   )
 
 (use-package robe
-  :after ruby-ts-mode
   :diminish robe-mode
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
@@ -399,8 +399,7 @@ cons cell (regexp . minor-mode)."
   (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
-
-  (define-key 'normal ruby-ts-mode-map (kbd "c-c .") 'robe-jump)
+  (define-key ruby-mode-map (kbd "C-c .") 'robe-jump)
   )
 
 (use-package ruby-mode
@@ -634,8 +633,6 @@ cons cell (regexp . minor-mode)."
     "c" (lambda () (interactive) (org-capture nil "n"))
     "d" 'flycheck-list-errors
     "e" 'er/expand-region
-    "f" 'counsel-rg
-    "F" 'rg-project
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu

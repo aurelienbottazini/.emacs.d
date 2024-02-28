@@ -241,7 +241,7 @@
  '(eglot-ignored-server-capabilities '(:hoverProvider))
  '(electric-pair-mode nil)
  '(electric-quote-string t)
- '(emamux:use-nearest-pane t)
+ '(emamux:use-nearest-pane t t)
  '(enable-remote-dir-locals t)
  '(engine/browser-function 'eww)
  '(evil-mode-line-format nil)
@@ -448,7 +448,8 @@
  '(web-mode-enable-auto-opening t)
  '(web-mode-enable-auto-pairing t)
  '(web-mode-enable-comment-interpolation t)
- '(web-mode-enable-front-matter-block t))
+ '(web-mode-enable-front-matter-block t)
+ '(xref-search-program 'ripgrep))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
