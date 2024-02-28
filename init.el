@@ -390,7 +390,7 @@ cons cell (regexp . minor-mode)."
   )
 
 (use-package robe
-  :after evil
+  :after ruby-ts-mode
   :diminish robe-mode
   :config
   (add-hook 'ruby-mode-hook 'robe-mode)
@@ -399,7 +399,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'ruby-ts-mode-hook 'flycheck-mode)
   (eval-after-load 'company
   '(push 'company-robe company-backends))
-  (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
+
+  (define-key 'normal ruby-ts-mode-map (kbd "c-c .") 'robe-jump)
   )
 
 (use-package ruby-mode
@@ -1078,93 +1079,9 @@ This command switches to browser."
 (setq visible-bell t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(use-package evil
-  :init (setq evil-want-C-i-jump nil)
-  :config
-  (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
-  (define-key evil-normal-state-map (kbd "C-n") 'next-line)
-  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
-  (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
-  (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
-  (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  ;; (evil-mode 1)
-)
-
-(use-package evil
-  :init
-  :config
-  (defun my-evil-record-macro ()
-    (interactive)
-    (if buffer-read-only
-        (quit-window)
-      (call-interactively 'evil-record-macro)))
-
-  (with-eval-after-load 'evil-maps
-    (define-key evil-normal-state-map (kbd "q") 'my-evil-record-macro)))
-
-(use-package evil-surround
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil
-  :config
-  (evil-set-initial-state 'deadgrep-mode 'emacs)
-  (evil-set-initial-state 'rg-mode 'emacs)
-  (evil-set-initial-state 'deft-mode 'insert)
-  (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'use-package-statistics 'emacs)
-  (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
-  (evil-set-initial-state 'term-mode 'emacs)
-  (evil-set-initial-state 'ert-results-mode 'emacs)
-  (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-initial-state 'shell-mode 'emacs)
-  (evil-set-initial-state 'tab-switcher-mode 'emacs)
-  (evil-set-initial-state 'cider-inspector-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-  (evil-set-initial-state 'inf-ruby-mode 'emacs)
-  (evil-set-initial-state 'compilation-mode 'emacs)
-
-  ;; magit commit
-  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(use-package evil-commentary
-  :after evil
-  :diminish evil-commentary-mode
-  :config
-  (evil-commentary-mode))
-
-(use-package evil-visualstar
-  :after evil
-  :config
-  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  (global-evil-visualstar-mode t))
-
-(use-package evil-matchit
-  :defer 2
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil
-  :init (setq evil-want-C-i-jump nil)
-  :config
-  (evil-ex-define-cmd "W" 'save-buffer))
-
-(use-package evil
-  :config
-  (setq evil-want-C-i-jump nil)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
-
 (use-package key-chord
-  :after evil
   :config
-  (key-chord-mode 1)
-  (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
+  (key-chord-mode 1))
 
 (use-package haskell-mode)
 
@@ -1200,36 +1117,6 @@ This command switches to browser."
 
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
-
-(setq evil-insert-state-cursor '((bar . 2) "#97d88a")
-      evil-normal-state-cursor '(box "#ffaf00")
-      evil-visual-state-cursor '(box "#afcff1")
-      evil-emacs-state-cursor '((bar . 2) "#ffffd7")
-
-        )
-
-(defun auray/bg-modeline-color-from-evil-state ()
-  (interactive)
-  (cond ((evil-insert-state-p) "#97d88a")
-        ((evil-visual-state-p) "#adcff1")
-        ((evil-emacs-state-p) "#4c7073")
-        ((evil-normal-state-p) "#ffaf00")
-        (t "#32302f")))
-
-(defun auray/fg-modeline-color-from-evil-state ()
-  (interactive)
-  (cond ((evil-insert-state-p) "#262626")
-        ((evil-visual-state-p) "#262626")
-        ((evil-emacs-state-p) "#ffffd7")
-        ((evil-normal-state-p) "#262626")
-        (t "#ffffd7")))
-
-(defun auray/post-command-evil-modeline-colors-hook ()
-  (interactive)
-  (set-face-background 'mode-line (auray/bg-modeline-color-from-evil-state))
-  (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
-
-(add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
