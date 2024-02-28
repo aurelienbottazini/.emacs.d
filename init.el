@@ -615,7 +615,7 @@ cons cell (regexp . minor-mode)."
   (interactive)
   (setq display-line-numbers 'relative))
 
-(global-hl-line-mode -1)
+(global-hl-line-mode 1)
 
 (use-package rainbow-mode :diminish rainbow-mode)
 (use-package windresize)

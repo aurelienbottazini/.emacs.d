@@ -943,7 +943,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (interactive)
   (setq display-line-numbers 'relative))
 
-(global-hl-line-mode -1)
+(global-hl-line-mode 1)
 
 (use-package rainbow-mode :diminish rainbow-mode)
 (use-package windresize)
