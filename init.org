@@ -65,7 +65,6 @@ Silence deprecated cl warnings
 (setq byte-compile-warnings '(cl-functions))
 #+end_src
 
-
 #+BEGIN_SRC emacs-lisp
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
@@ -1001,16 +1000,16 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
 
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
-   ;; "M-v" 'yank ; ⌘-v = Paste
+   "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
 
-  ;;  "C-h" 'tmux-move-left
-  ;; "C-j" 'tmux-move-down
-  ;;  "C-l" 'tmux-move-right
-  ;;  "C-k" 'tmux-move-up
+   "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-l" 'tmux-move-right
+   "C-k" 'tmux-move-up
 
-   ;; "C-r" 'isearch-backward
-   ;; "C-s" 'swiper
+   "C-r" 'isearch-backward
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1718,7 +1717,7 @@ Sessions
   (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  ;; (evil-mode 1)
+  (evil-mode 1)
 )
 #+end_src
 

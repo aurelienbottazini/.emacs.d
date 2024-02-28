@@ -671,16 +671,16 @@ cons cell (regexp . minor-mode)."
 
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
-   ;; "M-v" 'yank ; ⌘-v = Paste
+   "M-v" 'yank ; ⌘-v = Paste
    "M-x" 'counsel-M-x
 
-  ;;  "C-h" 'tmux-move-left
-  ;; "C-j" 'tmux-move-down
-  ;;  "C-l" 'tmux-move-right
-  ;;  "C-k" 'tmux-move-up
+   "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-l" 'tmux-move-right
+   "C-k" 'tmux-move-up
 
-   ;; "C-r" 'isearch-backward
-   ;; "C-s" 'swiper
+   "C-r" 'isearch-backward
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1083,7 +1083,7 @@ This command switches to browser."
   (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
   (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-  ;; (evil-mode 1)
+  (evil-mode 1)
 )
 
 (use-package evil
