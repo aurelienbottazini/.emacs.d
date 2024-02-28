@@ -83,6 +83,7 @@ If FILE is nil, use the current buffer's file name."
   (cond
    ((not (stringp a-file-path)) "")
 
+   ((string-match "app/helpers" a-file-path) (string-replace "app/helpers" "spec/helpers" a-file-path))
    ((string-match "spec/requests" a-file-path) (concat "app/controllers/" (auray/fip-base-name a-file-path) "_controller.rb"))
    ((string-match "spec/" a-file-path) (concat (substring (file-name-directory a-file-path) (+ 1 (length "spec"))) (auray/fip-base-name a-file-path)".rb"))
    ((string-match "app/controllers" a-file-path) (concat "spec/requests/" (string-replace "_controller" nil  (auray/fip-base-name a-file-path))"_spec.rb"))
@@ -98,6 +99,7 @@ If FILE is nil, use the current buffer's file name."
   (should (string= "" (auray/default-alternate-file "")))
   (should (equal "app/foo.rb" (auray/default-alternate-file "spec/app/foo.rb")))
   (should (equal "spec/requests/contacts_spec.rb" (auray/default-alternate-file "app/controllers/contacts_controller.rb")))
+  (should (equal "app/helpers/contacts_helper.rb" (auray/default-alternate-file "spec/helpers/contacts_helper_spec.rb")))
   (should (equal "app/controllers/contacts_controller.rb" (auray/default-alternate-file "spec/requests/contacts_spec.rb")))
   (should (equal "spec/app/foo_spec.rb" (auray/default-alternate-file "app/foo.rb")))
   (should (equal "test/foo_test.clj" (auray/default-alternate-file "src/foo.clj")))
