@@ -631,6 +631,10 @@ cons cell (regexp . minor-mode)."
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "gg" 'magit-status
+    "s" 'find-sibling-file
+    "p" 'project-find-file
+    "f" 'project-find-regexp
     "i" 'counsel-imenu
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
