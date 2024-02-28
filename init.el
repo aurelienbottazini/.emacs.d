@@ -1192,3 +1192,5 @@ This command switches to browser."
               (let ((orig  (car mode-line-buffer-identification)))
                 `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
                               (cdr mode-line-buffer-identification)))))
+
+(setq-default cursor-type 'bar)
