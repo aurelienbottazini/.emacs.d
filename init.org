@@ -1070,8 +1070,10 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c or" 'rainbow-mode
    "C-c ot" 'toggle-truncate-lines
    "C-c ow" 'visual-line-mode
+   "C-c s" 'find-sibling-file
 
    "C-c p" 'project-find-file
+   "C-c r" 'recentf-open
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
@@ -2027,6 +2029,13 @@ Speed up tramp
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq-default mode-line-buffer-identification
+              (let ((orig  (car mode-line-buffer-identification)))
+                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                              (cdr mode-line-buffer-identification)))))
 #+end_src
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)

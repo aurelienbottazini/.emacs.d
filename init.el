@@ -741,8 +741,10 @@ cons cell (regexp . minor-mode)."
    "C-c or" 'rainbow-mode
    "C-c ot" 'toggle-truncate-lines
    "C-c ow" 'visual-line-mode
+   "C-c s" 'find-sibling-file
 
    "C-c p" 'project-find-file
+   "C-c r" 'recentf-open
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
@@ -1301,3 +1303,8 @@ This command switches to browser."
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
+
+(setq-default mode-line-buffer-identification
+              (let ((orig  (car mode-line-buffer-identification)))
+                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                              (cdr mode-line-buffer-identification)))))
