@@ -408,9 +408,7 @@ cons cell (regexp . minor-mode)."
 
 
   (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-  (define-key rspec-mode-map (kbd "C-c r") 'rspec-rerun)
   (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
-  (define-key ruby-ts-mode-map (kbd "C-c r") 'rspec-rerun)
   (use-package ruby-interpolation
     :diminish ruby-interpolation-mode)
   (use-package ruby-end
@@ -418,7 +416,9 @@ cons cell (regexp . minor-mode)."
     )
   (use-package rspec-mode
     :config
-    (add-hook 'after-init-hook 'inf-ruby-switch-setup) ;When you've hit the breakpoint, hit C-x C-q to enable inf-ruby))
+    (add-hook 'after-init-hook 'inf-ruby-switch-setup) ;When you've hit the breakpoint, hit C-x C-q to enable inf-ruby
+  (define-key rspec-mode-map (kbd "C-c r") 'rspec-rerun)
+    ))
 
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
