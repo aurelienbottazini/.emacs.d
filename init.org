@@ -1847,6 +1847,7 @@ Speed up tramp
 (add-hook 'prog-mode-hook 'origami-mode)
 #+end_src
 
+
 #+begin_src emacs-lisp
 (use-package projectile-rails
   :config
@@ -1871,6 +1872,18 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (setq-default cursor-type 'bar)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package flymake-eslint
+  :config
+
+(add-hook 'web-mode-hook  (lambda () (flymake-eslint-enable)))
+(add-hook 'js2-mode-hook  (lambda () (flymake-eslint-enable)))
+(add-hook 'typescript-mode-hook  (lambda () (flymake-eslint-enable)))
+(add-hook 'typescript-ts-mode-hook  (lambda () (flymake-eslint-enable)))
+
+  )
 #+end_src
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
