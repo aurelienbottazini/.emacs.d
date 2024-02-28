@@ -638,10 +638,6 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'counsel-imenu
-    "o" 'recentf ;; o for oldfiles
-    "p" 'project-find-file
-    "s" 'auray/find-file-with-similar-name
-    "t" 'tab-switcher
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
@@ -742,6 +738,7 @@ cons cell (regexp . minor-mode)."
    "C-c ot" 'toggle-truncate-lines
    "C-c ow" 'visual-line-mode
    "C-c s" 'find-sibling-file
+   "C-c t" 'tab-switcher
 
    "C-c p" 'project-find-file
    "C-c r" 'recentf-open
