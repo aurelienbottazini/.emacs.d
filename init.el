@@ -1295,3 +1295,9 @@ This command switches to browser."
   :config
   (projectile-rails-global-mode)
 (define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
+
+(setq find-sibling-rules
+      '(
+               ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
+               ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
+               ))
