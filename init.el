@@ -92,6 +92,10 @@
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
+                   "/opt/homebrew/opt/grep/libexec/gnubin"
+                   "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
+                   "/opt/homebrew/opt/findutils/libexec/gnubin"
+                   "/opt/homebrew/opt/coreutils/libexec/gnubin"
                    ,(concat home-folder "/.asdf/shims/")
                    ,(concat home-folder "/.config/yarn/global/node_modules/.bin/")
                    ,(concat home-folder "/.local/share/n/bin")
@@ -949,12 +953,11 @@ This command switches to browser."
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
 
 (require 'eglot)
-(add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
-(add-to-list 'eglot-server-programs '(ruby-ts-mode . ("bundle" "exec" "rubocop" "--lsp")))
-(add-hook 'ruby-mode-hook 'eglot-ensure)
-(add-hook 'ruby-ts-mode-hook 'eglot-ensure)
-(add-hook 'ruby-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
-(add-hook 'ruby-ts-mode-hook (lambda () (add-hook 'before-save-hook 'eglot-format-buffer nil 'local)))
+
+(use-package rubocopfmt
+  :hook
+  (ruby-ts-mode . rubocopfmt-mode)
+  (ruby-mode . rubocopfmt-mode))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-from-kill

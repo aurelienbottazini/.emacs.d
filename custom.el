@@ -476,7 +476,5 @@
  '(highlight-blocks-depth-7-face ((t (:background "gray35"))))
  '(highlight-blocks-depth-8-face ((t (:background "gray39"))))
  '(highlight-blocks-depth-9-face ((t (:background "gray44"))))
- '(mode-line ((t (:background "#32302f" :box nil))))
- '(mode-line-active ((t (:inherit mode-line :background "yellow" :foreground "black"))))
  '(mode-line-buffer-id ((t (:slant italic :weight bold))))
  '(xref-match ((t (:inherit match)))))
