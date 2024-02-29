@@ -1294,6 +1294,8 @@ This command switches to browser."
 
 (setq find-sibling-rules
       '(
+               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
+               ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
