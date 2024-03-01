@@ -1296,6 +1296,8 @@ This command switches to browser."
                ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
                ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
+               ("app/controllers/\\(.*\\)_controller.rb\\'" "app/views/\\1/\\(index\\|show\\|edit\\|new\\).html.erb")
+               ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
 
