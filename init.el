@@ -1298,6 +1298,8 @@ This command switches to browser."
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
                ("app/\\(controllers\\|helpers\\)/\\(.*\\)_\\(controller\\|helper\\).rb\\'" "app/views/\\2/\\(index\\|show\\|edit\\|new\\).html.erb")
                ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
+               ("app/controllers/\\(.*\\)_controller.rb\\'" "spec/requests/\\1_spec.rb")
+               ("spec/requests/\\(.*\\)_spec.rb\\'" "app/controllers/\\1_controller.rb" )
                ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/helpers/\\1_helper.rb")
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
