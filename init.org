@@ -195,6 +195,7 @@ It make things easier when the two match.
 
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
+                   "/Users/abottazini/work/jeancaisse/node_modules/.bin"
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
                    "/opt/homebrew/opt/grep/libexec/gnubin"
                    "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
@@ -283,8 +284,6 @@ stick to fundamental mode and disable expensive minor modes.
 
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
-
-(setq-default truncate-lines t)
 #+END_SRC
 
 Sentences end with one space after point. The default two space is
@@ -802,6 +801,7 @@ Hooks put on js-mode are also run on js2-mode
 (use-package typescript-mode
   :after tree-sitter
   :mode "\\.ts\\'"
+  :mode "\\.tsx\\'"
   :mode "\\.mts\\'"
   :config
   (define-derived-mode typescriptreact-mode typescript-mode
@@ -855,7 +855,6 @@ adjustments for JSX.
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
   :mode "\\.vue\\'"
-  :mode "\\.tsx\\'"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)

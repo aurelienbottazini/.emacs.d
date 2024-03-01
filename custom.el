@@ -418,7 +418,7 @@
  '(tab-bar-tab-hints t)
  '(tool-bar-mode nil)
  '(treemacs-position 'right)
- '(truncate-lines nil)
+ '(truncate-lines t)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    '((20 . "#BC8383")

@@ -91,6 +91,7 @@
 
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
+                   "/Users/abottazini/work/jeancaisse/node_modules/.bin"
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
                    "/opt/homebrew/opt/grep/libexec/gnubin"
                    "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
@@ -173,8 +174,6 @@
 
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
-
-(setq-default truncate-lines t)
 
 (setq sentence-end-double-space nil)
 
@@ -517,6 +516,7 @@ cons cell (regexp . minor-mode)."
 (use-package typescript-mode
   :after tree-sitter
   :mode "\\.ts\\'"
+  :mode "\\.tsx\\'"
   :mode "\\.mts\\'"
   :config
   (define-derived-mode typescriptreact-mode typescript-mode
@@ -551,7 +551,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package web-mode
   :mode "\\.vue\\'"
-  :mode "\\.tsx\\'"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
