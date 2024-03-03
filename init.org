@@ -971,6 +971,12 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (winner-mode 1)
 
   (general-define-key
+   :states 'normal
+   "[[" 'previous-buffer
+   "]]" 'next-buffer
+   )
+
+  (general-define-key
    :states 'insert
    "s-/" 'hippie-expand
    "M-/" 'hippie-expand)

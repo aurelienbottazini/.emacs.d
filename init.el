@@ -646,6 +646,12 @@ cons cell (regexp . minor-mode)."
   (winner-mode 1)
 
   (general-define-key
+   :states 'normal
+   "[[" 'previous-buffer
+   "]]" 'next-buffer
+   )
+
+  (general-define-key
    :states 'insert
    "s-/" 'hippie-expand
    "M-/" 'hippie-expand)
