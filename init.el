@@ -635,9 +635,10 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "gg" 'magit-status
+    "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'project-find-file
-    "f" 'project-find-regexp
+    "p" 'projectile-find-file
+    "f" 'projectile-grep
     "i" 'counsel-imenu
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -1262,7 +1263,9 @@ This command switches to browser."
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
-(use-package projectile)
+(use-package projectile
+  :config
+  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)

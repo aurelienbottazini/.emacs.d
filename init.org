@@ -964,9 +964,10 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "gg" 'magit-status
+    "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'project-find-file
-    "f" 'project-find-regexp
+    "p" 'projectile-find-file
+    "f" 'projectile-grep
     "i" 'counsel-imenu
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -1981,7 +1982,9 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package projectile)
+(use-package projectile
+  :config
+  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)
