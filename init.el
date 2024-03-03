@@ -678,8 +678,8 @@ cons cell (regexp . minor-mode)."
    "C-l" 'tmux-move-right
    "C-k" 'tmux-move-up
 
-   "C-r" 'isearch-backward
-   "C-s" 'swiper
+   "C-r" 'undo-redo
+   "C-s" 'swiper-isearch
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -946,6 +946,7 @@ This command switches to browser."
 (require 'eglot)
 
 (use-package rubocopfmt
+  :diminish rubocopfmt-mode
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
@@ -1255,6 +1256,7 @@ This command switches to browser."
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 (use-package projectile
+  :diminish projectile-mode
   :config
   (projectile-mode +1))
 (use-package citre
@@ -1281,6 +1283,7 @@ This command switches to browser."
 (add-hook 'prog-mode-hook 'origami-mode)
 
 (use-package projectile-rails
+  :diminish projectile-rails-mode
   :config
   (projectile-rails-global-mode)
 (define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))

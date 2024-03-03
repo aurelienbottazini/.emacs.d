@@ -1003,8 +1003,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-l" 'tmux-move-right
    "C-k" 'tmux-move-up
 
-   "C-r" 'isearch-backward
-   "C-s" 'swiper
+   "C-r" 'undo-redo
+   "C-s" 'swiper-isearch
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1496,6 +1496,7 @@ IDE code analysis but it works surprisingly well.
 (require 'eglot)
 
 (use-package rubocopfmt
+  :diminish rubocopfmt-mode
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
@@ -1970,6 +1971,7 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (use-package projectile
+  :diminish projectile-mode
   :config
   (projectile-mode +1))
 (use-package citre
@@ -2001,6 +2003,7 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (use-package projectile-rails
+  :diminish projectile-rails-mode
   :config
   (projectile-rails-global-mode)
 (define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
