@@ -1321,3 +1321,6 @@ This command switches to browser."
 (add-hook 'js2-mode-hook  (lambda () (flymake-eslint-enable)))
 (add-hook 'typescript-mode-hook  (lambda () (flymake-eslint-enable)))
 (add-hook 'typescript-ts-mode-hook  (lambda () (flymake-eslint-enable))))
+
+(use-package ansi-color
+    :hook (compilation-filter . ansi-color-compilation-filter))
