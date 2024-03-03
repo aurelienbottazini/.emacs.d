@@ -619,12 +619,12 @@ cons cell (regexp . minor-mode)."
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "k" 'recompile
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
     "p" 'projectile-find-file
     "f" 'projectile-grep
-    "i" 'counsel-imenu
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
