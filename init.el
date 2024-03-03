@@ -467,21 +467,6 @@ cons cell (regexp . minor-mode)."
 (use-package sass-mode :mode "\\.sass\\'")
 (use-package less-css-mode :mode "\\.less\\'")
 
-(require 'compile)
-(setq compilation-error-regexp-alist-alist
-      (cons '(node "^\\([a-zA-Z\.0-9\/-]+\\):\\([0-9]+\\)$"
-                   1 ;; file
-                   2 ;; line
-                   )
-            compilation-error-regexp-alist-alist))
-(setq compilation-error-regexp-alist
-      (cons 'node compilation-error-regexp-alist))
-
-;; (add-hook 'js-mode-hook
-;;           (lambda ()
-;;             (set (make-local-variable 'compile-command)
-;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
-
 (setq js-indent-level 2)
 
 (add-hook 'js-mode-hook (lambda () (subword-mode t)))
@@ -1324,3 +1309,29 @@ This command switches to browser."
 
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
+
+(require 'compile)
+(setq compilation-error-regexp-alist '())
+(setq compilation-error-regexp-alist-alist
+      (cons '(node "^\\([a-zA-Z\.0-9\/-]+\\):\\([0-9]+\\)$"
+                   1 ;; file
+                   2 ;; line
+                   )
+            compilation-error-regexp-alist-alist))
+(setq compilation-error-regexp-alist
+      (cons 'node compilation-error-regexp-alist))
+
+;; (add-hook 'js-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'compile-command)
+;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
+
+
+(setq compilation-error-regexp-alist-alist
+      (cons '(rspec "^rspec \\(.*\\):\\([0-9]+\\)"
+                   1 ;; file
+                   2 ;; line
+                   )
+            compilation-error-regexp-alist-alist))
+(setq compilation-error-regexp-alist
+      (cons 'rspec compilation-error-regexp-alist))

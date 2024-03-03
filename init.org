@@ -747,25 +747,6 @@ describing what are the components of the messages.
 After running the compile command, you can navigate through the
 errors with ~next-error~ and ~previous-error~
 
-Hooks put on js-mode are also run on js2-mode
-#+BEGIN_SRC emacs-lisp
-(require 'compile)
-(setq compilation-error-regexp-alist-alist
-      (cons '(node "^\\([a-zA-Z\.0-9\/-]+\\):\\([0-9]+\\)$"
-                   1 ;; file
-                   2 ;; line
-                   )
-            compilation-error-regexp-alist-alist))
-(setq compilation-error-regexp-alist
-      (cons 'node compilation-error-regexp-alist))
-
-;; (add-hook 'js-mode-hook
-;;           (lambda ()
-;;             (set (make-local-variable 'compile-command)
-;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
-
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
 (setq js-indent-level 2)
 
@@ -2059,7 +2040,34 @@ Speed up tramp
 #+begin_src emacs-lisp
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
+
+(require 'compile)
+(setq compilation-error-regexp-alist '())
+(setq compilation-error-regexp-alist-alist
+      (cons '(node "^\\([a-zA-Z\.0-9\/-]+\\):\\([0-9]+\\)$"
+                   1 ;; file
+                   2 ;; line
+                   )
+            compilation-error-regexp-alist-alist))
+(setq compilation-error-regexp-alist
+      (cons 'node compilation-error-regexp-alist))
+
+;; (add-hook 'js-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'compile-command)
+;;                  (format "node %s" (file-name-nondirectory buffer-file-name)))))
+
+
+(setq compilation-error-regexp-alist-alist
+      (cons '(rspec "^rspec \\(.*\\):\\([0-9]+\\)"
+                   1 ;; file
+                   2 ;; line
+                   )
+            compilation-error-regexp-alist-alist))
+(setq compilation-error-regexp-alist
+      (cons 'rspec compilation-error-regexp-alist))
 #+end_src
+
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
