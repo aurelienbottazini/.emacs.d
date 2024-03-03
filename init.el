@@ -1300,7 +1300,7 @@ This command switches to browser."
 
 (setq-default mode-line-buffer-identification
               (let ((orig  (car mode-line-buffer-identification)))
-                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                `(:eval (cons (concat (abbreviate-file-name default-directory) ,orig)
                               (cdr mode-line-buffer-identification)))))
 
 (setq-default cursor-type 'bar)
@@ -1341,3 +1341,7 @@ This command switches to browser."
             compilation-error-regexp-alist-alist))
 (setq compilation-error-regexp-alist
       (cons 'rspec compilation-error-regexp-alist))
+
+(use-package envrc
+  :config
+  (envrc-global-mode))
