@@ -619,12 +619,12 @@ cons cell (regexp . minor-mode)."
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "k" 'recompile
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
     "p" 'projectile-find-file
     "f" 'projectile-grep
-    "i" 'counsel-imenu
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
@@ -644,6 +644,12 @@ cons cell (regexp . minor-mode)."
     "x" 'emamux:send-region)
 
   (winner-mode 1)
+
+  (general-define-key
+   :states 'normal
+   "[[" 'previous-buffer
+   "]]" 'next-buffer
+   )
 
   (general-define-key
    :states 'insert
@@ -672,8 +678,8 @@ cons cell (regexp . minor-mode)."
    "C-l" 'tmux-move-right
    "C-k" 'tmux-move-up
 
-   "C-r" 'isearch-backward
-   "C-s" 'swiper
+   "C-r" 'undo-redo
+   "C-s" 'swiper-isearch
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -940,6 +946,7 @@ This command switches to browser."
 (require 'eglot)
 
 (use-package rubocopfmt
+  :diminish rubocopfmt-mode
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
@@ -1249,6 +1256,7 @@ This command switches to browser."
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 (use-package projectile
+  :diminish projectile-mode
   :config
   (projectile-mode +1))
 (use-package citre
@@ -1275,6 +1283,7 @@ This command switches to browser."
 (add-hook 'prog-mode-hook 'origami-mode)
 
 (use-package projectile-rails
+  :diminish projectile-rails-mode
   :config
   (projectile-rails-global-mode)
 (define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
@@ -1294,7 +1303,7 @@ This command switches to browser."
 
 (setq-default mode-line-buffer-identification
               (let ((orig  (car mode-line-buffer-identification)))
-                `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+                `(:eval (cons (concat (abbreviate-file-name default-directory) ,orig)
                               (cdr mode-line-buffer-identification)))))
 
 (setq-default cursor-type 'bar)
@@ -1335,3 +1344,7 @@ This command switches to browser."
             compilation-error-regexp-alist-alist))
 (setq compilation-error-regexp-alist
       (cons 'rspec compilation-error-regexp-alist))
+
+(use-package envrc
+  :config
+  (envrc-global-mode))
