@@ -305,7 +305,6 @@
  '(pulse-delay 0.03)
  '(pulse-iterations 20)
  '(require-final-newline t)
- '(rspec-use-spring-when-possible nil)
  '(ruby-align-chained-calls t)
  '(ruby-align-to-stmt-keywords t)
  '(ruby-deep-arglist t)
@@ -418,6 +417,7 @@
  '(tab-bar-history-mode t)
  '(tab-bar-tab-hints t)
  '(tool-bar-mode nil)
+ '(treemacs-no-png-images nil)
  '(treemacs-position 'right)
  '(truncate-lines t)
  '(vc-annotate-background "#2B2B2B")
@@ -456,7 +456,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Operator Mono Ssm AB"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Monolisa Custom"))))
  '(context-coloring-level-0-face ((t (:foreground "#87afaf"))))
  '(context-coloring-level-1-face ((t (:foreground "#ffaf00"))))
  '(context-coloring-level-2-face ((t (:foreground "#87af87"))))
