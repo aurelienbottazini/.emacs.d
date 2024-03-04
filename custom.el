@@ -305,6 +305,7 @@
  '(pulse-delay 0.03)
  '(pulse-iterations 20)
  '(require-final-newline t)
+ '(rspec-use-spring-when-possible nil)
  '(ruby-align-chained-calls t)
  '(ruby-align-to-stmt-keywords t)
  '(ruby-deep-arglist t)
