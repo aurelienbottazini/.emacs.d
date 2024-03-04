@@ -1348,3 +1348,7 @@ This command switches to browser."
 (use-package envrc
   :config
   (envrc-global-mode))
+
+(setq-default truncate-lines t)
+
+(use-package treemacs)

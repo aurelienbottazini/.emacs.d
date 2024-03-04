@@ -2083,6 +2083,14 @@ Speed up tramp
   (envrc-global-mode))
 #+end_src
 
+#+begin_src emacs-lisp
+(setq-default truncate-lines t)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package treemacs)
+#+end_src
+
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
