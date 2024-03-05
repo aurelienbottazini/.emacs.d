@@ -949,7 +949,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'projectile-find-file
+    "p" 'counsel-fzf
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -1198,6 +1198,7 @@ This loads more programming languages to use with org-babel.
                                (sql . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+(require 'ob-ruby)
 #+END_SRC
 
 ** Publish

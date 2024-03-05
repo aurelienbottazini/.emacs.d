@@ -624,7 +624,7 @@ cons cell (regexp . minor-mode)."
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'projectile-find-file
+    "p" 'counsel-fzf
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -811,6 +811,7 @@ cons cell (regexp . minor-mode)."
                                (sql . t)
                                (ditaa . t)))
 (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+(require 'ob-ruby)
 
 (setq
  time-stamp-active t
