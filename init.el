@@ -1358,6 +1358,7 @@ This command switches to browser."
 (use-package treemacs-all-the-icons
   :config
   (treemacs-load-theme "all-the-icons"))
+(use-package treemacs-evil)
 
 (use-package all-the-icons-dired
   :config
