@@ -624,7 +624,7 @@ cons cell (regexp . minor-mode)."
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
     "p" 'projectile-find-file
-    "f" 'projectile-grep
+    "f" 'counsel-rg
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
