@@ -615,6 +615,7 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'normal
     :keymaps 'override
+    "1" 'treemacs
     "c" (lambda () (interactive) (org-capture nil "n"))
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
@@ -1348,3 +1349,16 @@ This command switches to browser."
 (use-package envrc
   :config
   (envrc-global-mode))
+
+(setq-default truncate-lines t)
+
+(use-package treemacs)
+(use-package all-the-icons
+  :if (display-graphic-p))
+(use-package treemacs-all-the-icons
+  :config
+  (treemacs-load-theme "all-the-icons"))
+
+(use-package all-the-icons-dired
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
