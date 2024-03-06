@@ -457,4 +457,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Monolisa Custom"))))
+ '(envrc-mode-line-error-face ((t (:inherit mode-line :inverse-video t))))
+ '(envrc-mode-line-none-face ((t (:inherit mode-line))))
  '(mode-line ((t (:background "#e89393" :foreground "#ffffd7" :height 1.1)))))
