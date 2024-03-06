@@ -247,7 +247,7 @@
   (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :height 1.0))))
   (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :height 1.0))))
   (mode-line-buffer-id ((t (:foreground "#383838" :slant italic :weight bold))))
-  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
+  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :height 1.0))))
   (org-block ((t (:extend t :background "#333333"))))
   (org-document-info-keyword ((t (:inherit shadow :height 1.3))))
   (org-document-title ((t (:inherit default :foreground "#8CD0D3" :weight bold :height 1.3))))
