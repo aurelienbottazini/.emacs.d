@@ -87,7 +87,7 @@
 (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
-(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES")
+(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES") ;; for a bug with spring
 
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
@@ -112,8 +112,7 @@
                    "/usr/bin/"
                    "/usr/local/sbin/"
                    "/opt/homebrew/opt/openjdk/bin/"
-                   "/usr/bin/"
-                   ,(concat home-folder "/.cargo/bin/"))) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
+                   ,(concat home-folder "/.cargo/bin/"))) ;; eshell does not consider last entry. Bug?
        )
 
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
@@ -121,7 +120,7 @@
   (setq exec-path my-paths))
 
 (defun check-large-file-hook ()
-  "If a file is over a given size, turn off minor modes."
+  "If a file is over a given size, and not a jpg, turn off minor modes."
   (when (and (> (buffer-size) (* 1024 100)) ;; 100K
              (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
         )
@@ -130,7 +129,6 @@
     (setq buffer-read-only t)
     (buffer-disable-undo)))
 (add-hook 'find-file-hooks 'check-large-file-hook)
-
 
 ;; only support left to right languages.
 ;; this makes long lines in files not a problem anymore.
@@ -321,6 +319,9 @@ cons cell (regexp . minor-mode)."
 (setq blink-matching-paren 'jump-offscreen)
 (show-paren-mode 1)
 
+(use-package origami)
+(add-hook 'prog-mode-hook 'origami-mode)
+
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -407,7 +408,6 @@ cons cell (regexp . minor-mode)."
 (use-package ruby-mode
   :config
   ;; (add-hook 'ruby-mode-hook 'subword-mode)
-
 
   (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
   (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
@@ -1280,9 +1280,6 @@ This command switches to browser."
    citre-auto-enable-citre-mode-modes '(prog-mode)
 )
 )
-
-(use-package origami)
-(add-hook 'prog-mode-hook 'origami-mode)
 
 (use-package projectile-rails
   :diminish projectile-rails-mode

@@ -191,7 +191,7 @@ can slow down Emacs startup if the shells scripts do too many things.
 It make things easier when the two match.
 #+BEGIN_SRC emacs-lisp
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
-(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES")
+(setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES") ;; for a bug with spring
 
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
@@ -216,8 +216,7 @@ It make things easier when the two match.
                    "/usr/bin/"
                    "/usr/local/sbin/"
                    "/opt/homebrew/opt/openjdk/bin/"
-                   "/usr/bin/"
-                   ,(concat home-folder "/.cargo/bin/"))) ;; /usr/bin/ is repeated because eshell does not consider last entry. Bug?
+                   ,(concat home-folder "/.cargo/bin/"))) ;; eshell does not consider last entry. Bug?
        )
 
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
@@ -229,7 +228,7 @@ Emacs can be really fast with large files too. The trick is to
 stick to fundamental mode and disable expensive minor modes.
 #+BEGIN_SRC emacs-lisp
 (defun check-large-file-hook ()
-  "If a file is over a given size, turn off minor modes."
+  "If a file is over a given size, and not a jpg, turn off minor modes."
   (when (and (> (buffer-size) (* 1024 100)) ;; 100K
              (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
         )
@@ -238,7 +237,6 @@ stick to fundamental mode and disable expensive minor modes.
     (setq buffer-read-only t)
     (buffer-disable-undo)))
 (add-hook 'find-file-hooks 'check-large-file-hook)
-
 
 ;; only support left to right languages.
 ;; this makes long lines in files not a problem anymore.
@@ -545,17 +543,23 @@ Enable ligatures on mac
 #+begin_src emacs-lisp
 (setq blink-matching-paren 'jump-offscreen)
 (show-paren-mode 1)
-
 #+end_src
 
-** Text size
+** Font
 
 Emacs makes it hard to select font with weight of Regular or Book.
 The trick is to just install the font weight you want and omit the medium and
 light weights. Medium and Light conflict with the Regular and Book versions
 
 ** Code Folding
-=set-selective-display=
+
+Use =set-selective-display=. With an argument to hide lines indented
+larger than argument. Without argument to clear
+
+#+begin_src emacs-lisp
+(use-package origami)
+(add-hook 'prog-mode-hook 'origami-mode)
+#+end_src
 
 * Regex
 
@@ -665,7 +669,6 @@ Auto-fill comments in prog modes
   :config
   ;; (add-hook 'ruby-mode-hook 'subword-mode)
 
-
   (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
   (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
   (use-package ruby-interpolation
@@ -682,8 +685,8 @@ Auto-fill comments in prog modes
 
 I learned about this on [[http://www.virtuouscode.com/2013/06/24/rubytapas-freebie-xmpfilter/][Ruby Tapas.]] Hit ~M-;~ twice adds a special
 comment for xmpfilter. Running ~xmp~ will evaluate the line and put
-the result after the comment. By default it does not work with Ruby
-enhanced mode so I made a fix for that.
+the result after the comment.
+This is to make it work with ruby-ts-mode and enh-ruby-mode
 #+BEGIN_SRC emacs-lisp
 (require 'rcodetools)
 (defadvice comment-dwim (around rct-hack activate)
@@ -741,12 +744,6 @@ enhanced mode so I made a fix for that.
 (use-package less-css-mode :mode "\\.less\\'")
 #+END_SRC
 ** JavaScript
-Node compilation errors messages are not understood by Emacs by
-default. All that's needed to make it work is to add a new regex
-describing what are the components of the messages.
-After running the compile command, you can navigate through the
-errors with ~next-error~ and ~previous-error~
-
 #+BEGIN_SRC emacs-lisp
 (setq js-indent-level 2)
 
@@ -1998,12 +1995,6 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package origami)
-(add-hook 'prog-mode-hook 'origami-mode)
-#+end_src
-
-
-#+begin_src emacs-lisp
 (use-package projectile-rails
   :diminish projectile-rails-mode
   :config
@@ -2048,6 +2039,15 @@ Speed up tramp
 #+end_src
 
 
+Some compilation errors messages are not understood by Emacs by
+default. All that's needed to make it work is to add a new regex
+describing what are the components of the messages.
+After running the compile command, you can navigate through the
+errors with ~next-error~ and ~previous-error~
+
+What I like to do is empty the compilation regexp list and add just
+the ones I need. Otherwise I can have matches in my compilation
+buffers that I don't want.
 #+begin_src emacs-lisp
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
