@@ -379,8 +379,34 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (load-theme 'solarized-dark))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
+  :custom-face
+  (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
+ (context-coloring-level-1-face ((t (:foreground "#ffaf00"))))
+ (context-coloring-level-2-face ((t (:foreground "#87af87"))))
+ (context-coloring-level-3-face ((t (:foreground "#d75f5f"))))
+ (context-coloring-level-4-face ((t (:foreground "#d787af"))))
+ (context-coloring-level-5-face ((t (:foreground "#ff8700"))))
+ (context-coloring-level-6-face ((t (:foreground "#5fafaf"))))
+ (eglot-mode-line ((t nil)))
+ (envrc-mode-line-error-face ((t (:weight bold))))
+ (envrc-mode-line-none-face ((t nil)))
+ (envrc-mode-line-on-face ((t (:weight bold))))
+ (fixed-pitch ((t (:family "MonoLisa Custom"))))
+ (flymake-error ((t nil)))
+ (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
+ (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
+ (highlight-blocks-depth-2-face ((t (:background "#1B354D"))))
+ (highlight-blocks-depth-3-face ((t (:background "#033624"))))
+ (highlight-blocks-depth-4-face ((t (:background "#03423E"))))
+ (highlight-blocks-depth-5-face ((t (:background "#420907"))))
+ (highlight-blocks-depth-6-face ((t (:background "#59110D"))))
+ (highlight-blocks-depth-7-face ((t (:background "gray35"))))
+ (highlight-blocks-depth-8-face ((t (:background "gray39"))))
+ (highlight-blocks-depth-9-face ((t (:background "gray44"))))
+ (mode-line-buffer-id ((t (:slant italic :weight bold))))
+ (xref-match ((t (:inherit match))))
   :config
   (load-theme 'gruvbox-dark-medium)
   )
@@ -389,7 +415,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 ;; (when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
@@ -411,7 +437,7 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
   (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
   (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.0))))
   (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :box (:line-width (2 . 2) :color "#4c7073") :height 1.1))))
-  (mode-line-buffer-id ((t (:foreground "#f0dfaf" :slant italic :weight bold))))
+  (mode-line-buffer-id ((t (:foreground "#383838" :slant italic :weight bold))))
   (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :box (:line-width (2 . 2) :color "#383838" :style flat-button) :height 1.1))))
   (org-block ((t (:extend t :background "#333333"))))
   (org-document-info-keyword ((t (:inherit shadow :height 1.3))))
@@ -1898,9 +1924,9 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(setq evil-insert-state-cursor '((bar . 2) "#97d88a")
-      evil-normal-state-cursor '(box "#ffaf00")
-      evil-visual-state-cursor '(box "#afcff1")
+(setq evil-insert-state-cursor '((bar . 2) "#ccdc90")
+      evil-normal-state-cursor '(box "#f0dfaf")
+      evil-visual-state-cursor '(box "#adcff1")
       evil-emacs-state-cursor '((bar . 2) "#ffffd7")
 
         )
@@ -1911,17 +1937,17 @@ Speed up tramp
 #+begin_src emacs-lisp
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#97d88a")
+  (cond ((evil-insert-state-p) "#ccdc90")
         ((evil-visual-state-p) "#adcff1")
-        ((evil-emacs-state-p) "#4c7073")
-        ((evil-normal-state-p) "#ffaf00")
+        ((evil-emacs-state-p) "#e89393")
+        ((evil-normal-state-p) "#f0dfaf")
         (t "#32302f")))
 
 (defun auray/fg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#262626")
         ((evil-visual-state-p) "#262626")
-        ((evil-emacs-state-p) "#ffffd7")
+        ((evil-emacs-state-p) "#262626")
         ((evil-normal-state-p) "#262626")
         (t "#ffffd7")))
 
