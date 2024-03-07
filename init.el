@@ -705,7 +705,8 @@ cons cell (regexp . minor-mode)."
   (general-define-key
    :keymaps 'override
 
-   "s-t" 'project-find-file
+   "s-t" 'counsel-fzf
+   "M-t" 'counsel-fzf
 
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
@@ -1406,3 +1407,6 @@ This command switches to browser."
 (use-package all-the-icons-dired
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+(use-package hideshow)
+(require 'hideshowvis)

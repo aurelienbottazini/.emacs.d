@@ -1008,7 +1008,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (general-define-key
    :keymaps 'override
 
-   "s-t" 'project-find-file
+   "s-t" 'counsel-fzf
+   "M-t" 'counsel-fzf
 
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
@@ -2127,6 +2128,11 @@ buffers that I don't want.
 (use-package all-the-icons-dired
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hideshow)
+(require 'hideshowvis)
 #+end_src
 
 # Local Variables:
