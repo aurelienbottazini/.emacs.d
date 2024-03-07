@@ -989,7 +989,7 @@ This command switches to browser."
 (add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
-(add-hook 'js-ts-mode-hook 'eglot-ensure)
+(add-hook 'ts-mode-hook 'eglot-ensure)
 
 (require 'eglot)
 
@@ -998,6 +998,25 @@ This command switches to browser."
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
+
+(define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
+  "A major mode for tsx.")
+
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescriptreact-mode)))
+
+(use-package eglot
+  :ensure t
+  :defer 3
+  :hook
+  ((js-mode
+    typescript-mode
+    typescriptreact-mode) . eglot-ensure)
+  :config
+  (cl-pushnew '((js-mode typescript-mode typescriptreact-mode) . ("typescript-language-server" "--stdio"))
+              eglot-server-programs
+              :test #'equal))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-from-kill
