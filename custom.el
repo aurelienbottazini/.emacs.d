@@ -416,6 +416,7 @@
  '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
  '(tab-bar-history-mode t)
  '(tab-bar-tab-hints t)
+ '(tags-add-tables nil)
  '(tool-bar-mode nil)
  '(treemacs-no-png-images nil)
  '(treemacs-position 'right)

@@ -180,7 +180,7 @@ with the reloading of those locals.
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+;; (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 #+end_src
 
 I like setting the path manually as other solutions like ~exec-path-from-shell~
@@ -2015,10 +2015,6 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)
@@ -2038,14 +2034,6 @@ Speed up tramp
    citre-auto-enable-citre-mode-modes '(prog-mode)
 )
 )
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package projectile-rails
-  :diminish projectile-rails-mode
-  :config
-  (projectile-rails-global-mode)
-(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
 #+end_src
 
 #+begin_src emacs-lisp

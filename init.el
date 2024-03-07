@@ -84,7 +84,7 @@
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+;; (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES") ;; for a bug with spring
@@ -1322,10 +1322,6 @@ This command switches to browser."
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)
@@ -1345,12 +1341,6 @@ This command switches to browser."
    citre-auto-enable-citre-mode-modes '(prog-mode)
 )
 )
-
-(use-package projectile-rails
-  :diminish projectile-rails-mode
-  :config
-  (projectile-rails-global-mode)
-(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
 
 (setq find-sibling-rules
       '(
