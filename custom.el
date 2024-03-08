@@ -444,8 +444,8 @@
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
  '(web-mode-auto-close-style 2)
- '(web-mode-code-indent-offset 0 t)
- '(web-mode-css-indent-offset 0 t)
+ '(web-mode-code-indent-offset 0)
+ '(web-mode-css-indent-offset 0)
  '(web-mode-enable-auto-expanding t)
  '(web-mode-enable-auto-opening t)
  '(web-mode-enable-auto-pairing t)
@@ -458,7 +458,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Monolisa Custom"))))
+ '(eglot-mode-line ((t (:weight bold))))
  '(envrc-mode-line-error-face ((t (:inherit mode-line :inverse-video t))))
  '(envrc-mode-line-none-face ((t (:inherit mode-line))))
+ '(error ((t (:foreground "#cc9393" :weight bold))))
+ '(flymake-error ((t (:background "#ecb3b3" :foreground "#6c3333" :underline (:color "#6c3333" :style wave :position nil)))))
  '(mode-line ((t (:background "#e89393" :foreground "#ffffd7" :height 1.1))))
  '(treemacs-hl-line-face ((t (:background "#f0dfaf" :foreground "#2b2b2b")))))

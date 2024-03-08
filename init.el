@@ -695,6 +695,8 @@ cons cell (regexp . minor-mode)."
    :states 'normal
    "[[" 'previous-buffer
    "]]" 'next-buffer
+   "[e" 'flymake-goto-prev-error
+   "]e" 'flymake-goto-next-error
    )
 
   (general-define-key
@@ -1355,20 +1357,22 @@ This command switches to browser."
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
 
-(setq-default mode-line-buffer-identification
-              (let ((orig  (car mode-line-buffer-identification)))
-                `(:eval (cons (concat (abbreviate-file-name default-directory) ,orig)
-                              (cdr mode-line-buffer-identification)))))
-
 (setq-default cursor-type 'bar)
 
 (use-package flymake-eslint
   :config
 
-(add-hook 'web-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'js2-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-ts-mode-hook  (lambda () (flymake-eslint-enable))))
+  (defun os/enable-eslint-if-typescript ()
+ "Enable eslint if typescript mode"
+ (when (or
+           (eq major-mode 'typescript-ts-mode)
+           (eq major-mode 'typescript-mode)
+           (eq major-mode 'js2-mode)
+           (eq major-mode 'web-mode)
+           )
+   (flymake-eslint-enable)))
+
+(add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
 
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
@@ -1419,3 +1423,7 @@ This command switches to browser."
 
 (use-package hideshow)
 (require 'hideshowvis)
+
+(setq frame-title-format
+      `((buffer-file-name "%f" "%b")
+        ))
