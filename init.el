@@ -84,7 +84,7 @@
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+;; (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
 (setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES") ;; for a bug with spring
@@ -695,6 +695,8 @@ cons cell (regexp . minor-mode)."
    :states 'normal
    "[[" 'previous-buffer
    "]]" 'next-buffer
+   "[e" 'flymake-goto-prev-error
+   "]e" 'flymake-goto-next-error
    )
 
   (general-define-key
@@ -705,7 +707,8 @@ cons cell (regexp . minor-mode)."
   (general-define-key
    :keymaps 'override
 
-   "s-t" 'project-find-file
+   "s-t" 'counsel-fzf
+   "M-t" 'counsel-fzf
 
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
@@ -988,7 +991,7 @@ This command switches to browser."
 (add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
-(add-hook 'js-ts-mode-hook 'eglot-ensure)
+(add-hook 'ts-mode-hook 'eglot-ensure)
 
 (require 'eglot)
 
@@ -997,6 +1000,25 @@ This command switches to browser."
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
+
+(define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
+  "A major mode for tsx.")
+
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescriptreact-mode)))
+
+(use-package eglot
+  :ensure t
+  :defer 3
+  :hook
+  ((js-mode
+    typescript-mode
+    typescriptreact-mode) . eglot-ensure)
+  :config
+  (cl-pushnew '((js-mode typescript-mode typescriptreact-mode) . ("typescript-language-server" "--stdio"))
+              eglot-server-programs
+              :test #'equal))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-from-kill
@@ -1302,10 +1324,6 @@ This command switches to browser."
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)
@@ -1326,12 +1344,6 @@ This command switches to browser."
 )
 )
 
-(use-package projectile-rails
-  :diminish projectile-rails-mode
-  :config
-  (projectile-rails-global-mode)
-(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
-
 (setq find-sibling-rules
       '(
                ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
@@ -1345,20 +1357,22 @@ This command switches to browser."
                ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
                ))
 
-(setq-default mode-line-buffer-identification
-              (let ((orig  (car mode-line-buffer-identification)))
-                `(:eval (cons (concat (abbreviate-file-name default-directory) ,orig)
-                              (cdr mode-line-buffer-identification)))))
-
 (setq-default cursor-type 'bar)
 
 (use-package flymake-eslint
   :config
 
-(add-hook 'web-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'js2-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-ts-mode-hook  (lambda () (flymake-eslint-enable))))
+  (defun os/enable-eslint-if-typescript ()
+ "Enable eslint if typescript mode"
+ (when (or
+           (eq major-mode 'typescript-ts-mode)
+           (eq major-mode 'typescript-mode)
+           (eq major-mode 'js2-mode)
+           (eq major-mode 'web-mode)
+           )
+   (flymake-eslint-enable)))
+
+(add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
 
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
@@ -1406,3 +1420,10 @@ This command switches to browser."
 (use-package all-the-icons-dired
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+(use-package hideshow)
+(require 'hideshowvis)
+
+(setq frame-title-format
+      `((buffer-file-name "%f" "%b")
+        ))

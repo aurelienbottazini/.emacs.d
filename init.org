@@ -180,7 +180,7 @@ with the reloading of those locals.
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
+;; (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
 #+end_src
 
 I like setting the path manually as other solutions like ~exec-path-from-shell~
@@ -998,6 +998,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    :states 'normal
    "[[" 'previous-buffer
    "]]" 'next-buffer
+   "[e" 'flymake-goto-prev-error
+   "]e" 'flymake-goto-next-error
    )
 
   (general-define-key
@@ -1008,7 +1010,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (general-define-key
    :keymaps 'override
 
-   "s-t" 'project-find-file
+   "s-t" 'counsel-fzf
+   "M-t" 'counsel-fzf
 
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
@@ -1516,7 +1519,7 @@ IDE code analysis but it works surprisingly well.
 (add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'js2-mode-hook 'eglot-ensure)
-(add-hook 'js-ts-mode-hook 'eglot-ensure)
+(add-hook 'ts-mode-hook 'eglot-ensure)
 
 (require 'eglot)
 
@@ -1525,6 +1528,25 @@ IDE code analysis but it works surprisingly well.
   :hook
   (ruby-ts-mode . rubocopfmt-mode)
   (ruby-mode . rubocopfmt-mode))
+
+(define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
+  "A major mode for tsx.")
+
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescriptreact-mode)))
+
+(use-package eglot
+  :ensure t
+  :defer 3
+  :hook
+  ((js-mode
+    typescript-mode
+    typescriptreact-mode) . eglot-ensure)
+  :config
+  (cl-pushnew '((js-mode typescript-mode typescriptreact-mode) . ("typescript-language-server" "--stdio"))
+              eglot-server-programs
+              :test #'equal))
 #+end_src
 
 * Completion
@@ -1995,10 +2017,6 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1))
 (use-package citre
   :init
   ;; (require 'citre-config)
@@ -2021,14 +2039,6 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package projectile-rails
-  :diminish projectile-rails-mode
-  :config
-  (projectile-rails-global-mode)
-(define-key projectile-rails-mode-map (kbd "C-c n") 'projectile-rails-command-map))
-#+end_src
-
-#+begin_src emacs-lisp
 (setq find-sibling-rules
       '(
                ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
@@ -2043,7 +2053,7 @@ Speed up tramp
                ))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (setq-default mode-line-buffer-identification
               (let ((orig  (car mode-line-buffer-identification)))
                 `(:eval (cons (concat (abbreviate-file-name default-directory) ,orig)
@@ -2058,10 +2068,17 @@ Speed up tramp
 (use-package flymake-eslint
   :config
 
-(add-hook 'web-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'js2-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-mode-hook  (lambda () (flymake-eslint-enable)))
-(add-hook 'typescript-ts-mode-hook  (lambda () (flymake-eslint-enable))))
+  (defun os/enable-eslint-if-typescript ()
+ "Enable eslint if typescript mode"
+ (when (or
+           (eq major-mode 'typescript-ts-mode)
+           (eq major-mode 'typescript-mode)
+           (eq major-mode 'js2-mode)
+           (eq major-mode 'web-mode)
+           )
+   (flymake-eslint-enable)))
+
+(add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
 #+end_src
 
 
@@ -2127,6 +2144,17 @@ buffers that I don't want.
 (use-package all-the-icons-dired
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hideshow)
+(require 'hideshowvis)
+#+end_src
+
+#+begin_src emacs-lisp
+(setq frame-title-format
+      `((buffer-file-name "%f" "%b")
+        ))
 #+end_src
 
 # Local Variables:
