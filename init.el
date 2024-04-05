@@ -225,55 +225,36 @@
   (interactive)
   (auray/tmux-move "D"))
 
-;; (when (display-graphic-p)
-(use-package zenburn-theme
+(use-package gruvbox-theme
   :custom-face
-  (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
-  (font-lock-comment-face ((t (:foreground "#7F9F7F" :slant italic))))
-  (hi-aquamarine ((t (:background "aquamarine" :foreground "black"))))
-  (hi-salmon ((t (:background "light salmon" :foreground "black"))))
-  (hlt-property-highlight ((t (:background "Wheat" :foreground "black"))))
-  (hlt-regexp-level-1 ((t (:background "#FA6CC847FFFF" :foreground "black"))))
-  (hlt-regexp-level-2 ((t (:background "#C847FFFFE423" :foreground "black"))))
-  (hlt-regexp-level-3 ((t (:background "#C847D8FEFFFF" :foreground "black"))))
-  (hlt-regexp-level-4 ((t (:background "#EF47FFFFC847" :foreground "black"))))
-  (hlt-regexp-level-5 ((t (:background "#FCFCE1E1FFFF" :foreground "black"))))
-  (hlt-regexp-level-6 ((t (:background "#E1E1FFFFF0F0" :foreground "black"))))
-  (hlt-regexp-level-7 ((t (:background "#E1E1EAEAFFFF" :foreground "black"))))
-  (hlt-regexp-level-8 ((t (:background "#F6F5FFFFE1E1" :foreground "black"))))
-  (lsp-modeline-code-actions-face ((t (:inherit warning))))
-  (lsp-ui-doc-background ((t (:background "#2b2b2b"))))
-  (minibuffer-prompt ((t (:foreground "#F0DFAF" :height 1.0))))
-  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :height 1.0))))
-  (mode-line ((t (:background "#4c7073" :foreground "#dcdccc" :height 1.0))))
-  (mode-line-buffer-id ((t (:foreground "#383838" :slant italic :weight bold))))
-  (mode-line-inactive ((t (:background "#383838" :foreground "#5F7F5F" :height 1.0))))
-  (org-block ((t (:extend t :background "#333333"))))
-  (org-document-info-keyword ((t (:inherit shadow :height 1.3))))
-  (org-document-title ((t (:inherit default :foreground "#8CD0D3" :weight bold :height 1.3))))
-  (org-drawer ((t (:foreground "#f0dfaf"))))
-  (org-level-1 ((t (:inherit outline-1 :extend nil :height 1.3))))
-  (org-level-2 ((t (:inherit outline-2 :extend nil :height 1.1))))
-  (org-level-3 ((t (:inherit default :extend nil :foreground "#7CB8BB" :slant italic :height 1.1))))
-  (org-meta-line ((t (:inherit font-lock-comment-face :height 1.1))))
-  (region ((t (:extend t :background "#adcff1" :foreground "black"))))
-  (tab-bar ((t (:inherit nil :background "#88b090" :foreground "#2e3330" :slant italic :height 1.0))))
-  (tab-bar-tab ((t (:inherit tab-bar :background "#ccdc90" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style pressed-button) :weight bold))))
-  (tab-bar-tab-group-current ((t (:inherit tab-bar-tab :background "#ccdc90"))))
-  (tab-bar-tab-inactive ((t (:inherit tab-bar-tab :background "#88b090" :foreground "#3f3f3f" :box (:line-width (3 . 3) :style released-button) :slant normal))))
-  (tab-line ((t (:inherit variable-pitch :background "#2c302d" :foreground "#dcdccc" :height 0.9))))
-  (tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
-  (tab-line-tab ((t (:inherit tab-line :box (:line-width (1 . 1) :style released-button)))))
-  (tab-line-tab-current ((t (:inherit tab-line-tab :background "#262626" :foreground "#dcdccc"))))
-  (tab-line-tab-inactive ((t (:inherit tab-line-tab))))
-  (tab-line-tab-modified ((t (:foreground "#e89393"))))
-  (web-mode-html-tag-bracket-face ((t (:foreground "#8f8f8f"))))
-  (highlight ((t (:background "#f0dfaf" :foreground "black"))))
+  (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
+ (context-coloring-level-1-face ((t (:foreground "#ffaf00"))))
+ (context-coloring-level-2-face ((t (:foreground "#87af87"))))
+ (context-coloring-level-3-face ((t (:foreground "#d75f5f"))))
+ (context-coloring-level-4-face ((t (:foreground "#d787af"))))
+ (context-coloring-level-5-face ((t (:foreground "#ff8700"))))
+ (context-coloring-level-6-face ((t (:foreground "#5fafaf"))))
+ (eglot-mode-line ((t nil)))
+ (envrc-mode-line-error-face ((t (:weight bold))))
+ (envrc-mode-line-none-face ((t nil)))
+ (envrc-mode-line-on-face ((t (:weight bold))))
+ (fixed-pitch ((t (:family "MonoLisa Custom"))))
+ (flymake-error ((t nil)))
+ (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
+ (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
+ (highlight-blocks-depth-2-face ((t (:background "#1B354D"))))
+ (highlight-blocks-depth-3-face ((t (:background "#033624"))))
+ (highlight-blocks-depth-4-face ((t (:background "#03423E"))))
+ (highlight-blocks-depth-5-face ((t (:background "#420907"))))
+ (highlight-blocks-depth-6-face ((t (:background "#59110D"))))
+ (highlight-blocks-depth-7-face ((t (:background "gray35"))))
+ (highlight-blocks-depth-8-face ((t (:background "gray39"))))
+ (highlight-blocks-depth-9-face ((t (:background "gray44"))))
+ (mode-line-buffer-id ((t (:slant italic :weight bold))))
+ (xref-match ((t (:inherit match))))
   :config
-  (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
-  (load-theme 'zenburn t)
+  (load-theme 'gruvbox-dark-medium)
   )
-;; )
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -1410,16 +1391,16 @@ This command switches to browser."
 (setq-default truncate-lines t)
 
 (use-package treemacs)
-(use-package all-the-icons
-  :if (display-graphic-p))
-(use-package treemacs-all-the-icons
-  :config
-  (treemacs-load-theme "all-the-icons"))
+;; (use-package all-the-icons
+;;   :if (display-graphic-p))
+;; (use-package treemacs-all-the-icons
+;;   :config
+;;   (treemacs-load-theme "all-the-icons"))
 (use-package treemacs-evil)
 
-(use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+;; (use-package all-the-icons-dired
+;;   :config
+;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 (use-package hideshow)
 (require 'hideshowvis)
