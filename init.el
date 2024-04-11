@@ -650,7 +650,7 @@ cons cell (regexp . minor-mode)."
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'counsel-fzf
+    "p" 'project-find-file
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
