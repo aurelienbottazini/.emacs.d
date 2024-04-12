@@ -379,7 +379,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (load-theme 'solarized-dark))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package gruvbox-theme
   :custom-face
   (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
@@ -415,8 +415,8 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
 Zenburn is one of the most complete theme out there. It also works
 well on the terminal.
 https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
-#+begin_src emacs-lisp :tangle yes
-;; (when (display-graphic-p)
+#+begin_src emacs-lisp :tangle no
+(when (display-graphic-p)
 (use-package zenburn-theme
   :custom-face
   (cider-debug-code-overlay-face ((t (:background "grey80" :foreground "black"))))
@@ -464,7 +464,7 @@ https://en.wikipedia.org/wiki/Wikipedia:Zenburn.
   (setq auray/default-color '("#2b2b2b" "#8fb28f" . "#f0dfaf"))
   (load-theme 'zenburn t)
   )
-;; )
+ )
 #+end_src
 
 * Utility functions
@@ -972,7 +972,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
     "s" 'find-sibling-file
-    "p" 'counsel-fzf
+    "p" 'project-find-file
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
     "rq" 'eglot-code-action-quickfix
@@ -2134,16 +2134,16 @@ buffers that I don't want.
 
 #+begin_src emacs-lisp
 (use-package treemacs)
-(use-package all-the-icons
-  :if (display-graphic-p))
-(use-package treemacs-all-the-icons
-  :config
-  (treemacs-load-theme "all-the-icons"))
+;; (use-package all-the-icons
+;;   :if (display-graphic-p))
+;; (use-package treemacs-all-the-icons
+;;   :config
+;;   (treemacs-load-theme "all-the-icons"))
 (use-package treemacs-evil)
 
-(use-package all-the-icons-dired
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+;; (use-package all-the-icons-dired
+;;   :config
+;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+end_src
 
 #+begin_src emacs-lisp
