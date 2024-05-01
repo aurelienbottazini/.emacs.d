@@ -1255,10 +1255,10 @@ This command switches to browser."
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#ccdc90")
+  (cond ((evil-insert-state-p) "#c4c431")
         ((evil-visual-state-p) "#adcff1")
         ((evil-emacs-state-p) "#e89393")
-        ((evil-normal-state-p) "#f0dfaf")
+        ((evil-normal-state-p) "#dfa82e")
         (t "#32302f")))
 
 (defun auray/fg-modeline-color-from-evil-state ()

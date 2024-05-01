@@ -462,7 +462,7 @@
  '(envrc-mode-line-none-face ((t (:inherit mode-line))))
  '(error ((t (:foreground "#cc9393" :weight bold))))
  '(flymake-error ((t (:background "#ecb3b3" :foreground "#6c3333" :underline (:color "#6c3333" :style wave :position nil)))))
- '(mode-line ((t (:background "#e89393" :foreground "#ffffd7" :height 1.1))))
+ '(mode-line ((t (:background "#e89393" :foreground "#dfa82e" :height 1.1))))
  '(org-meta-line ((t (:inherit font-lock-comment-face :height 0.9))))
  '(org-tag ((t (:background "#f0dfaf" :foreground "#383838" :weight bold))))
  '(treemacs-hl-line-face ((t (:background "#f0dfaf" :foreground "#2b2b2b")))))
