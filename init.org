@@ -393,7 +393,6 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
  (envrc-mode-line-error-face ((t (:weight bold))))
  (envrc-mode-line-none-face ((t nil)))
  (envrc-mode-line-on-face ((t (:weight bold))))
- (fixed-pitch ((t (:family "MonoLisa Custom"))))
  (flymake-error ((t nil)))
  (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
  (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
@@ -739,7 +738,6 @@ This is to make it work with ruby-ts-mode and enh-ruby-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
-  :mode "\\.html\\'"
   :mode "\\.gohtml\\'"
   :mode "\\.erb\\'"
   :config
@@ -2124,6 +2122,7 @@ buffers that I don't want.
 
 #+begin_src emacs-lisp
 (use-package envrc
+  :diminish envrc-mode
   :config
   (envrc-global-mode))
 #+end_src
@@ -2155,6 +2154,19 @@ buffers that I don't want.
 (setq frame-title-format
       `((buffer-file-name "%f" "%b")
         ))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-download
+  :config
+(add-hook 'dired-mode-hook 'org-download-enable)
+  )
+
+(setq org-cite-global-bibliography '("~/Dropbox/notes/books.bib"))
+(use-package org-ref
+  :config
+  (require 'org-ref-isbn))
+(use-package biblio)
 #+end_src
 
 # Local Variables:

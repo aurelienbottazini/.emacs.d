@@ -238,7 +238,6 @@
  (envrc-mode-line-error-face ((t (:weight bold))))
  (envrc-mode-line-none-face ((t nil)))
  (envrc-mode-line-on-face ((t (:weight bold))))
- (fixed-pitch ((t (:family "MonoLisa Custom"))))
  (flymake-error ((t nil)))
  (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
  (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
@@ -466,7 +465,6 @@ cons cell (regexp . minor-mode)."
   :mode "\\.go\\'")
 
 (use-package web-mode
-  :mode "\\.html\\'"
   :mode "\\.gohtml\\'"
   :mode "\\.erb\\'"
   :config
@@ -1385,6 +1383,7 @@ This command switches to browser."
       (cons 'rspec compilation-error-regexp-alist))
 
 (use-package envrc
+  :diminish envrc-mode
   :config
   (envrc-global-mode))
 
@@ -1408,3 +1407,14 @@ This command switches to browser."
 (setq frame-title-format
       `((buffer-file-name "%f" "%b")
         ))
+
+(use-package org-download
+  :config
+(add-hook 'dired-mode-hook 'org-download-enable)
+  )
+
+(setq org-cite-global-bibliography '("~/Dropbox/notes/books.bib"))
+(use-package org-ref
+  :config
+  (require 'org-ref-isbn))
+(use-package biblio)
