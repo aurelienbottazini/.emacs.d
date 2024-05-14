@@ -457,15 +457,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
  '(envrc-mode-line-error-face ((t (:inherit mode-line :inverse-video t))))
  '(envrc-mode-line-none-face ((t (:inherit mode-line))))
  '(error ((t (:foreground "#cc9393" :weight bold))))
- '(fixed-pitch ((t (:family "MonoLisa v2 variable custom"))))
  '(flymake-error ((t (:background "#ecb3b3" :foreground "#6c3333" :underline (:color "#6c3333" :style wave :position nil)))))
- '(mode-line ((t (:background "#e89393" :foreground "#dfa82e" :height 1.1))))
- '(org-meta-line ((t (:inherit font-lock-comment-face :height 0.9))))
+ '(mode-line ((t (:background "#e89393" :foreground "#383838" :height 1.0))))
+ '(org-meta-line ((t (:inherit font-lock-comment-face :height 1.0))))
  '(org-tag ((t (:background "#f0dfaf" :foreground "#383838" :weight bold))))
- '(show-paren-match ((t (:background "#665c54" :foreground "#83a598" :weight normal))))
+ '(show-paren-match ((t (:background "#665c54" :foreground "#83a598" :weight bold))))
  '(show-paren-mismatch ((t (:background "#fb4933" :foreground "#665c54"))))
  '(treemacs-hl-line-face ((t (:background "#f0dfaf" :foreground "#2b2b2b")))))
