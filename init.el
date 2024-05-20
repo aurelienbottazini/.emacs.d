@@ -1418,3 +1418,11 @@ This command switches to browser."
   :config
   (require 'org-ref-isbn))
 (use-package biblio)
+
+(when (and (image-type-available-p 'image-io)
+                (not (boundp 'imagemagick-render-type)))
+        ;; Image I/O is used as a fallback of ImageMagick.
+        (setq imagemagick-enabled-types t)
+        (setq imagemagick-types-inhibit
+              (cons 'XML (delq 'PDF imagemagick-types-inhibit)))
+        (imagemagick-register-types))

@@ -2169,6 +2169,16 @@ buffers that I don't want.
 (use-package biblio)
 #+end_src
 
+#+begin_src emacs-lisp
+(when (and (image-type-available-p 'image-io)
+                (not (boundp 'imagemagick-render-type)))
+        ;; Image I/O is used as a fallback of ImageMagick.
+        (setq imagemagick-enabled-types t)
+        (setq imagemagick-types-inhibit
+              (cons 'XML (delq 'PDF imagemagick-types-inhibit)))
+        (imagemagick-register-types))
+#+end_src
+
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda () (org-babel-tangle)) nil t)
 # End:
