@@ -1251,6 +1251,23 @@ This command switches to browser."
 
         )
 
+(defun find-file-right (filename)
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (find-file filename))
+
+(defun find-file-below (filename)
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (find-file filename))
+
+(ivy-set-actions
+ t
+ '(("|" find-file-right "open right")
+   ("%" find-file-below "open below")))
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#c4c431")

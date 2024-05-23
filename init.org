@@ -1953,6 +1953,25 @@ Speed up tramp
         )
 #+end_src
 
+#+begin_src emacs-lisp
+(defun find-file-right (filename)
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (find-file filename))
+
+(defun find-file-below (filename)
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (find-file filename))
+
+(ivy-set-actions
+ t
+ '(("|" find-file-right "open right")
+   ("%" find-file-below "open below")))
+#+end_src
+
 * Local variables
 
 #+begin_src emacs-lisp
