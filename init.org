@@ -2148,7 +2148,7 @@ buffers that I don't want.
 #+end_src
 
 #+begin_src emacs-lisp
-(setq-default truncate-lines t)
+(setq-default truncate-lines nil)
 #+end_src
 
 #+begin_src emacs-lisp

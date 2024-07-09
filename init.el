@@ -1404,7 +1404,7 @@ This command switches to browser."
   :config
   (envrc-global-mode))
 
-(setq-default truncate-lines t)
+(setq-default truncate-lines nil)
 
 (use-package treemacs)
 ;; (use-package all-the-icons
