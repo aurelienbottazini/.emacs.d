@@ -457,7 +457,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
  '(eglot-mode-line ((t (:inherit nil :weight bold))))
  '(envrc-mode-line-error-face ((t (:inherit mode-line :inverse-video t))))
  '(envrc-mode-line-none-face ((t (:inherit mode-line))))
