@@ -707,7 +707,7 @@ cons cell (regexp . minor-mode)."
    "C-k" 'tmux-move-up
 
    "C-r" 'undo-redo
-   "C-s" 'swiper-isearch
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1224,7 +1224,7 @@ This command switches to browser."
   :diminish counsel-mode ivy-mode
   :config
   (ivy-mode t)
-  (define-key ivy-minibuffer-map (kbd "C-c r") 'ivy-restrict-to-matches)
+  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
   (counsel-mode t))
 
 (require 'tramp)

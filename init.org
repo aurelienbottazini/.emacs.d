@@ -1030,7 +1030,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-k" 'tmux-move-up
 
    "C-r" 'undo-redo
-   "C-s" 'swiper-isearch
+   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
 
@@ -1911,7 +1911,7 @@ Jump to matching pairs with ~%~.
   :diminish counsel-mode ivy-mode
   :config
   (ivy-mode t)
-  (define-key ivy-minibuffer-map (kbd "C-c r") 'ivy-restrict-to-matches)
+  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
   (counsel-mode t))
 #+end_src
 
