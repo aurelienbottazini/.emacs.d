@@ -1972,6 +1972,12 @@ Speed up tramp
    ("%" find-file-below "open below")))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package hyperbole
+  :config
+  (hyperbole-mode 1))
+#+end_src
+
 * Local variables
 
 #+begin_src emacs-lisp

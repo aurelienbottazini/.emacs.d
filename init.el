@@ -1268,6 +1268,10 @@ This command switches to browser."
  '(("|" find-file-right "open right")
    ("%" find-file-below "open below")))
 
+(use-package hyperbole
+  :config
+  (hyperbole-mode 1))
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#c4c431")
