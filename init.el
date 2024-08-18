@@ -641,6 +641,7 @@ cons cell (regexp . minor-mode)."
     :keymaps 'override
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture nil "n"))
+    "d" 'dired-jump
     "e" 'er/expand-region
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
