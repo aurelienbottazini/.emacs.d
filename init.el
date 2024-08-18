@@ -646,8 +646,9 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "k" 'recompile
-    "gg" 'magit-status
-    "gf" 'magit-file-dispatch
+    "g" 'magit-dispatch
+    "Gg" 'magit-status
+    "Gf" 'magit-file-dispatch
     "s" 'find-sibling-file
     "p" 'project-find-file
     "f" 'counsel-rg
