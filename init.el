@@ -48,6 +48,7 @@
   (diminish 'org-indent-mode)
   (diminish 'visual-line-mode)
   (diminish 'org-indent-mode)
+  (diminish 'abbrev-mode)
   (diminish 'eldoc-mode))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -1272,6 +1273,7 @@ This command switches to browser."
    ("%" find-file-below "open below")))
 
 (use-package hyperbole
+  :diminish hyperbole-mode
   :config
   (hyperbole-mode 1))
 

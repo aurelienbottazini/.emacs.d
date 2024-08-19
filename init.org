@@ -109,6 +109,7 @@ You can get the time it took for emacs to start with.
   (diminish 'org-indent-mode)
   (diminish 'visual-line-mode)
   (diminish 'org-indent-mode)
+  (diminish 'abbrev-mode)
   (diminish 'eldoc-mode))
 #+END_SRC
 
@@ -1977,6 +1978,7 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (use-package hyperbole
+  :diminish hyperbole-mode
   :config
   (hyperbole-mode 1))
 #+end_src
