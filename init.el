@@ -1275,6 +1275,8 @@ This command switches to browser."
   :config
   (hyperbole-mode 1))
 
+(use-package vterm)
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#c4c431")
