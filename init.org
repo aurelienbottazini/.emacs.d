@@ -603,6 +603,7 @@ larger than argument. Without argument to clear
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
+(add-hook 'org-mode-hook 'abbrev-mode)
 #+end_src
 
 * Windows

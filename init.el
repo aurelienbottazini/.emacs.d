@@ -355,6 +355,7 @@ cons cell (regexp . minor-mode)."
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
+(add-hook 'org-mode-hook 'abbrev-mode)
 
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
