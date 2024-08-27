@@ -226,36 +226,6 @@
   (interactive)
   (auray/tmux-move "D"))
 
-(use-package gruvbox-theme
-  :custom-face
-  (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
- (context-coloring-level-1-face ((t (:foreground "#ffaf00"))))
- (context-coloring-level-2-face ((t (:foreground "#87af87"))))
- (context-coloring-level-3-face ((t (:foreground "#d75f5f"))))
- (context-coloring-level-4-face ((t (:foreground "#d787af"))))
- (context-coloring-level-5-face ((t (:foreground "#ff8700"))))
- (context-coloring-level-6-face ((t (:foreground "#5fafaf"))))
- (eglot-mode-line ((t nil)))
- (envrc-mode-line-error-face ((t (:weight bold))))
- (envrc-mode-line-none-face ((t nil)))
- (envrc-mode-line-on-face ((t (:weight bold))))
- (flymake-error ((t nil)))
- (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
- (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
- (highlight-blocks-depth-2-face ((t (:background "#1B354D"))))
- (highlight-blocks-depth-3-face ((t (:background "#033624"))))
- (highlight-blocks-depth-4-face ((t (:background "#03423E"))))
- (highlight-blocks-depth-5-face ((t (:background "#420907"))))
- (highlight-blocks-depth-6-face ((t (:background "#59110D"))))
- (highlight-blocks-depth-7-face ((t (:background "gray35"))))
- (highlight-blocks-depth-8-face ((t (:background "gray39"))))
- (highlight-blocks-depth-9-face ((t (:background "gray44"))))
- (mode-line-buffer-id ((t (:slant italic :weight bold))))
- (xref-match ((t (:inherit match))))
-  :config
-  (load-theme 'gruvbox-dark-medium)
-  )
-
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)
@@ -644,7 +614,7 @@ cons cell (regexp . minor-mode)."
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture nil "n"))
     "d" 'dired-jump
-    "e" 'er/expand-region
+    "e" 'recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "k" 'recompile
@@ -658,7 +628,8 @@ cons cell (regexp . minor-mode)."
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
-    "w" 'er/contract-region
+    "w" 'er/expand-region
+    "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
     )
@@ -1248,10 +1219,10 @@ This command switches to browser."
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 
-(setq evil-insert-state-cursor '((bar . 2) "#ccdc90")
-      evil-normal-state-cursor '(box "#f0dfaf")
-      evil-visual-state-cursor '(box "#adcff1")
-      evil-emacs-state-cursor '((bar . 2) "#ffffd7")
+(setq evil-insert-state-cursor '((bar . 2) "#000")
+      evil-normal-state-cursor '(box "#000")
+      evil-visual-state-cursor '(box "blue")
+      evil-emacs-state-cursor '((box . 2) "#000")
 
         )
 
@@ -1281,19 +1252,19 @@ This command switches to browser."
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#c4c431")
-        ((evil-visual-state-p) "#adcff1")
-        ((evil-emacs-state-p) "#e89393")
-        ((evil-normal-state-p) "#dfa82e")
-        (t "#32302f")))
+  (cond ((evil-insert-state-p) "light green")
+        ((evil-visual-state-p) "light sky blue")
+        ((evil-emacs-state-p) "light pink")
+        ((evil-normal-state-p) "moccasin")
+        (t "#000")))
 
 (defun auray/fg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#262626")
-        ((evil-visual-state-p) "#262626")
-        ((evil-emacs-state-p) "#262626")
-        ((evil-normal-state-p) "#262626")
-        (t "#ffffd7")))
+  (cond ((evil-insert-state-p) "#000")
+        ((evil-visual-state-p) "#000")
+        ((evil-emacs-state-p) "#000")
+        ((evil-normal-state-p) "#000")
+        (t "#fff")))
 
 (defun auray/post-command-evil-modeline-colors-hook ()
   (interactive)

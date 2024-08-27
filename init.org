@@ -381,7 +381,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (load-theme 'solarized-dark))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
   :custom-face
   (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
@@ -967,7 +967,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture nil "n"))
     "d" 'dired-jump
-    "e" 'er/expand-region
+    "e" 'recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "k" 'recompile
@@ -981,7 +981,8 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
-    "w" 'er/contract-region
+    "w" 'er/expand-region
+    "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
     )
@@ -1949,10 +1950,10 @@ Speed up tramp
 #+end_src
 
 #+begin_src emacs-lisp
-(setq evil-insert-state-cursor '((bar . 2) "#ccdc90")
-      evil-normal-state-cursor '(box "#f0dfaf")
-      evil-visual-state-cursor '(box "#adcff1")
-      evil-emacs-state-cursor '((bar . 2) "#ffffd7")
+(setq evil-insert-state-cursor '((bar . 2) "#000")
+      evil-normal-state-cursor '(box "#000")
+      evil-visual-state-cursor '(box "blue")
+      evil-emacs-state-cursor '((box . 2) "#000")
 
         )
 #+end_src
@@ -1992,19 +1993,19 @@ Speed up tramp
 #+begin_src emacs-lisp
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#c4c431")
-        ((evil-visual-state-p) "#adcff1")
-        ((evil-emacs-state-p) "#e89393")
-        ((evil-normal-state-p) "#dfa82e")
-        (t "#32302f")))
+  (cond ((evil-insert-state-p) "light green")
+        ((evil-visual-state-p) "light sky blue")
+        ((evil-emacs-state-p) "light pink")
+        ((evil-normal-state-p) "moccasin")
+        (t "#000")))
 
 (defun auray/fg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "#262626")
-        ((evil-visual-state-p) "#262626")
-        ((evil-emacs-state-p) "#262626")
-        ((evil-normal-state-p) "#262626")
-        (t "#ffffd7")))
+  (cond ((evil-insert-state-p) "#000")
+        ((evil-visual-state-p) "#000")
+        ((evil-emacs-state-p) "#000")
+        ((evil-normal-state-p) "#000")
+        (t "#fff")))
 
 (defun auray/post-command-evil-modeline-colors-hook ()
   (interactive)
