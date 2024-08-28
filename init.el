@@ -618,9 +618,8 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "k" 'recompile
-    "g" 'magit-dispatch
-    "Gg" 'magit-status
-    "Gf" 'magit-file-dispatch
+    "g" 'magit-status
+    "G" 'magit-file-dispatch
     "s" 'find-sibling-file
     "p" 'project-find-file
     "f" 'counsel-rg
