@@ -1003,6 +1003,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "]]" 'next-buffer
    "[e" 'flymake-goto-prev-error
    "]e" 'flymake-goto-next-error
+    ":" 'counsel-M-x
    )
 
   (general-define-key
@@ -1982,11 +1983,6 @@ Speed up tramp
   :config
   (hyperbole-mode 1))
 #+end_src
-
-#+begin_src emacs-lisp
-(use-package vterm)
-#+end_src
-
 * Local variables
 
 #+begin_src emacs-lisp

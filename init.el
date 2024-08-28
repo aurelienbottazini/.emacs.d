@@ -650,6 +650,7 @@ cons cell (regexp . minor-mode)."
    "]]" 'next-buffer
    "[e" 'flymake-goto-prev-error
    "]e" 'flymake-goto-next-error
+    ":" 'counsel-M-x
    )
 
   (general-define-key
@@ -1246,8 +1247,6 @@ This command switches to browser."
   :diminish hyperbole-mode
   :config
   (hyperbole-mode 1))
-
-(use-package vterm)
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
