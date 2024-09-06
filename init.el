@@ -703,10 +703,10 @@ cons cell (regexp . minor-mode)."
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
    "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-   "C-c jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
-   "C-c jp" (lambda () (interactive) (find-file "~/projects/"))
+   "C-c ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
+   "C-c jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
+   "C-c jp" (lambda () (interactive) (find-file "~/projects/")gtd)
    "C-c jw" (lambda () (interactive) (find-file "~/work"))
-   "C-c jj" 'dired-jump
    "C-c k" 'recompile
    "C-c K" 'compile
    "C-c l" 'org-store-link
