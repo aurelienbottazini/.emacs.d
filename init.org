@@ -381,7 +381,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (load-theme 'solarized-dark))
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (use-package gruvbox-theme
   :custom-face
   (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
@@ -965,7 +965,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     :states 'normal
     :keymaps 'override
     "1" 'treemacs
-    "c" (lambda () (interactive) (org-capture nil "n"))
+    "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
     "e" 'recentf
     "h" 'highlight-symbol-at-point
@@ -1121,7 +1121,7 @@ It is one of the best tool for note taking and writing
 Setting the org-directory helps integration with org-agenda and
 for org template captures.
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/Documents/notes")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1176,8 +1176,9 @@ This is a must to capture ideas quickly.
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
       '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org") "* %?" :empty-lines 1)
         ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
-         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+         "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 #+END_SRC
 
 To launch an Emacs client with a capture frame selecting the ~n~ template
