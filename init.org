@@ -980,6 +980,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
+    "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
@@ -1174,8 +1175,8 @@ org-capture allows to set up templates for quick note taking.
 This is a must to capture ideas quickly.
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
-        ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
+      '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
+        ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 #+END_SRC
 

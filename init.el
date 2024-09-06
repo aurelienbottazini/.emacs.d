@@ -657,6 +657,7 @@ cons cell (regexp . minor-mode)."
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
+    "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
@@ -809,8 +810,8 @@ cons cell (regexp . minor-mode)."
   (add-hook 'org-mode-hook 'palimpsest-mode))
 
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
-        ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
+      '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
+        ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (defadvice org-capture-finalize
