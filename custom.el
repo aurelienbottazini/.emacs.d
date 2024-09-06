@@ -283,7 +283,8 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
- '(org-agenda-files '("~/Dropbox/org/gtd.org"))
+ '(org-agenda-files
+   '("~/Documents/notes/vin.org" "/Users/aurelienbottazini/Documents/notes/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-emphasis-alist
    '(("*" bold)
@@ -469,4 +470,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
- )
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.5))))
+ '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.3))))
+ '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1)))))

@@ -1986,6 +1986,17 @@ Speed up tramp
   :config
   (hyperbole-mode 1))
 #+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+      '(lambda ()
+             (setq org-file-apps
+                   (append '(
+
+                             ("\\.jpg\\'" . default)
+                             ("\\.png\\'" . default)
+                             ) org-file-apps ))))
+#+end_src
 * Local variables
 
 #+begin_src emacs-lisp

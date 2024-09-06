@@ -1251,6 +1251,15 @@ This command switches to browser."
   :config
   (hyperbole-mode 1))
 
+(add-hook 'org-mode-hook
+      '(lambda ()
+             (setq org-file-apps
+                   (append '(
+
+                             ("\\.jpg\\'" . default)
+                             ("\\.png\\'" . default)
+                             ) org-file-apps ))))
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "light green")
