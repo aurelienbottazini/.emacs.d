@@ -612,7 +612,7 @@ cons cell (regexp . minor-mode)."
     :states 'normal
     :keymaps 'override
     "1" 'treemacs
-    "c" (lambda () (interactive) (org-capture nil "n"))
+    "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
     "e" 'recentf
     "h" 'highlight-symbol-at-point
@@ -627,6 +627,7 @@ cons cell (regexp . minor-mode)."
     "rq" 'eglot-code-action-quickfix
     "rn" 'eglot-rename
     "rf" 'eglot-format
+    "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
@@ -703,10 +704,10 @@ cons cell (regexp . minor-mode)."
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
    "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-   "C-c jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
-   "C-c jp" (lambda () (interactive) (find-file "~/projects/"))
+   "C-c ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
+   "C-c jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
+   "C-c jp" (lambda () (interactive) (find-file "~/projects/")gtd)
    "C-c jw" (lambda () (interactive) (find-file "~/work"))
-   "C-c jj" 'dired-jump
    "C-c k" 'recompile
    "C-c K" 'compile
    "C-c l" 'org-store-link
@@ -750,7 +751,7 @@ cons cell (regexp . minor-mode)."
   :config
   (drag-stuff-global-mode t))
 
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/Documents/notes")
 
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -780,9 +781,10 @@ cons cell (regexp . minor-mode)."
   (add-hook 'org-mode-hook 'palimpsest-mode))
 
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox") "* %?\n")
-        ("t" "todo" entry (file+headline "~/Dropbox/org/inbox.org" "Inbox")
-         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+      '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
+         "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (defadvice org-capture-finalize
     (after delete-capture-frame activate)
