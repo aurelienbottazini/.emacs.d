@@ -1260,6 +1260,28 @@ This command switches to browser."
                              ("\\.png\\'" . default)
                              ) org-file-apps ))))
 
+(defun my-org-replace-link-file (from to)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward org-bracket-link-regexp nil t)
+      (when (string-match-p from (match-string 1))
+        (replace-match (concat "[[file:" to "]]"))))))
+
+(defun my-org-rename-link-file-at-point ()
+  "Rename or move a file in an external link at point and
+  update the link path"
+  (interactive)
+  (let* ((curr-dir (abbreviate-file-name default-directory))
+         (current-path (org-element-property :path (org-element-context)))
+         (new-path (read-file-name "Rename file at point to: " current-path)))
+    (rename-file current-path new-path)
+    (message (concat "moved to: " new-path))
+    (if (directory-name-p new-path)
+        (setq new-path (concat new-path (file-name-nondirectory current-path)))
+      (setq new-path new-path))
+    (my-org-replace-link-file current-path
+                              (replace-regexp-in-string curr-dir "" new-path))))
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "light green")
@@ -1336,6 +1358,9 @@ This command switches to browser."
       '(
                ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
                ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
+               ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
+               ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
+               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
                ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb")
                ("app/\\(controllers\\|helpers\\)/\\(.*\\)_\\(controller\\|helper\\).rb\\'" "app/views/\\2/\\(index\\|show\\|edit\\|new\\).html.erb")
                ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
@@ -1422,7 +1447,7 @@ This command switches to browser."
 (add-hook 'dired-mode-hook 'org-download-enable)
   )
 
-(setq org-cite-global-bibliography '("~/Dropbox/notes/books.bib"))
+(setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
 (use-package org-ref
   :config
   (require 'org-ref-isbn))
