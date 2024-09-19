@@ -617,6 +617,11 @@ cons cell (regexp . minor-mode)."
     "e" 'recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+    "ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
+    "jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
+    "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
+    "jw" (lambda () (interactive) (find-file "~/work"))
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
@@ -647,6 +652,7 @@ cons cell (regexp . minor-mode)."
 
   (general-define-key
    :states 'normal
+   "-" 'dired-jump
    "[[" 'previous-buffer
    "]]" 'next-buffer
    "[e" 'flymake-goto-prev-error
