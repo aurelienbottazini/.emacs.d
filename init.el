@@ -313,7 +313,7 @@ cons cell (regexp . minor-mode)."
   (fringe-mode 20))
 
 (setq blink-matching-paren 'jump-offscreen)
-(show-paren-mode 1)
+(show-paren-mode nil) ;; if enabled do not jump to matching paren when I type it
 
 (use-package origami)
 (add-hook 'prog-mode-hook 'origami-mode)
@@ -713,7 +713,7 @@ cons cell (regexp . minor-mode)."
    "C-c ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
    "C-c jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
    "C-c jp" (lambda () (interactive) (find-file "~/projects/")gtd)
-   "C-c jw" (lambda () (interactive) (find-file "~/work"))
+   "C-c jw" (lambda () (interactive)(find-file "~/work"))
    "C-c k" 'recompile
    "C-c K" 'compile
    "C-c l" 'org-store-link
