@@ -964,6 +964,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
   (my-leader-def
     :states 'normal
     :keymaps 'override
+    "a" 'find-sibling-file
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
@@ -978,7 +979,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
-    "s" 'find-sibling-file
     "p" 'project-find-file
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
@@ -986,7 +986,7 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "rn" 'eglot-rename
     "rf" 'eglot-format
     "t" (lambda () (interactive) (org-capture nil "t"))
-    "w" 'er/expand-region
+   "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command

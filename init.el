@@ -641,6 +641,7 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'normal
     :keymaps 'override
+    "a" 'find-sibling-file
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
@@ -655,7 +656,6 @@ cons cell (regexp . minor-mode)."
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
-    "s" 'find-sibling-file
     "p" 'project-find-file
     "f" 'counsel-rg
     "rr" 'eglot-code-actions
@@ -663,7 +663,7 @@ cons cell (regexp . minor-mode)."
     "rn" 'eglot-rename
     "rf" 'eglot-format
     "t" (lambda () (interactive) (org-capture nil "t"))
-    "w" 'er/expand-region
+   "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
