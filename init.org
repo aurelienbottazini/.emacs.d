@@ -381,7 +381,7 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (load-theme 'solarized-dark))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package gruvbox-theme
   :custom-face
   (context-coloring-level-0-face ((t (:foreground "#87afaf"))))

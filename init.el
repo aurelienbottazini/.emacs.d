@@ -226,6 +226,36 @@
   (interactive)
   (auray/tmux-move "D"))
 
+(use-package gruvbox-theme
+  :custom-face
+  (context-coloring-level-0-face ((t (:foreground "#87afaf"))))
+ (context-coloring-level-1-face ((t (:foreground "#ffaf00"))))
+ (context-coloring-level-2-face ((t (:foreground "#87af87"))))
+ (context-coloring-level-3-face ((t (:foreground "#d75f5f"))))
+ (context-coloring-level-4-face ((t (:foreground "#d787af"))))
+ (context-coloring-level-5-face ((t (:foreground "#ff8700"))))
+ (context-coloring-level-6-face ((t (:foreground "#5fafaf"))))
+ (eglot-mode-line ((t nil)))
+ (envrc-mode-line-error-face ((t (:weight bold))))
+ (envrc-mode-line-none-face ((t nil)))
+ (envrc-mode-line-on-face ((t (:weight bold))))
+ (flymake-error ((t nil)))
+ (font-lock-comment-face ((t (:foreground "#7c6f64" :slant italic))))
+ (highlight-blocks-depth-1-face ((t (:background "#1b354d"))))
+ (highlight-blocks-depth-2-face ((t (:background "#1B354D"))))
+ (highlight-blocks-depth-3-face ((t (:background "#033624"))))
+ (highlight-blocks-depth-4-face ((t (:background "#03423E"))))
+ (highlight-blocks-depth-5-face ((t (:background "#420907"))))
+ (highlight-blocks-depth-6-face ((t (:background "#59110D"))))
+ (highlight-blocks-depth-7-face ((t (:background "gray35"))))
+ (highlight-blocks-depth-8-face ((t (:background "gray39"))))
+ (highlight-blocks-depth-9-face ((t (:background "gray44"))))
+ (mode-line-buffer-id ((t (:slant italic :weight bold))))
+ (xref-match ((t (:inherit match))))
+  :config
+  (load-theme 'gruvbox-dark-medium)
+  )
+
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
   (interactive)
