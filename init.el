@@ -1258,12 +1258,10 @@ This command switches to browser."
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 
-(setq evil-insert-state-cursor '((bar . 2) "#000")
-      evil-normal-state-cursor '(box "#000")
-      evil-visual-state-cursor '(box "blue")
-      evil-emacs-state-cursor '((box . 2) "#000")
-
-        )
+(setq evil-insert-state-cursor '((bar . 2) "#87af87")
+      evil-normal-state-cursor '(box "#ffaf00")
+      evil-visual-state-cursor '(box "#87afaf")
+      evil-emacs-state-cursor '((box . 2) "#d787af"))
 
 (defun find-file-right (filename)
   (interactive)
