@@ -1094,6 +1094,7 @@ This command switches to browser."
 (eval-after-load "dired"
   '(progn
      (define-key dired-mode-map "-" 'dired-up-directory)
+     (define-key dired-mode-map (kbd "G") 'end-of-buffer)
      ))
 
 (use-package dired-rsync
