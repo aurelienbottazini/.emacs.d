@@ -663,7 +663,7 @@ cons cell (regexp . minor-mode)."
     "rn" 'eglot-rename
     "rf" 'eglot-format
     "t" (lambda () (interactive) (org-capture nil "t"))
-   "w" 'er/expand-region
+    "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
@@ -990,9 +990,10 @@ This command switches to browser."
 
 (use-package rubocopfmt
   :diminish rubocopfmt-mode
-  :hook
-  (ruby-ts-mode . rubocopfmt-mode)
-  (ruby-mode . rubocopfmt-mode))
+  ;;:hook
+  ;;(ruby-ts-mode . rubocopfmt-mode)
+  ;;(ruby-mode . rubocopfmt-mode)
+  )
 
 (define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
   "A major mode for tsx.")
