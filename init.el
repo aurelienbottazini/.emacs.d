@@ -1320,6 +1320,8 @@ This command switches to browser."
     (my-org-replace-link-file current-path
                               (replace-regexp-in-string curr-dir "" new-path))))
 
+(use-package jsonrpc)
+
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "light green")
