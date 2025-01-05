@@ -175,6 +175,10 @@ with the reloading of those locals.
 #+end_src
 
 #+begin_src emacs-lisp
+(pixel-scroll-precision-mode)
+#+end_src
+
+#+begin_src emacs-lisp
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -222,6 +226,12 @@ It make things easier when the two match.
   (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq exec-path my-paths))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+#+end_src
 
 Emacs can be really fast with large files too. The trick is to
 stick to fundamental mode and disable expensive minor modes.
@@ -294,6 +304,11 @@ I want error highlights and error bindings in shell modes too.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
 #+END_SRC
+
+#+begin_src emacs-lisp
+(setq visible-bell t)
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
 
 *** tabs and white-space
 By default I disable tabs. I use ~whitespace-mode~ in programming
@@ -606,9 +621,50 @@ larger than argument. Without argument to clear
 (add-hook 'org-mode-hook 'abbrev-mode)
 #+end_src
 
+#+begin_src emacs-lisp
+(defun my-org-replace-link-file (from to)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward org-bracket-link-regexp nil t)
+      (when (string-match-p from (match-string 1))
+        (replace-match (concat "[[file:" to "]]"))))))
+
+(defun my-org-rename-link-file-at-point ()
+  "Rename or move a file in an external link at point and
+  update the link path"
+  (interactive)
+  (let* ((curr-dir (abbreviate-file-name default-directory))
+         (current-path (org-element-property :path (org-element-context)))
+         (new-path (read-file-name "Rename file at point to: " current-path)))
+    (rename-file current-path new-path)
+    (message (concat "moved to: " new-path))
+    (if (directory-name-p new-path)
+        (setq new-path (concat new-path (file-name-nondirectory current-path)))
+      (setq new-path new-path))
+    (my-org-replace-link-file current-path
+                              (replace-regexp-in-string curr-dir "" new-path))))
+
+#+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook
+      '(lambda ()
+             (setq org-file-apps
+                   (append '(
+
+                             ("\\.jpg\\'" . default)
+                             ("\\.png\\'" . default)
+                             ) org-file-apps ))))
+#+end_src
 * Windows
 Splitting can be done with ~C-x 2~ and ~C-x 3~  or with
 ~C-w v~ and ~C-w s~ to split vertically and horizontally.
+
+* Sessions
+#+begin_src emacs-lisp :tangle no
+(desktop-save-mode)
+#+end_src
+
 * Programming languages
 
 Auto-fill comments in prog modes
@@ -619,6 +675,16 @@ Auto-fill comments in prog modes
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package highlight-blocks)
+;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
+#+end_src
 
 ** Clojure
 #+BEGIN_SRC emacs-lisp
@@ -910,6 +976,35 @@ adjustments for JSX.
 
 #+end_src
 * Bindings
+
+#+begin_src emacs-lisp
+(use-package multiple-cursors)
+(use-package counsel
+  :diminish counsel-mode ivy-mode
+  :config
+  (ivy-mode t)
+  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
+  (counsel-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun find-file-right (filename)
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (find-file filename))
+
+(defun find-file-below (filename)
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (find-file filename))
+
+(ivy-set-actions
+ t
+ '(("|" find-file-right "open right")
+   ("%" find-file-below "open below")))
+#+end_src
 
 ** General
 Shows a key combination helper in the minibuffer
@@ -1403,6 +1498,16 @@ with ~Q~.
 #+BEGIN_SRC emacs-lisp
 (use-package iedit)
 #+END_SRC
+** Rg
+Maybe a better search interface?
+#+begin_src emacs-lisp
+(use-package deadgrep)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rg)
+#+end_src
+
 
 * VCS
 Don't forget Emacs vcs features accessible with the prefix ~C-x v~!
@@ -1713,6 +1818,13 @@ Other =terminfo= examples are available in the [[https://www.gnu.org/software/em
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
 #+END_SRC
 
+#+begin_src emacs-lisp
+(use-package hyperbole
+  :diminish hyperbole-mode
+  :config
+  (hyperbole-mode 1))
+#+end_src
+
 * Presentation
 #+begin_src emacs-lisp
 (defun abott/org-tree-slide-play ()
@@ -1739,32 +1851,7 @@ C-c C-e R =letter= to export a presentation from your org file
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+end_src
 
-* Testing
-
-#+begin_src emacs-lisp
-(pixel-scroll-precision-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package deadgrep)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package emamux
-  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
-  :init
-  (setq emamux:use-nearest-pane 1))
-#+end_src
-
-#+begin_src emacs-lisp
-(setq visible-bell t)
-(defalias 'yes-or-no-p 'y-or-n-p)
-#+end_src
-
-Sessions
-#+begin_src emacs-lisp :tangle no
-(desktop-save-mode)
-#+end_src
+* Evil
 
 #+begin_src emacs-lisp
 (use-package evil
@@ -1893,51 +1980,19 @@ Jump to matching pairs with ~%~.
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 #+END_SRC
 
-#+begin_src emacs-lisp :tangle no
-(use-package treesit-auto
-  :config
-  (global-treesit-auto-mode))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(fido-mode t)
-(fido-vertical-mode)
-#+end_src
-
 #+begin_src emacs-lisp
-(use-package haskell-mode)
+(setq evil-insert-state-cursor '((bar . 2) "#87af87")
+      evil-normal-state-cursor '(box "#ffaf00")
+      evil-visual-state-cursor '(box "#87afaf")
+      evil-emacs-state-cursor '((box . 2) "#d787af"))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package rg)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package sqlite3)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell)
-(exec-path-from-shell-copy-env "SSH_AGENT_PID")
-(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package multiple-cursors)
-(use-package counsel
-  :diminish counsel-mode ivy-mode
-  :config
-  (ivy-mode t)
-  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
-  (counsel-mode t))
-#+end_src
-
+* Tramp
 #+begin_src emacs-lisp
 (require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 #+end_src
-
 
 Speed up tramp
 #+begin_src emacs-lisp
@@ -1947,87 +2002,23 @@ Speed up tramp
               tramp-file-name-regexp))
 #+end_src
 
+* Testing
+
 #+begin_src emacs-lisp
-(use-package graphql-mode)
+(use-package emamux
+  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
+  :init
+  (setq emamux:use-nearest-pane 1))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :hook ((prog-mode . rainbow-delimiters-mode)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package highlight-blocks)
-;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(setq evil-insert-state-cursor '((bar . 2) "#87af87")
-      evil-normal-state-cursor '(box "#ffaf00")
-      evil-visual-state-cursor '(box "#87afaf")
-      evil-emacs-state-cursor '((box . 2) "#d787af"))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun find-file-right (filename)
-  (interactive)
-  (split-window-right)
-  (other-window 1)
-  (find-file filename))
-
-(defun find-file-below (filename)
-  (interactive)
-  (split-window-below)
-  (other-window 1)
-  (find-file filename))
-
-(ivy-set-actions
- t
- '(("|" find-file-right "open right")
-   ("%" find-file-below "open below")))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package hyperbole
-  :diminish hyperbole-mode
+#+begin_src emacs-lisp :tangle no
+(use-package treesit-auto
   :config
-  (hyperbole-mode 1))
+  (global-treesit-auto-mode))
 #+end_src
 
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-      '(lambda ()
-             (setq org-file-apps
-                   (append '(
-
-                             ("\\.jpg\\'" . default)
-                             ("\\.png\\'" . default)
-                             ) org-file-apps ))))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun my-org-replace-link-file (from to)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward org-bracket-link-regexp nil t)
-      (when (string-match-p from (match-string 1))
-        (replace-match (concat "[[file:" to "]]"))))))
-
-(defun my-org-rename-link-file-at-point ()
-  "Rename or move a file in an external link at point and
-  update the link path"
-  (interactive)
-  (let* ((curr-dir (abbreviate-file-name default-directory))
-         (current-path (org-element-property :path (org-element-context)))
-         (new-path (read-file-name "Rename file at point to: " current-path)))
-    (rename-file current-path new-path)
-    (message (concat "moved to: " new-path))
-    (if (directory-name-p new-path)
-        (setq new-path (concat new-path (file-name-nondirectory current-path)))
-      (setq new-path new-path))
-    (my-org-replace-link-file current-path
-                              (replace-regexp-in-string curr-dir "" new-path))))
-
+(use-package sqlite3)
 #+end_src
 
 #+begin_src emacs-lisp

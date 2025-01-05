@@ -79,6 +79,8 @@
 (setq initial-major-mode 'fundamental-mode)
 (setq initial-scratch-message nil)
 
+(pixel-scroll-precision-mode)
+
 (setq vc-follow-symlinks t)
 (put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
@@ -117,6 +119,10 @@
   (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq exec-path my-paths))
+
+(use-package exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 
 (defun check-large-file-hook ()
   "If a file is over a given size, and not a jpg, turn off minor modes."
@@ -175,6 +181,9 @@
 (setq sentence-end-double-space nil)
 
 (add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
+
+(setq visible-bell t)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq-default
  indent-tabs-mode nil    ; no tabs
@@ -358,11 +367,48 @@ cons cell (regexp . minor-mode)."
               (org-save-all-org-buffers)))
 (add-hook 'org-mode-hook 'abbrev-mode)
 
+(defun my-org-replace-link-file (from to)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward org-bracket-link-regexp nil t)
+      (when (string-match-p from (match-string 1))
+        (replace-match (concat "[[file:" to "]]"))))))
+
+(defun my-org-rename-link-file-at-point ()
+  "Rename or move a file in an external link at point and
+  update the link path"
+  (interactive)
+  (let* ((curr-dir (abbreviate-file-name default-directory))
+         (current-path (org-element-property :path (org-element-context)))
+         (new-path (read-file-name "Rename file at point to: " current-path)))
+    (rename-file current-path new-path)
+    (message (concat "moved to: " new-path))
+    (if (directory-name-p new-path)
+        (setq new-path (concat new-path (file-name-nondirectory current-path)))
+      (setq new-path new-path))
+    (my-org-replace-link-file current-path
+                              (replace-regexp-in-string curr-dir "" new-path))))
+
+(add-hook 'org-mode-hook
+      '(lambda ()
+             (setq org-file-apps
+                   (append '(
+
+                             ("\\.jpg\\'" . default)
+                             ("\\.png\\'" . default)
+                             ) org-file-apps ))))
+
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
+
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(use-package highlight-blocks)
+;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 
 ;; First install the package:
 (use-package clojure-mode
@@ -598,6 +644,31 @@ cons cell (regexp . minor-mode)."
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 
 (use-package elm-mode)
+
+(use-package multiple-cursors)
+(use-package counsel
+  :diminish counsel-mode ivy-mode
+  :config
+  (ivy-mode t)
+  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
+  (counsel-mode t))
+
+(defun find-file-right (filename)
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (find-file filename))
+
+(defun find-file-below (filename)
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (find-file filename))
+
+(ivy-set-actions
+ t
+ '(("|" find-file-right "open right")
+   ("%" find-file-below "open below")))
 
 (use-package which-key
   :diminish which-key-mode
@@ -944,6 +1015,10 @@ This command switches to browser."
 
 (use-package iedit)
 
+(use-package deadgrep)
+
+(use-package rg)
+
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 (setq ediff-split-window-function 'split-window-vertically)
@@ -1108,6 +1183,11 @@ This command switches to browser."
   :config
   (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
 
+(use-package hyperbole
+  :diminish hyperbole-mode
+  :config
+  (hyperbole-mode 1))
+
 (defun abott/org-tree-slide-play ()
   (writeroom-mode 1)
   (default-text-scale-increment 40))
@@ -1126,18 +1206,6 @@ This command switches to browser."
 (use-package ox-reveal
   :config
   (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
-(pixel-scroll-precision-mode)
-
-(use-package deadgrep)
-
-(use-package emamux
-  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
-  :init
-  (setq emamux:use-nearest-pane 1))
-
-(setq visible-bell t)
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
@@ -1227,23 +1295,10 @@ This command switches to browser."
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
-(use-package haskell-mode)
-
-(use-package rg)
-
-(use-package sqlite3)
-
-(use-package exec-path-from-shell)
-(exec-path-from-shell-copy-env "SSH_AGENT_PID")
-(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
-
-(use-package multiple-cursors)
-(use-package counsel
-  :diminish counsel-mode ivy-mode
-  :config
-  (ivy-mode t)
-  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
-  (counsel-mode t))
+(setq evil-insert-state-cursor '((bar . 2) "#87af87")
+      evil-normal-state-cursor '(box "#ffaf00")
+      evil-visual-state-cursor '(box "#87afaf")
+      evil-emacs-state-cursor '((box . 2) "#d787af"))
 
 (require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
@@ -1254,71 +1309,12 @@ This command switches to browser."
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-(use-package graphql-mode)
+(use-package emamux
+  :commands (emamux:run-last-command emamux:send-command emamux:send-region)
+  :init
+  (setq emamux:use-nearest-pane 1))
 
-(use-package rainbow-delimiters
-  :hook ((prog-mode . rainbow-delimiters-mode)))
-
-(use-package highlight-blocks)
-;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
-
-(setq evil-insert-state-cursor '((bar . 2) "#87af87")
-      evil-normal-state-cursor '(box "#ffaf00")
-      evil-visual-state-cursor '(box "#87afaf")
-      evil-emacs-state-cursor '((box . 2) "#d787af"))
-
-(defun find-file-right (filename)
-  (interactive)
-  (split-window-right)
-  (other-window 1)
-  (find-file filename))
-
-(defun find-file-below (filename)
-  (interactive)
-  (split-window-below)
-  (other-window 1)
-  (find-file filename))
-
-(ivy-set-actions
- t
- '(("|" find-file-right "open right")
-   ("%" find-file-below "open below")))
-
-(use-package hyperbole
-  :diminish hyperbole-mode
-  :config
-  (hyperbole-mode 1))
-
-(add-hook 'org-mode-hook
-      '(lambda ()
-             (setq org-file-apps
-                   (append '(
-
-                             ("\\.jpg\\'" . default)
-                             ("\\.png\\'" . default)
-                             ) org-file-apps ))))
-
-(defun my-org-replace-link-file (from to)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward org-bracket-link-regexp nil t)
-      (when (string-match-p from (match-string 1))
-        (replace-match (concat "[[file:" to "]]"))))))
-
-(defun my-org-rename-link-file-at-point ()
-  "Rename or move a file in an external link at point and
-  update the link path"
-  (interactive)
-  (let* ((curr-dir (abbreviate-file-name default-directory))
-         (current-path (org-element-property :path (org-element-context)))
-         (new-path (read-file-name "Rename file at point to: " current-path)))
-    (rename-file current-path new-path)
-    (message (concat "moved to: " new-path))
-    (if (directory-name-p new-path)
-        (setq new-path (concat new-path (file-name-nondirectory current-path)))
-      (setq new-path new-path))
-    (my-org-replace-link-file current-path
-                              (replace-regexp-in-string curr-dir "" new-path))))
+(use-package sqlite3)
 
 (use-package jsonrpc)
 
