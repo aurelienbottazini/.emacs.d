@@ -2024,6 +2024,7 @@ Speed up tramp
 #+begin_src emacs-lisp
 (use-package jsonrpc)
 #+end_src
+
 * Local variables
 
 #+begin_src emacs-lisp
