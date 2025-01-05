@@ -470,6 +470,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 180 :width normal :foundry "nil" :family "MonoLisa v2 variable custom"))))
- '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.5))))
- '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.3))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.1))))
+ '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.1))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1)))))

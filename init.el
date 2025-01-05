@@ -61,8 +61,6 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(require 'org)
-
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
   (interactive)
@@ -350,6 +348,8 @@ cons cell (regexp . minor-mode)."
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
+
+(require 'org)
 
 (setq org-refile-targets '((nil :maxlevel . 3)
                            (org-agenda-files :maxlevel . 3)))
@@ -1324,10 +1324,10 @@ This command switches to browser."
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "light green")
-        ((evil-visual-state-p) "light sky blue")
-        ((evil-emacs-state-p) "light pink")
-        ((evil-normal-state-p) "moccasin")
+  (cond ((evil-insert-state-p) "#87af87")
+        ((evil-visual-state-p) "#87afaf")
+        ((evil-emacs-state-p) "#d787af")
+        ((evil-normal-state-p) "#ffaf00")
         (t "#000")))
 
 (defun auray/fg-modeline-color-from-evil-state ()

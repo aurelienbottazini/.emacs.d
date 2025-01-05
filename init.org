@@ -98,6 +98,7 @@ You can get the time it took for emacs to start with.
 #+BEGIN_SRC emacs-lisp :tangle no
 (emacs-init-time)
 #+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (use-package diminish
   :config
@@ -140,10 +141,6 @@ added to the Emacs load-path.
 (let ((default-directory  "~/.emacs.d/site-lisp/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(require 'org)
 #+END_SRC
 
 * Local variables
@@ -304,8 +301,7 @@ buffers because sometimes when copy pasting code from external
 sources those external sources have tabs. I want to see those tabs
 to remove them.
 
-I don't use the ~global-whitespace-mode~ as some emacs mode like
-~magit~ use tabs.
+I don't use the ~global-whitespace-mode~ as some emacs mode like ~magit~ use tabs.
 
 You can remove all tabs from your buffer with ~untabify~
 
@@ -597,6 +593,9 @@ larger than argument. Without argument to clear
 (setq reb-re-syntax 'string)
 #+END_SRC
 * Org
+#+BEGIN_SRC emacs-lisp
+(require 'org)
+#+END_SRC
 
 #+begin_src emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 3)
@@ -2039,10 +2038,10 @@ Speed up tramp
 #+begin_src emacs-lisp
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
-  (cond ((evil-insert-state-p) "light green")
-        ((evil-visual-state-p) "light sky blue")
-        ((evil-emacs-state-p) "light pink")
-        ((evil-normal-state-p) "moccasin")
+  (cond ((evil-insert-state-p) "#87af87")
+        ((evil-visual-state-p) "#87afaf")
+        ((evil-emacs-state-p) "#d787af")
+        ((evil-normal-state-p) "#ffaf00")
         (t "#000")))
 
 (defun auray/fg-modeline-color-from-evil-state ()
