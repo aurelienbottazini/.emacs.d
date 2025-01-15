@@ -5,6 +5,7 @@
 
 * Faster startup
 Adjusts garbage collector for faster startup.
+And adjust it back after initialization
 #+begin_src emacs-lisp
 ;; -*- lexical-binding: t; -*-
 (defvar last-file-name-handler-alist file-name-handler-alist)
@@ -21,8 +22,9 @@ Adjusts garbage collector for faster startup.
 
 * Debug Emacs
 
-If Emacs complains about a mismatched paren while trying to start
-you can use ~check-parens~ to find the mismatched parenthesis.
+If Emacs complains about a mismatched paren you can use ~check-parens~
+to find the mismatched parenthesis.
+
 #+begin_src emacs-lisp :tangle no
 (check-parens)
 #+end_src
@@ -48,6 +50,7 @@ Silence deprecated cl warnings
 (setq byte-compile-warnings '(cl-functions))
 #+end_src
 
+Add package repositories and make sure use-package is installed
 #+BEGIN_SRC emacs-lisp
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
@@ -135,10 +138,13 @@ with the reloading of those locals.
 
 * Better Defaults
 #+begin_src emacs-lisp
-(setq initial-major-mode 'fundamental-mode)
-(setq initial-scratch-message nil)
+(setq initial-major-mode 'fundamental-mode
+      initial-scratch-message nil
+      inhibit-startup-message t)
+
 #+end_src
 
+Smoother scroll
 #+begin_src emacs-lisp
 (pixel-scroll-precision-mode)
 #+end_src
@@ -152,7 +158,7 @@ with the reloading of those locals.
 #+end_src
 
 I like setting the path manually as other solutions like ~exec-path-from-shell~
-can slow down Emacs startup if the shells scripts do too many things.
+can slow down Emacs startup if shells scripts do too many things.
 
 `exec-path` is used by Emacs to find executables.
 `PATH` is used by Emacs when you are running a shell in Emacs.
@@ -192,6 +198,8 @@ It make things easier when the two match.
   (setq exec-path my-paths))
 #+END_SRC
 
+I like to keep my ssh keys in a password management software and
+it manages ssh key access through the ssh agent
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell)
 (exec-path-from-shell-copy-env "SSH_AGENT_PID")
@@ -199,10 +207,16 @@ It make things easier when the two match.
 #+end_src
 
 Emacs can be really fast with large files too. The trick is to
-stick to fundamental mode and disable expensive minor modes.
+stick to fundamental mode and to disable expensive minor modes.
+
+The one I discovered last is ~bidi-paragraph-direction~.
+Since I know only lef to right languages, I only support that one in
+my config.
 #+BEGIN_SRC emacs-lisp
 (defun check-large-file-hook ()
-  "If a file is over a given size, and not a jpg, turn off minor modes."
+  "If a file is over a given size, and not a jpg, turn off expensive minor modes.
+Stick to fundamental mode and disable font-lock.
+On very large files, I usually just explore them with search tools anyway"
   (when (and (> (buffer-size) (* 1024 100)) ;; 100K
              (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
         )
@@ -222,7 +236,6 @@ stick to fundamental mode and disable expensive minor modes.
 
 #+BEGIN_SRC emacs-lisp
 (setq help-window-select t ; if an help window appears, give it focus
-      inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
       )
 
@@ -312,8 +325,17 @@ Clean white space on save.
 #+END_SRC
 
 * Movement
-Move between buffers with C-h C-j C-k C-l. My Tmux bindings are made
-to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8488e4a4fd50349cd/tmux/.config/tmux/tmux.conf#L31-L35][make it work seamlessly]] with Emacs.
+I move between buffers with C-h C-j C-k C-l.
+
+Here are my Tmux bindings are made to make it work seamlessly with Emacs.
+#+begin_src :tangle no
+is_vim_or_emacs='echo "#{pane_current_command}" | grep -iqE "vim|emacs|reattach-to-user-namespace"'
+bind -n C-h if-shell "$is_vim_or_emacs" "send-keys C-h" "select-pane -L"
+bind -n C-j if-shell "$is_vim_or_emacs" "send-keys C-j" "select-pane -D"
+bind -n C-k if-shell "$is_vim_or_emacs" "send-keys C-k" "select-pane -U"
+bind -n C-l if-shell "$is_vim_or_emacs" "send-keys C-l" "select-pane -R"
+#+end_src
+
 #+begin_src emacs-lisp :tangle yes
 (defun auray/tmux-active-session ()
   (interactive)
@@ -567,9 +589,11 @@ Enable ligatures on mac
 
 ** Font
 
-Emacs makes it hard to select font with weight of Regular or Book.
-The trick is to just install the font weight you want and omit the medium and
-light weights. Medium and Light conflict with the Regular and Book versions
+Emacs makes it hard to select a font face with a weight of Regular or
+Book. In particular this is the case for the /Operator Mono/ font
+family. The trick is to just install the font weight you want and omit
+the medium and light weights. Medium and Light conflict with the
+Regular and Book versions
 
 ** Code Folding
 

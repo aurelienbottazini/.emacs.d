@@ -61,8 +61,9 @@
         (when (equal default-directory dir))
         (my-reload-dir-locals-for-current-buffer)))))
 
-(setq initial-major-mode 'fundamental-mode)
-(setq initial-scratch-message nil)
+(setq initial-major-mode 'fundamental-mode
+      initial-scratch-message nil
+      inhibit-startup-message t)
 
 (pixel-scroll-precision-mode)
 
@@ -110,7 +111,9 @@
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 
 (defun check-large-file-hook ()
-  "If a file is over a given size, and not a jpg, turn off minor modes."
+  "If a file is over a given size, and not a jpg, turn off expensive minor modes.
+Stick to fundamental mode and disable font-lock.
+On very large files, I usually just explore them with search tools anyway"
   (when (and (> (buffer-size) (* 1024 100)) ;; 100K
              (not (string-equal "jpg" (file-name-extension (buffer-file-name))))
         )
@@ -128,7 +131,6 @@
 (global-so-long-mode 1) ;; helps when visiting files with long lines.
 
 (setq help-window-select t ; if an help window appears, give it focus
-      inhibit-startup-message t
       default-indicate-empty-lines nil ; show end of buffer on left fringe
       )
 
