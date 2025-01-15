@@ -19,9 +19,7 @@
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
-;; this tells package.el not to add those pesky customized variable settings at
-;; the end of your init.el
-(setq package--init-file-ensured t)
+(setq package--init-file-ensured t) ; do not add things at the end of init.el
 
 (package-initialize)
 (unless package-archive-contents
@@ -35,21 +33,8 @@
 (require-package 'use-package)
 (require 'use-package)
 
-(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
-(setq use-package-always-ensure t) ; Install package if it is missing
-
-(use-package diminish
-  :config
-  (eval-after-load "undo-tree"
-    '(diminish 'undo-tree-mode))
-  (eval-after-load "subword"
-    '(diminish 'subword-mode))
-  (diminish 'auto-fill-function)
-  (diminish 'org-indent-mode)
-  (diminish 'visual-line-mode)
-  (diminish 'org-indent-mode)
-  (diminish 'abbrev-mode)
-  (diminish 'eldoc-mode))
+(setq use-package-compute-statistics t) ;(use-package-report)
+(setq use-package-always-ensure t)
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
@@ -232,6 +217,19 @@
 (defun tmux-move-down ()
   (interactive)
   (auray/tmux-move "D"))
+
+(use-package diminish
+  :config
+  (eval-after-load "undo-tree"
+    '(diminish 'undo-tree-mode))
+  (eval-after-load "subword"
+    '(diminish 'subword-mode))
+  (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
+  (diminish 'abbrev-mode)
+  (diminish 'eldoc-mode))
 
 (use-package gruvbox-theme
   :custom-face

@@ -3,24 +3,6 @@
 #+PROPERTY: header-args :results silent :tangle yes
 #+STARTUP: overview
 
-* Advanced patterns
-** filter with rg
-With counsel-rg you can pass arguments
-#+begin_src
- foo -- -g!*.el
-#+end_src
-** filter with ivy
-You can negate filter with ivy too
-#+begin_src
-foo ! .el$
-#+end_src
-** grep with dired
-mark files with m and grep with A and Q to grep replace
-** ivy-occur
-C-o from an ivy completion and C-x C-q to modify results
-** replace in buffer
-M-%
-
 * Faster startup
 Adjusts garbage collector for faster startup.
 #+begin_src emacs-lisp
@@ -74,9 +56,7 @@ Silence deprecated cl warnings
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
-;; this tells package.el not to add those pesky customized variable settings at
-;; the end of your init.el
-(setq package--init-file-ensured t)
+(setq package--init-file-ensured t) ; do not add things at the end of init.el
 
 (package-initialize)
 (unless package-archive-contents
@@ -90,28 +70,13 @@ Silence deprecated cl warnings
 (require-package 'use-package)
 (require 'use-package)
 
-(setq use-package-compute-statistics t) ;(use-package-report) to show  which package is slow to start.
-(setq use-package-always-ensure t) ; Install package if it is missing
+(setq use-package-compute-statistics t) ;(use-package-report)
+(setq use-package-always-ensure t)
 #+END_SRC
 
 You can get the time it took for emacs to start with.
 #+BEGIN_SRC emacs-lisp :tangle no
 (emacs-init-time)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package diminish
-  :config
-  (eval-after-load "undo-tree"
-    '(diminish 'undo-tree-mode))
-  (eval-after-load "subword"
-    '(diminish 'subword-mode))
-  (diminish 'auto-fill-function)
-  (diminish 'org-indent-mode)
-  (diminish 'visual-line-mode)
-  (diminish 'org-indent-mode)
-  (diminish 'abbrev-mode)
-  (diminish 'eldoc-mode))
 #+END_SRC
 
 It is important to load custom settings early. Those are the ones
@@ -384,6 +349,23 @@ to [[https://github.com/aurelienbottazini/dotfiles/blob/6cb8e100568cffb788f0ecd8
   (auray/tmux-move "D"))
 
   #+END_SRC
+* Diminish
+
+#+begin_src emacs-lisp
+(use-package diminish
+  :config
+  (eval-after-load "undo-tree"
+    '(diminish 'undo-tree-mode))
+  (eval-after-load "subword"
+    '(diminish 'subword-mode))
+  (diminish 'auto-fill-function)
+  (diminish 'org-indent-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
+  (diminish 'abbrev-mode)
+  (diminish 'eldoc-mode))
+#+end_src
+
 * Colors
 
 #+begin_src emacs-lisp :tangle no
@@ -1489,7 +1471,7 @@ isearch and occur (~M-s o~)
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.
 
-*** From Dired
+** From Dired
 ~C-x d~ to launch dired . I mark the files I am interested in with
 ~m~. Then I can grep those files with ~A~ and do a query replace
 with ~Q~.
@@ -1508,7 +1490,20 @@ Maybe a better search interface?
 (use-package rg)
 #+end_src
 
-
+** filter with rg
+With counsel-rg you can pass arguments
+#+begin_src
+ foo -- -g!*.el
+#+end_src
+** filter with ivy
+You can negate filter with ivy too
+#+begin_src
+foo ! .el$
+#+end_src
+** ivy-occur
+C-c C-o from an ivy completion and C-x C-q to modify results
+** replace in buffer
+M-%
 * VCS
 Don't forget Emacs vcs features accessible with the prefix ~C-x v~!
 
