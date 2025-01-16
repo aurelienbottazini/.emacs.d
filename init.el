@@ -872,7 +872,7 @@ cons cell (regexp . minor-mode)."
   :init
   (setq deft-extensions '("org" "md")
         deft-recursive t
-        deft-directory "~/Dropbox/notes/"))
+        deft-directory "~/Library/CloudStorage/Dropbox/notes"))
 
 (use-package markdown-mode
   :mode "\\.md\\'")

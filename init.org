@@ -1245,7 +1245,7 @@ for org template captures.
   :init
   (setq deft-extensions '("org" "md")
         deft-recursive t
-        deft-directory "~/Dropbox/notes/"))
+        deft-directory "~/Library/CloudStorage/Dropbox/notes"))
 #+end_src
 ** Markdown
 #+BEGIN_SRC emacs-lisp
