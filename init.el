@@ -265,7 +265,6 @@ On very large files, I usually just explore them with search tools anyway"
  (context-coloring-level-4-face ((t (:foreground "#d787af"))))
  (context-coloring-level-5-face ((t (:foreground "#ff8700"))))
  (context-coloring-level-6-face ((t (:foreground "#5fafaf"))))
- (eglot-mode-line ((t nil)))
  (envrc-mode-line-error-face ((t (:weight bold))))
  (envrc-mode-line-none-face ((t nil)))
  (envrc-mode-line-on-face ((t (:weight bold))))
@@ -732,10 +731,6 @@ cons cell (regexp . minor-mode)."
     "G" 'magit-file-dispatch
     "p" 'project-find-file
     "f" 'counsel-rg
-    "rr" 'eglot-code-actions
-    "rq" 'eglot-code-action-quickfix
-    "rn" 'eglot-rename
-    "rf" 'eglot-format
     "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
@@ -746,10 +741,6 @@ cons cell (regexp . minor-mode)."
   (my-leader-def
     :states 'visual
     :keymaps 'override
-    "rr" 'eglot-code-actions
-    "rq" 'eglot-code-action-quickfix
-    "rn" 'eglot-rename
-    "rf" 'eglot-format
     "x" 'emamux:send-region)
 
   (winner-mode 1)
@@ -1057,13 +1048,6 @@ This command switches to browser."
 
 (setq project-switch-commands 'project-dired)
 
-(add-hook 'clojure-mode-hook 'eglot-ensure)
-(add-hook 'js-mode-hook 'eglot-ensure)
-(add-hook 'js2-mode-hook 'eglot-ensure)
-(add-hook 'ts-mode-hook 'eglot-ensure)
-
-(require 'eglot)
-
 (use-package rubocopfmt
   :diminish rubocopfmt-mode
   :hook
@@ -1086,17 +1070,27 @@ This command switches to browser."
   :mode (("\\.ts\\'" . typescript-mode)
          ("\\.tsx\\'" . typescriptreact-mode)))
 
-(use-package eglot
-  :ensure t
-  :defer 3
-  :hook
-  ((js-mode
-    typescript-mode
-    typescriptreact-mode) . eglot-ensure)
-  :config
-  (cl-pushnew '((js-mode typescript-mode typescriptreact-mode) . ("typescript-language-server" "--stdio"))
-              eglot-server-programs
-              :test #'equal))
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (js2-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+;; if you are helm user
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-from-kill
@@ -1526,3 +1520,5 @@ This command switches to browser."
         (setq imagemagick-types-inhibit
               (cons 'XML (delq 'PDF imagemagick-types-inhibit)))
         (imagemagick-register-types))
+
+(setq warning-minimum-level :error)
