@@ -1186,6 +1186,27 @@ This command switches to browser."
 (use-package dired-rsync
   :bind (:map dired-mode-map ("b" . dired-rsync)))
 
+(setq dired-guess-shell-alist-user
+      '(("\\.pdf\\'" "open"))) ; Replace "open" with the desired command (e.g., "xdg-open" or "start")
+
+(defun dired-open-file-with-system-viewer ()
+  "Open the file at point in Dired using the system's default application."
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (start-process "dired-open-file" nil "open" file))) ; Replace "open" with "xdg-open" on Linux or "start" on Windows
+
+(defun dired-find-file-or-open ()
+  "Open PDF files with the system viewer, other files with `dired-find-file`."
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (if (string-match "\\.pdf\\'" file)
+        (dired-open-file-with-system-viewer)
+      (dired-find-file))))
+
+;; Rebind RET to use the improved behavior
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "RET") 'dired-find-file-or-open))
+
 (use-package restclient
   :demand t
   :config
