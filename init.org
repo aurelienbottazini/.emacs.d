@@ -323,7 +323,31 @@ Clean white space on save.
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 #+END_SRC
+* Parens
+#+BEGIN_SRC emacs-lisp
+(use-package paredit
+  :diminish paredit-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'paredit-mode))
 
+(use-package expand-region)
+
+(global-display-line-numbers-mode -1)
+(defun show-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'absolute))
+(defun hide-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'nil))
+(defun show-relative-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'relative))
+
+(global-hl-line-mode 1)
+
+(use-package rainbow-mode :diminish rainbow-mode)
+#+END_SRC
 * Movement
 I move between buffers with C-h C-j C-k C-l.
 
@@ -620,7 +644,8 @@ larger than argument. Without argument to clear
 
 #+begin_src emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 3)
-                           (org-agenda-files :maxlevel . 3)))
+                           (org-agenda-files :maxlevel . 1)
+                           ))
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
@@ -991,6 +1016,9 @@ adjustments for JSX.
   (ivy-mode t)
   (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
   (counsel-mode t))
+
+(use-package windresize)
+(use-package ivy-hydra)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1010,9 +1038,9 @@ adjustments for JSX.
  t
  '(("|" find-file-right "open right")
    ("%" find-file-below "open below")))
+
 #+end_src
 
-** General
 Shows a key combination helper in the minibuffer
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
@@ -1021,40 +1049,9 @@ Shows a key combination helper in the minibuffer
   (which-key-mode))
 #+END_SRC
 
-Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
+
+** General
 #+BEGIN_SRC emacs-lisp
-;; makes grep buffers writable and apply the changes to files.
-(use-package wgrep :defer t)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :diminish paredit-mode
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'paredit-mode))
-
-(use-package expand-region)
-
-(global-display-line-numbers-mode -1)
-(defun show-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'absolute))
-(defun hide-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'nil))
-(defun show-relative-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'relative))
-
-(global-hl-line-mode 1)
-
-(use-package rainbow-mode :diminish rainbow-mode)
-(use-package windresize)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package ivy-hydra)
 (use-package general
   :config
 
@@ -1072,8 +1069,9 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-    "ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
-    "jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
+    "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
+    "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
+    "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
     "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
     "jw" (lambda () (interactive) (find-file "~/work"))
     "k" 'recompile
@@ -1162,11 +1160,6 @@ Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
-   "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-   "C-c ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
-   "C-c jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
-   "C-c jp" (lambda () (interactive) (find-file "~/projects/")gtd)
-   "C-c jw" (lambda () (interactive)(find-file "~/work"))
    "C-c k" 'recompile
    "C-c K" 'compile
    "C-c l" 'org-store-link
@@ -1282,9 +1275,9 @@ org-capture allows to set up templates for quick note taking.
 This is a must to capture ideas quickly.
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
-        ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org") "* %?" :empty-lines 1)
-        ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
+      '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 #+END_SRC
 
@@ -1479,6 +1472,13 @@ This command switches to browser."
 * Search
 Searching is probably the most important thing in a code editor.
 Here is how I search.
+
+** Grep
+Make grep buffers writable with ~C-c C-p~. Apply changes with ~C-c C-e~
+#+BEGIN_SRC emacs-lisp
+;; makes grep buffers writable and apply the changes to files.
+(use-package wgrep :defer t)
+#+END_SRC
 
 ** Search in current file/buffer
 

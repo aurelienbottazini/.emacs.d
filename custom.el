@@ -284,7 +284,7 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-files
-   '("~/Documents/notes/vin.org" "/Users/aurelienbottazini/Documents/notes/gtd.org"))
+   '("~/Library/CloudStorage/Dropbox/notes/gtd.org" "~/Library/CloudStorage/Dropbox/notes/pennylane/pennylane.org" ))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-emphasis-alist
    '(("*" bold)
