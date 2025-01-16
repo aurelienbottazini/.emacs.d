@@ -721,6 +721,7 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+    "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
     "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
     "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
