@@ -395,7 +395,9 @@ cons cell (regexp . minor-mode)."
                    (append '(
 
                              ("\\.jpg\\'" . default)
+                             ("\\.jpeg\\'" . default)
                              ("\\.png\\'" . default)
+                             ("\\.pdf\\'" . default)
                              ) org-file-apps ))))
 
 (defun my-prog-mode-auto-fill-hook ()

@@ -659,7 +659,9 @@ larger than argument. Without argument to clear
                    (append '(
 
                              ("\\.jpg\\'" . default)
+                             ("\\.jpeg\\'" . default)
                              ("\\.png\\'" . default)
+                             ("\\.pdf\\'" . default)
                              ) org-file-apps ))))
 #+end_src
 * Windows
