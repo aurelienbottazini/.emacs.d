@@ -1484,11 +1484,11 @@ This command switches to browser."
 (setq-default truncate-lines nil)
 
 (use-package treemacs)
-;; (use-package all-the-icons
-;;   :if (display-graphic-p))
-;; (use-package treemacs-all-the-icons
-;;   :config
-;;   (treemacs-load-theme "all-the-icons"))
+(use-package all-the-icons
+  :if (display-graphic-p))
+(use-package treemacs-all-the-icons
+  :config
+  (treemacs-load-theme "all-the-icons"))
 (use-package treemacs-evil)
 
 ;; (use-package all-the-icons-dired
