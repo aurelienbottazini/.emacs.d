@@ -1063,10 +1063,18 @@ This command switches to browser."
 
 (use-package rubocopfmt
   :diminish rubocopfmt-mode
-  ;;:hook
-  ;;(ruby-ts-mode . rubocopfmt-mode)
-  ;;(ruby-mode . rubocopfmt-mode)
+  :hook
+  (ruby-ts-mode . rubocopfmt-mode)
+  (ruby-mode . rubocopfmt-mode)
+  :config
+
+  (defun silence-rubocop-messages (orig-fun &rest args)
+    (let ((inhibit-message t))
+      (apply orig-fun args)))
+
+  (advice-add 'rubocopfmt :around #'silence-rubocop-messages)
   )
+
 
 (define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
   "A major mode for tsx.")

@@ -104,7 +104,9 @@
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "MBA-725-ABOT")
+   '(((:application tramp :machine "MBP-725-ABOT")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "MBA-725-ABOT")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :protocol "flatpak")
       tramp-flatpak-connection-local-default-profile)
@@ -284,7 +286,7 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-files
-   '("~/Library/CloudStorage/Dropbox/notes/gtd.org" "~/Library/CloudStorage/Dropbox/notes/pennylane/pennylane.org" ))
+   '("~/Library/CloudStorage/Dropbox/notes/gtd.org" "~/Library/CloudStorage/Dropbox/notes/pennylane/pennylane.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-emphasis-alist
    '(("*" bold)
@@ -317,6 +319,7 @@
  '(pulse-delay 0.03)
  '(pulse-iterations 20)
  '(require-final-newline t)
+ '(rubocopfmt-show-errors nil)
  '(ruby-align-chained-calls t)
  '(ruby-align-to-stmt-keywords t)
  '(ruby-deep-arglist t)
