@@ -187,6 +187,29 @@ On very large files, I usually just explore them with search tools anyway"
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 
+(use-package paredit
+  :diminish paredit-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'paredit-mode))
+
+(use-package expand-region)
+
+(global-display-line-numbers-mode -1)
+(defun show-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'absolute))
+(defun hide-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'nil))
+(defun show-relative-line-numbers ()
+  (interactive)
+  (setq display-line-numbers 'relative))
+
+(global-hl-line-mode 1)
+
+(use-package rainbow-mode :diminish rainbow-mode)
+
 (defun auray/tmux-active-session ()
   (interactive)
   ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
@@ -361,7 +384,8 @@ cons cell (regexp . minor-mode)."
 (require 'org)
 
 (setq org-refile-targets '((nil :maxlevel . 3)
-                           (org-agenda-files :maxlevel . 3)))
+                           (org-agenda-files :maxlevel . 1)
+                           ))
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
@@ -655,6 +679,9 @@ cons cell (regexp . minor-mode)."
   (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
   (counsel-mode t))
 
+(use-package windresize)
+(use-package ivy-hydra)
+
 (defun find-file-right (filename)
   (interactive)
   (split-window-right)
@@ -677,34 +704,6 @@ cons cell (regexp . minor-mode)."
   :config
   (which-key-mode))
 
-;; makes grep buffers writable and apply the changes to files.
-(use-package wgrep :defer t)
-
-(use-package paredit
-  :diminish paredit-mode
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'paredit-mode))
-
-(use-package expand-region)
-
-(global-display-line-numbers-mode -1)
-(defun show-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'absolute))
-(defun hide-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'nil))
-(defun show-relative-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'relative))
-
-(global-hl-line-mode 1)
-
-(use-package rainbow-mode :diminish rainbow-mode)
-(use-package windresize)
-
-(use-package ivy-hydra)
 (use-package general
   :config
 
@@ -722,8 +721,9 @@ cons cell (regexp . minor-mode)."
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-    "ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
-    "jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
+    "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
+    "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
+    "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
     "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
     "jw" (lambda () (interactive) (find-file "~/work"))
     "k" 'recompile
@@ -812,11 +812,6 @@ cons cell (regexp . minor-mode)."
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
-   "C-c je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-   "C-c ji" (lambda () (interactive) (find-file "~/Documents/notes/inbox.org"))
-   "C-c jj" (lambda () (interactive) (find-file "~/Documents/notes/journal.org"))
-   "C-c jp" (lambda () (interactive) (find-file "~/projects/")gtd)
-   "C-c jw" (lambda () (interactive)(find-file "~/work"))
    "C-c k" 'recompile
    "C-c K" 'compile
    "C-c l" 'org-store-link
@@ -879,7 +874,7 @@ cons cell (regexp . minor-mode)."
   :init
   (setq deft-extensions '("org" "md")
         deft-recursive t
-        deft-directory "~/Dropbox/notes/"))
+        deft-directory "~/Library/CloudStorage/Dropbox/notes"))
 
 (use-package markdown-mode
   :mode "\\.md\\'")
@@ -890,9 +885,9 @@ cons cell (regexp . minor-mode)."
   (add-hook 'org-mode-hook 'palimpsest-mode))
 
 (setq org-capture-templates
-      '(("n" "Notes" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
-        ("j" "Journal" entry (file+datetree "~/Documents/notes/journal.org") "* %?" :empty-lines 1)
-        ("t" "todo" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
+      '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (defadvice org-capture-finalize
@@ -1013,6 +1008,9 @@ This command switches to browser."
     ;; (eww myUrl) ; emacs's own browser
     ))
 
+;; makes grep buffers writable and apply the changes to files.
+(use-package wgrep :defer t)
+
 (require 'auray/find-in-project)
 
 (use-package iedit)
@@ -1067,10 +1065,18 @@ This command switches to browser."
 
 (use-package rubocopfmt
   :diminish rubocopfmt-mode
-  ;;:hook
-  ;;(ruby-ts-mode . rubocopfmt-mode)
-  ;;(ruby-mode . rubocopfmt-mode)
+  :hook
+  (ruby-ts-mode . rubocopfmt-mode)
+  (ruby-mode . rubocopfmt-mode)
+  :config
+
+  (defun silence-rubocop-messages (orig-fun &rest args)
+    (let ((inhibit-message t))
+      (apply orig-fun args)))
+
+  (advice-add 'rubocopfmt :around #'silence-rubocop-messages)
   )
+
 
 (define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
   "A major mode for tsx.")
