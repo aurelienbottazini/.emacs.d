@@ -1112,7 +1112,7 @@ Shows a key combination helper in the minibuffer
    "]]" 'next-buffer
    "[e" 'flymake-goto-prev-error
    "]e" 'flymake-goto-next-error
-    ":" 'counsel-M-x
+    ":" 'evil-ex
     "-" 'dired-jump
    )
 

@@ -762,7 +762,7 @@ cons cell (regexp . minor-mode)."
    "]]" 'next-buffer
    "[e" 'flymake-goto-prev-error
    "]e" 'flymake-goto-next-error
-    ":" 'counsel-M-x
+    ":" 'evil-ex
     "-" 'dired-jump
    )
 
