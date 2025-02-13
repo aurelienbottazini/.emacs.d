@@ -729,7 +729,7 @@ cons cell (regexp . minor-mode)."
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
-    "p" 'project-find-file
+    "p" 'counsel-fzf
     "f" 'counsel-rg
     "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
@@ -1341,6 +1341,11 @@ This command switches to browser."
 (use-package sqlite3)
 
 (use-package jsonrpc)
+
+(use-package consult
+:ensure t
+:bind
+("C-c f" . consult-fd))
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)

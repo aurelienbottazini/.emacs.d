@@ -1079,7 +1079,7 @@ Shows a key combination helper in the minibuffer
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
-    "p" 'project-find-file
+    "p" 'counsel-fzf
     "f" 'counsel-rg
     "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
@@ -2068,6 +2068,13 @@ Speed up tramp
 
 #+begin_src emacs-lisp
 (use-package jsonrpc)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package consult
+:ensure t
+:bind
+("C-c f" . consult-fd))
 #+end_src
 
 * Local variables
