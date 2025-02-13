@@ -1446,6 +1446,7 @@ This command switches to browser."
  (when (or
            (eq major-mode 'typescript-ts-mode)
            (eq major-mode 'typescript-mode)
+           (eq major-mode 'typescriptreact-mode)
            (eq major-mode 'js2-mode)
            (eq major-mode 'web-mode)
            )
