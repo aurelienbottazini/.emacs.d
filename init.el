@@ -736,7 +736,17 @@ cons cell (regexp . minor-mode)."
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
+    "SPC" 'orazur-run
     )
+
+  (defun orazur-run ()
+    (interactive)
+    (cond
+     ((derived-mode-p 'ruby-ts-mode) (xmp))
+     ((derived-mode-p 'ruby-mode) 'xmp)
+     (t (message "nothing to run for this buffer")
+
+     )))
 
   (my-leader-def
     :states 'visual
