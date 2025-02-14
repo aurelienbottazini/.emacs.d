@@ -729,9 +729,10 @@ cons cell (regexp . minor-mode)."
     "k" 'recompile
     "g" 'magit-status
     "G" 'magit-file-dispatch
-    "p" 'counsel-fzf
+    "p" 'project-switch-project
     "f" 'counsel-rg
-    "t" (lambda () (interactive) (org-capture nil "t"))
+    "t" 'counsel-fzf
+    ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
