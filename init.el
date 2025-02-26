@@ -731,7 +731,7 @@ cons cell (regexp . minor-mode)."
     "G" 'magit-file-dispatch
     "p" 'project-switch-project
     "f" 'counsel-rg
-    "t" 'counsel-fzf
+    "t" 'project-find-file
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
