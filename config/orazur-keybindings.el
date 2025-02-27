@@ -49,7 +49,7 @@
     "e" 'recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
-    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.el"))
     "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
     "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
