@@ -936,7 +936,7 @@ This command switches to browser."
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
-  (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
+  (define-key evil-normal-state-map (kbd "C-r") 'undo-redo)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
   (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
@@ -1231,3 +1231,5 @@ This command switches to browser."
         (imagemagick-register-types))
 
 (setq warning-minimum-level :error)
+
+(use-package flycheck)
