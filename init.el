@@ -1070,7 +1070,7 @@ This command switches to browser."
   (set-face-background 'mode-line (auray/bg-modeline-color-from-evil-state))
   (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
 
-(add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
+;; (add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
