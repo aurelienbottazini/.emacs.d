@@ -1233,3 +1233,27 @@ This command switches to browser."
 (setq warning-minimum-level :error)
 
 (use-package flycheck)
+
+(setq project-find-functions
+      '(project-try-vc
+        project-try-local
+        (lambda (dir) (project-root (project-current nil dir)))))
+
+;; Use ripgrep for finding files
+(setq project-find-file-function
+      (lambda ()
+        (let ((default-directory (project-root (project-current t))))
+          (call-interactively 'counsel-rg))))
+
+;; (defun my-project-find-file-rg ()
+;;   "Find file in project using ripgrep."
+;;   (interactive)
+;;   (let* ((project (project-current t))
+;;          (default-directory (project-root project))
+;;          (files (split-string
+;;                 (shell-command-to-string "rg --files --hidden --glob '!.git'")
+;;                 "\n" t)))
+;;     (find-file (completing-read "Find file: " files))))
+
+;; ;; Bind it to replace the default
+;; (define-key project-prefix-map "f" 'my-project-find-file-rg)
