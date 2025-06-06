@@ -60,7 +60,8 @@
     "g" 'magit-status
     "G" 'magit-file-dispatch
     "p" 'project-switch-project
-    "f" 'counsel-rg
+    "f" 'rg
+    "F" 'counsel-rg
     "t" 'project-find-file
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
