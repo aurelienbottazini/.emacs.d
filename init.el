@@ -474,6 +474,8 @@ cons cell (regexp . minor-mode)."
 (use-package js2-mode
   :mode "\\.js\\'"
   :mode "\\.mjs\\'"
+  :mode "\\.ts\\'"
+  :mode "\\.tsx\\'"
   :mode "\\.jsx\\'")
 
 (use-package json-mode
@@ -486,17 +488,17 @@ cons cell (regexp . minor-mode)."
   (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
   (custom-set-variables '(coffee-tab-width 2)))
 
-(use-package typescript-mode
-  :after tree-sitter
-  :mode "\\.ts\\'"
-  :mode "\\.tsx\\'"
-  :mode "\\.mts\\'"
-  :config
-  (define-derived-mode typescriptreact-mode typescript-mode
-    "TypeScript TSX")
-   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode) )
-   (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx))
-  )
+;; (use-package typescript-mode
+;;   :after tree-sitter
+;;   :mode "\\.ts\\'"
+;;   :mode "\\.tsx\\'"
+;;   :mode "\\.mts\\'"
+;;   :config
+;;   (define-derived-mode typescriptreact-mode typescript-mode
+;;     "TypeScript TSX")
+;;    (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode) )
+;;    (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx))
+;;   )
 
 (use-package prettier-js
   :diminish prettier-js-mode
@@ -765,12 +767,12 @@ This command switches to browser."
 (setq project-switch-commands 'project-dired)
 
 
-(define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
-  "A major mode for tsx.")
+;; (define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
+;;   "A major mode for tsx.")
 
-(use-package typescript-mode
-  :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.tsx\\'" . typescriptreact-mode)))
+;; (use-package typescript-mode
+;;   :mode (("\\.ts\\'" . typescript-mode)
+;;          ("\\.tsx\\'" . typescriptreact-mode)))
 
 (use-package lsp-mode
   :init
