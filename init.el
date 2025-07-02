@@ -798,8 +798,6 @@ This command switches to browser."
                                          try-expand-dabbrev-from-kill
                                          try-expand-all-abbrevs
                                          try-expand-dabbrev-all-buffers
-                                         try-complete-list-symbol-partially
-                                         try-compilete-list-symbol
                                          try-complete-file-name-partially
                                          try-complete-file-name))
 (require 'mode-local)
