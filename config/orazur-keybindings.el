@@ -43,12 +43,14 @@
     :states 'normal
     :keymaps 'override
     "a" 'find-sibling-file
+    "b" 'ibuffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
     "e" 'recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
+    "i" 'imenu
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.el"))
     "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
