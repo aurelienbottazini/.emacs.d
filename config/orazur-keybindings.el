@@ -130,6 +130,7 @@
    "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-c C-q" 'org-set-tags-command
 
    "C-c 9" 'paredit-backward-slurp-sexp
    "C-c 0" 'paredit-forward-slurp-sexp
