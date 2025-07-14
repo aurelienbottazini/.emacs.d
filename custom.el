@@ -205,8 +205,8 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-files
-   '("~/Library/CloudStorage/Dropbox/notes/gtd.org"
-     "~/Library/CloudStorage/Dropbox/notes/pennylane/pennylane.org"))
+   '("~/Dropbox/notes/journal.org"
+     "~/Dropbox/notes/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-emphasis-alist
    '(("*" bold) ("/" italic) ("_" underline) ("=" lazy-highlight verbatim) ("~" org-code verbatim)

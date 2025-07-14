@@ -42,6 +42,7 @@
   (my-leader-def
     :states 'normal
     :keymaps 'override
+    "A" 'org-agenda
     "a" 'find-sibling-file
     "b" 'ibuffer
     "1" 'treemacs
