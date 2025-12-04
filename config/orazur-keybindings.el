@@ -65,7 +65,7 @@
     "p" 'project-switch-project
     "F" 'rg
     "f" 'counsel-rg
-    "t" 'project-find-file
+    "t" 'projectile-find-file
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
