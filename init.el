@@ -242,7 +242,7 @@ On very large files, I usually just explore them with search tools anyway"
  (mode-line-buffer-id ((t (:slant italic :weight bold))))
  (xref-match ((t (:inherit match))))
   :config
-  (load-theme 'gruvbox-dark-medium)
+  ;; (load-theme 'gruvbox-dark-medium)
   )
 
 (defun sudo ()
