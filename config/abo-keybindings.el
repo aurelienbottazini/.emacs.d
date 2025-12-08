@@ -1,11 +1,4 @@
 (use-package multiple-cursors)
-;; (use-package counsel
-;;   :diminish counsel-mode ivy-mode
-;;   :config
-;;   (ivy-mode t)
-;;   (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
-;;   (counsel-mode t))
-
 (use-package windresize)
 
 (use-package ivy-hydra)
@@ -64,17 +57,17 @@
     "G" 'magit-file-dispatch
     "p" 'project-switch-project
     "F" 'rg
-    "f" 'counsel-rg
-    "t" 'projectile-find-file
+    "f" 'consult-ripgrep
+    "t" 'consult-fd
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
     "W" 'er/contract-region
     "x" 'emamux:run-last-command
     "X" 'emamux:send-command
-    "SPC" 'orazur-run
+    "SPC" 'abo-run
     )
 
-  (defun orazur-run ()
+  (defun abo-run ()
     (interactive)
     (cond
      ((derived-mode-p 'ruby-ts-mode) (xmp))

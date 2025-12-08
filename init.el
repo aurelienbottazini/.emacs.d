@@ -1,5 +1,3 @@
-;; -*- lexical-binding: t; -*-
-
 (let ((default-directory  "~/.emacs.d/config/"))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
@@ -170,38 +168,38 @@ On very large files, I usually just explore them with search tools anyway"
 
 (use-package rainbow-mode :diminish rainbow-mode)
 
-(defun auray/tmux-active-session ()
+(defun abo/tmux-active-session ()
   (interactive)
   ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
  (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
 
-(defun auray/tmux-select-pane (direction)
-  (shell-command (concat  "tmux select-pane -t " (auray/tmux-active-session) " -" direction)))
+(defun abo/tmux-select-pane (direction)
+  (shell-command (concat  "tmux select-pane -t " (abo/tmux-active-session) " -" direction)))
 
-(defun auray/tmux-move (direction)
+(defun abo/tmux-move (direction)
   (condition-case nil
       (cond
        ((string= "R" direction) (windmove-right))
        ((string= "L" direction) (windmove-left))
        ((string= "U" direction) (windmove-up))
        ((string= "D" direction) (windmove-down)))
-    (error (unless window-system (auray/tmux-select-pane direction)))))
+    (error (unless window-system (abo/tmux-select-pane direction)))))
 
 (defun tmux-move-right ()
   (interactive)
-  (auray/tmux-move "R"))
+  (abo/tmux-move "R"))
 
 (defun tmux-move-left ()
   (interactive)
-  (auray/tmux-move "L"))
+  (abo/tmux-move "L"))
 
 (defun tmux-move-up ()
   (interactive)
-  (auray/tmux-move "U"))
+  (abo/tmux-move "U"))
 
 (defun tmux-move-down ()
   (interactive)
-  (auray/tmux-move "D"))
+  (abo/tmux-move "D"))
 
 (use-package diminish
   :config
@@ -266,11 +264,11 @@ cons cell (regexp . minor-mode)."
   (interactive)
   (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
 
-(defun auray/today ()
+(defun abo/today ()
   "Today's date as a string."
   (format-time-string "%Y-%m-%d"))
 
-(defun auray/add-date-to-filename ()
+(defun abo/add-date-to-filename ()
   "Add current date in front of filename for current buffer. This is useful with some Blog tools like Jekyll to publish new articles."
   (interactive)
   (let* ((date (abott/today))
@@ -285,12 +283,12 @@ cons cell (regexp . minor-mode)."
     (set-visited-file-name new-file-name)
     (save-buffer)))
 
-(defun auray/insert-date ()
+(defun abo/insert-date ()
   "Insert today's date in current buffer"
   (interactive)
   (insert (abott/today)))
 
-(defun auray/toggle-html-export-on-save ()
+(defun abo/toggle-html-export-on-save ()
   "Enable or disable HTML export when saving current org buffer."
   (interactive)
   (when (not (eq major-mode 'org-mode))
@@ -302,7 +300,7 @@ cons cell (regexp . minor-mode)."
     (set-buffer-modified-p t)
     (message "Enabled org html export on save")))
 
-(defun auray/change-line-endings-to-unix ()
+(defun abo/change-line-endings-to-unix ()
   (let ((coding-str (symbol-name buffer-file-coding-system)))
     (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
       (set-buffer-file-coding-system 'unix))))
@@ -547,8 +545,6 @@ cons cell (regexp . minor-mode)."
             (lambda ()
               (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index))))))
 
-(require 'aurayb-narrow-indirect-vue)
-
 (use-package rust-mode
   :bind (:map rust-mode-map
               ("C-c C-c" . rust-run)))
@@ -563,7 +559,7 @@ cons cell (regexp . minor-mode)."
 
 (use-package elm-mode)
 
-(require 'orazur-keybindings)
+(require 'abo-keybindings)
 
 (setq org-directory "~/Documents/notes")
 
@@ -721,7 +717,7 @@ This command switches to browser."
 ;; makes grep buffers writable and apply the changes to files.
 (use-package wgrep :defer t)
 
-(require 'auray/find-in-project)
+(require 'abo/find-in-project)
 
 (use-package iedit)
 
@@ -931,7 +927,7 @@ This command switches to browser."
 
 (use-package ox-reveal
   :config
-  (setq org-reveal-root "file:///Users/auray/.emacs.d/site-lisp/reveal.js-4.1.0"))
+  (setq org-reveal-root "file:///Users/abo/.emacs.d/site-lisp/reveal.js-4.1.0"))
 
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
@@ -1045,7 +1041,7 @@ This command switches to browser."
 (use-package jsonrpc)
 
 
-(defun auray/bg-modeline-color-from-evil-state ()
+(defun abo/bg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#87af87")
         ((evil-visual-state-p) "#87afaf")
@@ -1053,7 +1049,7 @@ This command switches to browser."
         ((evil-normal-state-p) "#ffaf00")
         (t "#3c3836")))
 
-(defun auray/fg-modeline-color-from-evil-state ()
+(defun abo/fg-modeline-color-from-evil-state ()
   (interactive)
   (cond ((evil-insert-state-p) "#3c3836")
         ((evil-visual-state-p) "#3c3836")
@@ -1061,12 +1057,12 @@ This command switches to browser."
         ((evil-normal-state-p) "#3c3836")
         (t "#ebddb2")))
 
-(defun auray/post-command-evil-modeline-colors-hook ()
+(defun abo/post-command-evil-modeline-colors-hook ()
   (interactive)
-  (set-face-background 'mode-line (auray/bg-modeline-color-from-evil-state))
-  (set-face-foreground 'mode-line (auray/fg-modeline-color-from-evil-state)))
+  (set-face-background 'mode-line (abo/bg-modeline-color-from-evil-state))
+  (set-face-foreground 'mode-line (abo/fg-modeline-color-from-evil-state)))
 
-;; (add-hook 'post-command-hook 'auray/post-command-evil-modeline-colors-hook)
+;; (add-hook 'post-command-hook 'abo/post-command-evil-modeline-colors-hook)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)

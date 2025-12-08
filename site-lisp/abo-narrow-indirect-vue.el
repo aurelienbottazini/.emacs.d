@@ -1,5 +1,5 @@
 ;;;  -*- lexical-binding: t; -*-
-(defun aurayb-make-narrow-indirect-vue (atag-string amode-fn)
+(defun abo-make-narrow-indirect-vue (atag-string amode-fn)
   (lambda ()
     "Creates an indirect buffer for a .vue file component and narrows it to the region
  inside atag-string and set amode-fn as the mode file.
@@ -25,4 +25,4 @@ If already in the indirect buffer, switches bach to base-buffer."
               (funcall amode-fn)
               )))))))
 
-(provide 'aurayb-narrow-indirect-vue)
+(provide 'abo-narrow-indirect-vue)

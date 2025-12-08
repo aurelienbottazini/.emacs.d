@@ -1,4 +1,3 @@
-
 (use-package ruby-ts-mode
   :mode "\\.rake\\'"
   :mode "Rakefile\\'"
