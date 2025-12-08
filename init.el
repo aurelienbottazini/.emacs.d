@@ -1270,3 +1270,16 @@ This command switches to browser."
 :ensure t
 :bind
 ("C-c f" . consult-fd))
+
+(use-package embark
+  :bind (("C-." . embark-act)    ; The "Do Something" key
+         ("C-;" . embark-dwim)   ; "Do What I Mean"
+         ("C-h B" . embark-bindings))
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+(use-package embark-consult
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
