@@ -1285,3 +1285,12 @@ This command switches to browser."
   :after (embark consult)
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+(add-hook 'emacs-lisp-mode-hook
+  (lambda ()
+    (setq mode-name
+          '("Elisp"
+            ;; Dynamically check if lexical-binding is true or false
+            (:eval (if lexical-binding
+                       "/l"
+                     (propertize "/d" 'face 'nil)))))))
