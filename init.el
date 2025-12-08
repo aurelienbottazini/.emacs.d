@@ -120,6 +120,13 @@ On very large files, I usually just explore them with search tools anyway"
 ;; replace selected text when typing.
 (pending-delete-mode 1)
 
+;; 1. Force UTF-8 for filenames to stop the HFS recursion error
+(setq default-file-name-coding-system 'utf-8-unix)
+(setq file-name-coding-system 'utf-8-unix)
+
+;; 2. Ensure process outputs (like 'fd') are read as standard UTF-8
+(setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+
 (prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'process "\\*compilation\\*\\'"   'utf-8)
 
