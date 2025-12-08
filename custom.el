@@ -186,7 +186,7 @@
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-auto-execute-action nil)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
@@ -204,9 +204,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
- '(org-agenda-files
-   '("~/Dropbox/notes/journal.org"
-     "~/Dropbox/notes/gtd.org"))
+ '(org-agenda-files '("~/Dropbox/notes/journal.org" "~/Dropbox/notes/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-emphasis-alist
    '(("*" bold) ("/" italic) ("_" underline) ("=" lazy-highlight verbatim) ("~" org-code verbatim)
@@ -365,6 +363,9 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Monolisa v2 variable custom"))))
  '(fixed-pitch ((t (:family "Monolisa v2 variable custom"))))
+ '(font-lock-comment-face ((t (:background "yellow" :foreground "black" :slant italic))))
+ '(font-lock-function-name-face ((t (:background "pale turquoise"))))
+ '(font-lock-string-face ((t (:background "pale green"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
