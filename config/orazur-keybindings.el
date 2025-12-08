@@ -1,10 +1,10 @@
 (use-package multiple-cursors)
-(use-package counsel
-  :diminish counsel-mode ivy-mode
-  :config
-  (ivy-mode t)
-  (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
-  (counsel-mode t))
+;; (use-package counsel
+;;   :diminish counsel-mode ivy-mode
+;;   :config
+;;   (ivy-mode t)
+;;   (define-key ivy-minibuffer-map (kbd "C-c C-c") 'ivy-restrict-to-matches)
+;;   (counsel-mode t))
 
 (use-package windresize)
 
@@ -122,7 +122,7 @@
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
-   "M-x" 'counsel-M-x
+   ;; "M-x" 'counsel-M-x
 
    "C-h" 'tmux-move-left
    "C-j" 'tmux-move-down
@@ -172,7 +172,7 @@
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
-   "C-x C-m" 'counsel-M-x ; Another =M-x= without leaving the home row
+   ;; "C-x C-m" 'counsel-M-x ; Another =M-x= without leaving the home row
    "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
    "C-x C-f" 'counsel-find-file

@@ -1044,10 +1044,6 @@ This command switches to browser."
 
 (use-package jsonrpc)
 
-(use-package consult
-:ensure t
-:bind
-("C-c f" . consult-fd))
 
 (defun auray/bg-modeline-color-from-evil-state ()
   (interactive)
@@ -1268,15 +1264,6 @@ This command switches to browser."
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
-  :bind (("C-x p f" . consult-find)
-         ("C-x p g" . consult-ripgrep))
-  :config
-  ;; 1. Define the command string.
-  ;; Note: On Ubuntu/Debian, the binary is often named 'fdfind', not 'fd'.
-  (defvar my-consult-find-command
-    (if (executable-find "fdfind")
-        "fdfind --color=never --hidden --exclude .git/ --full-path ARG OPTS"
-      "fd --color=never --hidden --exclude .git/ --full-path ARG OPTS"))
-
-  ;; 2. Apply it using the modern consult-customize method
-  (consult-customize consult-find :command my-consult-find-command))
+:ensure t
+:bind
+("C-c f" . consult-fd))
