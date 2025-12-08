@@ -1272,7 +1272,7 @@ This command switches to browser."
 ("C-c f" . consult-fd))
 
 (use-package embark
-  :bind (("C-." . embark-act)    ; The "Do Something" key
+  :bind (("C-o" . embark-act)    ; The "Do Something" key
          ("C-;" . embark-dwim)   ; "Do What I Mean"
          ("C-h B" . embark-bindings))
   :init
