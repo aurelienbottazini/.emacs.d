@@ -1,8 +1,6 @@
 (use-package multiple-cursors)
 (use-package windresize)
 
-(use-package ivy-hydra)
-
 (defun find-file-right (filename)
   (interactive)
   (split-window-right)
@@ -15,16 +13,10 @@
   (other-window 1)
   (find-file filename))
 
-(ivy-set-actions
- t
- '(("|" find-file-right "open right")
-   ("%" find-file-below "open below")))
-
 (use-package which-key
   :diminish which-key-mode
   :config
   (which-key-mode))
-
 
 (use-package general
   :config
@@ -123,7 +115,6 @@
    "C-k" 'tmux-move-up
 
    "C-r" 'undo-redo
-   "C-s" 'swiper
 
    "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-c C-q" 'org-set-tags-command
@@ -165,7 +156,7 @@
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
-   ;; "C-x C-m" 'counsel-M-x ; Another =M-x= without leaving the home row
+   "C-x C-m" 'execute-extended-command
    "C-x C-o" 'company-complete
    "C-x b" 'switch-to-buffer
    "C-x C-f" 'counsel-find-file
