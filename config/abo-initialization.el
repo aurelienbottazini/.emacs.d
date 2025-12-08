@@ -45,4 +45,4 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(provide 'orazur-initialization)
+(provide 'abo-initialization)

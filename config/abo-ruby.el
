@@ -69,4 +69,4 @@
         (insert "=>"))
     ad-do-it))
 
-(provide 'aurayauray-ruby)
+(provide 'abo-ruby)

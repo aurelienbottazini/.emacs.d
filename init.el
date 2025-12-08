@@ -4,7 +4,7 @@
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(require 'orazur-initialization)
+(require 'abo-initialization)
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -420,7 +420,7 @@ cons cell (regexp . minor-mode)."
         ))
   (setq cider-repl-display-help-banner nil))
 
-(require 'aurayauray-ruby)
+(require 'abo-ruby)
 
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
