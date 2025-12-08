@@ -1236,7 +1236,6 @@ This command switches to browser."
 
 (setq project-find-functions
       '(project-try-vc
-        project-try-local
         (lambda (dir) (project-root (project-current nil dir)))))
 
 ;; Use ripgrep for finding files
@@ -1257,3 +1256,27 @@ This command switches to browser."
 
 ;; ;; Bind it to replace the default
 ;; (define-key project-prefix-map "f" 'my-project-find-file-rg)
+
+;; 1. Install packages: consult, vertico, orderless, marginalia
+(use-package vertico
+  :init (vertico-mode))
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package consult
+  :bind (("C-x p f" . consult-find)
+         ("C-x p g" . consult-ripgrep))
+  :config
+  ;; 1. Define the command string.
+  ;; Note: On Ubuntu/Debian, the binary is often named 'fdfind', not 'fd'.
+  (defvar my-consult-find-command
+    (if (executable-find "fdfind")
+        "fdfind --color=never --hidden --exclude .git/ --full-path ARG OPTS"
+      "fd --color=never --hidden --exclude .git/ --full-path ARG OPTS"))
+
+  ;; 2. Apply it using the modern consult-customize method
+  (consult-customize consult-find :command my-consult-find-command))
