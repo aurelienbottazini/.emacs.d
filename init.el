@@ -1294,3 +1294,5 @@ This command switches to browser."
             (:eval (if lexical-binding
                        "/l"
                      (propertize "/d" 'face 'nil)))))))
+
+(setenv "FZF_DEFAULT_OPTS" "--color=light")
