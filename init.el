@@ -956,7 +956,7 @@ This command switches to browser."
   (defun my-evil-record-macro ()
     (interactive)
     (if buffer-read-only
-        (quit-window)
+        (call-interactively 'quit-window)
       (call-interactively 'evil-record-macro)))
 
   (with-eval-after-load 'evil-maps

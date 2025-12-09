@@ -362,6 +362,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Monolisa v2 variable custom"))))
+ '(error ((t (:background "red" :foreground "white" :weight bold))))
  '(fixed-pitch ((t (:family "Monolisa v2 variable custom"))))
  '(font-lock-comment-face ((t (:background "yellow" :foreground "black" :slant italic))))
  '(font-lock-function-name-face ((t (:background "pale turquoise"))))
