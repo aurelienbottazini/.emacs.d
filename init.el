@@ -519,7 +519,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package context-coloring
   :ensure t
-  :hook ((js2-mode . context-coloring-mode))
   :bind (("C-c oc" . context-coloring-mode)))
 
 (add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )

@@ -186,7 +186,7 @@
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-auto-execute-action nil)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
