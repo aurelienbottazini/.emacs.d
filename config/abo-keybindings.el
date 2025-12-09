@@ -177,5 +177,27 @@
   :config
   (drag-stuff-global-mode t))
 
+(defun my/sublime-mark-next ()
+  "Behave exactly like Sublime Text's Cmd+D.
+   1. If no region is active, select the symbol at point.
+   2. If a region IS active, mark the next occurrence."
+  (interactive)
+  (if (region-active-p)
+      (mc/mark-next-like-this 1)
+    ;; If no selection, manually select the symbol under cursor
+    (if-let ((bounds (bounds-of-thing-at-point 'symbol)))
+        (progn
+          (goto-char (car bounds))
+          (push-mark (cdr bounds) t t))
+      (user-error "No symbol at point"))))
+
+(use-package multiple-cursors
+  :bind (("C->" . my/sublime-mark-next)))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
 (provide 'abo-keybindings)
