@@ -365,6 +365,7 @@
  '(fixed-pitch ((t (:family "Monolisa v2 variable custom"))))
  '(font-lock-comment-face ((t (:background "yellow" :foreground "black" :slant italic))))
  '(font-lock-function-name-face ((t (:background "pale turquoise"))))
+ '(font-lock-keyword-face ((t nil)))
  '(font-lock-string-face ((t (:background "pale green"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
