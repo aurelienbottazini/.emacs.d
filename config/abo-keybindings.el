@@ -48,6 +48,7 @@
     "g" 'magit-status
     "G" 'magit-file-dispatch
     "p" 'project-switch-project
+    "o" 'consult-outline
     "F" 'rg
     "f" 'consult-ripgrep
     "t" 'consult-fd
@@ -153,14 +154,14 @@
    "C-c t" 'tab-switcher
 
    "C-c p" 'project-find-file
-   "C-c r" 'recentf-open
+   "C-c r" 'consult-recent-file
    "C-c R" 'revert-buffer
    "C-c w r" 'windresize
 
    "C-x C-m" 'execute-extended-command
    "C-x C-o" 'company-complete
-   "C-x b" 'switch-to-buffer
-   "C-x C-f" 'counsel-find-file
+   "C-x b" 'consult-buffer
+   "C-x C-f" 'find-file
    "C-x B" 'project-switch-to-buffer
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
