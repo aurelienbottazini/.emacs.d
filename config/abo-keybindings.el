@@ -29,14 +29,14 @@
     :keymaps 'override
     "A" 'org-agenda
     "a" 'find-sibling-file
-    "b" 'ibuffer
+    "b" 'consult-ibuffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
-    "e" 'recentf
+    "e" 'consult-recentf
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
-    "i" 'imenu
+    "i" 'consult-imenu
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.el"))
     "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
@@ -64,6 +64,7 @@
     (cond
      ((derived-mode-p 'ruby-ts-mode) (xmp))
      ((derived-mode-p 'ruby-mode) 'xmp)
+     ((derived-mode-p 'emacs-lisp-mode) 'eval-buffer)
      (t (message "nothing to run for this buffer")
 
      )))
