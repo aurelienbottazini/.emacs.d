@@ -33,7 +33,7 @@
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
-    "e" 'consult-recentf
+    "e" 'consult-recent-file
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'consult-imenu

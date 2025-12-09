@@ -1235,9 +1235,7 @@ This command switches to browser."
 
 (use-package flycheck)
 
-(setq project-find-functions
-      '(project-try-vc
-        (lambda (dir) (project-root (project-current nil dir)))))
+(setq project-find-functions '(project-try-vc))
 
 ;; Use ripgrep for finding files
 (setq project-find-file-function
