@@ -1279,7 +1279,11 @@ This command switches to browser."
          ("C-h B" . embark-bindings))
   :init
   ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command))
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  ;; Add 't' to open files/buffers in a new tab
+  (define-key embark-file-map (kbd "t") #'find-file-other-tab)
+  (define-key embark-buffer-map (kbd "t") #'switch-to-buffer-other-tab))
 
 (use-package embark-consult
   :after (embark consult)
