@@ -365,7 +365,7 @@
  '(error ((t (:background "red" :foreground "white" :weight bold))))
  '(fixed-pitch ((t (:family "Monolisa v2 variable custom"))))
  '(font-lock-comment-face ((t (:background "yellow" :foreground "black" :slant italic))))
- '(font-lock-constant-face ((t (:foreground "purple"))))
+ '(font-lock-constant-face ((t nil)))
  '(font-lock-function-name-face ((t (:background "pale turquoise"))))
  '(font-lock-keyword-face ((t nil)))
  '(font-lock-string-face ((t (:background "pale green"))))
