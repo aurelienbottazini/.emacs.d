@@ -1025,9 +1025,9 @@ This command switches to browser."
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state))
 
-(setq evil-insert-state-cursor '((bar . 2) "#87af87")
-      evil-normal-state-cursor '(box "#ffaf00")
-      evil-visual-state-cursor '(box "#87afaf")
+(setq evil-insert-state-cursor '((bar . 2) "black")
+      evil-normal-state-cursor '(box "black")
+      evil-visual-state-cursor '(box "black")
       evil-emacs-state-cursor '((box . 2) "#d787af"))
 
 (require 'tramp)
