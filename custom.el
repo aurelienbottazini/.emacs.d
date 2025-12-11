@@ -362,17 +362,28 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Monolisa v2 variable custom"))))
- '(error ((t (:background "red" :foreground "white" :weight bold))))
+ '(error ((t (:background "#ffe0e0" :foreground "black" :weight bold))))
  '(fixed-pitch ((t (:family "Monolisa v2 variable custom"))))
- '(font-lock-comment-face ((t (:background "#fffab4" :foreground "black" :slant italic))))
+ '(font-lock-comment-face ((t (:background "#fffabc" :foreground "black" :slant italic))))
  '(font-lock-constant-face ((t nil)))
- '(font-lock-function-name-face ((t (:background "pale turquoise"))))
+ '(font-lock-function-name-face ((t (:background "#dbf1ff"))))
  '(font-lock-keyword-face ((t nil)))
- '(font-lock-string-face ((t (:background "pale green"))))
- '(font-lock-type-face ((t (:background "pale turquoise"))))
+ '(font-lock-string-face ((t (:background "#f1fadf"))))
+ '(font-lock-type-face ((t (:background "#dbf1ff"))))
  '(font-lock-variable-name-face ((t nil)))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.0))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0)))))
+
+        ;; "active":     "#007ACC",
+        ;; "fg":         "#000",
+        ;; "bg":         "#fff",
+        ;; "blue":       "#DBF1FF",
+        ;; "green":      "#F1FADF",
+        ;; "dark_green": "#DBECB6",
+        ;; "red":        "#FFE0E0",
+        ;; "magenta":    "#F9E0FF",
+        ;; "yellow":     "#FFFABC",
+        ;; "orange":     "#FFBC5D",
