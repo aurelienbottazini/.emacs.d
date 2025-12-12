@@ -29,7 +29,7 @@
     :keymaps 'override
     "A" 'org-agenda
     "a" 'find-sibling-file
-    "b" 'consult-ibuffer
+    "b" 'consult-buffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
     "d" 'dired-jump
