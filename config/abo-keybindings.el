@@ -32,7 +32,7 @@
     "b" 'consult-ibuffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
-    "d" 'dired-jump
+    "d" 'lsp-ui-flycheck-list
     "e" 'consult-recent-file
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
