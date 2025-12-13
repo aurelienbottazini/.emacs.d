@@ -757,7 +757,23 @@ This command switches to browser."
          (js2-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  :commands lsp
+  :config
+    (defun my/lsp-filter-typescript-commonjs (params _workspace)
+    "Filter out CommonJS module suggestion."
+    (let ((diagnostics (gethash "diagnostics" params)))
+      (puthash "diagnostics"
+               (cl-remove-if (lambda (d)
+                              (equal (gethash "code" d) 80001))
+                            diagnostics)
+               params))
+    params)
+
+  (advice-add 'lsp--on-diagnostics :before #'my/lsp-filter-typescript-commonjs)
+
+
+
+  )
 
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
