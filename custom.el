@@ -177,6 +177,7 @@
  '(global-evil-search-highlight-persist nil)
  '(highlight-blocks-max-innermost-block-count 1)
  '(hlt-auto-face-foreground "black")
+ '(imenu-max-item-length 100)
  '(indicate-buffer-boundaries 'left)
  '(indicate-empty-lines nil)
  '(ispell-highlight-face 'flyspell-incorrect)
@@ -186,7 +187,7 @@
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-auto-execute-action nil)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
