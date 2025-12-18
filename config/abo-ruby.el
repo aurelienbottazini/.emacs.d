@@ -24,7 +24,16 @@
   (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
   (add-hook 'ruby-ts-mode-hook (defun auray-ruby-ts-mode-hook ()
              (modify-syntax-entry ?_ "w")       ; now '_' is not considered a word-delimiter
-             )))
+             ))
+  (with-eval-after-load 'speedbar
+    (require 'speedbar)
+    (speedbar-add-supported-extension ".rb")
+    (speedbar-add-supported-extension ".rake")
+    (speedbar-add-supported-extension "Rakefile")
+    (speedbar-add-supported-extension "Gemfile")
+    (defvar speedbar-fetch-dynamic-tags-alist nil)
+    (add-to-list 'speedbar-fetch-dynamic-tags-alist
+                 '(ruby-ts-mode . speedbar-fetch-dynamic-imenu))))
 
 (use-package robe
   :after evil
