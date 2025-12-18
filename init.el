@@ -739,6 +739,11 @@ This command switches to browser."
 
 (setq speedbar-directory-unshown-regexp "^$")
 
+(with-eval-after-load 'speedbar
+  (require 'speedbar)
+  (speedbar-add-supported-extension ".ts")
+  (speedbar-add-supported-extension ".tsx"))
+
 (setq project-switch-commands 'project-dired)
 
 

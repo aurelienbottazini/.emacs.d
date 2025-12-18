@@ -51,6 +51,7 @@
     "o" 'consult-outline
     "F" 'rg
     "f" 'consult-ripgrep
+    "s" 'speedbar-get-focus
     "t" 'consult-fd
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
     "w" 'er/expand-region
