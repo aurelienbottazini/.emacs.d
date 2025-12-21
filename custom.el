@@ -207,6 +207,7 @@
  '(ns-command-modifier 'meta)
  '(org-agenda-files '("~/Dropbox/notes/journal.org" "~/Dropbox/notes/gtd.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
+ '(org-download-method 'attach)
  '(org-emphasis-alist
    '(("*" bold) ("/" italic) ("_" underline) ("=" lazy-highlight verbatim) ("~" org-code verbatim)
      ("+" (:strike-through t))))
