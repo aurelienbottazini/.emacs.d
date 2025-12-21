@@ -225,6 +225,7 @@
  '(org-startup-folded nil)
  '(org-startup-indented t)
  '(org-startup-truncated t)
+ '(org-startup-with-inline-images t)
  '(package-selected-packages
    '(chatgpt flymake-kondor tramp robe edit-indirect highlight-blocks highlight-thing rainbow-blocks
              iyv-hydra sqlite3 multi-vterm treesit-auto swiper elm-mode vterm clj-refactor
