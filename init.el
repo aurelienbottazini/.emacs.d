@@ -1289,3 +1289,5 @@ This command switches to browser."
                      (propertize "/d" 'face 'nil)))))))
 
 (setenv "FZF_DEFAULT_OPTS" "--color=light")
+
+(add-hook 'org-archive-hook 'org-save-all-org-buffers)
