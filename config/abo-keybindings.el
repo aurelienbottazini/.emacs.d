@@ -27,8 +27,7 @@
   (my-leader-def
     :states 'normal
     :keymaps 'override
-    "A" 'org-agenda
-    "a" 'find-sibling-file
+    "a" 'org-agenda
     "b" 'consult-buffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
@@ -51,6 +50,7 @@
     "o" 'consult-outline
     "F" 'rg
     "f" 'consult-ripgrep
+    "r" 'find-sibling-file
     "s" 'speedbar-get-focus
     "t" 'consult-fd
     ;; "t" (lambda () (interactive) (org-capture nil "t"))

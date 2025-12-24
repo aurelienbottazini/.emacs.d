@@ -552,7 +552,7 @@ cons cell (regexp . minor-mode)."
 (setq org-log-into-drawer t)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(canceled@)")))
+      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)")))
 
 (use-package deft
   :commands (deft)
