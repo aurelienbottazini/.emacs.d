@@ -318,7 +318,6 @@ cons cell (regexp . minor-mode)."
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
-(require 'org)
 
 (setq org-refile-targets '((nil :maxlevel . 3)
                            (org-agenda-files :maxlevel . 1)
@@ -546,10 +545,13 @@ cons cell (regexp . minor-mode)."
 
 (require 'org-tempo) ;; shortcuts like <s <q to insert org block;
 
-;; (require 'org-habit)
-;; (add-to-list 'org-modules "org-habit")
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
 ;; (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
+(setq org-habit-show-habits t) ;; Affiche les habitudes dans l'agenda
+(setq org-habit-graph-column 50) ;; Ajuste la position du graphique à droite
+(setq org-habit-show-habits-only-for-today nil) ;; Mettez à nil pour voir les habitudes futures
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)")))
@@ -652,6 +654,8 @@ cons cell (regexp . minor-mode)."
             (setq-local time-stamp-start "Updated on[ 	]+\\\\?[\"<]+")
             (org-indent-mode t)
             (add-hook 'before-save-hook 'time-stamp nil 'local)))
+
+(setq org-hide-emphasis-markers nil)
 
 (add-hook 'write-file-hooks 'time-stamp) ; update time-stamp on save
 (require 'ox-publish)

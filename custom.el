@@ -274,7 +274,9 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook (lambda nil (eval-buffer) (ert-run-tests-interactively t)) nil t)
+   '((eval add-hook 'after-save-hook #'org-table-recalculate-buffer-tables nil t)
+     (eval add-hook 'after-save-hook (lambda nil (eval-buffer) (ert-run-tests-interactively t)) nil
+           t)
      (eval add-hook 'after-save-hook (lambda nil (ert-run-tests-interactively t) (other-window)) nil
            t)
      (eval add-hook 'after-save-hook
@@ -378,7 +380,9 @@
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.0))))
- '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0)))))
+ '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0))))
+ '(outline-2 ((t (:inherit font-lock-variable-name-face :background "#f1fadf"))))
+ '(outline-3 ((t (:inherit font-lock-keyword-face :background "#f9e0ff")))))
 
         ;; "active":     "#007ACC",
         ;; "fg":         "#000",
