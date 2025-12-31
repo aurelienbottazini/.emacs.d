@@ -378,9 +378,10 @@
  '(font-lock-variable-name-face ((t nil)))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
- '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
- '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.0))))
- '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
+ '(org-quote ((t (:inherit org-block :slant italic))))
  '(outline-2 ((t (:inherit font-lock-variable-name-face :background "#f1fadf"))))
  '(outline-3 ((t (:inherit font-lock-keyword-face :background "#f9e0ff")))))
 
