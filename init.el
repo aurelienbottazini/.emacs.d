@@ -554,7 +554,7 @@ cons cell (regexp . minor-mode)."
 (setq org-habit-show-habits-only-for-today nil) ;; Mettez à nil pour voir les habitudes futures
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)")))
+      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)" )))
 
 (use-package deft
   :commands (deft)

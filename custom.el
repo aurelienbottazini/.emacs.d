@@ -376,14 +376,17 @@
  '(font-lock-string-face ((t (:background "#f1fadf"))))
  '(font-lock-type-face ((t (:background "#dbf1ff"))))
  '(font-lock-variable-name-face ((t nil)))
- '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
- '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :slant italic))))
- '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.3))))
+ '(org-block ((t (:inherit shadow :extend t :background "#eee"))))
+ '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
+ '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight normal :height 1.3))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
  '(org-quote ((t (:inherit org-block :slant italic))))
  '(outline-2 ((t (:inherit font-lock-variable-name-face :background "#f1fadf"))))
- '(outline-3 ((t (:inherit font-lock-keyword-face :background "#f9e0ff")))))
+ '(outline-3 ((t (:inherit font-lock-keyword-face :background "#f9e0ff"))))
+ '(outline-4 ((t (:inherit font-lock-comment-face :background "#ffe0e0"))))
+ '(outline-5 ((t (:inherit font-lock-type-face :background "#dbecb6")))))
 
         ;; "active":     "#007ACC",
         ;; "fg":         "#000",
