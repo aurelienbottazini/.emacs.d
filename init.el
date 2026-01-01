@@ -556,6 +556,8 @@ cons cell (regexp . minor-mode)."
 (setq org-todo-keywords
       '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)" )))
 
+(setq org-fontify-quote-and-verse-blocks t)
+
 (use-package deft
   :commands (deft)
   :init

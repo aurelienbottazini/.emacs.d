@@ -376,7 +376,7 @@
  '(font-lock-string-face ((t (:background "#f1fadf"))))
  '(font-lock-type-face ((t (:background "#dbf1ff"))))
  '(font-lock-variable-name-face ((t nil)))
- '(org-block ((t (:inherit shadow :extend t :background "#eee"))))
+ '(org-block ((t (:extend t :background "#eee"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight normal :height 1.3))))
