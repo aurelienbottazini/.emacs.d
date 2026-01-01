@@ -384,8 +384,8 @@
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
  '(org-quote ((t (:inherit org-block :slant italic))))
  '(outline-2 ((t (:inherit font-lock-variable-name-face :background "#f1fadf"))))
- '(outline-3 ((t (:inherit font-lock-keyword-face :background "#f9e0ff"))))
- '(outline-4 ((t (:inherit font-lock-comment-face :background "#ffe0e0"))))
+ '(outline-3 ((t (:inherit font-lock-keyword-face :background "#eee"))))
+ '(outline-4 ((t nil)))
  '(outline-5 ((t (:inherit font-lock-type-face :background "#dbecb6")))))
 
         ;; "active":     "#007ACC",
