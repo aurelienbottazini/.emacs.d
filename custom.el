@@ -379,7 +379,7 @@
  '(org-block ((t (:extend t :background "#eee"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
- '(org-level-1 ((t (:inherit outline-1 :extend nil :weight normal :height 1.3))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.3))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
  '(org-quote ((t (:inherit org-block :slant italic))))
