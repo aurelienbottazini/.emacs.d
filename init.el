@@ -549,7 +549,19 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'org-modules 'org-habit)
 ;; (add-to-list 'org-modules "org-git-link")
 (setq org-log-into-drawer t)
-(setq org-habit-show-habits t) ;; Affiche les habitudes dans l'agenda
+
+;; 1. Désactiver globalement (par défaut)
+(setq org-habit-show-habits nil)
+
+;; 2. Forcer l'activation uniquement pour la vue dédiée
+(setq org-agenda-custom-commands
+      '(("h" "Mes Habitudes"
+         ((agenda "" ((org-agenda-span 'week)
+                      ;; Ici on force l'affichage pour cette vue précise
+                      (org-habit-show-habits t)
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":STYLE:.*habit"))
+                      (org-agenda-overriding-header "Tableau de Bord des Habitudes")))))))
+
 (setq org-habit-graph-column 50) ;; Ajuste la position du graphique à droite
 (setq org-habit-show-habits-only-for-today nil) ;; Mettez à nil pour voir les habitudes futures
 
