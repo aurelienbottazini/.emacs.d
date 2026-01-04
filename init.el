@@ -1314,3 +1314,6 @@ This command switches to browser."
 (setenv "FZF_DEFAULT_OPTS" "--color=light")
 
 (add-hook 'org-archive-hook 'org-save-all-org-buffers)
+
+(setq org-id-link-to-org-use-id t)
+(setq org-id-link-to-org-use-id 'create-if-interactive)
