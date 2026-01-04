@@ -177,6 +177,8 @@
  '(global-evil-search-highlight-persist nil)
  '(highlight-blocks-max-innermost-block-count 1)
  '(hlt-auto-face-foreground "black")
+ '(hyrolo-date-format "[%Y-%m-%d]")
+ '(hyrolo-file-list '("~/Dropbox/notes/contacts.org"))
  '(imenu-max-item-length 100)
  '(indicate-buffer-boundaries 'left)
  '(indicate-empty-lines nil)
@@ -205,7 +207,8 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
- '(org-agenda-files '("~/Dropbox/notes/journal.org" "~/Dropbox/notes/gtd.org"))
+ '(org-agenda-files
+   '("~/Dropbox/notes/journal.org" "~/Dropbox/notes/gtd.org" "~/Dropbox/notes/contacts.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist

@@ -318,6 +318,7 @@ cons cell (regexp . minor-mode)."
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
+(setq org-agenda-span 'month)
 
 (setq org-refile-targets '((nil :maxlevel . 3)
                            (org-agenda-files :maxlevel . 1)
