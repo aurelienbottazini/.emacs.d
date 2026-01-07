@@ -391,7 +391,8 @@
  '(outline-2 ((t (:inherit font-lock-variable-name-face :background "#f1fadf"))))
  '(outline-3 ((t (:inherit font-lock-keyword-face :background "#eee"))))
  '(outline-4 ((t nil)))
- '(outline-5 ((t (:inherit font-lock-type-face :background "#dbecb6")))))
+ '(outline-5 ((t (:inherit font-lock-type-face :background "#dbecb6"))))
+ '(tab-bar-tab ((t (:inherit tab-bar :background "#fffabc" :box (:line-width (1 . 1) :style released-button))))))
 
         ;; "active":     "#007ACC",
         ;; "fg":         "#000",
