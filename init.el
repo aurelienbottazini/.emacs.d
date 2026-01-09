@@ -585,11 +585,6 @@ cons cell (regexp . minor-mode)."
 (use-package markdown-mode
   :mode "\\.md\\'")
 
-(use-package palimpsest
-  :diminish palimpsest-mode
-  :config
-  (add-hook 'org-mode-hook 'palimpsest-mode))
-
 (setq org-capture-templates
       '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
         ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
@@ -766,6 +761,9 @@ This command switches to browser."
   (require 'speedbar)
   (speedbar-add-supported-extension ".ts")
   (speedbar-add-supported-extension ".tsx"))
+
+(with-eval-after-load 'org-mode
+  (define-key org-mode-map (kbd "C-c C-s") 'org-schedule))
 
 (setq project-switch-commands 'project-dired)
 
