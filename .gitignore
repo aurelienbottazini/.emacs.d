@@ -38,3 +38,4 @@ image-dired
 /forge-database-*
 /init.:tangle
 /.gemini-clipboard/
+/init-tangled.el
