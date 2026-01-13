@@ -542,6 +542,8 @@ cons cell (regexp . minor-mode)."
 
 (setq org-directory "~/Dropbox/notes")
 
+(add-to-list 'auto-mode-alist '("Ruby\\.org\\'" . org-mode))
+
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 (require 'org-tempo) ;; shortcuts like <s <q to insert org block;
@@ -1315,3 +1317,4 @@ This command switches to browser."
 
 (setq org-id-link-to-org-use-id t)
 (setq org-id-link-to-org-use-id 'create-if-interactive)
+(setq org-download-timestamp-format "")

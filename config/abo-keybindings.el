@@ -61,6 +61,11 @@
     "SPC" 'abo-run
     )
 
+  (my-leader-def
+    :states 'normal
+    :keymaps 'org-mode-map
+    "i" 'consult-org-heading)
+
   (defun abo-run ()
     (interactive)
     (cond
