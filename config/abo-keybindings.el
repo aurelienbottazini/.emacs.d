@@ -35,8 +35,8 @@
     "e" 'consult-recent-file
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
-    "i" 'consult-imenu
-    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.el"))
+    "i" 'abo/consult-heading
+    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
     "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
     "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
@@ -61,10 +61,11 @@
     "SPC" 'abo-run
     )
 
-  (my-leader-def
-    :states 'normal
-    :keymaps 'org-mode-map
-    "i" 'consult-org-heading)
+  (defun abo/consult-heading ()
+    (interactive)
+    (if (derived-mode-p 'org-mode)
+        (consult-org-heading)
+      (consult-outline)))
 
   (defun abo-run ()
     (interactive)
