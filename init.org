@@ -547,6 +547,18 @@ cons cell (regexp . minor-mode)."
 (require 'abo-keybindings)
 
 (setq org-directory "~/Dropbox/notes")
+(setq org-archive-location "archives/%s_archive::")
+
+(defun abo/org-ensure-archive-directory ()
+  (when (and buffer-file-name
+             (derived-mode-p 'org-mode)
+             (file-in-directory-p (file-truename buffer-file-name)
+                                  (file-truename org-directory)))
+    (let ((archive-dir (expand-file-name "archives" (file-name-directory buffer-file-name))))
+      (unless (file-directory-p archive-dir)
+        (make-directory archive-dir t)))))
+
+(add-hook 'org-mode-hook 'abo/org-ensure-archive-directory)
 
 (add-to-list 'auto-mode-alist '("Ruby\\.org\\'" . org-mode))
 
