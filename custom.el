@@ -208,7 +208,10 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-files
-   '("~/Dropbox/notes/journal.org" "~/Dropbox/notes/gtd.org" "~/Dropbox/notes/contacts.org"))
+   '("~/Library/CloudStorage/Dropbox/notes/pennylane.org"
+     "/Users/aurelienbottazini/Dropbox/notes/journal.org"
+     "/Users/aurelienbottazini/Dropbox/notes/gtd.org"
+     "/Users/aurelienbottazini/Dropbox/notes/contacts.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist
@@ -380,8 +383,8 @@
  '(font-lock-type-face ((t (:background "#dbf1ff"))))
  '(font-lock-variable-name-face ((t nil)))
  '(org-block ((t (:extend t :background "#eee"))))
- '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
- '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :slant italic))))
+ '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
+ '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.3))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.2))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
