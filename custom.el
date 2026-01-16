@@ -209,9 +209,9 @@
  '(ns-command-modifier 'meta)
  '(org-agenda-files
    '("~/Library/CloudStorage/Dropbox/notes/pennylane.org"
-     "/Users/aurelienbottazini/Dropbox/notes/journal.org"
-     "/Users/aurelienbottazini/Dropbox/notes/gtd.org"
-     "/Users/aurelienbottazini/Dropbox/notes/contacts.org"))
+     "~/Dropbox/notes/journal.org"
+     "~/Dropbox/notes/gtd.org"
+     "~/Dropbox/notes/contacts.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist
