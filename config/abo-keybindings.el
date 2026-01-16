@@ -44,8 +44,6 @@
     "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
     "jw" (lambda () (interactive) (find-file "~/work"))
     "k" 'recompile
-    "g" 'magit-status
-    "G" 'magit-file-dispatch
     "p" 'project-switch-project
     "o" 'consult-outline
     "F" 'rg
@@ -136,10 +134,6 @@
    "C-c d" 'flymake-show-buffer-diagnostics
    "C-c e" 'er/expand-region
    ;; C-c C-c "runs" what makes sense for a particular mode
-   "C-c gg" 'magit-status
-
-   "C-c gg" 'magit-status
-   "C-c gf" 'magit-file-dispatch
    "C-c gl" 'git-link
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock

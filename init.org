@@ -34,7 +34,6 @@
 (pixel-scroll-precision-mode)
 
 (setq vc-follow-symlinks t)
-(put 'magit-edit-line-commit 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
 ;; (setq tags-add-tables 'nil) ; always start a new TAGS table don't ask the user
@@ -752,21 +751,10 @@ This command switches to browser."
   :config
   (fullframe vc-annotate quit-window))
 
-(use-package magit
-  :init
-  (setq magit-commit-show-diff nil
-        magit-auto-revert-mode nil
-        magit-commit-show-diff nil))
-
 (setq auth-sources '("~/.authinfo"))
 
 (use-package forge
   :after magit)
-
-(use-package fullframe
-  :after magit
-  :config
-  (fullframe magit-status magit-mode-quit-window))
 
 (require 'project)
 
@@ -1005,7 +993,6 @@ This command switches to browser."
   (evil-set-initial-state 'rg-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'insert)
   (evil-set-initial-state 'dired-mode 'normal)
-  (evil-set-initial-state 'magit-mode 'emacs)
   (evil-set-initial-state 'use-package-statistics 'emacs)
   (evil-set-initial-state 'xref--xref-buffer-mode 'emacs)
   (evil-set-initial-state 'term-mode 'emacs)
@@ -1020,7 +1007,6 @@ This command switches to browser."
   (evil-set-initial-state 'inf-ruby-mode 'emacs)
   (evil-set-initial-state 'compilation-mode 'emacs)
 
-  ;; magit commit
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (use-package evil-commentary
