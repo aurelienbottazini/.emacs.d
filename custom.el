@@ -189,7 +189,7 @@
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3 t)
+ '(js2-highlight-level 3)
  '(lsp-auto-execute-action nil)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
@@ -208,10 +208,8 @@
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-files
-   '("~/Library/CloudStorage/Dropbox/notes/pennylane.org"
-     "~/Dropbox/notes/journal.org"
-     "~/Dropbox/notes/gtd.org"
-     "~/Dropbox/notes/contacts.org"))
+   '("~/Library/CloudStorage/Dropbox/notes/pennylane.org" "~/Dropbox/notes/journal.org"
+     "~/Dropbox/notes/gtd.org" "~/Dropbox/notes/contacts.org"))
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist
@@ -382,12 +380,13 @@
  '(font-lock-string-face ((t (:background "#f1fadf"))))
  '(font-lock-type-face ((t (:background "#dbf1ff"))))
  '(font-lock-variable-name-face ((t nil)))
+ '(hl-line ((t (:extend t :background "#eee"))))
  '(org-block ((t (:extend t :background "#eee"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
- '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
- '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.0))))
- '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0))))
+ '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.2))))
+ '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.1))))
  '(org-quote ((t (:inherit org-block :slant italic))))
  '(org-table ((t (:foreground "Blue1"))))
  '(org-todo ((t (:background "misty rose" :foreground "dark red" :weight bold))))
