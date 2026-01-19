@@ -257,8 +257,8 @@ brew install --cask emacs-plus-app
 
 (use-package expand-region)
 
-(use-package origami)
-(add-hook 'prog-mode-hook 'origami-mode)
+(use-package origami
+  :hook (prog-mode . origami-mode))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -268,9 +268,6 @@ brew install --cask emacs-plus-app
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
-
-(use-package rainbow-delimiters
-  :hook ((prog-mode . rainbow-delimiters-mode)))
 
 (use-package highlight-blocks)
 
@@ -1087,14 +1084,6 @@ cons cell (regexp . minor-mode)."
   (require 'speedbar)
   (speedbar-add-supported-extension ".ts")
   (speedbar-add-supported-extension ".tsx"))
-
-(use-package treemacs)
-(use-package all-the-icons
-  :if (display-graphic-p))
-(use-package treemacs-all-the-icons
-  :config
-  (treemacs-load-theme "all-the-icons"))
-(use-package treemacs-evil)
 #+END_SRC
 
 ** Search

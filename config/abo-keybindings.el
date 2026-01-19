@@ -70,6 +70,7 @@
     (cond
      ((derived-mode-p 'ruby-ts-mode) (xmp))
      ((derived-mode-p 'ruby-mode) 'xmp)
+     ((derived-mode-p 'org-mode) 'org-ctrl-c-ctrl-c)
      ((derived-mode-p 'emacs-lisp-mode) 'eval-buffer)
      (t (message "nothing to run for this buffer")
 

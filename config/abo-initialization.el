@@ -13,12 +13,13 @@
 
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
-        ("org"         . "https://orgmode.org/elpa/")
-        ("gnu"         . "http://elpa.gnu.org/packages/")))
+        ("gnu"         . "https://elpa.gnu.org/packages/")
+        ("nongnu"      . "https://elpa.nongnu.org/nongnu/")))
 
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
 (setq package--init-file-ensured t) ; do not add things at the end of init.el
+(setq package-check-signature nil)
 
 (package-initialize)
 (unless package-archive-contents
@@ -31,6 +32,9 @@
 
 (require-package 'use-package)
 (require 'use-package)
+
+(require-package 'diminish)
+(require 'diminish)
 
 (setq use-package-compute-statistics t) ;(use-package-report)
 (setq use-package-always-ensure t)
