@@ -2,6 +2,20 @@
 #+PROPERTY: header-args:emacs-lisp :tangle init-tangled.el :results silent
 #+STARTUP: overview
 
+#+begin_src emacs-lisp
+(native-comp-available-p)
+#+end_src
+
+My favorite way to install emacs on OSX
+#+begin_src sh :tangle no
+brew tap d12frosted/emacs-plus
+brew install --cask emacs-plus-app
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(native-compile-async "~/.emacs.d/elpa/" 'recursively)
+#+end_src
+
 * Configuration
 ** Initialization
 #+BEGIN_SRC emacs-lisp
@@ -726,8 +740,8 @@ cons cell (regexp . minor-mode)."
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-span 'month)
 
-(setq org-refile-targets '((nil :maxlevel . 3)
-                           (org-agenda-files :maxlevel . 1)))
+(setq org-refile-targets '((nil :maxlevel . 5)
+                           (org-agenda-files :maxlevel . 5)))
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
