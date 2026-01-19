@@ -182,39 +182,6 @@ On very large files, I usually just explore them with search tools anyway"
 
 (use-package rainbow-mode :diminish rainbow-mode)
 
-(defun abo/tmux-active-session ()
-  (interactive)
-  ;; (substring-no-properties (shell-command-to-string "tmux ls | grep \\\(attached\\\) | cut -d':' -f1") 0 -1))
- (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
-
-(defun abo/tmux-select-pane (direction)
-  (shell-command (concat  "tmux select-pane -t " (abo/tmux-active-session) " -" direction)))
-
-(defun abo/tmux-move (direction)
-  (condition-case nil
-      (cond
-       ((string= "R" direction) (windmove-right))
-       ((string= "L" direction) (windmove-left))
-       ((string= "U" direction) (windmove-up))
-       ((string= "D" direction) (windmove-down)))
-    (error (unless window-system (abo/tmux-select-pane direction)))))
-
-(defun tmux-move-right ()
-  (interactive)
-  (abo/tmux-move "R"))
-
-(defun tmux-move-left ()
-  (interactive)
-  (abo/tmux-move "L"))
-
-(defun tmux-move-up ()
-  (interactive)
-  (abo/tmux-move "U"))
-
-(defun tmux-move-down ()
-  (interactive)
-  (abo/tmux-move "D"))
-
 (use-package diminish
   :config
   (eval-after-load "undo-tree"
@@ -242,53 +209,6 @@ cons cell (regexp . minor-mode)."
   (if (buffer-file-name)
       (if (string-match (car my-pair) buffer-file-name)
           (funcall (cdr my-pair)))))
-
-(defun filepath-with-line-number-for-current-buffer ()
-  "Return a string with Buffer-file-name:line-number.
-             Make it easier to prepare commands for tools like rspec"
-  (interactive)
-  (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
-
-(defun abo/today ()
-  "Today's date as a string."
-  (format-time-string "%Y-%m-%d"))
-
-(defun abo/add-date-to-filename ()
-  "Add current date in front of filename for current buffer. This is useful with some Blog tools like Jekyll to publish new articles."
-  (interactive)
-  (let* ((date (abott/today))
-         (buffer-file (buffer-file-name))
-         (new-file-name (concat (file-name-directory buffer-file)
-                                date
-                                "-"
-                                (file-name-nondirectory buffer-file)))
-         )
-    (save-buffer)
-    (rename-file buffer-file new-file-name)
-    (set-visited-file-name new-file-name)
-    (save-buffer)))
-
-(defun abo/insert-date ()
-  "Insert today's date in current buffer"
-  (interactive)
-  (insert (abott/today)))
-
-(defun abo/toggle-html-export-on-save ()
-  "Enable or disable HTML export when saving current org buffer."
-  (interactive)
-  (when (not (eq major-mode 'org-mode))
-    (error "Not an org-mode file!"))
-  (if (memq 'org-html-export-to-html after-save-hook)
-      (progn (remove-hook 'after-save-hook 'org-html-export-to-html t)
-             (message "Disabled org html export on save"))
-    (add-hook 'after-save-hook 'org-publish-current-file nil t)
-    (set-buffer-modified-p t)
-    (message "Enabled org html export on save")))
-
-(defun abo/change-line-endings-to-unix ()
-  (let ((coding-str (symbol-name buffer-file-coding-system)))
-    (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
-      (set-buffer-file-coding-system 'unix))))
 
 (if (fboundp 'mac-auto-operator-composition-mode)
     (mac-auto-operator-composition-mode t))
@@ -323,49 +243,6 @@ cons cell (regexp . minor-mode)."
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
-(setq org-agenda-span 'month)
-
-(setq org-refile-targets '((nil :maxlevel . 3)
-                           (org-agenda-files :maxlevel . 1)
-                           ))
-(advice-add 'org-refile :after
-            (lambda (&rest _)
-              (org-save-all-org-buffers)))
-(add-hook 'org-mode-hook 'abbrev-mode)
-
-(defun my-org-replace-link-file (from to)
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward org-bracket-link-regexp nil t)
-      (when (string-match-p from (match-string 1))
-        (replace-match (concat "[[file:" to "]]"))))))
-
-(defun my-org-rename-link-file-at-point ()
-  "Rename or move a file in an external link at point and
-  update the link path"
-  (interactive)
-  (let* ((curr-dir (abbreviate-file-name default-directory))
-         (current-path (org-element-property :path (org-element-context)))
-         (new-path (read-file-name "Rename file at point to: " current-path)))
-    (rename-file current-path new-path)
-    (message (concat "moved to: " new-path))
-    (if (directory-name-p new-path)
-        (setq new-path (concat new-path (file-name-nondirectory current-path)))
-      (setq new-path new-path))
-    (my-org-replace-link-file current-path
-                              (replace-regexp-in-string curr-dir "" new-path))))
-
-(add-hook 'org-mode-hook
-      '(lambda ()
-             (setq org-file-apps
-                   (append '(
-
-                             ("\\.jpg\\'" . default)
-                             ("\\.jpeg\\'" . default)
-                             ("\\.png\\'" . default)
-                             ("\\.pdf\\'" . default)
-                             ) org-file-apps ))))
-
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
@@ -378,221 +255,10 @@ cons cell (regexp . minor-mode)."
 (use-package highlight-blocks)
 ;; (add-hook 'prog-mode-hook 'highlight-blocks-mode)
 
-;; First install the package:
-(use-package clojure-mode
-  :mode "\\.clj\\'"
-  :config
-  (add-hook 'clojure-mode-hook #'subword-mode)
-
-  ;; (use-package rainbow-blocks)
-  ;; (add-hook 'clojure-mode-hook #'rainbow-blocks-mode)
-  )
-
-
-(use-package cider
-  :after clojure-mode
-  :config
-
-  (define-key cider-mode-map (kbd "C-c C-c") 'cider-eval-list-at-point)
-  (add-hook 'clojure-mode-hook (lambda ()
-                                 (add-hook 'before-save-hook 'cider-format-buffer t t)
-        ))
-
-  (add-hook 'edn-mode-hook (lambda ()
-                                 (add-hook 'before-save-hook 'cider-format-edn-buffer t t)
-        ))
-  (setq cider-repl-display-help-banner nil))
-
-(require 'abo-ruby)
-
-(use-package yaml-mode
-  :mode "\\.ya?ml\\'")
-
-(use-package go-mode
-  :mode "\\.go\\'")
-
-(use-package web-mode
-  :mode "\\.gohtml\\'"
-  :mode "\\.erb\\'"
-  :config
-  (setq web-mode-enable-auto-closing t)
-  (define-key web-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
-  )
-
-(use-package emmet-mode
-  :hook (css-mode sgml-mode web-mode)
-  :diminish emmet-mode
-  :config
-  (add-hook 'css-mode-hook
-            (lambda ()
-              (emmet-mode)
-              (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
-              (setq emmet-expand-jsx-className? nil)))
-
-  (add-hook 'sgml-mode-hook
-            (lambda ()
-              (emmet-mode)
-              (setq emmet-expand-jsx-className? nil))))
-
-(use-package scss-mode :mode "\\.scss\\'")
-(use-package sass-mode :mode "\\.sass\\'")
-(use-package less-css-mode :mode "\\.less\\'")
-
-(setq js-indent-level 2)
-
-(add-hook 'js-mode-hook (lambda () (subword-mode t)))
-
-(setq js2-mode-show-parse-errors nil
-      js2-mode-show-strict-warnings nil
-      js2-basic-offset 2
-      js2-highlight-level 3
-      css-indent-offset 2
-      web-mode-markup-indent-offset 2
-      web-mode-script-padding 0
-      web-mode-css-indent-offset 2
-      web-mode-style-padding 2
-      web-mode-code-indent-offset 2
-      web-mode-attr-indent-offset 2)
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :mode "\\.mjs\\'"
-  :mode "\\.ts\\'"
-  :mode "\\.tsx\\'"
-  :mode "\\.jsx\\'")
-
-(use-package json-mode
-  :mode "\\.json\\'"
-  :mode "\\.eslintrc\\'")
-
-(use-package coffee-mode
-  :mode "\\.coffee\\'"
-  :config
-  (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
-  (custom-set-variables '(coffee-tab-width 2)))
-
-;; (use-package typescript-mode
-;;   :after tree-sitter
-;;   :mode "\\.ts\\'"
-;;   :mode "\\.tsx\\'"
-;;   :mode "\\.mts\\'"
-;;   :config
-;;   (define-derived-mode typescriptreact-mode typescript-mode
-;;     "TypeScript TSX")
-;;    (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode) )
-;;    (add-to-list 'tree-sitter-major-mode-language-alist '(typescriptreact-mode . tsx))
-;;   )
-
-(use-package prettier-js
-  :diminish prettier-js-mode
-  :hook (js2-mode . prettier-js-mode)
-  :config
-  (setq prettier-args '(
-                        "--trailing-comma" "es5"
-                        "--single-quote" "true"
-                        )
-        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
-
-(use-package context-coloring
-  :ensure t
-  :bind (("C-c oc" . context-coloring-mode)))
-
-(add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
-(defun my-jsx-hook ()
-  "Set web mode with adjustments for JSX"
-  (interactive)
-  (web-mode)
-  (web-mode-set-content-type "jsx")
-  (setq emmet-expand-jsx-className? t)
-  (emmet-mode))
-
-(use-package web-mode
-  :mode "\\.vue\\'"
-  :config
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-script-padding 0)
-  (defun jjpandari/merge-imenu (index-fun)
-    (interactive)
-    (let ((mode-imenu (funcall index-fun))
-          (custom-imenu (imenu--generic-function imenu-generic-expression)))
-      (append custom-imenu mode-imenu)))
-
-  ;; (use-package prettier-js
-  ;;   :config
-  ;;   (add-hook 'web-mode-hook (lambda ()
-  ;;                              (enable-minor-mode
-  ;;                               '("\\.vue?\\'" . prettier-js-mode)))))
-
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index))))))
-
-(use-package rust-mode
-  :bind (:map rust-mode-map
-              ("C-c C-c" . rust-run)))
-
-(require 'wat-mode)
-
-(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
-
 (add-to-list 'auto-mode-alist '("\\.el\\'" . emacs-lisp-mode))
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 
-(use-package elm-mode)
-
 (require 'abo-keybindings)
-
-(setq org-directory "~/Dropbox/notes")
-(setq org-archive-location "archives/%s_archive::")
-
-(defun abo/org-ensure-archive-directory ()
-  (when (and buffer-file-name
-             (derived-mode-p 'org-mode)
-             (file-in-directory-p (file-truename buffer-file-name)
-                                  (file-truename org-directory)))
-    (let ((archive-dir (expand-file-name "archives" (file-name-directory buffer-file-name))))
-      (unless (file-directory-p archive-dir)
-        (make-directory archive-dir t)))))
-
-(add-hook 'org-mode-hook 'abo/org-ensure-archive-directory)
-
-(add-to-list 'auto-mode-alist '("Ruby\\.org\\'" . org-mode))
-
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
-
-(require 'org-tempo) ;; shortcuts like <s <q to insert org block;
-
-(require 'org-habit)
-(add-to-list 'org-modules 'org-habit)
-;; (add-to-list 'org-modules "org-git-link")
-(setq org-log-into-drawer t)
-(setq org-habit-show-habits t)
-
-;; 2. Forcer l'activation uniquement pour la vue dédiée
-;; (defun abo/skip-non-habits ()
-;;   "Skip entries that are not habits."
-;;   (let ((style (org-entry-get nil "STYLE")))
-;;     (if (and style (string= style "habit"))
-;;         nil
-;;       (org-end-of-subtree t))))
-
-;; (setq org-agenda-custom-commands
-;;       '(("h" "Mes Habitudes"
-;;          ((agenda "" ((org-agenda-span 'week)
-;;                       (org-habit-show-habits t)
-;;                       (org-agenda-skip-function 'abo/skip-non-habits)
-;;                       (org-agenda-overriding-header "Tableau de Bord des Habitudes")))))))
-
-(setq org-habit-graph-column 50) ;; Ajuste la position du graphique à droite
-;; (setq org-habit-show-habits-only-for-today t)
-
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)" )))
-
-(setq org-fontify-quote-and-verse-blocks t)
 
 (use-package deft
   :commands (deft)
@@ -604,44 +270,6 @@ cons cell (regexp . minor-mode)."
 (use-package markdown-mode
   :mode "\\.md\\'")
 
-(setq org-capture-templates
-      '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
-        ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
-        ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
-         "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
-
-(defadvice org-capture-finalize
-    (after delete-capture-frame activate)
-  "Advise capture-finalize to close the frame"
-  (if (equal "global-org-capture" (frame-parameter nil 'name))
-      (progn
-        (delete-frame))))
-
-(defadvice org-capture-destroy
-    (after delete-capture-frame activate)
-  "Advise capture-destroy to close the frame"
-  (if (equal "global-org-capture" (frame-parameter nil 'name))
-      (progn
-        (delete-frame))))
-
-;; make the frame contain a single window. by default org-capture
-;; splits the window.
-(add-hook 'org-capture-mode-hook
-          'delete-other-windows)
-
-(require 'ob-clojure) ;; run cider-jack-in from org buffer to be able to run
-;; clojure code
-(use-package ob-clojurescript) ;; requires [[https://github.com/anmonteiro/lumo][lumo]]
-(setq org-babel-clojure-backend 'cider)
-(require 'ob-js)
-(setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
-(org-babel-do-load-languages 'org-babel-load-languages
-                             '((shell . t)
-                               (sql . t)
-                               (ditaa . t)))
-(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
-(require 'ob-ruby)
-
 (setq
  time-stamp-active t
  time-stamp-line-limit 30     ; check first 30 buffer lines for Time-stamp:
@@ -650,65 +278,7 @@ cons cell (regexp . minor-mode)."
 (use-package writeroom-mode
   :bind (("C-c w w" . writeroom-mode)))
 
-(use-package htmlize) ; for org html export
-(setq system-time-locale "C") ; make sure time local is in english when exporting
-(setq org-html-validation-link nil)
-(setq org-publish-project-alist
-      `(
-        ("blog-files"
-         :base-directory "~/perso/aurelienbottazini.github.io/_org"
-         :base-extension "org"
-         :publishing-directory "~/perso/aurelienbottazini.github.io/"
-         :recursive t
-         :publishing-function org-html-publish-to-html
-         :headline-levels 4             ; Just the default for this project.
-         :auto-preamble t
-         :html-head-extra nil
-         :body-only t
-         )
-        ;; ... add all the components here (see below)...
-        ;; ("wiki" :components ("wiki-files"))
-        )
-      user-full-name "Aurélien Bottazini"
-      org-export-with-toc t
-      org-html-doctype "html5"
-      org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
-      org-html-head-include-default-style nil
-      org-html-head-include-scripts nil
-      org-html-html5-fancy t
-      org-html-postamble nil
-      org-src-preserve-indentation nil
-      org-html-htmlize-output-type "css"
-      org-html-indent nil               ; a value other than nil will screw up src block indentation
-      org-edit-src-content-indentation 0)
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (setq-local time-stamp-start "Updated on[ 	]+\\\\?[\"<]+")
-            (org-indent-mode t)
-            (add-hook 'before-save-hook 'time-stamp nil 'local)))
-
-(setq org-hide-emphasis-markers nil)
-
 (add-hook 'write-file-hooks 'time-stamp) ; update time-stamp on save
-(require 'ox-publish)
-(setq system-time-locale "C") ;; make sure time local is in english when exporting
-(setq org-html-validation-link nil)
-
-(add-to-list 'org-latex-packages-alist '("" "listings" nil))
-(setq org-latex-listings t)
-(setq org-latex-listings-options '(("breaklines" "true")
-                                   ("literate" "{0}{0}{1}%
-           {1}{1}{1}%
-           {2}{2}{1}%
-           {3}{3}{1}%
-           {4}{4}{1}%
-           {5}{5}{1}%
-           {6}{6}{1}%
-           {7}{7}{1}%
-           {8}{8}{1}%
-           {9}{9}{1}%
-    ")))
 
 (use-package writegood-mode)
 
@@ -755,33 +325,6 @@ This command switches to browser."
 
 (use-package forge
   :after magit)
-
-(require 'project)
-
-(use-package dumb-jump
-  :init
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-(setq speedbar-directory-unshown-regexp "^$")
-
-(with-eval-after-load 'speedbar
-  (require 'speedbar)
-  (speedbar-add-supported-extension ".ts")
-  (speedbar-add-supported-extension ".tsx"))
-
-(with-eval-after-load 'org-mode
-  (define-key org-mode-map (kbd "C-c C-s") 'org-schedule))
-
-(setq project-switch-commands 'project-dired)
-
-
-;; (define-derived-mode typescriptreact-mode web-mode "TypescriptReact"
-;;   "A major mode for tsx.")
-
-;; (use-package typescript-mode
-;;   :mode (("\\.ts\\'" . typescript-mode)
-;;          ("\\.tsx\\'" . typescriptreact-mode)))
 
 (use-package lsp-mode
   :init
@@ -940,25 +483,6 @@ This command switches to browser."
   :config
   (hyperbole-mode 1))
 
-(defun abott/org-tree-slide-play ()
-  (writeroom-mode 1)
-  (default-text-scale-increment 40))
-(defun abott/org-tree-slide-stop ()
-  (writeroom-mode -1)
-  (default-text-scale-reset))
-
-(use-package org-tree-slide
-  :hook ((org-tree-slide-play . abott/org-tree-slide-play)
-         (org-tree-slide-stop . abott/org-tree-slide-stop))
-  :config
-  (with-eval-after-load "org-tree-slide"
-    (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
-    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
-
-(use-package ox-reveal
-  :config
-  (setq org-reveal-root "file:///Users/abo/.emacs.d/site-lisp/reveal.js-4.1.0"))
-
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
@@ -1068,30 +592,6 @@ This command switches to browser."
 
 (use-package jsonrpc)
 
-
-(defun abo/bg-modeline-color-from-evil-state ()
-  (interactive)
-  (cond ((evil-insert-state-p) "#87af87")
-        ((evil-visual-state-p) "#87afaf")
-        ((evil-emacs-state-p) "#d787af")
-        ((evil-normal-state-p) "#ffaf00")
-        (t "#3c3836")))
-
-(defun abo/fg-modeline-color-from-evil-state ()
-  (interactive)
-  (cond ((evil-insert-state-p) "#3c3836")
-        ((evil-visual-state-p) "#3c3836")
-        ((evil-emacs-state-p) "#3c3836")
-        ((evil-normal-state-p) "#3c3836")
-        (t "#ebddb2")))
-
-(defun abo/post-command-evil-modeline-colors-hook ()
-  (interactive)
-  (set-face-background 'mode-line (abo/bg-modeline-color-from-evil-state))
-  (set-face-foreground 'mode-line (abo/fg-modeline-color-from-evil-state)))
-
-;; (add-hook 'post-command-hook 'abo/post-command-evil-modeline-colors-hook)
-
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
@@ -1121,60 +621,7 @@ This command switches to browser."
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
-(use-package citre
-  :init
-  ;; (require 'citre-config)
-  ;; Bind your frequently used commands.  Alternatively, you can define them
-  ;; in `citre-mode-map' so you can only use them when `citre-mode' is enabled.
-  (global-set-key (kbd "C-x c j") 'citre-jump)
-  (global-set-key (kbd "C-x c J") 'citre-jump-back)
-  (global-set-key (kbd "C-x c p") 'citre-ace-peek)
-  (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
-  :config
-  (setq
-   citre-use-project-root-when-creating-tags t
-   citre-prompt-language-for-ctags-command t
-   ;; By default, when you open any file, and a tags file can be found for it,
-   ;; `citre-mode' is automatically enabled.  If you only want this to work for
-   ;; certain modes (like `prog-mode'), set it like this.
-   citre-auto-enable-citre-mode-modes '(prog-mode)
-)
-)
-
-(setq find-sibling-rules
-      '(
-               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
-               ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
-               ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
-               ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
-               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
-               ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb" "test/.*/\\1_test.rb")
-               ("app/\\(controllers\\|helpers\\)/\\(.*\\)_\\(controller\\|helper\\).rb\\'" "app/views/\\2/\\(index\\|show\\|edit\\|new\\).html.erb")
-               ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
-               ("app/controllers/\\(.*\\)_controller.rb\\'" "spec/requests/\\1_spec.rb")
-               ("spec/requests/\\(.*\\)_spec.rb\\'" "app/controllers/\\1_controller.rb" )
-               ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/helpers/\\1_helper.rb")
-               ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
-               ("test/[^/]+/\\(.*\\)_test.rb\\'" "app/.*/\\1.rb")
-               ))
-
 (setq-default cursor-type 'bar)
-
-(use-package flymake-eslint
-  :config
-
-  (defun os/enable-eslint-if-typescript ()
- "Enable eslint if typescript mode"
- (when (or
-           (eq major-mode 'typescript-ts-mode)
-           (eq major-mode 'typescript-mode)
-           (eq major-mode 'typescriptreact-mode)
-           (eq major-mode 'js2-mode)
-           (eq major-mode 'web-mode)
-           )
-   (flymake-eslint-enable)))
-
-(add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
 
 (use-package ansi-color
     :hook (compilation-filter . ansi-color-compilation-filter))
@@ -1212,18 +659,6 @@ This command switches to browser."
 
 (setq-default truncate-lines nil)
 
-(use-package treemacs)
-(use-package all-the-icons
-  :if (display-graphic-p))
-(use-package treemacs-all-the-icons
-  :config
-  (treemacs-load-theme "all-the-icons"))
-(use-package treemacs-evil)
-
-;; (use-package all-the-icons-dired
-;;   :config
-;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
 (use-package hideshow)
 (require 'hideshowvis)
 
@@ -1231,15 +666,6 @@ This command switches to browser."
       `((buffer-file-name "%f" "%b")
         ))
 
-(use-package org-download
-  :config
-(add-hook 'dired-mode-hook 'org-download-enable)
-  )
-
-(setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
-(use-package org-ref
-  :config
-  (require 'org-ref-isbn))
 (use-package biblio)
 
 (when (and (image-type-available-p 'image-io)
@@ -1254,59 +680,6 @@ This command switches to browser."
 
 (use-package flycheck)
 
-(setq project-find-functions '(project-try-vc))
-
-;; Use ripgrep for finding files
-(setq project-find-file-function
-      (lambda ()
-        (let ((default-directory (project-root (project-current t))))
-          (call-interactively 'counsel-rg))))
-
-;; (defun my-project-find-file-rg ()
-;;   "Find file in project using ripgrep."
-;;   (interactive)
-;;   (let* ((project (project-current t))
-;;          (default-directory (project-root project))
-;;          (files (split-string
-;;                 (shell-command-to-string "rg --files --hidden --glob '!.git'")
-;;                 "\n" t)))
-;;     (find-file (completing-read "Find file: " files))))
-
-;; ;; Bind it to replace the default
-;; (define-key project-prefix-map "f" 'my-project-find-file-rg)
-
-;; 1. Install packages: consult, vertico, orderless, marginalia
-(use-package vertico
-  :init (vertico-mode))
-
-(use-package orderless
-  :init
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-
-(use-package consult
-:ensure t
-:bind
-("C-c f" . consult-fd))
-
-(use-package embark
-  :bind (("C-o" . embark-act)    ; The "Do Something" key
-         ("C-;" . embark-dwim)   ; "Do What I Mean"
-         ("C-h B" . embark-bindings))
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-  :config
-  ;; Add 't' to open files/buffers in a new tab
-  (define-key embark-file-map (kbd "t") #'find-file-other-tab)
-  (define-key embark-buffer-map (kbd "t") #'switch-to-buffer-other-tab))
-
-(use-package embark-consult
-  :after (embark consult)
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
 (add-hook 'emacs-lisp-mode-hook
   (lambda ()
     (setq mode-name
@@ -1317,10 +690,607 @@ This command switches to browser."
                      (propertize "/d" 'face 'nil)))))))
 
 (setenv "FZF_DEFAULT_OPTS" "--color=light")
+#+END_SRC
 
+* Org
+#+BEGIN_SRC emacs-lisp
+;; Org directory and archive settings
+(setq org-directory "~/Dropbox/notes")
+(setq org-archive-location "archives/%s_archive::")
+
+(defun abo/org-ensure-archive-directory ()
+  (when (and buffer-file-name
+             (derived-mode-p 'org-mode)
+             (file-in-directory-p (file-truename buffer-file-name)
+                                  (file-truename org-directory)))
+    (let ((archive-dir (expand-file-name "archives" (file-name-directory buffer-file-name))))
+      (unless (file-directory-p archive-dir)
+        (make-directory archive-dir t)))))
+
+(add-hook 'org-mode-hook 'abo/org-ensure-archive-directory)
+
+(add-to-list 'auto-mode-alist '("Ruby\\.org\\'" . org-mode))
+
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+(require 'org-tempo) ;; shortcuts like <s <q to insert org block;
+
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
+(setq org-log-into-drawer t)
+(setq org-habit-show-habits t)
+(setq org-habit-graph-column 50)
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)" )))
+
+(setq org-fontify-quote-and-verse-blocks t)
+
+;; Org agenda
+(setq org-agenda-span 'month)
+
+(setq org-refile-targets '((nil :maxlevel . 3)
+                           (org-agenda-files :maxlevel . 1)
+                           ))
+(advice-add 'org-refile :after
+            (lambda (&rest _)
+              (org-save-all-org-buffers)))
+(add-hook 'org-mode-hook 'abbrev-mode)
+
+;; Org link utilities
+(defun my-org-replace-link-file (from to)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward org-bracket-link-regexp nil t)
+      (when (string-match-p from (match-string 1))
+        (replace-match (concat "[[file:" to "]]"))))))
+
+(defun my-org-rename-link-file-at-point ()
+  "Rename or move a file in an external link at point and
+  update the link path"
+  (interactive)
+  (let* ((curr-dir (abbreviate-file-name default-directory))
+         (current-path (org-element-property :path (org-element-context)))
+         (new-path (read-file-name "Rename file at point to: " current-path)))
+    (rename-file current-path new-path)
+    (message (concat "moved to: " new-path))
+    (if (directory-name-p new-path)
+        (setq new-path (concat new-path (file-name-nondirectory current-path)))
+      (setq new-path new-path))
+    (my-org-replace-link-file current-path
+                              (replace-regexp-in-string curr-dir "" new-path))))
+
+(add-hook 'org-mode-hook
+      '(lambda ()
+             (setq org-file-apps
+                   (append '(
+
+                             ("\\.jpg\\'" . default)
+                             ("\\.jpeg\\'" . default)
+                             ("\\.png\\'" . default)
+                             ("\\.pdf\\'" . default)
+                             ) org-file-apps ))))
+
+;; Org capture
+(setq org-capture-templates
+      '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
+         "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
+
+(defadvice org-capture-finalize
+    (after delete-capture-frame activate)
+  "Advise capture-finalize to close the frame"
+  (if (equal "global-org-capture" (frame-parameter nil 'name))
+      (progn
+        (delete-frame))))
+
+(defadvice org-capture-destroy
+    (after delete-capture-frame activate)
+  "Advise capture-destroy to close the frame"
+  (if (equal "global-org-capture" (frame-parameter nil 'name))
+      (progn
+        (delete-frame))))
+
+;; make the frame contain a single window. by default org-capture
+;; splits the window.
+(add-hook 'org-capture-mode-hook
+          'delete-other-windows)
+
+;; Org babel
+(require 'ob-clojure) ;; run cider-jack-in from org buffer to be able to run
+;; clojure code
+(use-package ob-clojurescript) ;; requires [[https://github.com/anmonteiro/lumo][lumo]]
+(setq org-babel-clojure-backend 'cider)
+(require 'ob-js)
+(setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '((shell . t)
+                               (sql . t)
+                               (ditaa . t)))
+(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+(require 'ob-ruby)
+
+;; Org export and publishing
+(use-package htmlize) ; for org html export
+(setq system-time-locale "C") ; make sure time local is in english when exporting
+(setq org-html-validation-link nil)
+(setq org-publish-project-alist
+      `(
+        ("blog-files"
+         :base-directory "~/perso/aurelienbottazini.github.io/_org"
+         :base-extension "org"
+         :publishing-directory "~/perso/aurelienbottazini.github.io/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4             ; Just the default for this project.
+         :auto-preamble t
+         :html-head-extra nil
+         :body-only t
+         )
+        ;; ... add all the components here (see below)...
+        ;; ("wiki" :components ("wiki-files"))
+        )
+      user-full-name "Aurélien Bottazini"
+      org-export-with-toc t
+      org-html-doctype "html5"
+      org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
+      org-html-head-include-default-style nil
+      org-html-head-include-scripts nil
+      org-html-html5-fancy t
+      org-html-postamble nil
+      org-src-preserve-indentation nil
+      org-html-htmlize-output-type "css"
+      org-html-indent nil               ; a value other than nil will screw up src block indentation
+      org-edit-src-content-indentation 0)
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq-local time-stamp-start "Updated on[ 	]+\\\\?[\"<]+")
+            (org-indent-mode t)
+            (add-hook 'before-save-hook 'time-stamp nil 'local)))
+
+(setq org-hide-emphasis-markers nil)
+
+(require 'ox-publish)
+
+(add-to-list 'org-latex-packages-alist '("" "listings" nil))
+(setq org-latex-listings t)
+(setq org-latex-listings-options '(("breaklines" "true")
+                                   ("literate" "{0}{0}{1}%
+           {1}{1}{1}%
+           {2}{2}{1}%
+           {3}{3}{1}%
+           {4}{4}{1}%
+           {5}{5}{1}%
+           {6}{6}{1}%
+           {7}{7}{1}%
+           {8}{8}{1}%
+           {9}{9}{1}%
+    ")))
+
+(defun abo/toggle-html-export-on-save ()
+  "Enable or disable HTML export when saving current org buffer."
+  (interactive)
+  (when (not (eq major-mode 'org-mode))
+    (error "Not an org-mode file!"))
+  (if (memq 'org-html-export-to-html after-save-hook)
+      (progn (remove-hook 'after-save-hook 'org-html-export-to-html t)
+             (message "Disabled org html export on save"))
+    (add-hook 'after-save-hook 'org-publish-current-file nil t)
+    (set-buffer-modified-p t)
+    (message "Enabled org html export on save")))
+
+(with-eval-after-load 'org-mode
+  (define-key org-mode-map (kbd "C-c C-s") 'org-schedule))
+
+;; Org presentations
+(defun abott/org-tree-slide-play ()
+  (writeroom-mode 1)
+  (default-text-scale-increment 40))
+(defun abott/org-tree-slide-stop ()
+  (writeroom-mode -1)
+  (default-text-scale-reset))
+
+(use-package org-tree-slide
+  :hook ((org-tree-slide-play . abott/org-tree-slide-play)
+         (org-tree-slide-stop . abott/org-tree-slide-stop))
+  :config
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
+
+(use-package ox-reveal
+  :config
+  (setq org-reveal-root "file:///Users/abo/.emacs.d/site-lisp/reveal.js-4.1.0"))
+
+;; Org download and references
+(use-package org-download
+  :config
+(add-hook 'dired-mode-hook 'org-download-enable)
+  )
+
+(setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
+(use-package org-ref
+  :config
+  (require 'org-ref-isbn))
+
+;; Org archive and ID settings
 (add-hook 'org-archive-hook 'org-save-all-org-buffers)
 
 (setq org-id-link-to-org-use-id t)
 (setq org-id-link-to-org-use-id 'create-if-interactive)
 (setq org-download-timestamp-format "")
+#+END_SRC
+
+* Utilities
+#+BEGIN_SRC emacs-lisp
+;; Date utilities
+(defun abo/today ()
+  "Today's date as a string."
+  (format-time-string "%Y-%m-%d"))
+
+(defun abo/add-date-to-filename ()
+  "Add current date in front of filename for current buffer. This is useful with some Blog tools like Jekyll to publish new articles."
+  (interactive)
+  (let* ((date (abo/today))
+         (buffer-file (buffer-file-name))
+         (new-file-name (concat (file-name-directory buffer-file)
+                                date
+                                "-"
+                                (file-name-nondirectory buffer-file)))
+         )
+    (save-buffer)
+    (rename-file buffer-file new-file-name)
+    (set-visited-file-name new-file-name)
+    (save-buffer)))
+
+(defun abo/insert-date ()
+  "Insert today's date in current buffer"
+  (interactive)
+  (insert (abo/today)))
+
+;; File utilities
+(defun abo/change-line-endings-to-unix ()
+  (let ((coding-str (symbol-name buffer-file-coding-system)))
+    (when (string-match "-\\(?:dos\\|mac\\)$" coding-str)
+      (set-buffer-file-coding-system 'unix))))
+
+(defun filepath-with-line-number-for-current-buffer ()
+  "Return a string with Buffer-file-name:line-number.
+             Make it easier to prepare commands for tools like rspec"
+  (interactive)
+  (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
+
+;; Tmux integration
+(defun abo/tmux-active-session ()
+  (interactive)
+  (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
+
+(defun abo/tmux-select-pane (direction)
+  (shell-command (concat  "tmux select-pane -t " (abo/tmux-active-session) " -" direction)))
+
+(defun abo/tmux-move (direction)
+  (condition-case nil
+      (cond
+       ((string= "R" direction) (windmove-right))
+       ((string= "L" direction) (windmove-left))
+       ((string= "U" direction) (windmove-up))
+       ((string= "D" direction) (windmove-down)))
+    (error (unless window-system (abo/tmux-select-pane direction)))))
+
+(defun tmux-move-right ()
+  (interactive)
+  (abo/tmux-move "R"))
+
+(defun tmux-move-left ()
+  (interactive)
+  (abo/tmux-move "L"))
+
+(defun tmux-move-up ()
+  (interactive)
+  (abo/tmux-move "U"))
+
+(defun tmux-move-down ()
+  (interactive)
+  (abo/tmux-move "D"))
+
+;; Evil modeline colors
+(defun abo/bg-modeline-color-from-evil-state ()
+  (interactive)
+  (cond ((evil-insert-state-p) "#87af87")
+        ((evil-visual-state-p) "#87afaf")
+        ((evil-emacs-state-p) "#d787af")
+        ((evil-normal-state-p) "#ffaf00")
+        (t "#3c3836")))
+
+(defun abo/fg-modeline-color-from-evil-state ()
+  (interactive)
+  (cond ((evil-insert-state-p) "#3c3836")
+        ((evil-visual-state-p) "#3c3836")
+        ((evil-emacs-state-p) "#3c3836")
+        ((evil-normal-state-p) "#3c3836")
+        (t "#ebddb2")))
+
+(defun abo/post-command-evil-modeline-colors-hook ()
+  (interactive)
+  (set-face-background 'mode-line (abo/bg-modeline-color-from-evil-state))
+  (set-face-foreground 'mode-line (abo/fg-modeline-color-from-evil-state)))
+
+;; (add-hook 'post-command-hook 'abo/post-command-evil-modeline-colors-hook)
+#+END_SRC
+
+* Navigation
+#+BEGIN_SRC emacs-lisp
+;; Project and file navigation
+(require 'project)
+(setq project-switch-commands 'project-dired)
+(setq project-find-functions '(project-try-vc))
+
+;; Use ripgrep for finding files
+(setq project-find-file-function
+      (lambda ()
+        (let ((default-directory (project-root (project-current t))))
+          (call-interactively 'counsel-rg))))
+
+;; Find sibling files (test <-> implementation)
+(setq find-sibling-rules
+      '(
+               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
+               ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
+               ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
+               ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
+               ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
+               ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb" "test/.*/\\1_test.rb")
+               ("app/\\(controllers\\|helpers\\)/\\(.*\\)_\\(controller\\|helper\\).rb\\'" "app/views/\\2/\\(index\\|show\\|edit\\|new\\).html.erb")
+               ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
+               ("app/controllers/\\(.*\\)_controller.rb\\'" "spec/requests/\\1_spec.rb")
+               ("spec/requests/\\(.*\\)_spec.rb\\'" "app/controllers/\\1_controller.rb" )
+               ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/helpers/\\1_helper.rb")
+               ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
+               ("test/[^/]+/\\(.*\\)_test.rb\\'" "app/.*/\\1.rb")
+               ))
+
+;; Dumb jump for code navigation
+(use-package dumb-jump
+  :init
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
+;; Citre (ctags)
+(use-package citre
+  :init
+  (global-set-key (kbd "C-x c j") 'citre-jump)
+  (global-set-key (kbd "C-x c J") 'citre-jump-back)
+  (global-set-key (kbd "C-x c p") 'citre-ace-peek)
+  (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
+  :config
+  (setq
+   citre-use-project-root-when-creating-tags t
+   citre-prompt-language-for-ctags-command t
+   citre-auto-enable-citre-mode-modes '(prog-mode)))
+
+;; Consult, Vertico, Orderless for completion
+(use-package vertico
+  :init (vertico-mode))
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package consult
+  :ensure t
+  :bind
+  ("C-c f" . consult-fd))
+
+;; Embark for actions
+(use-package embark
+  :bind (("C-o" . embark-act)
+         ("C-;" . embark-dwim)
+         ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  (define-key embark-file-map (kbd "t") #'find-file-other-tab)
+  (define-key embark-buffer-map (kbd "t") #'switch-to-buffer-other-tab))
+
+(use-package embark-consult
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+;; Speedbar
+(setq speedbar-directory-unshown-regexp "^$")
+
+(with-eval-after-load 'speedbar
+  (require 'speedbar)
+  (speedbar-add-supported-extension ".ts")
+  (speedbar-add-supported-extension ".tsx"))
+
+;; Treemacs
+(use-package treemacs)
+(use-package all-the-icons
+  :if (display-graphic-p))
+(use-package treemacs-all-the-icons
+  :config
+  (treemacs-load-theme "all-the-icons"))
+(use-package treemacs-evil)
+
+;; Search tools
+(use-package wgrep :defer t)
+(require 'abo/find-in-project)
+(use-package iedit)
+(use-package deadgrep)
+(use-package rg)
+#+END_SRC
+
+* Programming languages
+** Clojure
+#+BEGIN_SRC emacs-lisp
+(use-package clojure-mode
+  :mode "\\.clj\\'"
+  :config
+  (add-hook 'clojure-mode-hook #'subword-mode))
+
+(use-package cider
+  :after clojure-mode
+  :config
+  (define-key cider-mode-map (kbd "C-c C-c") 'cider-eval-list-at-point)
+  (add-hook 'clojure-mode-hook (lambda ()
+                                 (add-hook 'before-save-hook 'cider-format-buffer t t)))
+  (add-hook 'edn-mode-hook (lambda ()
+                                 (add-hook 'before-save-hook 'cider-format-edn-buffer t t)))
+  (setq cider-repl-display-help-banner nil))
+#+END_SRC
+
+** Ruby
+#+BEGIN_SRC emacs-lisp
+(require 'abo-ruby)
+#+END_SRC
+
+** JavaScript / TypeScript
+#+BEGIN_SRC emacs-lisp
+(setq js-indent-level 2)
+(add-hook 'js-mode-hook (lambda () (subword-mode t)))
+
+(setq js2-mode-show-parse-errors nil
+      js2-mode-show-strict-warnings nil
+      js2-basic-offset 2
+      js2-highlight-level 3)
+
+(use-package js2-mode
+  :mode "\\.js\\'"
+  :mode "\\.mjs\\'"
+  :mode "\\.ts\\'"
+  :mode "\\.tsx\\'"
+  :mode "\\.jsx\\'")
+
+(use-package json-mode
+  :mode "\\.json\\'"
+  :mode "\\.eslintrc\\'")
+
+(use-package coffee-mode
+  :mode "\\.coffee\\'"
+  :config
+  (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
+  (custom-set-variables '(coffee-tab-width 2)))
+
+(use-package prettier-js
+  :diminish prettier-js-mode
+  :hook (js2-mode . prettier-js-mode)
+  :config
+  (setq prettier-args '(
+                        "--trailing-comma" "es5"
+                        "--single-quote" "true"
+                        )
+        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
+
+(use-package context-coloring
+  :ensure t
+  :bind (("C-c oc" . context-coloring-mode)))
+
+(add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
+(defun my-jsx-hook ()
+  "Set web mode with adjustments for JSX"
+  (interactive)
+  (web-mode)
+  (web-mode-set-content-type "jsx")
+  (setq emmet-expand-jsx-className? t)
+  (emmet-mode))
+
+(use-package flymake-eslint
+  :config
+  (defun os/enable-eslint-if-typescript ()
+    "Enable eslint if typescript mode"
+    (when (or
+           (eq major-mode 'typescript-ts-mode)
+           (eq major-mode 'typescript-mode)
+           (eq major-mode 'typescriptreact-mode)
+           (eq major-mode 'js2-mode)
+           (eq major-mode 'web-mode))
+      (flymake-eslint-enable)))
+  (add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
+#+END_SRC
+
+** CSS / SCSS / Web
+#+BEGIN_SRC emacs-lisp
+(setq css-indent-offset 2
+      web-mode-markup-indent-offset 2
+      web-mode-script-padding 0
+      web-mode-css-indent-offset 2
+      web-mode-style-padding 2
+      web-mode-code-indent-offset 2
+      web-mode-attr-indent-offset 2)
+
+(use-package web-mode
+  :mode "\\.gohtml\\'"
+  :mode "\\.erb\\'"
+  :mode "\\.vue\\'"
+  :config
+  (setq web-mode-enable-auto-closing t)
+  (define-key web-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-script-padding 0)
+  (defun jjpandari/merge-imenu (index-fun)
+    (interactive)
+    (let ((mode-imenu (funcall index-fun))
+          (custom-imenu (imenu--generic-function imenu-generic-expression)))
+      (append custom-imenu mode-imenu)))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index))))))
+
+(use-package emmet-mode
+  :hook (css-mode sgml-mode web-mode)
+  :diminish emmet-mode
+  :config
+  (add-hook 'css-mode-hook
+            (lambda ()
+              (emmet-mode)
+              (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
+              (setq emmet-expand-jsx-className? nil)))
+  (add-hook 'sgml-mode-hook
+            (lambda ()
+              (emmet-mode)
+              (setq emmet-expand-jsx-className? nil))))
+
+(use-package scss-mode :mode "\\.scss\\'")
+(use-package sass-mode :mode "\\.sass\\'")
+(use-package less-css-mode :mode "\\.less\\'")
+#+END_SRC
+
+** Go
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+  :mode "\\.go\\'")
+#+END_SRC
+
+** Rust
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :bind (:map rust-mode-map
+              ("C-c C-c" . rust-run)))
+#+END_SRC
+
+** Elm
+#+BEGIN_SRC emacs-lisp
+(use-package elm-mode)
+#+END_SRC
+
+** YAML
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :mode "\\.ya?ml\\'")
+#+END_SRC
+
+** Other
+#+BEGIN_SRC emacs-lisp
+(require 'wat-mode)
+
+(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 #+END_SRC
