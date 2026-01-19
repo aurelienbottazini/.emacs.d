@@ -805,15 +805,16 @@ This command switches to browser."
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :config
-    (defun my/lsp-filter-typescript-commonjs (params _workspace)
+    (defun my/lsp-filter-typescript-commonjs (_workspace params)
     "Filter out CommonJS module suggestion."
-    (let ((diagnostics (gethash "diagnostics" params)))
-      (puthash "diagnostics"
-               (cl-remove-if (lambda (d)
-                              (equal (gethash "code" d) 80001))
-                            diagnostics)
-               params))
-    params)
+    (when (hash-table-p params)
+      (let ((diagnostics (gethash "diagnostics" params)))
+        (when diagnostics
+          (puthash "diagnostics"
+                   (cl-remove-if (lambda (d)
+                                  (equal (gethash "code" d) 80001))
+                                diagnostics)
+                   params)))))
 
   (advice-add 'lsp--on-diagnostics :before #'my/lsp-filter-typescript-commonjs)
 
