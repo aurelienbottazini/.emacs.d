@@ -339,7 +339,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Operator Mono Ssm AB"))))
  '(error ((t (:background "#ffe0e0" :foreground "black" :weight bold))))
- '(fixed-pitch ((t (:family "Input Sans Condensed"))))
+ '(fixed-pitch ((t (:family "Operator Mono Ssm AB"))))
  '(font-lock-comment-face ((t (:background "#fffabc" :foreground "black" :slant italic))))
  '(font-lock-constant-face ((t nil)))
  '(font-lock-function-name-face ((t (:background "#dbf1ff"))))
