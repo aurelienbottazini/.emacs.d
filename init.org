@@ -446,6 +446,7 @@ cons cell (regexp . minor-mode)."
    "]e" 'flymake-goto-next-error
     ":" 'evil-ex
     "-" 'dired-jump
+    "gr" 'lsp-find-references
    )
 
   (general-define-key
@@ -699,15 +700,13 @@ cons cell (regexp . minor-mode)."
   ;; Prefer tsgo (native TS server) over ts-ls
   (add-to-list 'lsp-disabled-clients 'ts-ls))
 
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-delay 0.5
-        lsp-ui-doc-position 'at-point
-        lsp-ui-doc-show-with-mouse nil))
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode
+;;   :config
+;;   (setq lsp-ui-doc-enable t
+;;         lsp-ui-doc-delay 0.5
+;;         lsp-ui-doc-position 'at-point
+;;         lsp-ui-doc-show-with-mouse nil))
 
 (use-package flycheck)
 #+END_SRC
