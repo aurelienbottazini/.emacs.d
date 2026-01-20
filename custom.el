@@ -230,7 +230,7 @@
  '(org-startup-indented t)
  '(org-startup-truncated t)
  '(org-startup-with-inline-images t)
- '(package-selected-packages '())
+ '(package-selected-packages 'nil)
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-mode-line-prefix " Proj")
  '(projectile-switch-project-action 'projectile-dired)
@@ -314,6 +314,7 @@
  '(tool-bar-mode nil)
  '(treemacs-no-png-images nil)
  '(treemacs-position 'right)
+ '(treesit-font-lock-level 4)
  '(truncate-lines nil)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map

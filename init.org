@@ -622,17 +622,7 @@ cons cell (regexp . minor-mode)."
 
 (setq auth-sources '("~/.authinfo"))
 
-(use-package magit
-  :config
-  (setq magit-refresh-status-buffer nil
-        magit-refresh-on-index-change nil
-        magit-process-popup-time 0
-        magit-process-raise-error t
-        magit-status-sections-hook
-        '(magit-insert-status-headers
-          magit-insert-merge-log
-          magit-insert-rebase-sequence
-          magit-insert-untracked-files)))
+(use-package magit)
 
 ;; Git performance tips (global config)
 ;; git config --global core.untrackedCache true
@@ -1525,8 +1515,6 @@ cons cell (regexp . minor-mode)."
 (use-package js2-mode
   :mode "\\.js\\'"
   :mode "\\.mjs\\'"
-  :mode "\\.ts\\'"
-  :mode "\\.tsx\\'"
   :mode "\\.jsx\\'")
 
 (use-package json-mode
@@ -1574,6 +1562,10 @@ cons cell (regexp . minor-mode)."
            (eq major-mode 'web-mode))
       (flymake-eslint-enable)))
   (add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
+
+(use-package typescript-ts-mode
+  :mode "\\.ts\\'"
+  :mode "\\.tsx\\'")
 #+END_SRC
 
 ** CSS / SCSS / Web
@@ -1656,3 +1648,12 @@ cons cell (regexp . minor-mode)."
 (add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
 #+END_SRC
+
+** Treesitter
+#+begin_src emacs-lisp
+(setq treesit-language-source-alist
+      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (ruby "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src")
+        ))
+#+end_src
