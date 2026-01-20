@@ -371,7 +371,12 @@ cons cell (regexp . minor-mode)."
 #+BEGIN_SRC emacs-lisp
 (use-package lsp-mode
   :init
-  (setq lsp-keymap-prefix "M-l")
+  (setq lsp-keymap-prefix "M-l"
+        lsp-completion-enable-additional-text-edit t
+        lsp-completion-enable-imports t
+        lsp-enable-snippet t
+        lsp-completion-show-detail t
+        lsp-completion-show-kind t)
   :hook ((js2-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
