@@ -401,6 +401,7 @@ cons cell (regexp . minor-mode)."
     "o" 'consult-outline
     "F" 'rg
     "f" 'consult-ripgrep
+    "g" 'magit-status
     "r" 'find-sibling-file
     "s" 'speedbar-get-focus
     "t" 'consult-fd
@@ -521,6 +522,12 @@ cons cell (regexp . minor-mode)."
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
   )
+
+(with-eval-after-load 'lsp-mode
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "l" '(:keymap lsp-command-map :which-key "lsp")))
 
 (use-package hydra
   :config
