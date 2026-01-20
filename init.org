@@ -621,6 +621,22 @@ cons cell (regexp . minor-mode)."
 
 (setq auth-sources '("~/.authinfo"))
 
+(use-package magit
+  :config
+  (setq magit-refresh-status-buffer nil
+        magit-refresh-on-index-change nil
+        magit-process-popup-time 0
+        magit-process-raise-error t
+        magit-status-sections-hook
+        '(magit-insert-status-headers
+          magit-insert-merge-log
+          magit-insert-rebase-sequence
+          magit-insert-untracked-files)))
+
+;; Git performance tips (global config)
+;; git config --global core.untrackedCache true
+;; git config --global core.fsmonitor true
+
 (use-package forge
   :after magit)
 #+END_SRC
