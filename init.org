@@ -650,8 +650,24 @@ cons cell (regexp . minor-mode)."
         lsp-completion-enable-imports t
         lsp-enable-snippet t
         lsp-completion-show-detail t
-        lsp-completion-show-kind t)
+        lsp-completion-show-kind t
+        ;; Performance optimizations
+        lsp-idle-delay 0.5
+        lsp-log-io nil
+        lsp-enable-file-watchers nil
+        lsp-enable-folding nil
+        lsp-enable-on-type-formatting nil
+        lsp-enable-indentation nil
+        ;; TypeScript-specific settings
+        lsp-typescript-suggest-complete-function-calls t
+        lsp-javascript-display-inlay-hints t
+        lsp-javascript-display-parameter-name-hints "all"
+        lsp-javascript-display-return-type-hints t
+        lsp-inlay-hint-enable t)
   :hook ((js2-mode . lsp)
+         (typescript-mode . lsp)
+         (typescript-ts-mode . lsp)
+         (tsx-ts-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :config
@@ -665,9 +681,31 @@ cons cell (regexp . minor-mode)."
                                    (equal (gethash "code" d) 80001))
                                  diagnostics)
                    params)))))
-  (advice-add 'lsp--on-diagnostics :before #'my/lsp-filter-typescript-commonjs))
+  (advice-add 'lsp--on-diagnostics :before #'my/lsp-filter-typescript-commonjs)
 
-(use-package lsp-ui :commands lsp-ui-mode)
+  (defun my/lsp-organize-imports ()
+    "Organize imports and format buffer."
+    (interactive)
+    (lsp-organize-imports)
+    (lsp-format-buffer))
+
+  (add-hook 'typescript-ts-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'lsp-organize-imports nil t)))
+  (add-hook 'tsx-ts-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'lsp-organize-imports nil t)))
+
+  ;; Prefer tsgo (native TS server) over ts-ls
+  (add-to-list 'lsp-disabled-clients 'ts-ls))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-delay 0.5
+        lsp-ui-doc-position 'at-point
+        lsp-ui-doc-show-with-mouse nil))
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
