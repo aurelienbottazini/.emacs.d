@@ -21,9 +21,6 @@ brew install --cask emacs-plus-app
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
 
-(let ((default-directory  "~/.emacs.d/config/"))
-  (normal-top-level-add-to-load-path '("."))
-  (normal-top-level-add-subdirs-to-load-path))
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
