@@ -25,8 +25,6 @@ brew install --cask emacs-plus-app
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(require 'abo-initialization)
-
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
   (interactive)
@@ -50,6 +48,59 @@ brew install --cask emacs-plus-app
 
 (setq vc-follow-symlinks t)
 (put 'narrow-to-region 'disabled nil)
+#+END_SRC
+
+** abo-initialization
+#+BEGIN_SRC emacs-lisp
+(defvar last-file-name-handler-alist file-name-handler-alist)
+(setq gc-cons-threshold 100000000
+      gc-cons-percentage 0.6
+      file-name-handler-alist nil)
+
+(add-hook 'emacs-startup-hook (lambda ()
+                                (setq gc-cons-threshold 16777216
+                                      gc-cons-percentage 0.1
+                                      file-name-handler-alist last-file-name-handler-alist)))
+
+(setq byte-compile-warnings '(cl-functions))
+
+(setq package-archives
+      '(("melpa"       . "https://melpa.org/packages/")
+        ("gnu"         . "https://elpa.gnu.org/packages/")
+        ("nongnu"      . "https://elpa.nongnu.org/nongnu/")))
+
+(setq package-user-dir (concat user-emacs-directory "elpa"))
+
+(setq package--init-file-ensured t) ; do not add things at the end of init.el
+(setq package-check-signature nil)
+
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(defun require-package (package &optional min-version)
+  "Ask elpa to install given PACKAGE. You can specify a MIN-VERSION for your PACKAGE."
+  (unless (package-installed-p package min-version)
+    (package-install package)))
+
+(require-package 'use-package)
+(require 'use-package)
+
+(require-package 'diminish)
+(require 'diminish)
+
+(setq use-package-compute-statistics t) ;(use-package-report)
+(setq use-package-always-ensure t)
+
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file)
+
+(if (file-exists-p "~/.emacs.d/.emacs-local")
+    (load "~/.emacs.d/.emacs-local"))
+
+(let ((default-directory  "~/.emacs.d/site-lisp/"))
+  (normal-top-level-add-to-load-path '("."))
+  (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
 ** Environment and paths
@@ -303,7 +354,210 @@ cons cell (regexp . minor-mode)."
 
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
-(require 'abo-keybindings)
+(use-package multiple-cursors)
+(use-package windresize)
+
+(defun find-file-right (filename)
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (find-file filename))
+
+(defun find-file-below (filename)
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (find-file filename))
+
+(use-package which-key
+  :diminish which-key-mode
+  :config
+  (which-key-mode))
+
+(use-package general
+  :config
+
+  (general-create-definer my-leader-def
+    :prefix "SPC")
+
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "a" 'org-agenda
+    "b" 'consult-buffer
+    "1" 'treemacs
+    "c" (lambda () (interactive) (org-capture))
+    "d" 'lsp-ui-flycheck-list
+    "e" 'consult-recent-file
+    "h" 'highlight-symbol-at-point
+    "H" 'unhighlight-regexp
+    "i" 'abo/consult-heading
+    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+    "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
+    "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
+    "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
+    "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
+    "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
+    "jw" (lambda () (interactive) (find-file "~/work"))
+    "k" 'recompile
+    "p" 'project-switch-project
+    "o" 'consult-outline
+    "F" 'rg
+    "f" 'consult-ripgrep
+    "r" 'find-sibling-file
+    "s" 'speedbar-get-focus
+    "t" 'consult-fd
+    ;; "t" (lambda () (interactive) (org-capture nil "t"))
+    "w" 'er/expand-region
+    "W" 'er/contract-region
+    "x" 'emamux:run-last-command
+    "X" 'emamux:send-command
+    "SPC" 'abo-run
+    )
+
+  (defun abo/consult-heading ()
+    (interactive)
+    (if (derived-mode-p 'org-mode)
+        (consult-org-heading)
+      (consult-outline)))
+
+  (defun abo-run ()
+    (interactive)
+    (cond
+     ((derived-mode-p 'ruby-ts-mode) (xmp))
+     ((derived-mode-p 'ruby-mode) 'xmp)
+     ((derived-mode-p 'org-mode) 'org-ctrl-c-ctrl-c)
+     ((derived-mode-p 'emacs-lisp-mode) 'eval-buffer)
+     (t (message "nothing to run for this buffer")
+
+     )))
+
+  (my-leader-def
+    :states 'visual
+    :keymaps 'override
+    "x" 'emamux:send-region)
+
+  (winner-mode 1)
+
+  (general-define-key
+   :states 'normal
+   "-" 'dired-jump
+   "[[" 'previous-buffer
+   "]]" 'next-buffer
+   "[e" 'flymake-goto-prev-error
+   "]e" 'flymake-goto-next-error
+    ":" 'evil-ex
+    "-" 'dired-jump
+   )
+
+  (general-define-key
+   :states 'insert
+   "s-/" 'hippie-expand
+   "M-/" 'hippie-expand)
+
+  (general-define-key
+   :keymaps 'override
+
+   "s-t" 'counsel-fzf
+   "M-t" 'counsel-fzf
+
+   "<f5>" 'ispell-buffer
+   "<f6>" 'iedit-mode
+   "<f7>" 'org-tree-slide-mode
+   "S-<f7>" 'org-tree-slide-skip-done-toggle
+   ;; Hydra on F8
+   "<f9>" 'deft
+
+   "M-." 'xref-find-definitions
+   "M-c" 'kill-ring-save ; ⌘-c = Copy
+   "M-v" 'yank ; ⌘-v = Paste
+   ;; "M-x" 'counsel-M-x
+
+   "C-h" 'tmux-move-left
+   "C-j" 'tmux-move-down
+   "C-l" 'tmux-move-right
+   "C-k" 'tmux-move-up
+
+   "C-r" 'undo-redo
+
+   "C-c C-m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-c C-q" 'org-set-tags-command
+
+   "C-c 9" 'paredit-backward-slurp-sexp
+   "C-c 0" 'paredit-forward-slurp-sexp
+   "C-c [" 'paredit-backward-barf-sexp
+   "C-c ]" 'paredit-forward-barf-sexp
+   "C-c a" 'org-agenda
+   "C-c d" 'flymake-show-buffer-diagnostics
+   "C-c e" 'er/expand-region
+   ;; C-c C-c "runs" what makes sense for a particular mode
+   "C-c gl" 'git-link
+   "C-c gt" 'git-timemachine-toggle
+   "C-c jc" 'org-clock-jump-to-current-clock
+   "C-c k" 'recompile
+   "C-c K" 'compile
+   "C-c l" 'org-store-link
+
+   "C-c of" 'auto-fill-mode
+   "C-c og" 'global-hl-line-mode
+   "C-c oi" 'electric-indent-mode
+   "C-c olh" 'hide-line-numbers
+   "C-c oll" 'show-line-numbers
+   "C-c olr" 'show-relative-line-numbers
+   "C-c op" 'show-paren-mode
+   "C-c or" 'rainbow-mode
+   "C-c ot" 'toggle-truncate-lines
+   "C-c ow" 'visual-line-mode
+   "C-c s" 'find-sibling-file
+   "C-c t" 'tab-switcher
+
+   "C-c p" 'project-find-file
+   "C-c r" 'consult-recent-file
+   "C-c R" 'revert-buffer
+   "C-c w r" 'windresize
+
+   "C-x C-m" 'execute-extended-command
+   "C-x C-o" 'company-complete
+   "C-x b" 'consult-buffer
+   "C-x C-f" 'find-file
+   "C-x B" 'project-switch-to-buffer
+   "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
+   "C-x o" 'other-window)
+  )
+
+(use-package hydra
+  :config
+  (defhydra hydra-utils (global-map "<f8>")
+    "drag"
+    ("j" drag-stuff-down "down")
+    ("k" drag-stuff-up "up")))
+
+(use-package drag-stuff
+  :diminish drag-stuff-mode
+  :config
+  (drag-stuff-global-mode t))
+
+(defun my/sublime-mark-next ()
+  "Behave exactly like Sublime Text's Cmd+D.
+   1. If no region is active, select the symbol at point.
+   2. If a region IS active, mark the next occurrence."
+  (interactive)
+  (if (region-active-p)
+      (mc/mark-next-like-this 1)
+    ;; If no selection, manually select the symbol under cursor
+    (if-let ((bounds (bounds-of-thing-at-point 'symbol)))
+        (progn
+          (goto-char (car bounds))
+          (push-mark (cdr bounds) t t))
+      (user-error "No symbol at point"))))
+
+(use-package multiple-cursors
+  :bind (("C->" . my/sublime-mark-next)))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
 
 ** Notes and writing
@@ -1121,7 +1375,84 @@ cons cell (regexp . minor-mode)."
 
 ** Ruby
 #+BEGIN_SRC emacs-lisp
-(require 'abo-ruby)
+(use-package ruby-ts-mode
+  :mode "\\.rake\\'"
+  :mode "Rakefile\\'"
+  :mode "\\.gemspec\\'"
+  :mode "\\.ru\\'"
+  :mode "Gemfile\\'"
+  :mode "Guardfile\\'"
+  :mode "Capfile\\'"
+  :mode "\\.cap\\'"
+  :mode "\\.thor\\'"
+  :mode "\\.rabl\\'"
+  :mode "Thorfile\\'"
+  :mode "Vagrantfile\\'"
+  :mode "\\.jbuilder\\'"
+  :mode "Podfile\\'"
+  :mode "\\.podspec\\'"
+  :mode "Puppetfile\\'"
+  :mode "Berksfile\\'"
+  :mode "Appraisals\\'"
+  :mode "\\.rb$"
+  :mode "ruby"
+  :config
+  (define-key ruby-ts-mode-map (kbd "C-c .") 'robe-jump)
+  (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
+  (add-hook 'ruby-ts-mode-hook (defun auray-ruby-ts-mode-hook ()
+             (modify-syntax-entry ?_ "w")
+             ))
+  (with-eval-after-load 'speedbar
+    (require 'speedbar)
+    (speedbar-add-supported-extension ".rb")
+    (speedbar-add-supported-extension ".rake")
+    (speedbar-add-supported-extension "Rakefile")
+    (speedbar-add-supported-extension "Gemfile")
+    (defvar speedbar-fetch-dynamic-tags-alist nil)
+    (add-to-list 'speedbar-fetch-dynamic-tags-alist
+                 '(ruby-ts-mode . speedbar-fetch-dynamic-imenu))))
+
+(use-package robe
+  :after evil
+  :diminish robe-mode
+  :config
+  (add-hook 'ruby-mode-hook 'robe-mode)
+  (add-hook 'ruby-ts-mode-hook 'robe-mode)
+  (eval-after-load 'company
+  '(push 'company-robe company-backends))
+  (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
+  )
+
+(use-package ruby-mode
+  :config
+  ;; (add-hook 'ruby-mode-hook 'subword-mode)
+
+  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
+  (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
+  (use-package ruby-interpolation
+    :diminish ruby-interpolation-mode)
+  (use-package ruby-end
+    :diminish ruby-end-mode
+    )
+  (use-package rspec-mode
+    :config
+    (add-hook 'after-init-hook 'inf-ruby-switch-setup) ;When you've hit the breakpoint, hit C-x C-q to enable inf-ruby
+  (define-key rspec-mode-map (kbd "C-c r") 'rspec-rerun)
+    ))
+
+(require 'rcodetools)
+(defadvice comment-dwim (around rct-hack activate)
+  "If comment-dwim is successively called, add => mark."
+  (if (and (or (eq major-mode 'enh-ruby-mode)
+               (eq major-mode 'ruby-mode)
+               (eq major-mode 'ruby-ts-mode)
+               )
+           (eq last-command 'comment-dwim))
+      (progn
+        (if (eq major-mode 'enh-ruby-mode)
+            (end-of-line))
+        (insert "=>"))
+    ad-do-it))
 #+END_SRC
 
 ** JavaScript / TypeScript
