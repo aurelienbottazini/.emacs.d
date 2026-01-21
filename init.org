@@ -1655,5 +1655,7 @@ cons cell (regexp . minor-mode)."
       '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
         (ruby "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src")
+        (css "https://github.com/tree-sitter/tree-sitter-css" "master" "src")
+        (json "https://github.com/tree-sitter/tree-sitter-css" "master" "src")
         ))
 #+end_src
