@@ -401,7 +401,8 @@ cons cell (regexp . minor-mode)."
     "o" 'consult-outline
     "F" 'rg
     "f" 'consult-ripgrep
-    "g" 'magit-status
+    "gg" 'magit-status
+    "gf" 'magit-file-dispatch
     "r" 'find-sibling-file
     "s" 'speedbar-get-focus
     "t" 'consult-fd
