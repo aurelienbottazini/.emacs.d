@@ -988,7 +988,10 @@ cons cell (regexp . minor-mode)."
 ** General settings
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/Dropbox/notes")
+(setq org-id-locations-file
+      (expand-file-name ".org-id-locations" org-directory))
 (setq org-archive-location "archives/%s_archive::")
+(setq org-agenda-files (directory-files-recursively org-directory "\\.org$"))
 
 (defun abo/org-ensure-archive-directory ()
   (when (and buffer-file-name
