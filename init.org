@@ -1105,17 +1105,23 @@ cons cell (regexp . minor-mode)."
 
 ** Babel
 #+BEGIN_SRC emacs-lisp
-(require 'ob-clojure)
-(use-package ob-clojurescript)
-(setq org-babel-clojure-backend 'cider)
-(require 'ob-js)
-(setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
-(org-babel-do-load-languages 'org-babel-load-languages
-                             '((shell . t)
-                               (sql . t)
-                               (ditaa . t)))
-(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
-(require 'ob-ruby)
+  (require 'ob-clojure)
+  (use-package ob-clojurescript)
+  (setq org-babel-clojure-backend 'cider)
+  (require 'ob-js)
+  (setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
+
+  (use-package ob-mermaid)
+  (setq ob-mermaid-cli-path "mmdc")
+
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((shell . t)
+                                 (sql . t)
+                                 (mermaid . t)
+                                 (ditaa . t)))
+  (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+  (require 'ob-ruby)
 #+END_SRC
 
 ** Export and publishing
