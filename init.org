@@ -1115,24 +1115,48 @@ cons cell (regexp . minor-mode)."
   (use-package ob-mermaid)
   (setq ob-mermaid-cli-path "mmdc")
 
+  (defun abo/org--clean-heading (text)
+    "Return heading text with links and targets removed."
+    (let ((clean (org-link-display-format text)))
+      (setq clean (replace-regexp-in-string "<<+\\([^>]+\\)>>+" "\\1" clean))
+      (setq clean (replace-regexp-in-string "[\t ]+" " " clean))
+      (string-trim clean)))
+
   (defun abo/org-subtree-to-mermaid-mindmap (outfile)
-    "Export the current Org subtree to a Mermaid mindmap file."
-    (interactive "FWrite Mermaid to: ")
+    "Insert a Mermaid mindmap block for the current Org subtree."
+    (interactive
+     (save-excursion
+       (org-back-to-heading t)
+       (let* ((root (org-get-heading t t t t))
+              (root-text (abo/org--clean-heading root))
+              (base-name (if buffer-file-name
+                             (file-name-base buffer-file-name)
+                           "mindmap"))
+              (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" root-text)))
+              (default-file (format "%s-%s.svg" base-name (if (string= slug "") "mindmap" slug))))
+         (list (read-file-name "Write Mermaid image to: " nil nil nil default-file)))))
     (org-back-to-heading t)
     (let* ((root (org-get-heading t t t t))
+           (root-text (abo/org--clean-heading root))
            (base-level (org-outline-level))
-           (lines (list "mindmap"
-                        (format "  root((%s))" root))))
+           (file-arg (format "%S" outfile))
+           (lines (list (format "#+begin_src mermaid :file %s :results file :exports results" file-arg)
+                        "mindmap"
+                        (format "  root((%s))" root-text)))
+           (child-lines nil))
       (org-map-entries
        (lambda ()
          (let* ((level (org-outline-level))
-                (title (org-get-heading t t t t)))
+                (title (org-get-heading t t t t))
+                (title-text (abo/org--clean-heading title)))
            (unless (= level base-level)
              (let ((indent (+ 2 (* 2 (- level base-level)))))
-               (push (format "%s%s" (make-string indent ? ) title) lines)))))
+               (push (format "%s%s" (make-string indent ? ) title-text) child-lines)))))
        nil 'tree)
-      (with-temp-file outfile
-        (insert (mapconcat #'identity (nreverse lines) "\n")))))
+      (setq lines (append lines (nreverse child-lines) '("#+end_src")))
+      (save-excursion
+        (org-end-of-meta-data t)
+        (insert "\n" (mapconcat #'identity lines "\n") "\n\n"))))
 
 
   (org-babel-do-load-languages 'org-babel-load-languages
