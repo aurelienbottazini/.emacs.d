@@ -403,6 +403,8 @@ cons cell (regexp . minor-mode)."
     "f" 'consult-ripgrep
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
+    "m" 'consult-mark
+    "M" 'consult-global-mark
     "r" 'find-sibling-file
     "s" 'speedbar-get-focus
     "t" 'consult-fd
@@ -1003,7 +1005,6 @@ cons cell (regexp . minor-mode)."
         (make-directory archive-dir t)))))
 
 (add-hook 'org-mode-hook 'abo/org-ensure-archive-directory)
-(add-to-list 'auto-mode-alist '("Ruby\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 (add-hook 'org-mode-hook 'abbrev-mode)
 
@@ -1113,6 +1114,25 @@ cons cell (regexp . minor-mode)."
 
   (use-package ob-mermaid)
   (setq ob-mermaid-cli-path "mmdc")
+
+  (defun abo/org-subtree-to-mermaid-mindmap (outfile)
+    "Export the current Org subtree to a Mermaid mindmap file."
+    (interactive "FWrite Mermaid to: ")
+    (org-back-to-heading t)
+    (let* ((root (org-get-heading t t t t))
+           (base-level (org-outline-level))
+           (lines (list "mindmap"
+                        (format "  root((%s))" root))))
+      (org-map-entries
+       (lambda ()
+         (let* ((level (org-outline-level))
+                (title (org-get-heading t t t t)))
+           (unless (= level base-level)
+             (let ((indent (+ 2 (* 2 (- level base-level)))))
+               (push (format "%s%s" (make-string indent ? ) title) lines)))))
+       nil 'tree)
+      (with-temp-file outfile
+        (insert (mapconcat #'identity (nreverse lines) "\n")))))
 
 
   (org-babel-do-load-languages 'org-babel-load-languages
