@@ -207,6 +207,9 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
+ '(org-agenda-custom-commands
+   '(("n" "Agenda and all TODOs" ((agenda "" nil) (alltodo "" nil)) nil)
+     ("N" "Next todos" todo "NEXT" nil)))
  '(org-agenda-span 'week)
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)

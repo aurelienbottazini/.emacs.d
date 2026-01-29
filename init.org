@@ -1011,7 +1011,7 @@ cons cell (regexp . minor-mode)."
 (require 'org-tempo)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)")))
+      '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)")))
 
 (setq org-fontify-quote-and-verse-blocks t)
 (setq org-hide-emphasis-markers nil)
@@ -1052,6 +1052,12 @@ cons cell (regexp . minor-mode)."
             (lambda (&rest _)
               (org-save-all-org-buffers)))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(setq org-stuck-projects
+      '("+project/-MAYBE-DONE" ("NEXT") ("errand")
+        "\\<IGNORE\\>"))
+#+end_src
 
 ** Links
 #+BEGIN_SRC emacs-lisp
