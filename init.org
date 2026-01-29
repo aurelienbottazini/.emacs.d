@@ -1351,7 +1351,10 @@ cons cell (regexp . minor-mode)."
           (call-interactively 'counsel-rg))))
 
 (setq find-sibling-rules
-      '(("\\(.*\\).tsx\\'" "\\1.spec.tsx")
+      '(
+        ("\\(.*\\).ts\\'" "\\1.spec.ts")
+        ("\\(.*\\).spec.ts\\'" "\\1.ts")
+        ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
         ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
         ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
         ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
