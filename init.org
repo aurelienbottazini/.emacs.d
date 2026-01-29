@@ -1046,8 +1046,6 @@ cons cell (regexp . minor-mode)."
 
 ** Agenda
 #+BEGIN_SRC emacs-lisp
-(setq org-agenda-span 'month)
-
 (setq org-refile-targets '((nil :maxlevel . 5)
                            (org-agenda-files :maxlevel . 5)))
 (advice-add 'org-refile :after
