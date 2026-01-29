@@ -1472,7 +1472,6 @@ cons cell (regexp . minor-mode)."
   :mode "Berksfile\\'"
   :mode "Appraisals\\'"
   :mode "\\.rb$"
-  :mode "ruby"
   :config
   (define-key ruby-ts-mode-map (kbd "C-c .") 'robe-jump)
   (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
