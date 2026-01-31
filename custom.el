@@ -46,7 +46,9 @@
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "MBP-725-ABOT") tramp-connection-local-darwin-ps-profile)
+   '(((:application tramp :machine "MacBook-Air-de-Aurelien-2.local")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "MBP-725-ABOT") tramp-connection-local-darwin-ps-profile)
      ((:application tramp :machine "MBA-725-ABOT") tramp-connection-local-darwin-ps-profile)
      ((:application tramp :protocol "flatpak") tramp-flatpak-connection-local-default-profile)
      ((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
@@ -210,6 +212,24 @@
  '(org-agenda-custom-commands
    '(("n" "Agenda and all TODOs" ((agenda "" nil) (alltodo "" nil)) nil)
      ("N" "Next todos" todo "NEXT" nil)))
+ '(org-agenda-files
+   '("/Users/aurelienbottazini/Dropbox/notes/code/JavascriptTypescript.org"
+     "/Users/aurelienbottazini/Dropbox/notes/code/Ruby.org"
+     "/Users/aurelienbottazini/Dropbox/notes/code/css.org"
+     "/Users/aurelienbottazini/Dropbox/notes/code/naming.org"
+     "/Users/aurelienbottazini/Dropbox/notes/code/performance.org"
+     "/Users/aurelienbottazini/Dropbox/notes/art.org"
+     "/Users/aurelienbottazini/Dropbox/notes/awesome.org"
+     "/Users/aurelienbottazini/Dropbox/notes/cadeaux.org"
+     "/Users/aurelienbottazini/Dropbox/notes/contacts.org"
+     "/Users/aurelienbottazini/Dropbox/notes/finance.org"
+     "/Users/aurelienbottazini/Dropbox/notes/gtd.org"
+     "/Users/aurelienbottazini/Dropbox/notes/inbox.org"
+     "/Users/aurelienbottazini/Dropbox/notes/journal.org"
+     "/Users/aurelienbottazini/Dropbox/notes/learn.org"
+     "/Users/aurelienbottazini/Dropbox/notes/pennylane.org"
+     "/Users/aurelienbottazini/Dropbox/notes/plan.org"
+     "/Users/aurelienbottazini/Dropbox/notes/principles.org"))
  '(org-agenda-span 'week)
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
@@ -353,6 +373,7 @@
  '(org-block ((t (:extend t :background "#eee"))))
  '(org-block-begin-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
  '(org-block-end-line ((t (:inherit font-lock-comment-face :extend t :background "#eee" :foreground "#aaa" :slant italic))))
+ '(org-column ((t (:background "grey90" :foreground "black" :strike-through nil :underline nil :slant normal :weight normal))))
  '(org-level-1 ((t (:inherit outline-1 :extend nil :weight bold :height 1.0))))
  '(org-level-2 ((t (:inherit outline-2 :extend nil :weight bold :height 1.0))))
  '(org-level-3 ((t (:inherit outline-3 :extend nil :weight bold :height 1.0))))

@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle init-tangled.el :results silent
 #+STARTUP: overview
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (native-comp-available-p)
 #+end_src
 
