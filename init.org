@@ -1057,6 +1057,7 @@ cons cell (regexp . minor-mode)."
 (setq org-stuck-projects
       '("+project/-MAYBE-DONE" ("NEXT") ("errand")
         "\\<IGNORE\\>"))
+(add-to-list 'org-tags-exclude-from-inheritance "project")
 #+end_src
 
 ** Links
