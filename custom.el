@@ -189,7 +189,7 @@
  '(ivy-preferred-re-builders
    '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
- '(js2-highlight-level 3)
+ '(js2-highlight-level 3 t)
  '(lsp-auto-execute-action nil)
  '(lsp-headerline-breadcrumb-enable nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
@@ -207,6 +207,10 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
+ '(org-agenda-custom-commands
+   '(("n" "Agenda and all TODOs" ((agenda "" nil) (alltodo "" nil)) nil)
+     ("N" "Next todos" todo "NEXT" nil)))
+ '(org-agenda-span 'week)
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist

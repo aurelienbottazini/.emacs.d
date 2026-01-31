@@ -1011,7 +1011,7 @@ cons cell (regexp . minor-mode)."
 (require 'org-tempo)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)")))
+      '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)")))
 
 (setq org-fontify-quote-and-verse-blocks t)
 (setq org-hide-emphasis-markers nil)
@@ -1046,14 +1046,18 @@ cons cell (regexp . minor-mode)."
 
 ** Agenda
 #+BEGIN_SRC emacs-lisp
-(setq org-agenda-span 'month)
-
 (setq org-refile-targets '((nil :maxlevel . 5)
                            (org-agenda-files :maxlevel . 5)))
 (advice-add 'org-refile :after
             (lambda (&rest _)
               (org-save-all-org-buffers)))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(setq org-stuck-projects
+      '("+project/-MAYBE-DONE" ("NEXT") ("errand")
+        "\\<IGNORE\\>"))
+#+end_src
 
 ** Links
 #+BEGIN_SRC emacs-lisp
@@ -1375,7 +1379,10 @@ cons cell (regexp . minor-mode)."
           (call-interactively 'counsel-rg))))
 
 (setq find-sibling-rules
-      '(("\\(.*\\).tsx\\'" "\\1.spec.tsx")
+      '(
+        ("\\(.*\\).ts\\'" "\\1.spec.ts")
+        ("\\(.*\\).spec.ts\\'" "\\1.ts")
+        ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
         ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
         ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
         ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
@@ -1496,7 +1503,6 @@ cons cell (regexp . minor-mode)."
   :mode "Berksfile\\'"
   :mode "Appraisals\\'"
   :mode "\\.rb$"
-  :mode "ruby"
   :config
   (define-key ruby-ts-mode-map (kbd "C-c .") 'robe-jump)
   (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
