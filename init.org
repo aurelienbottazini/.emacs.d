@@ -31,11 +31,11 @@ brew install --cask emacs-plus-app
 (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
   "For every buffer with the same `default-directory` as the current buffer's, reload dir-locals."
   (interactive)
-  (let ((dirdefault-directory))
+  (let ((dir default-directory))
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
-        (when (equal default-directory dir))
-        (my-reload-dir-locals-for-current-buffer)))))
+        (when (equal default-directory dir)
+          (my-reload-dir-locals-for-current-buffer))))))
 
 (setq initial-major-mode 'fundamental-mode
       initial-scratch-message nil
@@ -69,15 +69,20 @@ brew install --cask emacs-plus-app
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
 (setq package--init-file-ensured t) ; do not add things at the end of init.el
-(setq package-check-signature nil)
+(setq package-check-signature 'allow-unsigned)
 
 (package-initialize)
-(unless package-archive-contents
+
+(defun abo/refresh-package-contents ()
+  "Refresh package archives on demand."
+  (interactive)
   (package-refresh-contents))
 
 (defun require-package (package &optional min-version)
   "Ask elpa to install given PACKAGE. You can specify a MIN-VERSION for your PACKAGE."
   (unless (package-installed-p package min-version)
+    (unless package-archive-contents
+      (package-refresh-contents))
     (package-install package)))
 
 (require-package 'use-package)
@@ -102,7 +107,9 @@ brew install --cask emacs-plus-app
 
 ** Environment and paths
 #+BEGIN_SRC emacs-lisp
-(setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home")
+(let ((my-java-home "/Library/Java/JavaVirtualMachines/adoptopenjdk-12.0.2.jdk/Contents/Home"))
+  (when (file-directory-p my-java-home)
+    (setenv "JAVA_HOME" my-java-home)))
 (setenv "OBJC_DISABLE_INITIALIZE_FORK_SAFETY" "YES")
 
 (let* ((home-folder (getenv "HOME"))
@@ -351,7 +358,6 @@ cons cell (regexp . minor-mode)."
 
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors)
 (use-package windresize)
 
 (defun find-file-right (filename)
@@ -384,7 +390,7 @@ cons cell (regexp . minor-mode)."
     "b" 'consult-buffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
-    "d" 'lsp-ui-flycheck-list
+    "d" 'flycheck-list-errors
     "e" 'consult-recent-file
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
@@ -394,7 +400,7 @@ cons cell (regexp . minor-mode)."
     "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
     "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
     "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
-    "jp" (lambda () (interactive) (find-file "~/projects/")gtd)
+    "jp" (lambda () (interactive) (find-file "~/projects/"))
     "jw" (lambda () (interactive) (find-file "~/work"))
     "k" 'recompile
     "p" 'project-switch-project
@@ -426,9 +432,9 @@ cons cell (regexp . minor-mode)."
     (interactive)
     (cond
      ((derived-mode-p 'ruby-ts-mode) (xmp))
-     ((derived-mode-p 'ruby-mode) 'xmp)
-     ((derived-mode-p 'org-mode) 'org-ctrl-c-ctrl-c)
-     ((derived-mode-p 'emacs-lisp-mode) 'eval-buffer)
+     ((derived-mode-p 'ruby-mode) (call-interactively #'xmp))
+     ((derived-mode-p 'org-mode) (call-interactively #'org-ctrl-c-ctrl-c))
+     ((derived-mode-p 'emacs-lisp-mode) (call-interactively #'eval-buffer))
      (t (message "nothing to run for this buffer")
 
      )))
@@ -445,8 +451,8 @@ cons cell (regexp . minor-mode)."
    "-" 'dired-jump
    "[[" 'previous-buffer
    "]]" 'next-buffer
-   "[e" 'flymake-goto-prev-error
-   "]e" 'flymake-goto-next-error
+   "[e" 'flycheck-previous-error
+   "]e" 'flycheck-next-error
     ":" 'evil-ex
     "-" 'dired-jump
     "gr" 'lsp-find-references
@@ -460,8 +466,8 @@ cons cell (regexp . minor-mode)."
   (general-define-key
    :keymaps 'override
 
-   "s-t" 'counsel-fzf
-   "M-t" 'counsel-fzf
+   "s-t" 'consult-fd
+   "M-t" 'consult-fd
 
    "<f5>" 'ispell-buffer
    "<f6>" 'iedit-mode
@@ -560,11 +566,8 @@ cons cell (regexp . minor-mode)."
       (user-error "No symbol at point"))))
 
 (use-package multiple-cursors
-  :bind (("C->" . my/sublime-mark-next)))
-
-(use-package multiple-cursors
-  :ensure t
-  :bind (("C-<" . mc/mark-previous-like-this)
+  :bind (("C->" . my/sublime-mark-next)
+         ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
 
@@ -586,11 +589,13 @@ cons cell (regexp . minor-mode)."
  time-stamp-format "%04y-%02m-%02d")
 
 (use-package writeroom-mode
+  :commands writeroom-mode
   :bind (("C-c w w" . writeroom-mode)))
 
-(add-hook 'write-file-hooks 'time-stamp)
+(add-hook 'before-save-hook #'time-stamp)
 
-(use-package writegood-mode)
+(use-package writegood-mode
+  :commands writegood-mode)
 
 (require 'browse-url)
 
@@ -605,7 +610,8 @@ cons cell (regexp . minor-mode)."
     (setq word (replace-regexp-in-string " " "_" word))
     (xwidget-webkit-browse-url (concat "http://en.wikipedia.org/wiki/" word))))
 
-(use-package biblio)
+(use-package biblio
+  :commands biblio-lookup)
 #+END_SRC
 
 ** Ediff
@@ -617,7 +623,8 @@ cons cell (regexp . minor-mode)."
 
 ** Git
 #+BEGIN_SRC emacs-lisp
-(use-package git-link)
+(use-package git-link
+  :commands (git-link git-link-commit git-link-homepage))
 
 (use-package fullframe
   :config
@@ -625,14 +632,16 @@ cons cell (regexp . minor-mode)."
 
 (setq auth-sources '("~/.authinfo"))
 
-(use-package magit)
+(use-package magit
+  :commands (magit-status magit-file-dispatch))
 
 ;; Git performance tips (global config)
 ;; git config --global core.untrackedCache true
 ;; git config --global core.fsmonitor true
 
 (use-package forge
-  :after magit)
+  :after magit
+  :defer t)
 #+END_SRC
 
 ** LSP
@@ -701,7 +710,9 @@ cons cell (regexp . minor-mode)."
 ;;         lsp-ui-doc-position 'at-point
 ;;         lsp-ui-doc-show-with-mouse nil))
 
-(use-package flycheck)
+(use-package flycheck
+  :commands (flycheck-mode flycheck-list-errors flycheck-next-error flycheck-previous-error)
+  :hook (prog-mode . flycheck-mode))
 #+END_SRC
 
 ** Completion
@@ -938,26 +949,26 @@ cons cell (regexp . minor-mode)."
 
 ** AI assistants
 #+BEGIN_SRC emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(defun abo/add-straight-build-to-load-path (package-name)
+  "Keep legacy straight packages available without bootstrapping straight."
+  (let ((package-dir (expand-file-name
+                      (format "straight/build/%s" package-name)
+                      user-emacs-directory)))
+    (when (file-directory-p package-dir)
+      (add-to-list 'load-path package-dir))))
 
-(use-package chatgpt
-  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
-  :bind ("C-c q" . chatgpt-code-query))
+(abo/add-straight-build-to-load-path "copilot")
+
+(defun abo/install-ai-packages ()
+  (interactive)
+  (unless (fboundp 'package-vc-install)
+    (user-error "package-vc-install is unavailable on this Emacs"))
+  (unless (locate-library "copilot")
+    (package-vc-install "https://github.com/copilot-emacs/copilot.el")))
 
 (use-package copilot
-  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("dist" "*.el"))
-  :ensure t
+  :if (locate-library "copilot")
+  :commands (copilot-mode copilot-accept-completion copilot-accept-completion-by-word)
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
@@ -972,18 +983,13 @@ cons cell (regexp . minor-mode)."
   :hook (compilation-filter . ansi-color-compilation-filter))
 
 (require 'compile)
-(setq compilation-error-regexp-alist '())
-(setq compilation-error-regexp-alist-alist
-      (cons '(node "^\\([a-zA-Z\.0-9\/-]+\\):\\([0-9]+\\)$" 1 2)
-            compilation-error-regexp-alist-alist))
-(setq compilation-error-regexp-alist
-      (cons 'node compilation-error-regexp-alist))
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(node "^\\([a-zA-Z\\.0-9/-]+\\):\\([0-9]+\\)$" 1 2))
+(add-to-list 'compilation-error-regexp-alist 'node)
 
-(setq compilation-error-regexp-alist-alist
-      (cons '(rspec "^rspec \\(.*\\):\\([0-9]+\\)" 1 2)
-            compilation-error-regexp-alist-alist))
-(setq compilation-error-regexp-alist
-      (cons 'rspec compilation-error-regexp-alist))
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(rspec "^rspec \\(.*\\):\\([0-9]+\\)" 1 2))
+(add-to-list 'compilation-error-regexp-alist 'rspec)
 #+END_SRC
 
 * Org
@@ -993,7 +999,23 @@ cons cell (regexp . minor-mode)."
 (setq org-id-locations-file
       (expand-file-name ".org-id-locations" org-directory))
 (setq org-archive-location "archives/%s_archive::")
-(setq org-agenda-files (directory-files-recursively org-directory "\\.org$"))
+
+(defun abo/refresh-org-agenda-files ()
+  "Recompute `org-agenda-files' from `org-directory'."
+  (interactive)
+  (setq org-agenda-files (directory-files-recursively org-directory "\\.org$")))
+
+(defun abo/ensure-org-agenda-files (&rest _)
+  "Populate `org-agenda-files' on first agenda usage."
+  (unless org-agenda-files
+    (abo/refresh-org-agenda-files)))
+
+(setq org-agenda-files nil)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (run-with-idle-timer 5 nil #'abo/refresh-org-agenda-files)))
+(advice-add 'org-agenda :before #'abo/ensure-org-agenda-files)
+(advice-add 'org-refile :before #'abo/ensure-org-agenda-files)
 
 (defun abo/org-ensure-archive-directory ()
   (when (and buffer-file-name
@@ -1094,17 +1116,13 @@ cons cell (regexp . minor-mode)."
         ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
-(defadvice org-capture-finalize
-    (after delete-capture-frame activate)
-  "Advise capture-finalize to close the frame"
-  (if (equal "global-org-capture" (frame-parameter nil 'name))
-      (delete-frame)))
+(defun abo/delete-capture-frame (&rest _)
+  "Close the frame after capture when using global capture."
+  (when (equal "global-org-capture" (frame-parameter nil 'name))
+    (delete-frame)))
 
-(defadvice org-capture-destroy
-    (after delete-capture-frame activate)
-  "Advise capture-destroy to close the frame"
-  (if (equal "global-org-capture" (frame-parameter nil 'name))
-      (delete-frame)))
+(advice-add 'org-capture-finalize :after #'abo/delete-capture-frame)
+(advice-add 'org-capture-destroy :after #'abo/delete-capture-frame)
 
 (add-hook 'org-capture-mode-hook 'delete-other-windows)
 #+END_SRC
@@ -1247,6 +1265,7 @@ cons cell (regexp . minor-mode)."
   (default-text-scale-reset))
 
 (use-package org-tree-slide
+  :commands (org-tree-slide-mode org-tree-slide-move-previous-tree org-tree-slide-move-next-tree)
   :hook ((org-tree-slide-play . abott/org-tree-slide-play)
          (org-tree-slide-stop . abott/org-tree-slide-stop))
   :config
@@ -1255,6 +1274,7 @@ cons cell (regexp . minor-mode)."
     (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
 
 (use-package ox-reveal
+  :commands org-reveal-export-to-html
   :config
   (setq org-reveal-root "file:///Users/abo/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+END_SRC
@@ -1262,11 +1282,12 @@ cons cell (regexp . minor-mode)."
 ** Attachments and references
 #+BEGIN_SRC emacs-lisp
 (use-package org-download
-  :config
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  :commands (org-download-enable org-download-yank)
+  :hook (dired-mode . org-download-enable))
 
 (setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
 (use-package org-ref
+  :commands (org-ref-insert-link org-ref-open-bibtex-notes)
   :config
   (require 'org-ref-isbn))
 
@@ -1377,7 +1398,7 @@ cons cell (regexp . minor-mode)."
 (setq project-find-file-function
       (lambda ()
         (let ((default-directory (project-root (project-current t))))
-          (call-interactively 'counsel-rg))))
+          (call-interactively 'consult-ripgrep))))
 
 (setq find-sibling-rules
       '(
@@ -1458,9 +1479,12 @@ cons cell (regexp . minor-mode)."
 #+BEGIN_SRC emacs-lisp
 (use-package wgrep :defer t)
 (require 'abo/find-in-project)
-(use-package iedit)
-(use-package deadgrep)
-(use-package rg)
+(use-package iedit
+  :commands iedit-mode)
+(use-package deadgrep
+  :commands deadgrep)
+(use-package rg
+  :commands rg)
 #+END_SRC
 
 * Programming languages
@@ -1549,18 +1573,17 @@ cons cell (regexp . minor-mode)."
     ))
 
 (require 'rcodetools)
-(defadvice comment-dwim (around rct-hack activate)
-  "If comment-dwim is successively called, add => mark."
-  (if (and (or (eq major-mode 'enh-ruby-mode)
-               (eq major-mode 'ruby-mode)
-               (eq major-mode 'ruby-ts-mode)
-               )
+(defun abo/comment-dwim-rct-hack (orig-fun &rest args)
+  "Insert => on repeated `comment-dwim' in Ruby buffers."
+  (if (and (memq major-mode '(enh-ruby-mode ruby-mode ruby-ts-mode))
            (eq last-command 'comment-dwim))
       (progn
-        (if (eq major-mode 'enh-ruby-mode)
-            (end-of-line))
+        (when (eq major-mode 'enh-ruby-mode)
+          (end-of-line))
         (insert "=>"))
-    ad-do-it))
+    (apply orig-fun args)))
+
+(advice-add 'comment-dwim :around #'abo/comment-dwim-rct-hack)
 #+END_SRC
 
 ** JavaScript / TypeScript
@@ -1610,19 +1633,6 @@ cons cell (regexp . minor-mode)."
   (web-mode-set-content-type "jsx")
   (setq emmet-expand-jsx-className? t)
   (emmet-mode))
-
-(use-package flymake-eslint
-  :config
-  (defun os/enable-eslint-if-typescript ()
-    "Enable eslint if typescript mode"
-    (when (or
-           (eq major-mode 'typescript-ts-mode)
-           (eq major-mode 'typescript-mode)
-           (eq major-mode 'typescriptreact-mode)
-           (eq major-mode 'js2-mode)
-           (eq major-mode 'web-mode))
-      (flymake-eslint-enable)))
-  (add-hook 'eglot-managed-mode-hook #'os/enable-eslint-if-typescript))
 
 (use-package typescript-ts-mode
   :mode "\\.ts\\'"
@@ -1721,7 +1731,10 @@ cons cell (regexp . minor-mode)."
         (html "https://github.com/tree-sitter/tree-sitter-html" "master" "src")
         ))
 
-(dolist (lang (mapcar #'car treesit-language-source-alist))
-  (unless (treesit-language-available-p lang)
-    (treesit-install-language-grammar lang)))
+(defun abo/install-missing-treesit-grammars ()
+  "Install tree-sitter grammars missing from `treesit-language-source-alist'."
+  (interactive)
+  (dolist (lang (mapcar #'car treesit-language-source-alist))
+    (unless (treesit-language-available-p lang)
+      (treesit-install-language-grammar lang))))
 #+end_src
