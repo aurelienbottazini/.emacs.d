@@ -490,19 +490,20 @@ cons cell (regexp . minor-mode)."
     "b" 'consult-buffer
     "1" 'treemacs
     "c" (lambda () (interactive) (org-capture))
-    "d" 'flycheck-list-errors
+    "d" 'deadgrep
     "e" 'consult-recent-file
     "h" 'highlight-symbol-at-point
     "H" 'unhighlight-regexp
     "i" 'abo/consult-heading
     "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-    "jg" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/gtd.org"))
-    "ji" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/inbox.org"))
-    "jj" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/journal.org"))
-    "jn" (lambda () (interactive) (find-file "~/Library/CloudStorage/Dropbox/notes/"))
+    "jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
+    "ji" (lambda () (interactive) (find-file "~/Dropbox/notes/inbox.org"))
+    "jj" (lambda () (interactive) (find-file "~/Dropbox/notes/journal.org"))
+    "jr" 'abo/weekly-review
+    "jn" (lambda () (interactive) (find-file "~/Dropbox/notes/"))
     "jp" (lambda () (interactive) (find-file "~/projects/"))
     "jw" (lambda () (interactive) (find-file "~/work"))
-    "k" 'recompile
+    "k" 'org-capture
     "p" 'project-switch-project
     "o" 'consult-outline
     "F" 'rg
@@ -512,7 +513,7 @@ cons cell (regexp . minor-mode)."
     "gs" 'abo/open-in-sublime-merge
     "m" 'consult-mark
     "M" 'consult-global-mark
-    "r" 'find-sibling-file
+    "r" 'consult-ripgrep
     "s" 'speedbar-get-focus
     "t" 'consult-fd
     ;; "t" (lambda () (interactive) (org-capture nil "t"))
@@ -532,13 +533,9 @@ cons cell (regexp . minor-mode)."
   (defun abo-run ()
     (interactive)
     (cond
-     ((derived-mode-p 'ruby-ts-mode) (xmp))
-     ((derived-mode-p 'ruby-mode) (call-interactively #'xmp))
      ((derived-mode-p 'org-mode) (call-interactively #'org-ctrl-c-ctrl-c))
      ((derived-mode-p 'emacs-lisp-mode) (call-interactively #'eval-buffer))
-     (t (message "nothing to run for this buffer")
-
-     )))
+     (t (message "nothing to run for this buffer"))))
 
   (my-leader-def
     :states 'visual
@@ -552,11 +549,8 @@ cons cell (regexp . minor-mode)."
    "-" 'dired-jump
    "[[" 'previous-buffer
    "]]" 'next-buffer
-   "[e" 'flycheck-previous-error
-   "]e" 'flycheck-next-error
     ":" 'evil-ex
     "-" 'dired-jump
-    "gr" 'lsp-find-references
    )
 
   (general-define-key
@@ -597,15 +591,15 @@ cons cell (regexp . minor-mode)."
    "C-c [" 'paredit-backward-barf-sexp
    "C-c ]" 'paredit-forward-barf-sexp
    "C-c a" 'org-agenda
-   "C-c d" 'flymake-show-buffer-diagnostics
+   "C-c d" 'deadgrep
    "C-c e" 'er/expand-region
    ;; C-c C-c "runs" what makes sense for a particular mode
    "C-c gl" 'git-link
    "C-c gs" 'abo/open-in-sublime-merge
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
-   "C-c k" 'recompile
-   "C-c K" 'compile
+   "C-c k" 'org-capture
+   "C-c K" 'org-agenda
    "C-c l" 'org-store-link
 
    "C-c of" 'auto-fill-mode
@@ -618,7 +612,7 @@ cons cell (regexp . minor-mode)."
    "C-c or" 'rainbow-mode
    "C-c ot" 'toggle-truncate-lines
    "C-c ow" 'visual-line-mode
-   "C-c s" 'find-sibling-file
+   "C-c s" 'consult-ripgrep
    "C-c t" 'tab-switcher
 
    "C-c p" 'project-find-file
@@ -627,19 +621,12 @@ cons cell (regexp . minor-mode)."
    "C-c w r" 'windresize
 
    "C-x C-m" 'execute-extended-command
-   "C-x C-o" 'company-complete
    "C-x b" 'consult-buffer
    "C-x C-f" 'find-file
    "C-x B" 'project-switch-to-buffer
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
   )
-
-(with-eval-after-load 'lsp-mode
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "l" '(:keymap lsp-command-map :which-key "lsp")))
 
 (use-package hydra
   :config
@@ -680,7 +667,7 @@ cons cell (regexp . minor-mode)."
   :init
   (setq deft-extensions '("org" "md")
         deft-recursive t
-        deft-directory "~/Library/CloudStorage/Dropbox/notes"))
+        deft-directory "~/Dropbox/notes"))
 
 (use-package markdown-mode
   :mode "\\.md\\'")
@@ -714,160 +701,6 @@ cons cell (regexp . minor-mode)."
 
 (use-package biblio
   :commands biblio-lookup)
-#+END_SRC
-
-** Ediff
-#+BEGIN_SRC emacs-lisp
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(add-hook 'ediff-after-quit-hook-internal 'winner-undo)
-(setq ediff-split-window-function 'split-window-vertically)
-#+END_SRC
-
-** Git
-#+BEGIN_SRC emacs-lisp
-(use-package git-link
-  :commands (git-link git-link-commit git-link-homepage))
-
-(use-package fullframe
-  :config
-  (fullframe vc-annotate quit-window))
-
-(setq auth-sources '("~/.authinfo"))
-
-(use-package magit
-  :commands (magit-status magit-file-dispatch))
-
-;; Git performance tips (global config)
-;; git config --global core.untrackedCache true
-;; git config --global core.fsmonitor true
-
-(use-package forge
-  :after magit
-  :defer t)
-#+END_SRC
-
-** LSP
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "M-l"
-        lsp-completion-enable-additional-text-edit t
-        lsp-completion-enable-imports t
-        lsp-enable-snippet t
-        lsp-completion-show-detail t
-        lsp-completion-show-kind t
-        ;; Performance optimizations
-        lsp-idle-delay 0.5
-        lsp-log-io nil
-        lsp-enable-file-watchers nil
-        lsp-enable-folding nil
-        lsp-enable-on-type-formatting nil
-        lsp-enable-indentation nil
-        ;; TypeScript-specific settings
-        lsp-typescript-suggest-complete-function-calls t
-        lsp-javascript-display-inlay-hints t
-        lsp-javascript-display-parameter-name-hints "all"
-        lsp-javascript-display-return-type-hints t
-        lsp-inlay-hint-enable t)
-  :hook ((js2-mode . lsp)
-         (typescript-mode . lsp)
-         (typescript-ts-mode . lsp)
-         (tsx-ts-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp
-  :config
-  (defun my/lsp-filter-typescript-commonjs (_workspace params)
-    "Filter out CommonJS module suggestion."
-    (when (hash-table-p params)
-      (let ((diagnostics (gethash "diagnostics" params)))
-        (when diagnostics
-          (puthash "diagnostics"
-                   (cl-remove-if (lambda (d)
-                                   (equal (gethash "code" d) 80001))
-                                 diagnostics)
-                   params)))))
-  (advice-add 'lsp--on-diagnostics :before #'my/lsp-filter-typescript-commonjs)
-
-  (defun my/lsp-organize-imports ()
-    "Organize imports and format buffer."
-    (interactive)
-    (lsp-organize-imports)
-    (lsp-format-buffer))
-
-  (add-hook 'typescript-ts-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook #'lsp-organize-imports nil t)))
-  (add-hook 'tsx-ts-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook #'lsp-organize-imports nil t)))
-
-  ;; Prefer tsgo (native TS server) over ts-ls
-  (add-to-list 'lsp-disabled-clients 'ts-ls))
-
-;; (use-package lsp-ui
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (setq lsp-ui-doc-enable t
-;;         lsp-ui-doc-delay 0.5
-;;         lsp-ui-doc-position 'at-point
-;;         lsp-ui-doc-show-with-mouse nil))
-
-(use-package flycheck
-  :commands (flycheck-mode flycheck-list-errors flycheck-next-error flycheck-previous-error)
-  :hook (prog-mode . flycheck-mode))
-#+END_SRC
-
-** Completion
-#+BEGIN_SRC emacs-lisp
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-from-kill
-                                         try-expand-all-abbrevs
-                                         try-expand-dabbrev-all-buffers
-                                         try-complete-file-name-partially
-                                         try-complete-file-name))
-(require 'mode-local)
-(setq-mode-local elisp-mode hippie-expand-try-functions-list
-                 '(try-expand-dabbrev try-expand-dabbrev-from-kill try-expand-list
-                   try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
-
-(use-package company
-  :diminish company-mode
-  :hook (after-init . global-company-mode)
-  :config
-  (setq company-idle-delay nil
-        company-tooltip-limit 10
-        company-tooltip-align-annotations t
-        company-require-match 'never
-        company-global-modes '(not eshell-mode comint-mode erc-mode message-mode help-mode gud-mode)
-        company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend)
-        company-backends '((company-files company-capf))
-        company-transformers '(company-sort-by-occurrence))
-
-  (setq company-dabbrev-downcase nil
-        company-dabbrev-ignore-case nil)
-  (setq company-show-numbers t)
-
-  (use-package company-statistics
-    :after company
-    :config
-    (setq company-statistics-file "~/.emacs.d/company-stats-cache.el")
-    (company-statistics-mode +1))
-
-  (autoload 'company-capf "company-capf")
-  (autoload 'company-yasnippet "company-yasnippet")
-  (autoload 'company-elisp "company-elisp")
-  (autoload 'company-files "company-files"))
-
-(use-package yasnippet
-  :defer 3
-  :commands yas-expand-snippet
-  :bind (("C-c y" . yas-insert-snippet))
-  :diminish yas-minor-mode
-  :init
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  :config
-  (yas-global-mode 1)
-  (add-hook 'term-mode-hook (lambda() (yas-minor-mode -1))))
 #+END_SRC
 
 ** Dired
@@ -928,9 +761,7 @@ cons cell (regexp . minor-mode)."
   :config
   (define-key evil-normal-state-map (kbd "C-r") 'undo-redo)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
-  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)
-  (define-key evil-normal-state-map (kbd "C-]") 'citre-jump)
-  (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
+  (define-key evil-normal-state-map (kbd "C-p") 'previous-line)  (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
   (evil-mode 1)
 
@@ -953,12 +784,8 @@ cons cell (regexp . minor-mode)."
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
-  (evil-set-initial-state 'tab-switcher-mode 'emacs)
-  (evil-set-initial-state 'cider-inspector-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)
-  (evil-set-initial-state 'inf-ruby-mode 'emacs)
-  (evil-set-initial-state 'compilation-mode 'emacs)
+  (evil-set-initial-state 'tab-switcher-mode 'emacs)  (evil-set-initial-state 'ivy-occur-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)  (evil-set-initial-state 'compilation-mode 'emacs)
 
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
 
@@ -1217,9 +1044,11 @@ cons cell (regexp . minor-mode)."
 ** Capture
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("i" "inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
-        ("j" "Journal" entry (file+datetree "~/Library/CloudStorage/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
-        ("t" "todo-inbox" entry (file+headline "~/Library/CloudStorage/Dropbox/notes/inbox.org" "Inbox")
+      '(("i" "inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
+        ("h" "things-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
+         "* TODO [THINGS] %?\nCaptured: %U\n")
+        ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (defun abo/delete-capture-frame (&rest _)
@@ -1231,6 +1060,19 @@ cons cell (regexp . minor-mode)."
 (advice-add 'org-capture-destroy :after #'abo/delete-capture-frame)
 
 (add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+(defun abo/weekly-review ()
+  "Open core GTD buffers for weekly review."
+  (interactive)
+  (delete-other-windows)
+  (find-file "~/Dropbox/notes/gtd.org")
+  (split-window-right)
+  (other-window 1)
+  (find-file "~/Dropbox/notes/inbox.org")
+  (split-window-below)
+  (other-window 1)
+  (find-file "~/Dropbox/notes/journal.org")
+  (other-window -2))
 #+END_SRC
 
 ** Babel
@@ -1464,30 +1306,6 @@ With `C-u', prompt for any file."
   (start-process "open-in-sublime-merge" nil "open" "-a" "Sublime Merge" (expand-file-name file)))
 #+END_SRC
 
-** Tmux
-#+BEGIN_SRC emacs-lisp
-(defun abo/tmux-active-session ()
-  (interactive)
-  (substring-no-properties (shell-command-to-string "tmux list-clients | grep 'attached,focused,' | cut -d' ' -f2") 0 -1))
-
-(defun abo/tmux-select-pane (direction)
-  (shell-command (concat "tmux select-pane -t " (abo/tmux-active-session) " -" direction)))
-
-(defun abo/tmux-move (direction)
-  (condition-case nil
-      (cond
-       ((string= "R" direction) (windmove-right))
-       ((string= "L" direction) (windmove-left))
-       ((string= "U" direction) (windmove-up))
-       ((string= "D" direction) (windmove-down)))
-    (error (unless window-system (abo/tmux-select-pane direction)))))
-
-(defun tmux-move-right () (interactive) (abo/tmux-move "R"))
-(defun tmux-move-left () (interactive) (abo/tmux-move "L"))
-(defun tmux-move-up () (interactive) (abo/tmux-move "U"))
-(defun tmux-move-down () (interactive) (abo/tmux-move "D"))
-#+END_SRC
-
 ** Evil modeline colors
 #+BEGIN_SRC emacs-lisp
 (defun abo/bg-modeline-color-from-evil-state ()
@@ -1530,36 +1348,7 @@ With `C-u', prompt for any file."
       '(
         ("\\(.*\\).ts\\'" "\\1.spec.ts")
         ("\\(.*\\).spec.ts\\'" "\\1.ts")
-        ("\\(.*\\).tsx\\'" "\\1.spec.tsx")
-        ("\\(.*\\).spec.tsx\\'" "\\1.tsx")
-        ("src/\\(.*\\).cljs\\'" "test/\\1_test.cljs")
-        ("test/\\(.*\\)_test.cljs\\'" "src/\\1.cljs")
-        ("app/[^/]+/\\(.*\\).rb\\'" "spec/.*/\\1_spec.rb" "test/.*/\\1_test.rb")
-        ("app/\\(controllers\\|helpers\\)/\\(.*\\)_\\(controller\\|helper\\).rb\\'" "app/views/\\2/\\(index\\|show\\|edit\\|new\\).html.erb")
-        ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/controllers/\\1_controller.rb")
-        ("app/controllers/\\(.*\\)_controller.rb\\'" "spec/requests/\\1_spec.rb")
-        ("spec/requests/\\(.*\\)_spec.rb\\'" "app/controllers/\\1_controller.rb")
-        ("app/views/\\(.*\\)/\\(index\\|show\\|edit\\|new\\).html.erb\\'" "app/helpers/\\1_helper.rb")
-        ("spec/[^/]+/\\(.*\\)_spec.rb\\'" "app/.*/\\1.rb")
-        ("test/[^/]+/\\(.*\\)_test.rb\\'" "app/.*/\\1.rb")))
-#+END_SRC
-
-** Code navigation
-#+BEGIN_SRC emacs-lisp
-(use-package dumb-jump
-  :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-(use-package citre
-  :init
-  (global-set-key (kbd "C-x c j") 'citre-jump)
-  (global-set-key (kbd "C-x c J") 'citre-jump-back)
-  (global-set-key (kbd "C-x c p") 'citre-ace-peek)
-  (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
-  :config
-  (setq citre-use-project-root-when-creating-tags t
-        citre-prompt-language-for-ctags-command t
-        citre-auto-enable-citre-mode-modes '(prog-mode)))
+        ))
 #+END_SRC
 
 ** Completion framework
@@ -1594,11 +1383,6 @@ With `C-u', prompt for any file."
 ** File browser
 #+BEGIN_SRC emacs-lisp
 (setq speedbar-directory-unshown-regexp "^$")
-
-(with-eval-after-load 'speedbar
-  (require 'speedbar)
-  (speedbar-add-supported-extension ".ts")
-  (speedbar-add-supported-extension ".tsx"))
 #+END_SRC
 
 ** Search
@@ -1613,254 +1397,3 @@ With `C-u', prompt for any file."
   :commands rg)
 #+END_SRC
 
-* Programming languages
-** Clojure
-#+BEGIN_SRC emacs-lisp
-(use-package clojure-mode
-  :mode "\\.clj\\'"
-  :config
-  (add-hook 'clojure-mode-hook #'subword-mode))
-
-(use-package cider
-  :after clojure-mode
-  :config
-  (define-key cider-mode-map (kbd "C-c C-c") 'cider-eval-list-at-point)
-  (add-hook 'clojure-mode-hook (lambda ()
-                                 (add-hook 'before-save-hook 'cider-format-buffer t t)))
-  (add-hook 'edn-mode-hook (lambda ()
-                                 (add-hook 'before-save-hook 'cider-format-edn-buffer t t)))
-  (setq cider-repl-display-help-banner nil))
-#+END_SRC
-
-** Ruby
-#+BEGIN_SRC emacs-lisp
-(use-package ruby-ts-mode
-  :mode "\\.rake\\'"
-  :mode "Rakefile\\'"
-  :mode "\\.gemspec\\'"
-  :mode "\\.ru\\'"
-  :mode "Gemfile\\'"
-  :mode "Guardfile\\'"
-  :mode "Capfile\\'"
-  :mode "\\.cap\\'"
-  :mode "\\.thor\\'"
-  :mode "\\.rabl\\'"
-  :mode "Thorfile\\'"
-  :mode "Vagrantfile\\'"
-  :mode "\\.jbuilder\\'"
-  :mode "Podfile\\'"
-  :mode "\\.podspec\\'"
-  :mode "Puppetfile\\'"
-  :mode "Berksfile\\'"
-  :mode "Appraisals\\'"
-  :mode "\\.rb$"
-  :config
-  (define-key ruby-ts-mode-map (kbd "C-c .") 'robe-jump)
-  (define-key ruby-ts-mode-map (kbd "C-c C-c") 'xmp)
-  (add-hook 'ruby-ts-mode-hook (defun auray-ruby-ts-mode-hook ()
-             (modify-syntax-entry ?_ "w")
-             ))
-  (with-eval-after-load 'speedbar
-    (require 'speedbar)
-    (speedbar-add-supported-extension ".rb")
-    (speedbar-add-supported-extension ".rake")
-    (speedbar-add-supported-extension "Rakefile")
-    (speedbar-add-supported-extension "Gemfile")
-    (defvar speedbar-fetch-dynamic-tags-alist nil)
-    (add-to-list 'speedbar-fetch-dynamic-tags-alist
-                 '(ruby-ts-mode . speedbar-fetch-dynamic-imenu))))
-
-(use-package robe
-  :after evil
-  :diminish robe-mode
-  :config
-  (add-hook 'ruby-mode-hook 'robe-mode)
-  (add-hook 'ruby-ts-mode-hook 'robe-mode)
-  (eval-after-load 'company
-  '(push 'company-robe company-backends))
-  (evil-define-key 'normal ruby-ts-mode-map (kbd "gd") 'robe-jump)
-  )
-
-(use-package ruby-mode
-  :config
-  ;; (add-hook 'ruby-mode-hook 'subword-mode)
-
-  (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-  (define-key ruby-mode-map (kbd "C-c r") 'rspec-rerun)
-  (use-package ruby-interpolation
-    :diminish ruby-interpolation-mode)
-  (use-package ruby-end
-    :diminish ruby-end-mode
-    )
-  (use-package rspec-mode
-    :config
-    (add-hook 'after-init-hook 'inf-ruby-switch-setup) ;When you've hit the breakpoint, hit C-x C-q to enable inf-ruby
-  (define-key rspec-mode-map (kbd "C-c r") 'rspec-rerun)
-    ))
-
-(require 'rcodetools)
-(defun abo/comment-dwim-rct-hack (orig-fun &rest args)
-  "Insert => on repeated `comment-dwim' in Ruby buffers."
-  (if (and (memq major-mode '(enh-ruby-mode ruby-mode ruby-ts-mode))
-           (eq last-command 'comment-dwim))
-      (progn
-        (when (eq major-mode 'enh-ruby-mode)
-          (end-of-line))
-        (insert "=>"))
-    (apply orig-fun args)))
-
-(advice-add 'comment-dwim :around #'abo/comment-dwim-rct-hack)
-#+END_SRC
-
-** JavaScript / TypeScript
-#+BEGIN_SRC emacs-lisp
-(setq js-indent-level 2)
-(add-hook 'js-mode-hook (lambda () (subword-mode t)))
-
-(setq js2-mode-show-parse-errors nil
-      js2-mode-show-strict-warnings nil
-      js2-basic-offset 2
-      js2-highlight-level 3)
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :mode "\\.mjs\\'"
-  :mode "\\.jsx\\'")
-
-(use-package json-mode
-  :mode "\\.json\\'"
-  :mode "\\.eslintrc\\'")
-
-(use-package coffee-mode
-  :mode "\\.coffee\\'"
-  :config
-  (add-hook 'coffee-mode-hook (lambda () (subword-mode +1)))
-  (custom-set-variables '(coffee-tab-width 2)))
-
-(use-package prettier-js
-  :diminish prettier-js-mode
-  :hook (js2-mode . prettier-js-mode)
-  :config
-  (setq prettier-args '(
-                        "--trailing-comma" "es5"
-                        "--single-quote" "true"
-                        )
-        prettier-js-command (concat (getenv "HOME") "/.local/share/npm/bin/prettier")))
-
-(use-package context-coloring
-  :ensure t
-  :bind (("C-c oc" . context-coloring-mode)))
-
-(add-to-list 'magic-mode-alist '("^import.*React.* from 'react'" . my-jsx-hook) )
-(defun my-jsx-hook ()
-  "Set web mode with adjustments for JSX"
-  (interactive)
-  (web-mode)
-  (web-mode-set-content-type "jsx")
-  (setq emmet-expand-jsx-className? t)
-  (emmet-mode))
-
-(use-package typescript-ts-mode
-  :mode "\\.ts\\'"
-  :mode "\\.tsx\\'")
-#+END_SRC
-
-** CSS / SCSS / Web
-#+BEGIN_SRC emacs-lisp
-(setq css-indent-offset 2
-      web-mode-markup-indent-offset 2
-      web-mode-script-padding 0
-      web-mode-css-indent-offset 2
-      web-mode-style-padding 2
-      web-mode-code-indent-offset 2
-      web-mode-attr-indent-offset 2)
-
-(use-package web-mode
-  :mode "\\.gohtml\\'"
-  :mode "\\.erb\\'"
-  :mode "\\.vue\\'"
-  :config
-  (setq web-mode-enable-auto-closing t)
-  (define-key web-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-script-padding 0)
-  (defun jjpandari/merge-imenu (index-fun)
-    (interactive)
-    (let ((mode-imenu (funcall index-fun))
-          (custom-imenu (imenu--generic-function imenu-generic-expression)))
-      (append custom-imenu mode-imenu)))
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index))))))
-
-(use-package emmet-mode
-  :hook (css-mode sgml-mode web-mode)
-  :diminish emmet-mode
-  :config
-  (add-hook 'css-mode-hook
-            (lambda ()
-              (emmet-mode)
-              (define-key css-mode-map (kbd "C-c C-c e") 'emmet-expand-line)
-              (setq emmet-expand-jsx-className? nil)))
-  (add-hook 'sgml-mode-hook
-            (lambda ()
-              (emmet-mode)
-              (setq emmet-expand-jsx-className? nil))))
-
-(use-package scss-mode :mode "\\.scss\\'")
-(use-package sass-mode :mode "\\.sass\\'")
-(use-package less-css-mode :mode "\\.less\\'")
-#+END_SRC
-
-** Go
-#+BEGIN_SRC emacs-lisp
-(use-package go-mode
-  :mode "\\.go\\'")
-#+END_SRC
-
-** Rust
-#+BEGIN_SRC emacs-lisp
-(use-package rust-mode
-  :bind (:map rust-mode-map
-              ("C-c C-c" . rust-run)))
-#+END_SRC
-
-** Elm
-#+BEGIN_SRC emacs-lisp
-(use-package elm-mode)
-#+END_SRC
-
-** YAML
-#+BEGIN_SRC emacs-lisp
-(use-package yaml-mode
-  :mode "\\.ya?ml\\'")
-#+END_SRC
-
-** Other
-#+BEGIN_SRC emacs-lisp
-(require 'wat-mode)
-
-(add-to-list 'auto-mode-alist '("\\aliases\\'" . shell-script-mode))
-(add-to-list 'auto-mode-alist '("\\exports\\'" . shell-script-mode))
-#+END_SRC
-
-** Treesitter
-#+begin_src emacs-lisp
-(setq treesit-language-source-alist
-      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-        (ruby "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src")
-        (css "https://github.com/tree-sitter/tree-sitter-css" "master" "src")
-        (json "https://github.com/tree-sitter/tree-sitter-json" "master" "src")
-        (html "https://github.com/tree-sitter/tree-sitter-html" "master" "src")
-        ))
-
-(defun abo/install-missing-treesit-grammars ()
-  "Install tree-sitter grammars missing from `treesit-language-source-alist'."
-  (interactive)
-  (dolist (lang (mapcar #'car treesit-language-source-alist))
-    (unless (treesit-language-available-p lang)
-      (treesit-install-language-grammar lang))))
-#+end_src

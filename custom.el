@@ -251,7 +251,16 @@
  '(org-startup-indented t)
  '(org-startup-truncated t)
  '(org-startup-with-inline-images t)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(cider citre coffee-mode company-statistics context-coloring copilot deadgrep deft diminish
+           dired-rsync drag-stuff dumb-jump elm-mode emamux embark-consult emmet-mode envrc
+           evil-commentary evil-matchit evil-surround evil-visualstar exec-path-from-shell
+           expand-region flycheck flymake-eslint forge fullframe general git-link go-mode
+           highlight-blocks hyperbole iedit js2-mode json-mode key-chord lsp-ivy lsp-treemacs lsp-ui
+           multiple-cursors ob-clojurescript ob-mermaid orderless org-download org-ref
+           org-tree-slide origami ox-reveal paredit prettier-js rainbow-mode restclient rg robe
+           rspec-mode ruby-end ruby-interpolation rust-mode sass-mode scss-mode sqlite3 vertico
+           web-mode windresize writegood-mode writeroom-mode yaml-mode yasnippet))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-mode-line-prefix " Proj")
  '(projectile-switch-project-action 'projectile-dired)
