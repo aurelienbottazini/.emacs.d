@@ -82,15 +82,15 @@ See also `rct-interactive'. "
 (defun xmpfilter-command (&optional option)
   "The xmpfilter command line, DWIM."
   (setq option (or option ""))
-  (flet ((in-block (beg-re)
-                   (save-excursion
-                     (goto-char (point-min))
-                     (when (re-search-forward beg-re nil t)
-                       (let ((s (point)) e)
-                         (when (re-search-forward "^end\n" nil t)
-                           (setq e (point))
-                           (goto-char s)
-                           (re-search-forward "# => *$" e t)))))))
+  (cl-flet ((in-block (beg-re)
+                      (save-excursion
+                        (goto-char (point-min))
+                        (when (re-search-forward beg-re nil t)
+                          (let ((s (point)) e)
+                            (when (re-search-forward "^end\n" nil t)
+                              (setq e (point))
+                              (goto-char s)
+                              (re-search-forward "# => *$" e t)))))))
     (cond ((in-block "^class.+< Test::Unit::TestCase$")
            (format "%s --unittest %s" xmpfilter-command-name option))
           ((in-block "^\\(describe\\|context\\).+do$")
@@ -185,7 +185,7 @@ See also `rct-interactive'."
             (format "-t %s --filename=%s" t-opt bfn))
         ""))))
 
-(require 'cl)
+(require 'cl-lib)
 
 (defun rct-find-test-script-buffer (&optional buffer-list)
   "Find the latest used Ruby test script buffer."

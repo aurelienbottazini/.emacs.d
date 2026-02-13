@@ -49,15 +49,39 @@ brew install --cask emacs-plus-app
 
 ** abo-initialization
 #+BEGIN_SRC emacs-lisp
-(defvar last-file-name-handler-alist file-name-handler-alist)
-(setq gc-cons-threshold 100000000
+(defvar abo/default-file-name-handler-alist file-name-handler-alist)
+(defvar abo/default-gc-cons-threshold (* 16 1024 1024))
+(defvar abo/default-gc-cons-percentage 0.1)
+
+(setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
-(add-hook 'emacs-startup-hook (lambda ()
-                                (setq gc-cons-threshold 16777216
-                                      gc-cons-percentage 0.1
-                                      file-name-handler-alist last-file-name-handler-alist)))
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold abo/default-gc-cons-threshold
+                  gc-cons-percentage abo/default-gc-cons-percentage
+                  file-name-handler-alist abo/default-file-name-handler-alist)
+            (garbage-collect)))
+
+;; Run GC while idle to reduce pauses during interactive editing.
+(run-with-idle-timer
+ 5 t
+ (lambda ()
+   (unless (minibufferp)
+     (garbage-collect))))
+
+(setq read-process-output-max (* 1024 1024)
+      process-adaptive-read-buffering nil)
+
+(when (boundp 'inhibit-compacting-font-caches)
+  (setq inhibit-compacting-font-caches t))
+(when (boundp 'fast-but-imprecise-scrolling)
+  (setq fast-but-imprecise-scrolling t))
+(when (boundp 'redisplay-skip-fontification-on-input)
+  (setq redisplay-skip-fontification-on-input t))
+(when (boundp 'native-comp-async-report-warnings-errors)
+  (setq native-comp-async-report-warnings-errors 'silent))
 
 (setq byte-compile-warnings '(cl-functions))
 
@@ -70,6 +94,7 @@ brew install --cask emacs-plus-app
 
 (setq package--init-file-ensured t) ; do not add things at the end of init.el
 (setq package-check-signature 'allow-unsigned)
+(setq package-quickstart t)
 
 (package-initialize)
 
@@ -95,14 +120,21 @@ brew install --cask emacs-plus-app
 (setq use-package-always-ensure t)
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file)
+(condition-case err
+    (load custom-file 'noerror 'nomessage)
+  (error
+   (message "Skipping invalid custom.el entry: %s" (error-message-string err))))
 
 (if (file-exists-p "~/.emacs.d/.emacs-local")
     (load "~/.emacs.d/.emacs-local"))
 
-(let ((default-directory  "~/.emacs.d/site-lisp/"))
-  (normal-top-level-add-to-load-path '("."))
-  (normal-top-level-add-subdirs-to-load-path))
+(let ((site-lisp-dir (expand-file-name "site-lisp" user-emacs-directory)))
+  (when (file-directory-p site-lisp-dir)
+    (add-to-list 'load-path site-lisp-dir)
+    (dolist (dir (directory-files site-lisp-dir t "^[^.]" t))
+      (when (and (file-directory-p dir)
+                 (directory-files dir nil "\\.el\\'" t))
+        (add-to-list 'load-path dir)))))
 #+END_SRC
 
 ** Environment and paths
@@ -141,35 +173,49 @@ brew install --cask emacs-plus-app
   (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
   (setq exec-path my-paths))
 
-(use-package exec-path-from-shell)
-(exec-path-from-shell-copy-env "SSH_AGENT_PID")
-(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :commands exec-path-from-shell-copy-env)
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+  (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
 
 (setenv "FZF_DEFAULT_OPTS" "--color=light")
 #+END_SRC
 
 ** Performance
 #+BEGIN_SRC emacs-lisp
-(defun check-large-file-hook ()
-  "If a file is over a given size, and not a jpg, turn off expensive minor modes."
-  (when (and (> (buffer-size) (* 1024 100))
-             (not (string-equal "jpg" (file-name-extension (buffer-file-name)))))
-    (fundamental-mode)
-    (font-lock-mode -1)
-    (setq buffer-read-only t)
-    (buffer-disable-undo)))
-(add-hook 'find-file-hooks 'check-large-file-hook)
+(setq large-file-warning-threshold (* 2 1024 1024))
+
+(defun abo/check-large-file-hook ()
+  "Use a lightweight setup for very large local text files."
+  (let* ((file (buffer-file-name))
+         (ext (downcase (or (file-name-extension (or file "")) ""))))
+    (when (and file
+               (not (file-remote-p file))
+               (> (buffer-size) large-file-warning-threshold)
+               (not (member ext '("jpg" "jpeg" "png" "gif" "webp" "svg" "pdf"))))
+      (fundamental-mode)
+      (font-lock-mode -1)
+      (setq-local buffer-read-only t)
+      (buffer-disable-undo))))
+(add-hook 'find-file-hook #'abo/check-large-file-hook)
 
 (setq-default bidi-paragraph-direction 'left-to-right)
 (setq bidi-inhibit-bpa t)
+(setq auto-window-vscroll nil)
 
 (global-so-long-mode 1)
 #+END_SRC
 
 ** Backups and autosave
 #+BEGIN_SRC emacs-lisp
-(setq backup-by-copying t
-      backup-directory-alist '((".*" . "~/.local/share/emacs-saves"))
+(let ((save-dir (expand-file-name "~/.local/share/emacs-saves/")))
+  (unless (file-directory-p save-dir)
+    (make-directory save-dir t))
+  (setq backup-by-copying t
+      backup-directory-alist `((".*" . ,save-dir))
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -179,9 +225,11 @@ brew install --cask emacs-plus-app
       auto-save-interval 200
       version-control t
       create-lockfiles nil
-      auto-save-file-name-transforms `((".*" ,"~/.local/share/emacs-saves" t)))
+      auto-save-file-name-transforms `((".*" ,save-dir t))))
 
 (setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+(setq auto-revert-remote-files nil)
 (global-auto-revert-mode 1)
 #+END_SRC
 
@@ -216,6 +264,20 @@ brew install --cask emacs-plus-app
 (recentf-mode 1)
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
+(setq recentf-auto-cleanup 'never)
+(dolist (pattern '("/tmp/" "/ssh:" "/sudo:" "/scp:"))
+  (add-to-list 'recentf-exclude pattern))
+
+(let ((state-dir (expand-file-name ".cache/state/" user-emacs-directory)))
+  (unless (file-directory-p state-dir)
+    (make-directory state-dir t))
+  (setq savehist-file (expand-file-name "history" state-dir)
+        save-place-file (expand-file-name "places" state-dir)))
+(savehist-mode 1)
+(save-place-mode 1)
+(setq history-length 200)
+(setq savehist-additional-variables
+      '(mark-ring global-mark-ring search-ring regexp-search-ring))
 
 (setq warning-minimum-level :error)
 #+END_SRC
@@ -224,7 +286,14 @@ brew install --cask emacs-plus-app
 #+BEGIN_SRC emacs-lisp
 (setq-default whitespace-style '(face trailing))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defun abo/delete-trailing-whitespace-maybe ()
+  "Delete trailing whitespace in regular text/code buffers."
+  (when (and (derived-mode-p 'prog-mode 'text-mode 'conf-mode)
+             (not buffer-read-only)
+             (< (buffer-size) (* 1024 1024)))
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook #'abo/delete-trailing-whitespace-maybe)
 (add-hook 'prog-mode-hook 'whitespace-mode)
 (eval-after-load "whitespace"
   '(diminish 'whitespace-mode))
@@ -312,8 +381,39 @@ brew install --cask emacs-plus-app
 
 (use-package expand-region)
 
+(defun abo/origami-safe-background ()
+  "Return a valid background color for Origami header faces."
+  (let ((default-bg (face-attribute 'default :background nil t)))
+    (if (and (stringp default-bg)
+             (not (string-prefix-p "unspecified" default-bg)))
+        default-bg
+      "#d9d9d9")))
+
+(defun abo/origami-valid-color-p (value)
+  "Return non-nil when VALUE can safely be used as a face color."
+  (and (stringp value)
+       (not (string-prefix-p "unspecified" value))))
+
+(defun abo/origami-fix-header-face ()
+  "Patch Origami face definitions that can break on newer Emacs versions."
+  (let ((bg (abo/origami-safe-background)))
+    (set-face-attribute 'origami-fold-header-face nil
+                        :box `(:line-width 1 :color ,bg)
+                        :background bg)))
+
+(defun abo/origami-enable-safely ()
+  "Enable Origami with compatible face settings."
+  (unless (abo/origami-valid-color-p
+           (face-attribute 'highlight :background nil t))
+    (set-face-attribute 'highlight nil
+                        :background (abo/origami-safe-background)))
+  (require 'origami)
+  (abo/origami-fix-header-face)
+  (origami-mode 1))
+
 (use-package origami
-  :hook (prog-mode . origami-mode))
+  :commands (origami-mode)
+  :hook (prog-mode . abo/origami-enable-safely))
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
@@ -729,8 +829,8 @@ cons cell (regexp . minor-mode)."
                    try-complete-lisp-symbol-partially try-complete-lisp-symbol try-complete-file-name))
 
 (use-package company
-  :demand t
   :diminish company-mode
+  :hook (after-init . global-company-mode)
   :config
   (setq company-idle-delay nil
         company-tooltip-limit 10
@@ -741,7 +841,6 @@ cons cell (regexp . minor-mode)."
         company-backends '((company-files company-capf))
         company-transformers '(company-sort-by-occurrence))
 
-  (add-hook 'after-init-hook 'global-company-mode)
   (setq company-dabbrev-downcase nil
         company-dabbrev-ignore-case nil)
   (setq company-show-numbers t)
@@ -905,6 +1004,8 @@ cons cell (regexp . minor-mode)."
 (require 'tramp)
 (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
 (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+(setq tramp-default-method "ssh"
+      tramp-verbose 1)
 
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
@@ -923,12 +1024,15 @@ cons cell (regexp . minor-mode)."
 ** Misc packages
 #+BEGIN_SRC emacs-lisp
 (use-package restclient
-  :demand t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode)))
+  :mode "\\.http\\'")
 
 (use-package hyperbole
   :diminish hyperbole-mode
+  :init
+  (let ((hyperbole-dir (expand-file-name "hyperbole/" user-emacs-directory)))
+    (unless (file-directory-p hyperbole-dir)
+      (make-directory hyperbole-dir t))
+    (setq hbmap:dir-user hyperbole-dir))
   :config
   (hyperbole-mode 1))
 
@@ -1301,6 +1405,8 @@ cons cell (regexp . minor-mode)."
 
 * Utilities
 ** Date
+In org mode you can do ~C-c !~ to pick and insert the date
+
 #+BEGIN_SRC emacs-lisp
 (defun abo/today ()
   "Today's date as a string."
