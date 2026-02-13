@@ -509,6 +509,7 @@ cons cell (regexp . minor-mode)."
     "f" 'consult-ripgrep
     "gg" 'magit-status
     "gf" 'magit-file-dispatch
+    "gs" 'abo/open-in-sublime-merge
     "m" 'consult-mark
     "M" 'consult-global-mark
     "r" 'find-sibling-file
@@ -600,6 +601,7 @@ cons cell (regexp . minor-mode)."
    "C-c e" 'er/expand-region
    ;; C-c C-c "runs" what makes sense for a particular mode
    "C-c gl" 'git-link
+   "C-c gs" 'abo/open-in-sublime-merge
    "C-c gt" 'git-timemachine-toggle
    "C-c jc" 'org-clock-jump-to-current-clock
    "C-c k" 'recompile
@@ -1442,6 +1444,24 @@ In org mode you can do ~C-c !~ to pick and insert the date
   "Return a string with Buffer-file-name:line-number."
   (interactive)
   (concat (buffer-file-name) ":" (number-to-string (line-number-at-pos))))
+
+(defun abo/open-in-sublime-merge (file)
+  "Open FILE in Sublime Merge.
+Without a prefix argument, use the current buffer file.
+With `C-u', prompt for any file."
+  (interactive
+   (list
+    (if (and buffer-file-name (not current-prefix-arg))
+        buffer-file-name
+      (read-file-name "Open in Sublime Merge: "
+                      default-directory
+                      buffer-file-name
+                      t))))
+  (unless (eq system-type 'darwin)
+    (user-error "This command currently supports macOS only"))
+  (unless (file-exists-p file)
+    (user-error "File does not exist: %s" file))
+  (start-process "open-in-sublime-merge" nil "open" "-a" "Sublime Merge" (expand-file-name file)))
 #+END_SRC
 
 ** Tmux
