@@ -43,18 +43,8 @@ brew install --cask emacs-plus-app
 
 (pixel-scroll-precision-mode)
 
-
+(setq vc-follow-symlinks t)
 (put 'narrow-to-region 'disabled nil)
-
-
-(defun abo/tangle-init-org ()
-  "Tangle init.org into init-tangled.el manually."
-  (interactive)
-  (require 'org)
-  (let ((org-file (expand-file-name "init.org" user-emacs-directory))
-        (out-file (expand-file-name "init-tangled.el" user-emacs-directory)))
-    (org-babel-tangle-file org-file out-file)
-    (message "Tangled %s" out-file)))
 #+END_SRC
 
 ** abo-initialization
@@ -372,8 +362,84 @@ brew install --cask emacs-plus-app
 ** Editing helpers
 #+BEGIN_SRC emacs-lisp
 (electric-indent-mode t)
+
 (electric-pair-mode t)
-(use-package expand-region :commands er/expand-region)
+(setq electric-pair-inhibit-predicate
+      (lambda (c)
+        (or (minibufferp)
+            (eq major-mode 'org-mode)
+            (not (or
+                  (char-equal c ?\s)
+                  (char-equal c ?\t)
+                  (eolp))))))
+
+(use-package paredit
+  :diminish paredit-mode
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+  (add-hook 'clojure-mode-hook #'paredit-mode))
+
+(use-package expand-region)
+
+(defun abo/origami-safe-background ()
+  "Return a valid background color for Origami header faces."
+  (let ((default-bg (face-attribute 'default :background nil t)))
+    (if (and (stringp default-bg)
+             (not (string-prefix-p "unspecified" default-bg)))
+        default-bg
+      "#d9d9d9")))
+
+(defun abo/origami-valid-color-p (value)
+  "Return non-nil when VALUE can safely be used as a face color."
+  (and (stringp value)
+       (not (string-prefix-p "unspecified" value))))
+
+(defun abo/origami-fix-header-face ()
+  "Patch Origami face definitions that can break on newer Emacs versions."
+  (let ((bg (abo/origami-safe-background)))
+    (set-face-attribute 'origami-fold-header-face nil
+                        :box `(:line-width 1 :color ,bg)
+                        :background bg)))
+
+(defun abo/origami-enable-safely ()
+  "Enable Origami with compatible face settings."
+  (unless (abo/origami-valid-color-p
+           (face-attribute 'highlight :background nil t))
+    (set-face-attribute 'highlight nil
+                        :background (abo/origami-safe-background)))
+  (require 'origami)
+  (abo/origami-fix-header-face)
+  (origami-mode 1))
+
+(use-package origami
+  :commands (origami-mode)
+  :hook (prog-mode . abo/origami-enable-safely))
+
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
+(defun my-prog-mode-auto-fill-hook ()
+  (setq fill-column 100)
+  (set (make-local-variable 'comment-auto-fill-only-comments) t)
+  (auto-fill-mode t))
+(add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
+
+(use-package highlight-blocks)
+
+(defun sudo ()
+  "Use TRAMP to `sudo' the file for current buffer."
+  (interactive)
+  (when buffer-file-name
+    (find-alternate-file
+     (concat "/sudo:root@localhost:"
+             buffer-file-name))))
+
+(defun enable-minor-mode (my-pair)
+  "Enable minor mode if filename match the regexp. MY-PAIR is a
+cons cell (regexp . minor-mode)."
+  (if (buffer-file-name)
+      (if (string-match (car my-pair) buffer-file-name)
+          (funcall (cdr my-pair)))))
 #+END_SRC
 
 ** Emacs Lisp
@@ -561,6 +627,37 @@ brew install --cask emacs-plus-app
    "C-x m" 'execute-extended-command ; Another =M-x= without leaving the home row
    "C-x o" 'other-window)
   )
+
+(use-package hydra
+  :config
+  (defhydra hydra-utils (global-map "<f8>")
+    "drag"
+    ("j" drag-stuff-down "down")
+    ("k" drag-stuff-up "up")))
+
+(use-package drag-stuff
+  :diminish drag-stuff-mode
+  :config
+  (drag-stuff-global-mode t))
+
+(defun my/sublime-mark-next ()
+  "Behave exactly like Sublime Text's Cmd+D.
+   1. If no region is active, select the symbol at point.
+   2. If a region IS active, mark the next occurrence."
+  (interactive)
+  (if (region-active-p)
+      (mc/mark-next-like-this 1)
+    ;; If no selection, manually select the symbol under cursor
+    (if-let ((bounds (bounds-of-thing-at-point 'symbol)))
+        (progn
+          (goto-char (car bounds))
+          (push-mark (cdr bounds) t t))
+      (user-error "No symbol at point"))))
+
+(use-package multiple-cursors
+  :bind (("C->" . my/sublime-mark-next)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
 
 ** Notes and writing
@@ -687,15 +784,43 @@ brew install --cask emacs-plus-app
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
-  
-  
+  (evil-set-initial-state 'tab-switcher-mode 'emacs)  (evil-set-initial-state 'ivy-occur-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)  (evil-set-initial-state 'compilation-mode 'emacs)
 
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
 
   (evil-ex-define-cmd "W" 'save-buffer)
   (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
 
-;; Extra evil plugins disabled in ultra-fast notes profile.
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :after evil
+  :diminish evil-commentary-mode
+  :config
+  (evil-commentary-mode))
+
+(use-package evil-visualstar
+  :after evil
+  :config
+  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (global-evil-visualstar-mode t))
+
+(use-package evil-matchit
+  :defer 2
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package key-chord
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
 
 (setq evil-insert-state-cursor '((bar . 2) "black")
       evil-normal-state-cursor '(box "black")
@@ -727,18 +852,77 @@ brew install --cask emacs-plus-app
 
 ** Misc packages
 #+BEGIN_SRC emacs-lisp
+(use-package restclient
+  :mode "\\.http\\'")
+
+(use-package hyperbole
+  :diminish hyperbole-mode
+  :init
+  (let ((hyperbole-dir (expand-file-name "hyperbole/" user-emacs-directory)))
+    (unless (file-directory-p hyperbole-dir)
+      (make-directory hyperbole-dir t))
+    (setq hbmap:dir-user hyperbole-dir))
+  :config
+  (hyperbole-mode 1))
+
+(use-package sqlite3)
+(use-package jsonrpc)
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
+
+(use-package hideshow)
+(require 'hideshowvis)
+
+(use-package envrc
+  :diminish envrc-mode
+  :config
+  (envrc-global-mode))
 #+END_SRC
 
-** AI assistants (disabled)
+** AI assistants
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(defun abo/add-straight-build-to-load-path (package-name)
+  "Keep legacy straight packages available without bootstrapping straight."
+  (let ((package-dir (expand-file-name
+                      (format "straight/build/%s" package-name)
+                      user-emacs-directory)))
+    (when (file-directory-p package-dir)
+      (add-to-list 'load-path package-dir))))
+
+(abo/add-straight-build-to-load-path "copilot")
+
+(defun abo/install-ai-packages ()
+  (interactive)
+  (unless (fboundp 'package-vc-install)
+    (user-error "package-vc-install is unavailable on this Emacs"))
+  (unless (locate-library "copilot")
+    (package-vc-install "https://github.com/copilot-emacs/copilot.el")))
+
+(use-package copilot
+  :if (locate-library "copilot")
+  :commands (copilot-mode copilot-accept-completion copilot-accept-completion-by-word)
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
 #+END_SRC
 
-** Compilation (disabled)
+** Compilation
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(use-package ansi-color
+  :hook (compilation-filter . ansi-color-compilation-filter))
+
+(require 'compile)
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(node "^\\([a-zA-Z\\.0-9/-]+\\):\\([0-9]+\\)$" 1 2))
+(add-to-list 'compilation-error-regexp-alist 'node)
+
+(add-to-list 'compilation-error-regexp-alist-alist
+             '(rspec "^rspec \\(.*\\):\\([0-9]+\\)" 1 2))
+(add-to-list 'compilation-error-regexp-alist 'rspec)
 #+END_SRC
 
 * Org
@@ -891,29 +1075,171 @@ brew install --cask emacs-plus-app
   (other-window -2))
 #+END_SRC
 
-** Babel (disabled)
+** Babel
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+  (require 'ob-clojure)
+  (use-package ob-clojurescript)
+  (setq org-babel-clojure-backend 'cider)
+  (require 'ob-js)
+  (setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
+
+  (use-package ob-mermaid)
+  (setq ob-mermaid-cli-path "mmdc")
+
+  (defun abo/org--clean-heading (text)
+    "Return heading text with links and targets removed."
+    (let ((clean (org-link-display-format text)))
+      (setq clean (replace-regexp-in-string "<<+\\([^>]+\\)>>+" "\\1" clean))
+      (setq clean (replace-regexp-in-string "[\t ]+" " " clean))
+      (string-trim clean)))
+
+  (defun abo/org-subtree-to-mermaid-mindmap (outfile)
+    "Insert a Mermaid mindmap block for the current Org subtree."
+    (interactive
+     (save-excursion
+       (org-back-to-heading t)
+       (let* ((root (org-get-heading t t t t))
+              (root-text (abo/org--clean-heading root))
+              (base-name (if buffer-file-name
+                             (file-name-base buffer-file-name)
+                           "mindmap"))
+              (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" root-text)))
+              (default-file (format "%s-%s.svg" base-name (if (string= slug "") "mindmap" slug))))
+         (list (read-file-name "Write Mermaid image to: " nil nil nil default-file)))))
+    (org-back-to-heading t)
+    (let* ((root (org-get-heading t t t t))
+           (root-text (abo/org--clean-heading root))
+           (base-level (org-outline-level))
+           (file-arg (format "%S" outfile))
+           (lines (list (format "#+begin_src mermaid :file %s :results file :exports results" file-arg)
+                        "mindmap"
+                        (format "  root((%s))" root-text)))
+           (child-lines nil))
+      (org-map-entries
+       (lambda ()
+         (let* ((level (org-outline-level))
+                (title (org-get-heading t t t t))
+                (title-text (abo/org--clean-heading title)))
+           (unless (= level base-level)
+             (let ((indent (+ 2 (* 2 (- level base-level)))))
+               (push (format "%s%s" (make-string indent ? ) title-text) child-lines)))))
+       nil 'tree)
+      (setq lines (append lines (nreverse child-lines) '("#+end_src")))
+      (save-excursion
+        (org-end-of-meta-data t)
+        (insert "\n" (mapconcat #'identity lines "\n") "\n\n"))))
+
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((shell . t)
+                                 (sql . t)
+                                 (mermaid . t)
+                                 (ditaa . t)))
+  (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+  (require 'ob-ruby)
 #+END_SRC
 
-** Export and publishing (disabled)
+** Export and publishing
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(use-package htmlize)
+(setq system-time-locale "C")
+(setq org-html-validation-link nil)
+
+(setq org-publish-project-alist
+      `(("blog-files"
+         :base-directory "~/perso/aurelienbottazini.github.io/_org"
+         :base-extension "org"
+         :publishing-directory "~/perso/aurelienbottazini.github.io/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :auto-preamble t
+         :html-head-extra nil
+         :body-only t))
+      user-full-name "Aurélien Bottazini"
+      org-export-with-toc t
+      org-html-doctype "html5"
+      org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
+      org-html-head-include-default-style nil
+      org-html-head-include-scripts nil
+      org-html-html5-fancy t
+      org-html-postamble nil
+      org-src-preserve-indentation nil
+      org-html-htmlize-output-type "css"
+      org-html-indent nil
+      org-edit-src-content-indentation 0)
+
+(require 'ox-publish)
+
+(defun abo/toggle-html-export-on-save ()
+  "Enable or disable HTML export when saving current org buffer."
+  (interactive)
+  (when (not (eq major-mode 'org-mode))
+    (error "Not an org-mode file!"))
+  (if (memq 'org-html-export-to-html after-save-hook)
+      (progn (remove-hook 'after-save-hook 'org-html-export-to-html t)
+             (message "Disabled org html export on save"))
+    (add-hook 'after-save-hook 'org-publish-current-file nil t)
+    (set-buffer-modified-p t)
+    (message "Enabled org html export on save")))
 #+END_SRC
 
-** LaTeX (disabled)
+** LaTeX
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(add-to-list 'org-latex-packages-alist '("" "listings" nil))
+(setq org-latex-listings t)
+(setq org-latex-listings-options '(("breaklines" "true")
+                                   ("literate" "{0}{0}{1}%
+           {1}{1}{1}%
+           {2}{2}{1}%
+           {3}{3}{1}%
+           {4}{4}{1}%
+           {5}{5}{1}%
+           {6}{6}{1}%
+           {7}{7}{1}%
+           {8}{8}{1}%
+           {9}{9}{1}%
+    ")))
 #+END_SRC
 
-** Presentations (disabled)
+** Presentations
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(defun abott/org-tree-slide-play ()
+  (writeroom-mode 1)
+  (default-text-scale-increment 40))
+
+(defun abott/org-tree-slide-stop ()
+  (writeroom-mode -1)
+  (default-text-scale-reset))
+
+(use-package org-tree-slide
+  :commands (org-tree-slide-mode org-tree-slide-move-previous-tree org-tree-slide-move-next-tree)
+  :hook ((org-tree-slide-play . abott/org-tree-slide-play)
+         (org-tree-slide-stop . abott/org-tree-slide-stop))
+  :config
+  (with-eval-after-load "org-tree-slide"
+    (define-key org-tree-slide-mode-map (kbd "<f8>") 'org-tree-slide-move-previous-tree)
+    (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-next-tree)))
+
+(use-package ox-reveal
+  :commands org-reveal-export-to-html
+  :config
+  (setq org-reveal-root "file:///Users/abo/.emacs.d/site-lisp/reveal.js-4.1.0"))
 #+END_SRC
 
-** Attachments and references (disabled)
+** Attachments and references
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(use-package org-download
+  :commands (org-download-enable org-download-yank)
+  :hook (dired-mode . org-download-enable))
+
+(setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
+(use-package org-ref
+  :commands (org-ref-insert-link org-ref-open-bibtex-notes)
+  :config
+  (require 'org-ref-isbn))
+
+(setq org-download-timestamp-format "")
 #+END_SRC
 
 ** Archive
@@ -1017,6 +1343,12 @@ With `C-u', prompt for any file."
       (lambda ()
         (let ((default-directory (project-root (project-current t))))
           (call-interactively 'consult-ripgrep))))
+
+(setq find-sibling-rules
+      '(
+        ("\\(.*\\).ts\\'" "\\1.spec.ts")
+        ("\\(.*\\).spec.ts\\'" "\\1.ts")
+        ))
 #+END_SRC
 
 ** Completion framework
@@ -1048,9 +1380,9 @@ With `C-u', prompt for any file."
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 #+END_SRC
 
-** File browser (disabled)
+** File browser
 #+BEGIN_SRC emacs-lisp
-;; Disabled in notes-only ultra-fast profile.
+(setq speedbar-directory-unshown-regexp "^$")
 #+END_SRC
 
 ** Search
