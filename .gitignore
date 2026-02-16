@@ -40,3 +40,4 @@ image-dired
 /.gemini-clipboard/
 /init-tangled.el
 /package-quickstart.elc
+/init-tangled.elc

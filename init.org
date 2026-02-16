@@ -24,10 +24,13 @@ brew install --cask emacs-plus-app
 (defun abo/tangle-init-config ()
   "Tangle `init.org' into `init-tangled.el'."
   (interactive)
-  (let ((org-confirm-babel-evaluate nil)
-        (init-org (expand-file-name "init.org" user-emacs-directory))
+  (let ((init-org (expand-file-name "init.org" user-emacs-directory))
         (init-el (expand-file-name "init-tangled.el" user-emacs-directory)))
-    (org-babel-tangle-file init-org init-el)))
+    (org-babel-tangle-file init-org init-el)
+    (when (file-exists-p init-el)
+      (byte-compile-file init-el)
+      (when (fboundp 'native-compile-async)
+        (native-compile-async init-el nil)))))
 
 (defun abo/tangle-init-config-on-save ()
   "Auto-tangle the literate config when saving `init.org'."
@@ -136,7 +139,7 @@ brew install --cask emacs-plus-app
 (require-package 'diminish)
 (require 'diminish)
 
-(setq use-package-compute-statistics t) ;(use-package-report)
+(setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
 (setq use-package-always-ensure nil)
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -250,7 +253,6 @@ brew install --cask emacs-plus-app
 (setq global-auto-revert-non-file-buffers t)
 (setq auto-revert-verbose nil)
 (setq auto-revert-remote-files nil)
-(global-auto-revert-mode 1)
 #+END_SRC
 
 ** Encoding
@@ -281,23 +283,35 @@ brew install --cask emacs-plus-app
 (setq-default indent-tabs-mode nil
               c-basic-offset 2)
 
-(recentf-mode 1)
 (setq recentf-max-menu-items 200)
 (setq recentf-max-saved-items 200)
 (setq recentf-auto-cleanup 'never)
-(dolist (pattern '("/tmp/" "/ssh:" "/sudo:" "/scp:"))
-  (add-to-list 'recentf-exclude pattern))
+(defvar recentf-exclude nil)
+(with-eval-after-load 'recentf
+  (dolist (pattern '("/tmp/" "/ssh:" "/sudo:" "/scp:"))
+    (add-to-list 'recentf-exclude pattern)))
 
 (let ((state-dir (expand-file-name ".cache/state/" user-emacs-directory)))
   (unless (file-directory-p state-dir)
     (make-directory state-dir t))
   (setq savehist-file (expand-file-name "history" state-dir)
         save-place-file (expand-file-name "places" state-dir)))
-(savehist-mode 1)
-(save-place-mode 1)
 (setq history-length 200)
 (setq savehist-additional-variables
       '(mark-ring global-mark-ring search-ring regexp-search-ring))
+
+(defvar abo/stateful-modes-enabled nil)
+
+(defun abo/enable-stateful-modes ()
+  "Enable stateful modes after startup to keep init fast."
+  (unless abo/stateful-modes-enabled
+    (recentf-mode 1)
+    (savehist-mode 1)
+    (save-place-mode 1)
+    (global-auto-revert-mode 1)
+    (setq abo/stateful-modes-enabled t)))
+
+(run-with-idle-timer 1 nil #'abo/enable-stateful-modes)
 
 (setq warning-minimum-level :error)
 #+END_SRC
@@ -437,8 +451,8 @@ brew install --cask emacs-plus-app
   :commands (origami-mode)
   :hook (prog-mode . abo/origami-enable-safely))
 
-(require 're-builder)
-(setq reb-re-syntax 'string)
+(with-eval-after-load 're-builder
+  (setq reb-re-syntax 'string))
 
 (defun my-prog-mode-auto-fill-hook ()
   (setq fill-column 100)
@@ -505,49 +519,45 @@ cons cell (regexp . minor-mode)."
 (use-package general
   :config
 
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "a" 'org-agenda
-    "b" 'consult-buffer
-    "1" 'treemacs
-    "c" (lambda () (interactive) (org-capture))
-    "d" 'deadgrep
-    "e" 'consult-recent-file
-    "h" 'highlight-symbol-at-point
-    "H" 'unhighlight-regexp
-    "i" 'abo/consult-heading
-    "je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-    "jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
-    "ji" (lambda () (interactive) (find-file "~/Dropbox/notes/inbox.org"))
-    "jj" (lambda () (interactive) (find-file "~/Dropbox/notes/journal.org"))
-    "jr" 'abo/weekly-review
-    "jn" (lambda () (interactive) (find-file "~/Dropbox/notes/"))
-    "jp" (lambda () (interactive) (find-file "~/projects/"))
-    "jw" (lambda () (interactive) (find-file "~/work"))
-    "k" 'org-capture
-    "p" 'project-switch-project
-    "o" 'consult-outline
-    "F" 'rg
-    "f" 'consult-ripgrep
-    "gg" 'magit-status
-    "gf" 'magit-file-dispatch
-    "gs" 'abo/open-in-sublime-merge
-    "m" 'consult-mark
-    "M" 'consult-global-mark
-    "r" 'consult-ripgrep
-    "s" 'speedbar-get-focus
-    "t" 'consult-fd
-    ;; "t" (lambda () (interactive) (org-capture nil "t"))
-    "w" 'er/expand-region
-    "W" 'er/contract-region
-    "x" 'emamux:run-last-command
-    "X" 'emamux:send-command
-    "SPC" 'abo-run
-    )
+  (general-define-key
+   :states 'normal
+   :keymaps 'override
+   "SPC a" 'org-agenda
+   "SPC b" 'consult-buffer
+   "SPC 1" 'treemacs
+   "SPC c" (lambda () (interactive) (org-capture))
+   "SPC d" 'deadgrep
+   "SPC e" 'consult-recent-file
+   "SPC h" 'highlight-symbol-at-point
+   "SPC H" 'unhighlight-regexp
+   "SPC i" 'abo/consult-heading
+   "SPC je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
+   "SPC jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
+   "SPC ji" (lambda () (interactive) (find-file "~/Dropbox/notes/inbox.org"))
+   "SPC jj" (lambda () (interactive) (find-file "~/Dropbox/notes/journal.org"))
+   "SPC jr" 'abo/weekly-review
+   "SPC jn" (lambda () (interactive) (find-file "~/Dropbox/notes/"))
+   "SPC jp" (lambda () (interactive) (find-file "~/projects/"))
+   "SPC jw" (lambda () (interactive) (find-file "~/work"))
+   "SPC k" 'org-capture
+   "SPC p" 'project-switch-project
+   "SPC o" 'consult-outline
+   "SPC F" 'rg
+   "SPC f" 'consult-ripgrep
+   "SPC gg" 'magit-status
+   "SPC gf" 'magit-file-dispatch
+   "SPC gs" 'abo/open-in-sublime-merge
+   "SPC m" 'consult-mark
+   "SPC M" 'consult-global-mark
+   "SPC r" 'consult-ripgrep
+   "SPC s" 'speedbar-get-focus
+   "SPC t" 'consult-fd
+   ;; "SPC t" (lambda () (interactive) (org-capture nil "t"))
+   "SPC w" 'er/expand-region
+   "SPC W" 'er/contract-region
+   "SPC x" 'emamux:run-last-command
+   "SPC X" 'emamux:send-command
+   "SPC SPC" 'abo-run)
 
   (defun abo/consult-heading ()
     (interactive)
@@ -562,10 +572,10 @@ cons cell (regexp . minor-mode)."
      ((derived-mode-p 'emacs-lisp-mode) (call-interactively #'eval-buffer))
      (t (message "nothing to run for this buffer"))))
 
-  (my-leader-def
-    :states 'visual
-    :keymaps 'override
-    "x" 'emamux:send-region)
+  (general-define-key
+   :states 'visual
+   :keymaps 'override
+   "SPC x" 'emamux:send-region)
 
   (winner-mode 1)
 
@@ -736,7 +746,6 @@ cons cell (regexp . minor-mode)."
 (when (string-equal system-type "darwin")
   (setq insert-directory-program "/opt/homebrew/bin/gls"))
 
-(require 'dired)
 (defun my-dired-mode-setup ()
   "to be run as hook for `dired-mode'."
   (dired-hide-details-mode 1))
@@ -746,7 +755,7 @@ cons cell (regexp . minor-mode)."
 (setq dired-dwim-target t)
 (add-hook 'dired-load-hook
           (lambda ()
-            (load "dired-x")
+            (require 'dired-x)
             (setq dired-recursive-copies (quote always))
             (setq dired-recursive-deletes (quote top))))
 
@@ -856,16 +865,15 @@ cons cell (regexp . minor-mode)."
 
 ** Tramp
 #+BEGIN_SRC emacs-lisp
-(require 'tramp)
-(add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-(setq tramp-default-method "ssh"
-      tramp-verbose 1)
-
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
+(with-eval-after-load 'tramp
+  (add-to-list 'tramp-remote-path "~/.local/share/npm/bin/")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (setq tramp-default-method "ssh"
+        tramp-verbose 1)
+  (setq vc-ignore-dir-regexp
+        (format "\\(%s\\)\\|\\(%s\\)"
+                vc-ignore-dir-regexp
+                tramp-file-name-regexp)))
 #+END_SRC
 
 ** Tmux integration
@@ -944,14 +952,13 @@ cons cell (regexp . minor-mode)."
 (use-package ansi-color
   :hook (compilation-filter . ansi-color-compilation-filter))
 
-(require 'compile)
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(node "^\\([a-zA-Z\\.0-9/-]+\\):\\([0-9]+\\)$" 1 2))
-(add-to-list 'compilation-error-regexp-alist 'node)
-
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(rspec "^rspec \\(.*\\):\\([0-9]+\\)" 1 2))
-(add-to-list 'compilation-error-regexp-alist 'rspec)
+(with-eval-after-load 'compile
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(node "^\\([a-zA-Z\\.0-9/-]+\\):\\([0-9]+\\)$" 1 2))
+  (add-to-list 'compilation-error-regexp-alist 'node)
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(rspec "^rspec \\(.*\\):\\([0-9]+\\)" 1 2))
+  (add-to-list 'compilation-error-regexp-alist 'rspec))
 #+END_SRC
 
 * Org
@@ -1180,34 +1187,46 @@ cons cell (regexp . minor-mode)."
 ** Export and publishing
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize :defer t)
-(setq system-time-locale "C")
-(setq org-html-validation-link nil)
 
-(setq org-publish-project-alist
-      `(("blog-files"
-         :base-directory "~/perso/aurelienbottazini.github.io/_org"
-         :base-extension "org"
-         :publishing-directory "~/perso/aurelienbottazini.github.io/"
-         :recursive t
-         :publishing-function org-html-publish-to-html
-         :headline-levels 4
-         :auto-preamble t
-         :html-head-extra nil
-         :body-only t))
-      user-full-name "Aurélien Bottazini"
-      org-export-with-toc t
-      org-html-doctype "html5"
-      org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
-      org-html-head-include-default-style nil
-      org-html-head-include-scripts nil
-      org-html-html5-fancy t
-      org-html-postamble nil
-      org-src-preserve-indentation nil
-      org-html-htmlize-output-type "css"
-      org-html-indent nil
-      org-edit-src-content-indentation 0)
+(defvar abo/org-export-configured nil)
 
-(require 'ox-publish)
+(defun abo/setup-org-export (&rest _)
+  "Load Org export stack and related settings only when needed."
+  (unless abo/org-export-configured
+    (require 'ox-publish)
+    (require 'htmlize)
+    (setq system-time-locale "C")
+    (setq org-html-validation-link nil)
+    (setq org-publish-project-alist
+          `(("blog-files"
+             :base-directory "~/perso/aurelienbottazini.github.io/_org"
+             :base-extension "org"
+             :publishing-directory "~/perso/aurelienbottazini.github.io/"
+             :recursive t
+             :publishing-function org-html-publish-to-html
+             :headline-levels 4
+             :auto-preamble t
+             :html-head-extra nil
+             :body-only t))
+          user-full-name "Aurélien Bottazini"
+          org-export-with-toc t
+          org-html-doctype "html5"
+          org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
+          org-html-head-include-default-style nil
+          org-html-head-include-scripts nil
+          org-html-html5-fancy t
+          org-html-postamble nil
+          org-src-preserve-indentation nil
+          org-html-htmlize-output-type "css"
+          org-html-indent nil
+          org-edit-src-content-indentation 0)
+    (setq abo/org-export-configured t)))
+
+(dolist (fn '(org-export-dispatch
+              org-html-export-to-html
+              org-publish
+              org-publish-current-file))
+  (advice-add fn :before #'abo/setup-org-export))
 
 (defun abo/toggle-html-export-on-save ()
   "Enable or disable HTML export when saving current org buffer."
@@ -1217,6 +1236,7 @@ cons cell (regexp . minor-mode)."
   (if (memq 'org-html-export-to-html after-save-hook)
       (progn (remove-hook 'after-save-hook 'org-html-export-to-html t)
              (message "Disabled org html export on save"))
+    (abo/setup-org-export)
     (add-hook 'after-save-hook 'org-publish-current-file nil t)
     (set-buffer-modified-p t)
     (message "Enabled org html export on save")))
