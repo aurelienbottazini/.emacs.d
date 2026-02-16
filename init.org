@@ -21,6 +21,30 @@ brew install --cask emacs-plus-app
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
 
+(defun abo/tangle-init-config ()
+  "Tangle `init.org' into `init-tangled.el'."
+  (interactive)
+  (let ((org-confirm-babel-evaluate nil)
+        (init-org (expand-file-name "init.org" user-emacs-directory))
+        (init-el (expand-file-name "init-tangled.el" user-emacs-directory)))
+    (org-babel-tangle-file init-org init-el)))
+
+(defun abo/tangle-init-config-on-save ()
+  "Auto-tangle the literate config when saving `init.org'."
+  (when (and buffer-file-name
+             (string-equal (file-truename buffer-file-name)
+                           (file-truename (expand-file-name "init.org" user-emacs-directory))))
+    (abo/tangle-init-config)))
+
+(defun abo/setup-init-org-auto-tangle ()
+  "Enable local auto-tangle when visiting `init.org'."
+  (when (and buffer-file-name
+             (string-equal (file-truename buffer-file-name)
+                           (file-truename (expand-file-name "init.org" user-emacs-directory))))
+    (add-hook 'after-save-hook #'abo/tangle-init-config-on-save nil t)))
+
+(add-hook 'org-mode-hook #'abo/setup-init-org-auto-tangle)
+
 
 (defun my-reload-dir-locals-for-current-buffer ()
   "Reloads dir locals for the current buffer."
@@ -52,10 +76,6 @@ brew install --cask emacs-plus-app
 (defvar abo/default-file-name-handler-alist file-name-handler-alist)
 (defvar abo/default-gc-cons-threshold (* 16 1024 1024))
 (defvar abo/default-gc-cons-percentage 0.1)
-
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6
-      file-name-handler-alist nil)
 
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -117,7 +137,7 @@ brew install --cask emacs-plus-app
 (require 'diminish)
 
 (setq use-package-compute-statistics t) ;(use-package-report)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure nil)
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (condition-case err
@@ -314,7 +334,9 @@ brew install --cask emacs-plus-app
 
 (global-hl-line-mode 1)
 
-(use-package rainbow-mode :diminish rainbow-mode)
+(use-package rainbow-mode
+  :commands (rainbow-mode)
+  :diminish rainbow-mode)
 
 (if (fboundp 'mac-auto-operator-composition-mode)
     (mac-auto-operator-composition-mode t))
@@ -375,11 +397,11 @@ brew install --cask emacs-plus-app
 
 (use-package paredit
   :diminish paredit-mode
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-  (add-hook 'clojure-mode-hook #'paredit-mode))
+  :hook ((emacs-lisp-mode . paredit-mode)
+         (clojure-mode . paredit-mode)))
 
-(use-package expand-region)
+(use-package expand-region
+  :commands (er/expand-region er/contract-region))
 
 (defun abo/origami-safe-background ()
   "Return a valid background color for Origami header faces."
@@ -424,7 +446,8 @@ brew install --cask emacs-plus-app
   (auto-fill-mode t))
 (add-hook 'prog-mode-hook 'my-prog-mode-auto-fill-hook)
 
-(use-package highlight-blocks)
+(use-package highlight-blocks
+  :defer t)
 
 (defun sudo ()
   "Use TRAMP to `sudo' the file for current buffer."
@@ -458,7 +481,8 @@ cons cell (regexp . minor-mode)."
 
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
-(use-package windresize)
+(use-package windresize
+  :commands (windresize))
 
 (defun find-file-right (filename)
   (interactive)
@@ -473,6 +497,7 @@ cons cell (regexp . minor-mode)."
   (find-file filename))
 
 (use-package which-key
+  :defer 1
   :diminish which-key-mode
   :config
   (which-key-mode))
@@ -636,6 +661,7 @@ cons cell (regexp . minor-mode)."
     ("k" drag-stuff-up "up")))
 
 (use-package drag-stuff
+  :defer 2
   :diminish drag-stuff-mode
   :config
   (drag-stuff-global-mode t))
@@ -856,6 +882,7 @@ cons cell (regexp . minor-mode)."
   :mode "\\.http\\'")
 
 (use-package hyperbole
+  :defer 2
   :diminish hyperbole-mode
   :init
   (let ((hyperbole-dir (expand-file-name "hyperbole/" user-emacs-directory)))
@@ -865,16 +892,18 @@ cons cell (regexp . minor-mode)."
   :config
   (hyperbole-mode 1))
 
-(use-package sqlite3)
-(use-package jsonrpc)
+(use-package sqlite3 :defer t)
+(use-package jsonrpc :defer t)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
-(use-package hideshow)
-(require 'hideshowvis)
+(use-package hideshow :defer t)
+(with-eval-after-load 'hideshow
+  (require 'hideshowvis))
 
 (use-package envrc
+  :defer 2
   :diminish envrc-mode
   :config
   (envrc-global-mode))
@@ -1077,14 +1106,28 @@ cons cell (regexp . minor-mode)."
 
 ** Babel
 #+BEGIN_SRC emacs-lisp
-  (require 'ob-clojure)
-  (use-package ob-clojurescript)
+  (use-package ob-clojurescript :defer t)
+  (use-package ob-mermaid :defer t)
   (setq org-babel-clojure-backend 'cider)
-  (require 'ob-js)
   (setq org-babel-js-function-wrapper "require('util').log(require('util').inspect(function(){%s}()));")
-
-  (use-package ob-mermaid)
   (setq ob-mermaid-cli-path "mmdc")
+
+  (defvar abo/org-babel-languages-loaded nil)
+
+  (defun abo/load-org-babel-languages (&rest _)
+    "Load heavier Org Babel integrations on demand."
+    (unless abo/org-babel-languages-loaded
+      (require 'ob-clojure)
+      (require 'ob-js)
+      (require 'ob-ruby)
+      (let ((languages '((shell . t)
+                         (sql . t)
+                         (ditaa . t))))
+        (when (locate-library "ob-mermaid")
+          (push '(mermaid . t) languages))
+        (org-babel-do-load-languages 'org-babel-load-languages (nreverse languages)))
+      (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
+      (setq abo/org-babel-languages-loaded t)))
 
   (defun abo/org--clean-heading (text)
     "Return heading text with links and targets removed."
@@ -1130,18 +1173,13 @@ cons cell (regexp . minor-mode)."
         (insert "\n" (mapconcat #'identity lines "\n") "\n\n"))))
 
 
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((shell . t)
-                                 (sql . t)
-                                 (mermaid . t)
-                                 (ditaa . t)))
-  (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0/libexec/ditaa-0.11.0-standalone.jar")
-  (require 'ob-ruby)
+  (advice-add 'org-babel-execute-src-block :before #'abo/load-org-babel-languages)
+  (run-with-idle-timer 3 nil #'abo/load-org-babel-languages)
 #+END_SRC
 
 ** Export and publishing
 #+BEGIN_SRC emacs-lisp
-(use-package htmlize)
+(use-package htmlize :defer t)
 (setq system-time-locale "C")
 (setq org-html-validation-link nil)
 
@@ -1396,4 +1434,3 @@ With `C-u', prompt for any file."
 (use-package rg
   :commands rg)
 #+END_SRC
-
