@@ -519,6 +519,34 @@ cons cell (regexp . minor-mode)."
 (use-package general
   :config
 
+  (defun abo/move-left ()
+    "Move to left tmux pane when available, else use windmove."
+    (interactive)
+    (if (commandp 'tmux-move-left)
+        (call-interactively 'tmux-move-left)
+      (call-interactively 'windmove-left)))
+
+  (defun abo/move-down ()
+    "Move to lower tmux pane when available, else use windmove."
+    (interactive)
+    (if (commandp 'tmux-move-down)
+        (call-interactively 'tmux-move-down)
+      (call-interactively 'windmove-down)))
+
+  (defun abo/move-right ()
+    "Move to right tmux pane when available, else use windmove."
+    (interactive)
+    (if (commandp 'tmux-move-right)
+        (call-interactively 'tmux-move-right)
+      (call-interactively 'windmove-right)))
+
+  (defun abo/move-up ()
+    "Move to upper tmux pane when available, else use windmove."
+    (interactive)
+    (if (commandp 'tmux-move-up)
+        (call-interactively 'tmux-move-up)
+      (call-interactively 'windmove-up)))
+
   (general-define-key
    :states 'normal
    :keymaps 'override
@@ -611,10 +639,10 @@ cons cell (regexp . minor-mode)."
    "M-v" 'yank ; ⌘-v = Paste
    ;; "M-x" 'counsel-M-x
 
-   "C-h" 'tmux-move-left
-   "C-j" 'tmux-move-down
-   "C-l" 'tmux-move-right
-   "C-k" 'tmux-move-up
+   "C-h" 'abo/move-left
+   "C-j" 'abo/move-down
+   "C-l" 'abo/move-right
+   "C-k" 'abo/move-up
 
    "C-r" 'undo-redo
 
@@ -878,6 +906,45 @@ cons cell (regexp . minor-mode)."
 
 ** Tmux integration
 #+BEGIN_SRC emacs-lisp
+(defun tmux-socket-command-string ()
+  "Return tmux socket command prefix from $TMUX."
+  (interactive)
+  (concat "tmux -S "
+          (replace-regexp-in-string "\n\\'" ""
+                                    (shell-command-to-string "echo $TMUX | sed -e 's/,.*//g'"))))
+
+(defun tmux-move-right ()
+  (interactive)
+  (condition-case nil
+      (evil-window-right 1)
+    (error
+     (unless window-system
+       (shell-command (concat (tmux-socket-command-string) " select-pane -R") nil)))))
+
+(defun tmux-move-left ()
+  (interactive)
+  (condition-case nil
+      (evil-window-left 1)
+    (error
+     (unless window-system
+       (shell-command (concat (tmux-socket-command-string) " select-pane -L") nil)))))
+
+(defun tmux-move-up ()
+  (interactive)
+  (condition-case nil
+      (evil-window-up 1)
+    (error
+     (unless window-system
+       (shell-command (concat (tmux-socket-command-string) " select-pane -U") nil)))))
+
+(defun tmux-move-down ()
+  (interactive)
+  (condition-case nil
+      (evil-window-down 1)
+    (error
+     (unless window-system
+       (shell-command (concat (tmux-socket-command-string) " select-pane -D") nil)))))
+
 (use-package emamux
   :commands (emamux:run-last-command emamux:send-command emamux:send-region)
   :init
