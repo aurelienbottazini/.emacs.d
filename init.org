@@ -184,7 +184,7 @@ brew install --cask emacs-plus-app
 
 (setq package--init-file-ensured t) ; do not add things at the end of init.el
 (setq package-check-signature 'allow-unsigned)
-(setq package-quickstart t)
+(setq package-quickstart nil)
 
 (package-initialize)
 
@@ -283,6 +283,16 @@ brew install --cask emacs-plus-app
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-copy-env "SSH_AGENT_PID")
   (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+
+(when (memq window-system '(mac ns))
+  ;; Keep Option/Alt for macOS dead keys (e.g. e + e => é), and use Command as Meta.
+  (setq ns-option-modifier 'none
+        ns-right-option-modifier 'none
+        ns-command-modifier 'meta)
+  (when (boundp 'mac-option-modifier)
+    (setq mac-option-modifier nil
+          mac-right-option-modifier nil
+          mac-command-modifier 'meta)))
 
 (setenv "FZF_DEFAULT_OPTS" "--color=light")
 #+END_SRC
