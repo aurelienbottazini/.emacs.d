@@ -603,6 +603,28 @@ cons cell (regexp . minor-mode)."
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.el\\'" . emacs-lisp-mode))
+
+(defvar abo/typescript-major-mode
+  (cond
+   ((fboundp 'typescript-ts-mode) 'typescript-ts-mode)
+   ((fboundp 'typescript-mode) 'typescript-mode)
+   ((fboundp 'js-ts-mode) 'js-ts-mode)
+   (t 'js-mode))
+  "Preferred major mode for TypeScript files.")
+
+(defvar abo/tsx-major-mode
+  (cond
+   ((fboundp 'tsx-ts-mode) 'tsx-ts-mode)
+   ((fboundp 'typescript-ts-mode) 'typescript-ts-mode)
+   ((fboundp 'web-mode) 'web-mode)
+   ((fboundp 'js-ts-mode) 'js-ts-mode)
+   (t 'js-mode))
+  "Preferred major mode for TSX files.")
+
+(dolist (pattern '("\\.ts\\'" "\\.mts\\'" "\\.cts\\'"))
+  (add-to-list 'auto-mode-alist `(,pattern . ,abo/typescript-major-mode)))
+(add-to-list 'auto-mode-alist `("\\.tsx\\'" . ,abo/tsx-major-mode))
+
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-buffer)
 
 (add-hook 'emacs-lisp-mode-hook
@@ -1138,6 +1160,57 @@ cons cell (regexp . minor-mode)."
   (envrc-global-mode))
 #+END_SRC
 
+** LSP
+#+BEGIN_SRC emacs-lisp
+(defvar abo/js-lsp-server-missing-reported nil)
+
+(defun abo/js-lsp-server-command ()
+  "Return the JavaScript/TypeScript LSP command when available."
+  (cond
+   ((executable-find "typescript-language-server")
+    '("typescript-language-server" "--stdio"))
+   ((executable-find "vtsls")
+    '("vtsls" "--stdio"))
+   (t nil)))
+
+(defun abo/start-lsp-maybe ()
+  "Start LSP for the current buffer when a client is available."
+  (unless (or (minibufferp)
+              (file-remote-p default-directory)
+              (not buffer-file-name))
+    (cond
+     ((fboundp 'eglot-ensure)
+      (eglot-ensure))
+     ((fboundp 'lsp-deferred)
+      (lsp-deferred)))))
+
+(defun abo/js-like-file-p ()
+  "Return non-nil when current buffer visits a JS/TS-related file."
+  (and buffer-file-name
+       (string-match-p "\\.\\(js\\|jsx\\|mjs\\|cjs\\|ts\\|tsx\\)\\'" buffer-file-name)))
+
+(defun abo/start-lsp-in-web-mode-maybe ()
+  "Start LSP in `web-mode' only for JavaScript/TypeScript files."
+  (when (abo/js-like-file-p)
+    (abo/start-lsp-maybe)))
+
+(with-eval-after-load 'eglot
+  (let ((cmd (abo/js-lsp-server-command)))
+    (if cmd
+        (dolist (mode '(js-mode js-ts-mode js2-mode web-mode
+                        typescript-mode typescript-ts-mode tsx-ts-mode))
+          (add-to-list 'eglot-server-programs `(,mode . ,cmd)))
+      (unless abo/js-lsp-server-missing-reported
+        (setq abo/js-lsp-server-missing-reported t)
+        (message "No JavaScript LSP server found (install typescript-language-server or vtsls).")))))
+
+(dolist (hook '(js-mode-hook js-ts-mode-hook js2-mode-hook
+                typescript-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook))
+  (add-hook hook #'abo/start-lsp-maybe))
+
+(add-hook 'web-mode-hook #'abo/start-lsp-in-web-mode-maybe)
+#+END_SRC
+
 ** AI assistants
 #+BEGIN_SRC emacs-lisp
 (defun abo/add-straight-build-to-load-path (package-name)
@@ -1640,19 +1713,64 @@ With `C-u', prompt for any file."
 
 ** Completion framework
 #+BEGIN_SRC emacs-lisp
+(defun abo/install-completion-packages ()
+  "Install the completion stack packages when missing."
+  (interactive)
+  (dolist (pkg '(vertico marginalia orderless consult corfu cape embark embark-consult))
+    (require-package pkg)))
+
 (use-package vertico
-  :init (vertico-mode))
+  :if (locate-library "vertico")
+  :init
+  (vertico-mode))
+
+(use-package marginalia
+  :if (locate-library "marginalia")
+  :after vertico
+  :config
+  (marginalia-mode))
 
 (use-package orderless
+  :if (locate-library "orderless")
   :init
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
-  :bind ("C-c f" . consult-fd))
+  :if (locate-library "consult")
+  :bind ("C-c f" . consult-fd)
+  :config
+  ;; Use Consult's in-buffer completion UI when completion-at-point is active.
+  (setq completion-in-region-function #'consult-completion-in-region))
+
+(setq tab-always-indent 'complete
+      completion-cycle-threshold 3)
+
+(use-package corfu
+  :if (locate-library "corfu")
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-preselect 'first)
+  (corfu-quit-no-match 'separator))
+
+(use-package cape
+  :if (locate-library "cape")
+  :config
+  ;; Remove stale CAPFs from newer CAPE versions when running older CAPE.
+  (dolist (obsolete '(cape-keyword cape-symbol))
+    (setq completion-at-point-functions
+          (delq obsolete completion-at-point-functions)))
+  ;; Keep default CAPF sources, then add practical extras if available.
+  (dolist (capf '(cape-file cape-dabbrev cape-abbrev))
+    (when (fboundp capf)
+      (add-to-list 'completion-at-point-functions capf))))
 
 (use-package embark
+  :if (locate-library "embark")
   :bind (("C-o" . embark-act)
          ("C-;" . embark-dwim)
          ("C-h B" . embark-bindings))
@@ -1663,6 +1781,9 @@ With `C-u', prompt for any file."
   (define-key embark-buffer-map (kbd "t") #'switch-to-buffer-other-tab))
 
 (use-package embark-consult
+  :if (and (locate-library "embark")
+           (locate-library "consult")
+           (locate-library "embark-consult"))
   :after (embark consult))
 #+END_SRC
 

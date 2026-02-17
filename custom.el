@@ -4,117 +4,178 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#657b83"])
+   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198"
+    "#657b83"])
  '(apheleia-mode-alist
-   '((asm-mode . asmfmt) (awk-mode . gawk) (bash-ts-mode . shfmt) (bazel-mode . buildifier)
-     (beancount-mode . bean-format) (c++-ts-mode . clang-format) (caddyfile-mode . caddyfmt)
-     (cc-mode . clang-format) (c-mode . clang-format) (c-ts-mode . clang-format)
-     (c++-mode . clang-format) (caml-mode . ocamlformat) (clojure-dart-ts-mode . cljfmt)
-     (clojure-jank-ts-mode . cljfmt) (clojure-mode . cljfmt) (clojure-ts-mode . cljfmt)
-     (clojurec-mode . cljfmt) (clojurec-ts-mode . cljfmt) (clojurescript-mode . cljfmt)
-     (clojurescript-ts-mode . cljfmt) (cmake-mode . cmake-format) (cmake-ts-mode . cmake-format)
-     (common-lisp-mode . lisp-indent) (conf-toml-mode . dprint) (cperl-mode . perltidy)
-     (crystal-mode . crystal-tool-format) (css-mode . prettier-css) (css-ts-mode . prettier-css)
-     (dart-mode . dart-format) (dart-ts-mode . dart-format) (dockerfile-mode . dprint)
-     (elixir-mode . mix-format) (elixir-ts-mode . mix-format) (elm-mode . elm-format)
-     (emacs-lisp-mode . lisp-indent) (fish-mode . fish-indent) (go-mode . gofmt)
-     (go-ts-mode . gofmt) (graphql-mode . prettier-graphql) (haskell-mode . brittany)
-     (hcl-mode . hclfmt) (html-mode . prettier-html) (html-ts-mode . prettier-html)
-     (java-mode . google-java-format) (java-ts-mode . google-java-format) (jinja2-mode)
-     (js3-mode . prettier-javascript) (js-json-mode . prettier-json) (js-mode . prettier-javascript)
-     (js-ts-mode . prettier-javascript) (json-mode . prettier-json) (json-ts-mode . prettier-json)
-     (kotlin-mode . ktlint) (kotlin-ts-mode . ktlint) (latex-mode . latexindent)
-     (LaTeX-mode . latexindent) (lua-mode . stylua) (lua-ts-mode . stylua) (lisp-mode . lisp-indent)
-     (nasm-mode . asmfmt) (nix-mode . nixfmt) (perl-mode . perltidy) (php-mode . phpcs)
-     (purescript-mode . purs-tidy) (python-mode . black) (python-ts-mode . black)
-     (robot-mode . robotidy) (rustic-mode . rustfmt) (rust-mode . rustfmt) (rust-ts-mode . rustfmt)
-     (scss-mode . prettier-scss) (sql-mode . pgformatter) (svelte-mode . prettier-svelte)
-     (terraform-mode . terraform) (TeX-latex-mode . latexindent) (TeX-mode . latexindent)
+   '((asm-mode . asmfmt) (awk-mode . gawk) (bash-ts-mode . shfmt)
+     (bazel-mode . buildifier) (beancount-mode . bean-format)
+     (c++-ts-mode . clang-format) (caddyfile-mode . caddyfmt)
+     (cc-mode . clang-format) (c-mode . clang-format)
+     (c-ts-mode . clang-format) (c++-mode . clang-format)
+     (caml-mode . ocamlformat) (clojure-dart-ts-mode . cljfmt)
+     (clojure-jank-ts-mode . cljfmt) (clojure-mode . cljfmt)
+     (clojure-ts-mode . cljfmt) (clojurec-mode . cljfmt)
+     (clojurec-ts-mode . cljfmt) (clojurescript-mode . cljfmt)
+     (clojurescript-ts-mode . cljfmt) (cmake-mode . cmake-format)
+     (cmake-ts-mode . cmake-format) (common-lisp-mode . lisp-indent)
+     (conf-toml-mode . dprint) (cperl-mode . perltidy)
+     (crystal-mode . crystal-tool-format) (css-mode . prettier-css)
+     (css-ts-mode . prettier-css) (dart-mode . dart-format)
+     (dart-ts-mode . dart-format) (dockerfile-mode . dprint)
+     (elixir-mode . mix-format) (elixir-ts-mode . mix-format)
+     (elm-mode . elm-format) (emacs-lisp-mode . lisp-indent)
+     (fish-mode . fish-indent) (go-mode . gofmt) (go-ts-mode . gofmt)
+     (graphql-mode . prettier-graphql) (haskell-mode . brittany)
+     (hcl-mode . hclfmt) (html-mode . prettier-html)
+     (html-ts-mode . prettier-html) (java-mode . google-java-format)
+     (java-ts-mode . google-java-format) (jinja2-mode)
+     (js3-mode . prettier-javascript) (js-json-mode . prettier-json)
+     (js-mode . prettier-javascript)
+     (js-ts-mode . prettier-javascript) (json-mode . prettier-json)
+     (json-ts-mode . prettier-json) (kotlin-mode . ktlint)
+     (kotlin-ts-mode . ktlint) (latex-mode . latexindent)
+     (LaTeX-mode . latexindent) (lua-mode . stylua)
+     (lua-ts-mode . stylua) (lisp-mode . lisp-indent)
+     (nasm-mode . asmfmt) (nix-mode . nixfmt) (perl-mode . perltidy)
+     (php-mode . phpcs) (purescript-mode . purs-tidy)
+     (python-mode . black) (python-ts-mode . black)
+     (robot-mode . robotidy) (rustic-mode . rustfmt)
+     (rust-mode . rustfmt) (rust-ts-mode . rustfmt)
+     (scss-mode . prettier-scss) (sql-mode . pgformatter)
+     (svelte-mode . prettier-svelte) (terraform-mode . terraform)
+     (TeX-latex-mode . latexindent) (TeX-mode . latexindent)
      (tsx-ts-mode . prettier-typescript) (tuareg-mode . ocamlformat)
-     (typescript-mode . prettier-typescript) (typescript-ts-mode . prettier-typescript)
-     (web-mode . prettier) (yaml-mode . prettier-yaml) (yaml-ts-mode . prettier-yaml)
-     (yang-mode . pyang) (ruby-ts-mode . rubocop) (ruby-mode . rubocop)))
+     (typescript-mode . prettier-typescript)
+     (typescript-ts-mode . prettier-typescript) (web-mode . prettier)
+     (yaml-mode . prettier-yaml) (yaml-ts-mode . prettier-yaml)
+     (yang-mode . pyang) (ruby-ts-mode . rubocop)
+     (ruby-mode . rubocop)))
  '(blink-cursor-mode nil)
  '(blink-matching-paren 'jump-offscreen)
  '(cider-injected-middleware-version "0.37.1")
  '(citre-tags-file-names '(".tags" "tags"))
  '(coffee-tab-width 2)
  '(column-number-mode t)
- '(company-dabbrev-char-regexp "\\sw\\|\\s_")
- '(company-dabbrev-ignore-case nil t)
- '(company-minimum-prefix-length 1)
- '(company-quickhelp-color-background "#4F4F4F")
- '(company-quickhelp-color-foreground "#DCDCCC")
  '(connection-local-criteria-alist
    '(((:application tramp :machine "MacBook-Air-de-Aurelien-2.local")
       tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "MBP-725-ABOT") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "MBA-725-ABOT") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :protocol "flatpak") tramp-flatpak-connection-local-default-profile)
-     ((:application tramp :protocol "kubernetes") tramp-kubernetes-connection-local-default-profile)
+     ((:application tramp :machine "MBP-725-ABOT")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "MBA-725-ABOT")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :protocol "flatpak")
+      tramp-flatpak-connection-local-default-profile)
+     ((:application tramp :protocol "kubernetes")
+      tramp-kubernetes-connection-local-default-profile)
      ((:application tramp :machine "MacBook-Air-de-Aurelien.local")
       tramp-connection-local-darwin-ps-profile)
      ((:application eshell) eshell-connection-default-profile)
-     ((:application tramp :machine "auray-air.home") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "auray-air.local") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "localhost") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "tagada-167.local") tramp-connection-local-darwin-ps-profile)
-     ((:application tramp) tramp-connection-local-default-system-profile
+     ((:application tramp :machine "auray-air.home")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "auray-air.local")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "tagada-167.local")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp)
+      tramp-connection-local-default-system-profile
       tramp-connection-local-default-shell-profile)))
  '(connection-local-profile-alist
    '((tramp-flatpak-connection-local-default-profile
-      (tramp-remote-path "/app/bin" tramp-default-remote-path "/bin" "/usr/bin" "/sbin" "/usr/sbin"
-                         "/usr/local/bin" "/usr/local/sbin" "/local/bin" "/local/freeware/bin"
-                         "/local/gnu/bin" "/usr/freeware/bin" "/usr/pkg/bin" "/usr/contrib/bin"
-                         "/opt/bin" "/opt/sbin" "/opt/local/bin"))
+      (tramp-remote-path "/app/bin" tramp-default-remote-path "/bin"
+                         "/usr/bin" "/sbin" "/usr/sbin"
+                         "/usr/local/bin" "/usr/local/sbin"
+                         "/local/bin" "/local/freeware/bin"
+                         "/local/gnu/bin" "/usr/freeware/bin"
+                         "/usr/pkg/bin" "/usr/contrib/bin" "/opt/bin"
+                         "/opt/sbin" "/opt/local/bin"))
      (tramp-kubernetes-connection-local-default-profile
       (tramp-config-check . tramp-kubernetes--current-context-data)
-      (tramp-extra-expand-args 97 (tramp-kubernetes--container (car tramp-current-connection)) 104
-                               (tramp-kubernetes--pod (car tramp-current-connection)) 120
-                               (tramp-kubernetes--context-namespace (car tramp-current-connection))))
+      (tramp-extra-expand-args 97
+                               (tramp-kubernetes--container
+                                (car tramp-current-connection))
+                               104
+                               (tramp-kubernetes--pod
+                                (car tramp-current-connection))
+                               120
+                               (tramp-kubernetes--context-namespace
+                                (car tramp-current-connection))))
      (eshell-connection-default-profile (eshell-path-env-list))
      (tramp-connection-local-darwin-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o"
                                         "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                         "-o" "state=abcde" "-o"
                                         "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-                                          (egid . number) (comm . 52) (state . 5) (ppid . number)
-                                          (pgrp . number) (sess . number) (ttname . string)
-                                          (tpgid . number) (minflt . number) (majflt . number)
-                                          (time . tramp-ps-time) (pri . number) (nice . number)
-                                          (vsize . number) (rss . number) (etime . tramp-ps-time)
-                                          (pcpu . number) (pmem . number) (args)))
+      (tramp-process-attributes-ps-format (pid . number)
+                                          (euid . number)
+                                          (user . string)
+                                          (egid . number) (comm . 52)
+                                          (state . 5) (ppid . number)
+                                          (pgrp . number)
+                                          (sess . number)
+                                          (ttname . string)
+                                          (tpgid . number)
+                                          (minflt . number)
+                                          (majflt . number)
+                                          (time . tramp-ps-time)
+                                          (pri . number)
+                                          (nice . number)
+                                          (vsize . number)
+                                          (rss . number)
+                                          (etime . tramp-ps-time)
+                                          (pcpu . number)
+                                          (pmem . number) (args)))
      (tramp-connection-local-busybox-ps-profile
       (tramp-process-attributes-ps-args "-o"
                                         "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-      (tramp-process-attributes-ps-format (pid . number) (user . string) (group . string)
-                                          (comm . 52) (state . 5) (ppid . number) (pgrp . number)
-                                          (ttname . string) (time . tramp-ps-time) (nice . number)
-                                          (etime . tramp-ps-time) (args)))
+                                        "-o" "stat=abcde" "-o"
+                                        "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format (pid . number)
+                                          (user . string)
+                                          (group . string) (comm . 52)
+                                          (state . 5) (ppid . number)
+                                          (pgrp . number)
+                                          (ttname . string)
+                                          (time . tramp-ps-time)
+                                          (nice . number)
+                                          (etime . tramp-ps-time)
+                                          (args)))
      (tramp-connection-local-bsd-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o"
                                         "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                         "-o"
                                         "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format (pid . number) (euid . number) (user . string)
-                                          (egid . number) (group . string) (comm . 52)
-                                          (state . string) (ppid . number) (pgrp . number)
-                                          (sess . number) (ttname . string) (tpgid . number)
-                                          (minflt . number) (majflt . number) (time . tramp-ps-time)
-                                          (pri . number) (nice . number) (vsize . number)
-                                          (rss . number) (etime . number) (pcpu . number)
+      (tramp-process-attributes-ps-format (pid . number)
+                                          (euid . number)
+                                          (user . string)
+                                          (egid . number)
+                                          (group . string) (comm . 52)
+                                          (state . string)
+                                          (ppid . number)
+                                          (pgrp . number)
+                                          (sess . number)
+                                          (ttname . string)
+                                          (tpgid . number)
+                                          (minflt . number)
+                                          (majflt . number)
+                                          (time . tramp-ps-time)
+                                          (pri . number)
+                                          (nice . number)
+                                          (vsize . number)
+                                          (rss . number)
+                                          (etime . number)
+                                          (pcpu . number)
                                           (pmem . number) (args)))
-     (tramp-connection-local-default-shell-profile (shell-file-name . "/bin/sh")
-                                                   (shell-command-switch . "-c"))
-     (tramp-connection-local-default-system-profile (path-separator . ":")
-                                                    (null-device . "/dev/null"))))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh") (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":") (null-device . "/dev/null"))))
  '(context-coloring-syntactic-strings nil)
  '(copilot-indent-warning-suppress t)
  '(counsel-rg-base-command
-   '("rg" "--hidden" "--max-columns" "240" "--with-filename" "--no-heading" "--line-number" "--color"
-     "never" "%s"))
+   '("rg" "--hidden" "--max-columns" "240" "--with-filename"
+     "--no-heading" "--line-number" "--color" "never" "%s"))
  '(coverlay:tested-line-background-color "#2e3600")
  '(coverlay:untested-line-background-color "#8a1f1d")
  '(custom-safe-themes
@@ -141,7 +202,8 @@
      "0809c08440b51a39c77ec5529f89af83ab256a9d48107b088d40098ce322c7d8"
      "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b"
      "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739"
-     "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default))
+     "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a"
+     default))
  '(deft-new-file-format "%Y-%m-%dT%H:%M")
  '(deft-use-filename-as-title t)
  '(deft-use-filter-string-for-filename t)
@@ -189,7 +251,8 @@
  '(ivy-posframe-border-width 5)
  '(ivy-posframe-mode t)
  '(ivy-preferred-re-builders
-   '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order") (ivy--regex-fuzzy . "fuzzy")))
+   '((ivy--regex-plus . "ivy") (ivy--regex-ignore-order . "order")
+     (ivy--regex-fuzzy . "fuzzy")))
  '(jka-compr-shell "/bin/sh")
  '(js2-highlight-level 3 t)
  '(lsp-auto-execute-action nil)
@@ -207,7 +270,8 @@
  '(lsp-ui-sideline-show-code-actions nil)
  '(menu-bar-mode nil)
  '(nrepl-message-colors
-   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3"
+     "#94BFF3" "#DC8CC3"))
  '(ns-command-modifier 'meta)
  '(org-agenda-custom-commands
    '(("n" "Agenda and all TODOs" ((agenda "" nil) (alltodo "" nil)) nil)
@@ -234,7 +298,8 @@
  '(org-bullets-bullet-list '("⭐" "◾" "◽"))
  '(org-download-method 'attach)
  '(org-emphasis-alist
-   '(("*" bold) ("/" italic) ("_" underline) ("=" lazy-highlight verbatim) ("~" org-code verbatim)
+   '(("*" bold) ("/" italic) ("_" underline)
+     ("=" lazy-highlight verbatim) ("~" org-code verbatim)
      ("+" (:strike-through t))))
  '(org-fold-core-style 'overlays)
  '(org-hide-emphasis-markers nil)
@@ -252,15 +317,20 @@
  '(org-startup-truncated t)
  '(org-startup-with-inline-images t)
  '(package-selected-packages
-   '(cider citre coffee-mode company-statistics context-coloring copilot deadgrep deft diminish
-           dired-rsync drag-stuff dumb-jump elm-mode emamux embark-consult emmet-mode envrc
-           evil-commentary evil-matchit evil-surround evil-visualstar exec-path-from-shell
-           expand-region flycheck flymake-eslint forge fullframe general git-link go-mode
-           highlight-blocks hyperbole iedit js2-mode json-mode key-chord lsp-ivy lsp-treemacs lsp-ui
-           multiple-cursors ob-clojurescript ob-mermaid orderless org-download org-ref
-           org-tree-slide origami ox-reveal paredit prettier-js rainbow-mode restclient rg robe
-           rspec-mode ruby-end ruby-interpolation rust-mode sass-mode scss-mode sqlite3 vertico
-           web-mode windresize writegood-mode writeroom-mode yaml-mode yasnippet))
+   '(cape cider citre coffee-mode context-coloring
+          copilot corfu deadgrep deft diminish dired-rsync drag-stuff
+          dumb-jump elm-mode emamux embark-consult emmet-mode envrc
+          evil-commentary evil-matchit evil-surround evil-visualstar
+          exec-path-from-shell expand-region flycheck flymake-eslint
+          forge fullframe general git-link go-mode highlight-blocks
+          hyperbole iedit js2-mode json-mode key-chord lsp-ivy
+          lsp-treemacs lsp-ui marginalia multiple-cursors
+          ob-clojurescript ob-mermaid orderless org-download org-ref
+          org-tree-slide origami ox-reveal paredit prettier-js
+          rainbow-mode restclient rg robe rspec-mode ruby-end
+          ruby-interpolation rust-mode sass-mode scss-mode sqlite3
+          vertico web-mode windresize writegood-mode writeroom-mode
+          yaml-mode yasnippet))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-mode-line-prefix " Proj")
  '(projectile-switch-project-action 'projectile-dired)
@@ -275,54 +345,82 @@
  '(ruby-deep-indent-paren '(40 91 93 123 125))
  '(ruby-deep-indent-paren-style 'space)
  '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook #'org-table-recalculate-buffer-tables nil t)
-     (eval add-hook 'after-save-hook (lambda nil (eval-buffer) (ert-run-tests-interactively t)) nil
-           t)
-     (eval add-hook 'after-save-hook (lambda nil (ert-run-tests-interactively t) (other-window)) nil
-           t)
+   '((eval add-hook 'after-save-hook
+           #'org-table-recalculate-buffer-tables nil t)
      (eval add-hook 'after-save-hook
-           (lambda nil (ert-run-tests-interactively t) (switch-to-buffer "find-in-project.el")) nil
-           t)
-     (eval add-hook 'after-save-hook (lambda nil (ert-run-tests-interactively t)) nil t)
+           (lambda nil (eval-buffer) (ert-run-tests-interactively t))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil (ert-run-tests-interactively t) (other-window))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil (ert-run-tests-interactively t)
+             (switch-to-buffer "find-in-project.el"))
+           nil t)
+     (eval add-hook 'after-save-hook
+           (lambda nil (ert-run-tests-interactively t)) nil t)
      (find-sibling-rules ("\\([^/]+\\)\\.ts\\'" "\\1\\.test\\.ts"))
      (find-sibling-rules ("src/\\(.*)\\)\\.ts" "test/\\1\\.test\\.ts"))
      (find-sibling-rules ("src/\\(.*)\\)\\.ts" "test/\\1\\.test.ts"))
-     (find-sibling-rules ("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts"))
-     (find-sibling-rules quote (("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts")))
-     (find-sibling-rules quote ("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts"))
+     (find-sibling-rules
+      ("src/[^/]+//(.*)\\)\\.ts" "test/.*/\\1\\.test.ts"))
+     (find-sibling-rules quote
+                         (("src/[^/]+//(.*)\\)\\.ts"
+                           "test/.*/\\1\\.test.ts")))
+     (find-sibling-rules quote
+                         ("src/[^/]+//(.*)\\)\\.ts"
+                          "test/.*/\\1\\.test.ts"))
      (cider-clojure-cli-global-options . -M:dev:cider)
      (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1\\.spec\\.ts")
      (find-sibling-rules "\\([^/]+\\)\\.ts\\" "\\1.spec.ts")
-     (eval progn (make-variable-buffer-local 'cider-jack-in-nrepl-middlewares)
+     (eval progn
+           (make-variable-buffer-local
+            'cider-jack-in-nrepl-middlewares)
            (add-to-list 'cider-jack-in-nrepl-middlewares
                         "shadow.cljs.devtools.server.nrepl/middleware"))
-     (cider-clojure-cli-global-options . "-A:dev") (cider-shadow-default-options . "web")
-     (cider-default-cljs-repl . shadow) (coverlay:base-path . "/Users/auray/work/dox-errors-js/")
-     (cider-shadow-cljs-default-options . "spa") (cider-shadow-cljs-default-options . "app")
-     (org-reveal-title-slide . "<h1>Life beyond distributed Transactions</h1>")
-     (org-reveal-title-slide . "<h1>Life beyong distributed Transactions</h1>")
-     (org-reveal-title-slide . "<h1>Life Beyong Distributed Transactions</h1>")
+     (cider-clojure-cli-global-options . "-A:dev")
+     (cider-shadow-default-options . "web")
+     (cider-default-cljs-repl . shadow)
+     (coverlay:base-path . "/Users/auray/work/dox-errors-js/")
+     (cider-shadow-cljs-default-options . "spa")
+     (cider-shadow-cljs-default-options . "app")
+     (org-reveal-title-slide
+      . "<h1>Life beyond distributed Transactions</h1>")
+     (org-reveal-title-slide
+      . "<h1>Life beyong distributed Transactions</h1>")
+     (org-reveal-title-slide
+      . "<h1>Life Beyong Distributed Transactions</h1>")
      (org-reveal-title-slide . "<h1>Yo</h1>")
      (eval when (require 'rainbow-mode nil t) (rainbow-mode 1))
-     (eval add-hook 'after-save-hook (lambda nil (org-babel-tangle)) nil t)
+     (eval add-hook 'after-save-hook (lambda nil (org-babel-tangle))
+           nil t)
      (eval progn (require 'find-file-in-project)
-           (setq ffip-prune-patterns `("*/public/packs*/*" ,@ffip-prune-patterns))
+           (setq ffip-prune-patterns
+                 `("*/public/packs*/*" ,@ffip-prune-patterns))
            (setq prettier-js-command
                  "/home/auray/work/doximity-client-vue/node_modules/.bin/prettier"))
-     (compilation-scroll-output 'first-error) (compilation-scroll-output t)
+     (compilation-scroll-output 'first-error)
+     (compilation-scroll-output t)
      (ffip-project-root . "/home/auray/work/doximity-client-vue/")
      (eval progn (require 'find-file-in-project)
-           (setq ffip-prune-patterns `("vendor/*" ,@ffip-prune-patterns)))
-     (ffip-project-root . "/home/aurelienbottazini/work/doximity-client-vue/")
-     (alternative-files-rules ("src/\\(.*\\).vue" "test/unit/specs/\\1.spec.js")
-                              ("test/unit/specs/\\(.*\\).spec.js" "src/\\1.vue")
-                              ("src/\\(.*\\).js" "test/unit/specs/\\1.spec.js")
-                              ("test/unit/specs/\\(.*\\).spec.js" "src/\\1.js"))
-     (eval add-hook 'after-save-hook (lambda nil (org-html-export-to-html t)) t t)
+           (setq ffip-prune-patterns
+                 `("vendor/*" ,@ffip-prune-patterns)))
+     (ffip-project-root
+      . "/home/aurelienbottazini/work/doximity-client-vue/")
+     (alternative-files-rules
+      ("src/\\(.*\\).vue" "test/unit/specs/\\1.spec.js")
+      ("test/unit/specs/\\(.*\\).spec.js" "src/\\1.vue")
+      ("src/\\(.*\\).js" "test/unit/specs/\\1.spec.js")
+      ("test/unit/specs/\\(.*\\).spec.js" "src/\\1.js"))
+     (eval add-hook 'after-save-hook
+           (lambda nil (org-html-export-to-html t)) t t)
      (eval progn (require 'find-file-in-project)
-           (setq ffip-prune-patterns `("*/public/packs*/*" ,@ffip-prune-patterns)))
-     (ffip-find-options . "-not -size +64k -not -iwholename './target/*'")
-     (ffip-find-options . "-not -size +64k -not -iwholename './target/debug/*'")
+           (setq ffip-prune-patterns
+                 `("*/public/packs*/*" ,@ffip-prune-patterns)))
+     (ffip-find-options
+      . "-not -size +64k -not -iwholename './target/*'")
+     (ffip-find-options
+      . "-not -size +64k -not -iwholename './target/debug/*'")
      (org-confirm-babel-evaluate)))
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
@@ -331,8 +429,9 @@
  '(show-paren-when-point-inside-paren t)
  '(speedbar-default-position 'right)
  '(speedbar-frame-parameters
-   '((minibuffer . t) (width . 100) (border-width . 0) (menu-bar-lines . 0) (tool-bar-lines . 0)
-     (unsplittable . t) (left-fringe . 0) (height . 60)))
+   '((minibuffer . t) (width . 100) (border-width . 0)
+     (menu-bar-lines . 0) (tool-bar-lines . 0) (unsplittable . t)
+     (left-fringe . 0) (height . 60)))
  '(speedbar-show-unknown-files t)
  '(swiper-goto-start-of-match t)
  '(tab-always-indent nil)
@@ -348,10 +447,12 @@
  '(truncate-lines nil)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F")
-     (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F")
-     (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB")
-     (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3")))
+   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F")
+     (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F")
+     (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F")
+     (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3")
+     (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3")
+     (340 . "#94BFF3") (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(vc-follow-symlinks t)
  '(web-mode-auto-close-style 2)
