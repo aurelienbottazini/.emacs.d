@@ -191,20 +191,36 @@ brew install --cask emacs-plus-app
 (defun abo/refresh-package-contents ()
   "Refresh package archives on demand."
   (interactive)
-  (package-refresh-contents))
+  (condition-case err
+      (package-refresh-contents)
+    (error
+     (message "Package refresh failed: %s" (error-message-string err))
+     nil)))
 
 (defun require-package (package &optional min-version)
-  "Install PACKAGE via ELPA when missing. Optional MIN-VERSION is supported."
-  (unless (package-installed-p package min-version)
-    (unless package-archive-contents
-      (package-refresh-contents))
-    (package-install package)))
+  "Install PACKAGE via ELPA when missing. Return non-nil on success."
+  (condition-case err
+      (progn
+        (unless (package-installed-p package min-version)
+          (unless package-archive-contents
+            (abo/refresh-package-contents))
+          (when package-archive-contents
+            (package-install package)))
+        (package-installed-p package min-version))
+    (error
+     (message "Package install failed for %s: %s" package (error-message-string err))
+     nil)))
 
-(require-package 'use-package)
-(require 'use-package)
+(unless (require 'use-package nil 'noerror)
+  (unless (require-package 'use-package)
+    (error "Missing required package `use-package`; run M-x abo/refresh-package-contents and restart Emacs"))
+  (require 'use-package))
 
-(require-package 'diminish)
-(require 'diminish)
+(unless (require 'diminish nil 'noerror)
+  (unless (require-package 'diminish)
+    ;; Keep startup reliable even when ELPA is unavailable.
+    (defalias 'diminish #'ignore))
+  (require 'diminish nil 'noerror))
 
 (setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
 (setq use-package-always-ensure nil)
@@ -280,9 +296,11 @@ brew install --cask emacs-plus-app
   :if (memq window-system '(mac ns x))
   :commands exec-path-from-shell-copy-env)
 
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-  (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+(when (and (memq window-system '(mac ns x))
+           (fboundp 'exec-path-from-shell-copy-env))
+  (ignore-errors
+    (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+    (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")))
 
 (when (memq window-system '(mac ns))
   ;; Keep Option/Alt for macOS dead keys (e.g. e + e => é), and use Command as Meta.
