@@ -668,26 +668,61 @@ cons cell (regexp . minor-mode)."
         (call-interactively 'tmux-move-up)
       (call-interactively 'windmove-up)))
 
+  (defun abo/open-init-org ()
+    "Open the literate Emacs config."
+    (interactive)
+    (find-file "~/.emacs.d/init.org"))
+
+  (defun abo/open-gtd-org ()
+    "Open GTD notes."
+    (interactive)
+    (find-file "~/Dropbox/notes/gtd.org"))
+
+  (defun abo/open-inbox-org ()
+    "Open inbox notes."
+    (interactive)
+    (find-file "~/Dropbox/notes/inbox.org"))
+
+  (defun abo/open-journal-org ()
+    "Open journal notes."
+    (interactive)
+    (find-file "~/Dropbox/notes/journal.org"))
+
+  (defun abo/open-notes-directory ()
+    "Open notes directory."
+    (interactive)
+    (find-file "~/Dropbox/notes/"))
+
+  (defun abo/open-projects-directory ()
+    "Open projects directory."
+    (interactive)
+    (find-file "~/projects/"))
+
+  (defun abo/open-work-directory ()
+    "Open work directory."
+    (interactive)
+    (find-file "~/work"))
+
   (general-define-key
    :states 'normal
    :keymaps 'override
    "SPC a" 'org-agenda
    "SPC b" 'consult-buffer
    "SPC 1" 'treemacs
-   "SPC c" (lambda () (interactive) (org-capture))
+   "SPC c" 'org-capture
    "SPC d" 'deadgrep
    "SPC e" 'consult-recent-file
    "SPC h" 'highlight-symbol-at-point
    "SPC H" 'unhighlight-regexp
    "SPC i" 'abo/consult-heading
-   "SPC je" (lambda () (interactive) (find-file "~/.emacs.d/init.org"))
-   "SPC jg" (lambda () (interactive) (find-file "~/Dropbox/notes/gtd.org"))
-   "SPC ji" (lambda () (interactive) (find-file "~/Dropbox/notes/inbox.org"))
-   "SPC jj" (lambda () (interactive) (find-file "~/Dropbox/notes/journal.org"))
+   "SPC je" 'abo/open-init-org
+   "SPC jg" 'abo/open-gtd-org
+   "SPC ji" 'abo/open-inbox-org
+   "SPC jj" 'abo/open-journal-org
    "SPC jr" 'abo/weekly-review
-   "SPC jn" (lambda () (interactive) (find-file "~/Dropbox/notes/"))
-   "SPC jp" (lambda () (interactive) (find-file "~/projects/"))
-   "SPC jw" (lambda () (interactive) (find-file "~/work"))
+   "SPC jn" 'abo/open-notes-directory
+   "SPC jp" 'abo/open-projects-directory
+   "SPC jw" 'abo/open-work-directory
    "SPC k" 'org-capture
    "SPC p" 'project-switch-project
    "SPC o" 'consult-outline
