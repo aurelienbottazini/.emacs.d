@@ -21,6 +21,66 @@ brew install --cask emacs-plus-app
 #+BEGIN_SRC emacs-lisp
 ;;; -*- lexical-binding: t; -*-
 
+(eval-when-compile
+  (require 'autorevert)
+  (require 'dired)
+  (require 'dired-x)
+  (require 'elec-pair)
+  (require 'eshell)
+  (require 'hydra nil t)
+  (require 'evil nil t)
+  (require 'ls-lisp)
+  (require 'org)
+  (require 'org-element)
+  (require 'project)
+  (require 'recentf)
+  (require 'savehist)
+  (require 'saveplace)
+  (require 'speedbar nil t)
+  (require 'time-stamp))
+
+;; Declared for byte-compiler in minimal batch contexts.
+(defvar package--init-file-ensured)
+(defvar reb-re-syntax)
+(defvar org-capture-templates)
+(defvar org-babel-clojure-backend)
+(defvar org-babel-js-function-wrapper)
+(defvar org-ditaa-jar-path)
+(defvar org-download-timestamp-format)
+(defvar project-find-file-function)
+(declare-function default-text-scale-increment "default-text-scale" (&optional increment))
+(declare-function default-text-scale-reset "default-text-scale" ())
+(declare-function dired-get-file-for-visit "dired")
+(declare-function dired-find-file "dired")
+(declare-function dired-hide-details-mode "dired-x" (&optional arg))
+(declare-function evil-window-right "evil-window" (&optional count))
+(declare-function evil-window-left "evil-window" (&optional count))
+(declare-function evil-window-up "evil-window" (&optional count))
+(declare-function evil-window-down "evil-window" (&optional count))
+(declare-function evil-set-initial-state "evil-core" (mode state))
+(declare-function evil-ex-define-cmd "evil-commands" (cmd func))
+(declare-function evil-define-key* "evil-core" (state keymap key def &rest bindings))
+(declare-function evil-insert-state-p "evil-states" ())
+(declare-function evil-visual-state-p "evil-states" ())
+(declare-function evil-emacs-state-p "evil-states" ())
+(declare-function evil-normal-state-p "evil-states" ())
+(declare-function hydra-default-pre "hydra")
+(declare-function hydra-keyboard-quit "hydra")
+(declare-function hydra--call-interactively-remap-maybe "hydra")
+(declare-function hydra-show-hint "hydra")
+(declare-function hydra-set-transient-map "hydra")
+(declare-function org-ctrl-c-ctrl-c "org")
+(declare-function org-indent-mode "org-indent" (&optional arg))
+(declare-function org-save-all-org-buffers "org")
+(declare-function org-element-context "org-element")
+(declare-function org-link-display-format "org")
+(declare-function org-back-to-heading "org")
+(declare-function org-get-heading "org")
+(declare-function org-outline-level "org")
+(declare-function org-map-entries "org")
+(declare-function org-end-of-meta-data "org")
+(declare-function org-element--property "org-element")
+
 (defun abo/tangle-init-config ()
   "Tangle `init.org' into `init-tangled.el'."
   (interactive)
@@ -28,9 +88,15 @@ brew install --cask emacs-plus-app
         (init-el (expand-file-name "init-tangled.el" user-emacs-directory)))
     (org-babel-tangle-file init-org init-el)
     (when (file-exists-p init-el)
-      (byte-compile-file init-el)
+      (let ((byte-compile-warnings '(not obsolete cl-functions))
+            (warning-minimum-level :error)
+            (inhibit-message t)
+            (message-log-max nil))
+        (ignore-errors
+          (byte-compile-file init-el)))
       (when (fboundp 'native-compile-async)
-        (native-compile-async init-el nil)))))
+        (ignore-errors
+          (native-compile-async init-el nil))))))
 
 (defun abo/tangle-init-config-on-save ()
   "Auto-tangle the literate config when saving `init.org'."
@@ -56,7 +122,7 @@ brew install --cask emacs-plus-app
     (hack-dir-local-variables-non-file-buffer)))
 
 (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
-  "For every buffer with the same `default-directory` as the current buffer's, reload dir-locals."
+  "Reload dir-locals in buffers sharing the current `default-directory`."
   (interactive)
   (let ((dir default-directory))
     (dolist (buffer (buffer-list))
@@ -106,7 +172,7 @@ brew install --cask emacs-plus-app
 (when (boundp 'native-comp-async-report-warnings-errors)
   (setq native-comp-async-report-warnings-errors 'silent))
 
-(setq byte-compile-warnings '(cl-functions))
+(setq byte-compile-warnings '(not obsolete cl-functions))
 
 (setq package-archives
       '(("melpa"       . "https://melpa.org/packages/")
@@ -127,7 +193,7 @@ brew install --cask emacs-plus-app
   (package-refresh-contents))
 
 (defun require-package (package &optional min-version)
-  "Ask elpa to install given PACKAGE. You can specify a MIN-VERSION for your PACKAGE."
+  "Install PACKAGE via ELPA when missing. Optional MIN-VERSION is supported."
   (unless (package-installed-p package min-version)
     (unless package-archive-contents
       (package-refresh-contents))
@@ -207,7 +273,6 @@ brew install --cask emacs-plus-app
       (push path existing-paths)))
   (setq existing-paths (nreverse existing-paths))
   (setenv "PATH" (mapconcat #'identity existing-paths path-separator-string))
-  (setq eshell-path-env (getenv "PATH"))
   (setq exec-path existing-paths))
 
 (use-package exec-path-from-shell
@@ -281,7 +346,7 @@ brew install --cask emacs-plus-app
 ** General settings
 #+BEGIN_SRC emacs-lisp
 (setq help-window-select t
-      default-indicate-empty-lines nil)
+      indicate-empty-lines nil)
 
 (make-variable-buffer-local 'compile-command)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -473,6 +538,7 @@ brew install --cask emacs-plus-app
        (message "Origami disabled: %s" (error-message-string err))))))
 
 (use-package origami
+  :if (not noninteractive)
   :commands (origami-mode)
   :hook (prog-mode . abo/origami-enable-safely))
 
@@ -981,6 +1047,7 @@ cons cell (regexp . minor-mode)."
   :mode "\\.http\\'")
 
 (use-package hyperbole
+  :if (not noninteractive)
   :defer 2
   :diminish hyperbole-mode
   :init
@@ -1028,7 +1095,8 @@ cons cell (regexp . minor-mode)."
     (package-vc-install "https://github.com/copilot-emacs/copilot.el")))
 
 (use-package copilot
-  :if (locate-library "copilot")
+  :if (and (not noninteractive)
+           (locate-library "copilot"))
   :commands (copilot-mode copilot-accept-completion copilot-accept-completion-by-word)
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
@@ -1105,7 +1173,7 @@ cons cell (regexp . minor-mode)."
             (add-hook 'before-save-hook 'time-stamp nil 'local)))
 
 (add-hook 'org-mode-hook
-      '(lambda ()
+      #'(lambda ()
              (setq org-file-apps
                    (append '(("\\.jpg\\'" . default)
                              ("\\.jpeg\\'" . default)
@@ -1176,7 +1244,7 @@ cons cell (regexp . minor-mode)."
       '(("i" "inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
         ("h" "things-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
          "* TODO [THINGS] %?\nCaptured: %U\n")
-        ("j" "Journal" entry (file+datetree "~/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
+        ("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
         ("t" "todo-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
