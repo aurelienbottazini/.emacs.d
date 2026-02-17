@@ -80,6 +80,7 @@ brew install --cask emacs-plus-app
 (declare-function org-map-entries "org")
 (declare-function org-end-of-meta-data "org")
 (declare-function org-element--property "org-element")
+(declare-function consult-org-heading "consult")
 
 (defun abo/tangle-init-config ()
   "Tangle `init.org' into `init-tangled.el'."
@@ -871,10 +872,12 @@ cons cell (regexp . minor-mode)."
 
 (use-package hydra
   :config
-  (defhydra hydra-utils (global-map "<f8>")
-    "drag"
-    ("j" drag-stuff-down "down")
-    ("k" drag-stuff-up "up")))
+  ;; Keep this quoted so byte-compilation works even when hydra isn't loaded yet.
+  (eval
+   '(defhydra hydra-utils (global-map "<f8>")
+      "drag"
+      ("j" drag-stuff-down "down")
+      ("k" drag-stuff-up "up"))))
 
 (use-package drag-stuff
   :defer 2
@@ -1028,7 +1031,7 @@ cons cell (regexp . minor-mode)."
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
 
   (evil-ex-define-cmd "W" 'save-buffer)
-  (evil-define-key 'insert lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
+  (define-key lisp-interaction-mode-map (kbd "C-c C-c") 'eval-print-last-sexp))
 
 (use-package evil-surround
   :after evil
@@ -1044,8 +1047,8 @@ cons cell (regexp . minor-mode)."
 (use-package evil-visualstar
   :after evil
   :config
-  (evil-define-key nil evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-  (evil-define-key nil evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (global-evil-visualstar-mode t))
 
 (use-package evil-matchit
@@ -1233,6 +1236,9 @@ cons cell (regexp . minor-mode)."
 (use-package copilot
   :if (and (not noninteractive)
            (locate-library "copilot"))
+  :init
+  ;; Avoid deprecated jsonrpc fallback warnings on mixed Emacs/Copilot versions.
+  (setq copilot-log-max nil)
   :commands (copilot-mode copilot-accept-completion copilot-accept-completion-by-word)
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
