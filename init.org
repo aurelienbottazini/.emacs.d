@@ -154,11 +154,12 @@ brew install --cask emacs-plus-app
             (garbage-collect)))
 
 ;; Run GC while idle to reduce pauses during interactive editing.
-(run-with-idle-timer
- 5 t
- (lambda ()
-   (unless (minibufferp)
-     (garbage-collect))))
+(unless noninteractive
+  (run-with-idle-timer
+   5 t
+   (lambda ()
+     (unless (minibufferp)
+       (garbage-collect)))))
 
 (setq read-process-output-max (* 1024 1024)
       process-adaptive-read-buffering nil)
@@ -390,7 +391,8 @@ brew install --cask emacs-plus-app
     (global-auto-revert-mode 1)
     (setq abo/stateful-modes-enabled t)))
 
-(run-with-idle-timer 1 nil #'abo/enable-stateful-modes)
+(unless noninteractive
+  (run-with-idle-timer 1 nil #'abo/enable-stateful-modes))
 
 (setq warning-minimum-level :error)
 #+END_SRC
@@ -841,8 +843,6 @@ cons cell (regexp . minor-mode)."
 (use-package writegood-mode
   :commands writegood-mode)
 
-(require 'browse-url)
-
 (defun my-lookup-wikipedia ()
   "Look up the word under cursor in Wikipedia."
   (interactive)
@@ -1138,12 +1138,12 @@ cons cell (regexp . minor-mode)."
   (unless org-agenda-files
     (abo/refresh-org-agenda-files)))
 
-(setq org-agenda-files nil)
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (run-with-idle-timer 5 nil #'abo/refresh-org-agenda-files)))
-(advice-add 'org-agenda :before #'abo/ensure-org-agenda-files)
-(advice-add 'org-refile :before #'abo/ensure-org-agenda-files)
+(unless (and (boundp 'org-agenda-files) org-agenda-files)
+  (setq org-agenda-files nil))
+(unless (advice-member-p #'abo/ensure-org-agenda-files 'org-agenda)
+  (advice-add 'org-agenda :before #'abo/ensure-org-agenda-files))
+(unless (advice-member-p #'abo/ensure-org-agenda-files 'org-refile)
+  (advice-add 'org-refile :before #'abo/ensure-org-agenda-files))
 
 (defun abo/org-ensure-archive-directory ()
   (when (and buffer-file-name
@@ -1158,7 +1158,8 @@ cons cell (regexp . minor-mode)."
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 (add-hook 'org-mode-hook 'abbrev-mode)
 
-(require 'org-tempo)
+(with-eval-after-load 'org
+  (require 'org-tempo))
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELED(c!)")))
@@ -1187,11 +1188,12 @@ cons cell (regexp . minor-mode)."
 
 ** Habits
 #+BEGIN_SRC emacs-lisp
-(require 'org-habit)
-(add-to-list 'org-modules 'org-habit)
 (setq org-log-into-drawer t)
-(setq org-habit-show-habits t)
-(setq org-habit-graph-column 50)
+(with-eval-after-load 'org-agenda
+  (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
+  (setq org-habit-show-habits t)
+  (setq org-habit-graph-column 50))
 #+END_SRC
 
 ** Agenda
@@ -1209,7 +1211,8 @@ cons cell (regexp . minor-mode)."
 (setq org-stuck-projects
       '("+project/-MAYBE-DONE" ("NEXT") ("errand")
         "\\<IGNORE\\>"))
-(add-to-list 'org-tags-exclude-from-inheritance "project")
+(with-eval-after-load 'org
+  (add-to-list 'org-tags-exclude-from-inheritance "project"))
 #+end_src
 
 ** Links
@@ -1343,7 +1346,6 @@ cons cell (regexp . minor-mode)."
 
   (unless (advice-member-p #'abo/load-org-babel-languages 'org-babel-execute-src-block)
     (advice-add 'org-babel-execute-src-block :before #'abo/load-org-babel-languages))
-  (run-with-idle-timer 3 nil #'abo/load-org-babel-languages)
 #+END_SRC
 
 ** Export and publishing
@@ -1407,10 +1409,11 @@ cons cell (regexp . minor-mode)."
 
 ** LaTeX
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'org-latex-packages-alist '("" "listings" nil))
-(setq org-latex-src-block-backend 'listings)
-(setq org-latex-listings-options '(("breaklines" "true")
-                                   ("literate" "{0}{0}{1}%
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-packages-alist '("" "listings" nil))
+  (setq org-latex-src-block-backend 'listings)
+  (setq org-latex-listings-options '(("breaklines" "true")
+                                     ("literate" "{0}{0}{1}%
            {1}{1}{1}%
            {2}{2}{1}%
            {3}{3}{1}%
@@ -1420,7 +1423,7 @@ cons cell (regexp . minor-mode)."
            {7}{7}{1}%
            {8}{8}{1}%
            {9}{9}{1}%
-    ")))
+    "))))
 #+END_SRC
 
 ** Presentations
@@ -1608,7 +1611,9 @@ With `C-u', prompt for any file."
 ** Search
 #+BEGIN_SRC emacs-lisp
 (use-package wgrep :defer t)
-(require 'abo/find-in-project)
+(autoload 'abo/find-file-with-similar-name "abo/find-in-project" nil t)
+(autoload 'abo/project-guess-file "abo/find-in-project" nil t)
+(autoload 'abo/project-find-file "abo/find-in-project" nil t)
 (use-package iedit
   :commands iedit-mode)
 (use-package deadgrep
