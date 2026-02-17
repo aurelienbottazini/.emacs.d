@@ -169,7 +169,7 @@ brew install --cask emacs-plus-app
 
 (let* ((home-folder (getenv "HOME"))
        (my-paths `("/opt/homebrew/bin"
-                   "/Users/abottazini/work/jeancaisse/node_modules/.bin"
+                   ,(concat home-folder "/work/jeancaisse/node_modules/.bin")
                    "/Applications/Postgres.app/Contents/Versions/latest/bin"
                    "/opt/homebrew/opt/grep/libexec/gnubin"
                    "/opt/homebrew/opt/gnu-sed/libexec/gnubin"
@@ -190,11 +190,25 @@ brew install --cask emacs-plus-app
                    "/usr/bin/"
                    "/usr/local/sbin/"
                    "/opt/homebrew/opt/openjdk/bin/"
-                   ,(concat home-folder "/.cargo/bin/"))))
-
-  (setenv "PATH" (concat (mapconcat 'identity my-paths ":" ) ":"))
-  (setq eshell-path-env (concat (mapconcat 'identity my-paths ":" ) ":"))
-  (setq exec-path my-paths))
+                   ,(concat home-folder "/.cargo/bin/")))
+       (existing-paths nil)
+       (seen-paths (make-hash-table :test 'equal))
+       (path-separator-string (if (characterp path-separator)
+                                  (char-to-string path-separator)
+                                path-separator))
+       (path-split-regexp (regexp-quote path-separator-string)))
+  ;; Preserve inherited PATH/exec-path while prioritizing custom entries.
+  (dolist (path (append my-paths
+                        exec-path
+                        (split-string (or (getenv "PATH") "") path-split-regexp t)))
+    (when (and (stringp path)
+               (not (gethash path seen-paths)))
+      (puthash path t seen-paths)
+      (push path existing-paths)))
+  (setq existing-paths (nreverse existing-paths))
+  (setenv "PATH" (mapconcat #'identity existing-paths path-separator-string))
+  (setq eshell-path-env (getenv "PATH"))
+  (setq exec-path existing-paths))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
@@ -433,9 +447,14 @@ brew install --cask emacs-plus-app
 (defun abo/origami-fix-header-face ()
   "Patch Origami face definitions that can break on newer Emacs versions."
   (let ((bg (abo/origami-safe-background)))
-    (set-face-attribute 'origami-fold-header-face nil
-                        :box `(:line-width 1 :color ,bg)
-                        :background bg)))
+    (when (facep 'origami-fold-header-face)
+      (condition-case nil
+          (set-face-attribute 'origami-fold-header-face nil
+                              :box '(:line-width 1)
+                              :background bg)
+        (error nil)))))
+
+(defvar abo/origami-load-error-reported nil)
 
 (defun abo/origami-enable-safely ()
   "Enable Origami with compatible face settings."
@@ -443,9 +462,15 @@ brew install --cask emacs-plus-app
            (face-attribute 'highlight :background nil t))
     (set-face-attribute 'highlight nil
                         :background (abo/origami-safe-background)))
-  (require 'origami)
-  (abo/origami-fix-header-face)
-  (origami-mode 1))
+  (condition-case err
+      (progn
+        (require 'origami)
+        (abo/origami-fix-header-face)
+        (origami-mode 1))
+    (error
+     (unless abo/origami-load-error-reported
+       (setq abo/origami-load-error-reported t)
+       (message "Origami disabled: %s" (error-message-string err))))))
 
 (use-package origami
   :commands (origami-mode)
@@ -781,11 +806,10 @@ cons cell (regexp . minor-mode)."
 
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-dwim-target t)
-(add-hook 'dired-load-hook
-          (lambda ()
-            (require 'dired-x)
-            (setq dired-recursive-copies (quote always))
-            (setq dired-recursive-deletes (quote top))))
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  (setq dired-recursive-copies 'always)
+  (setq dired-recursive-deletes 'top))
 
 (eval-after-load "dired"
   '(progn
@@ -1106,9 +1130,11 @@ cons cell (regexp . minor-mode)."
 #+BEGIN_SRC emacs-lisp
 (setq org-refile-targets '((nil :maxlevel . 5)
                            (org-agenda-files :maxlevel . 5)))
-(advice-add 'org-refile :after
-            (lambda (&rest _)
-              (org-save-all-org-buffers)))
+(defun abo/save-all-org-buffers-after-refile (&rest _)
+  (org-save-all-org-buffers))
+
+(unless (advice-member-p #'abo/save-all-org-buffers-after-refile 'org-refile)
+  (advice-add 'org-refile :after #'abo/save-all-org-buffers-after-refile))
 #+END_SRC
 
 #+begin_src emacs-lisp
@@ -1123,7 +1149,7 @@ cons cell (regexp . minor-mode)."
 (defun my-org-replace-link-file (from to)
   (save-excursion
     (goto-char (point-min))
-    (while (re-search-forward org-bracket-link-regexp nil t)
+    (while (re-search-forward org-link-bracket-re nil t)
       (when (string-match-p from (match-string 1))
         (replace-match (concat "[[file:" to "]]"))))))
 
@@ -1247,7 +1273,8 @@ cons cell (regexp . minor-mode)."
         (insert "\n" (mapconcat #'identity lines "\n") "\n\n"))))
 
 
-  (advice-add 'org-babel-execute-src-block :before #'abo/load-org-babel-languages)
+  (unless (advice-member-p #'abo/load-org-babel-languages 'org-babel-execute-src-block)
+    (advice-add 'org-babel-execute-src-block :before #'abo/load-org-babel-languages))
   (run-with-idle-timer 3 nil #'abo/load-org-babel-languages)
 #+END_SRC
 
@@ -1293,7 +1320,8 @@ cons cell (regexp . minor-mode)."
               org-html-export-to-html
               org-publish
               org-publish-current-file))
-  (advice-add fn :before #'abo/setup-org-export))
+  (unless (advice-member-p #'abo/setup-org-export fn)
+    (advice-add fn :before #'abo/setup-org-export)))
 
 (defun abo/toggle-html-export-on-save ()
   "Enable or disable HTML export when saving current org buffer."
@@ -1312,7 +1340,7 @@ cons cell (regexp . minor-mode)."
 ** LaTeX
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-latex-packages-alist '("" "listings" nil))
-(setq org-latex-listings t)
+(setq org-latex-src-block-backend 'listings)
 (setq org-latex-listings-options '(("breaklines" "true")
                                    ("literate" "{0}{0}{1}%
            {1}{1}{1}%
@@ -1501,8 +1529,7 @@ With `C-u', prompt for any file."
   (define-key embark-buffer-map (kbd "t") #'switch-to-buffer-other-tab))
 
 (use-package embark-consult
-  :after (embark consult)
-  :hook (embark-collect-mode . consult-preview-at-point-mode))
+  :after (embark consult))
 #+END_SRC
 
 ** File browser
