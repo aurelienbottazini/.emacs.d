@@ -380,7 +380,7 @@
  '(font-lock-variable-name-face ((t nil)))
  '(hl-line ((t (:extend t :background "#eee"))))
  '(hywiki--word-face ((t (:background "#ffd580" :foreground "black" :underline t))))
- '(org-block ((t (:inherit (shadow fixed-pitch) :extend t))))
+ '(org-block ((t (:inherit (shadow fixed-pitch) :extend t :background "#eee"))))
  '(org-block-begin-line ((t (:inherit (font-lock-comment-face fixed-pitch) :extend t :background "#eee" :foreground "#aaa" :slant italic))))
  '(org-block-end-line ((t (:inherit (font-lock-comment-face fixed-pitch) :extend t :background "#eee" :foreground "#aaa" :slant italic))))
  '(org-code ((t (:inherit (shadow fixed-pitch)))))
