@@ -464,7 +464,7 @@ brew install --cask emacs-plus-app
   (interactive)
   (setq display-line-numbers 'relative))
 
-(global-hl-line-mode 1)
+(global-hl-line-mode nil)
 
 (use-package rainbow-mode
   :commands (rainbow-mode)
@@ -765,7 +765,8 @@ cons cell (regexp . minor-mode)."
    "SPC gs" 'abo/open-in-sublime-merge
    "SPC m" 'consult-mark
    "SPC M" 'consult-global-mark
-   "SPC r" 'consult-ripgrep
+   "SPC r" 'eglot-code-actions
+   "SPC R" 'consult-ripgrep
    "SPC s" 'speedbar-get-focus
    "SPC t" 'consult-fd
    ;; "SPC t" (lambda () (interactive) (org-capture nil "t"))
@@ -1040,19 +1041,30 @@ cons cell (regexp . minor-mode)."
         (corfu-previous)
       (evil-complete-previous)))
 
+  (defun abo/eldoc-buffer ()
+    "Return the active ElDoc buffer, if any."
+    (catch 'found
+      (dolist (buf (buffer-list))
+        (when (string-match-p "\\*eldoc" (buffer-name buf))
+          (throw 'found buf)))
+      nil))
+
+  (defun abo/pop-eldoc-buffer-retry (&optional retries)
+    "Pop the ElDoc buffer, retrying a few times for async responses."
+    (if-let ((buf (abo/eldoc-buffer)))
+        (pop-to-buffer buf)
+      (when (and (numberp retries) (> retries 0))
+        (run-with-timer 0.05 nil #'abo/pop-eldoc-buffer-retry (1- retries)))))
+
   (defun abo/evil-show-doc-or-lookup ()
     "Show docs via Eglot in managed buffers, else fallback to `evil-lookup'."
     (interactive)
     (if (and (fboundp 'eglot-managed-p)
              (eglot-managed-p))
         (progn
-          ;; Trigger doc retrieval immediately, then pop the doc buffer if available.
-          (when (fboundp 'eldoc-print-current-symbol-info)
-            (eldoc-print-current-symbol-info))
-          (when (fboundp 'eldoc-doc-buffer)
-            (ignore-errors (eldoc-doc-buffer))
-            (when-let ((buf (get-buffer "*eldoc*")))
-              (pop-to-buffer buf))))
+          ;; Request docs now, then wait briefly for async hover result.
+          (eldoc-print-current-symbol-info t)
+          (abo/pop-eldoc-buffer-retry 8))
       (evil-lookup)))
 
   (define-key evil-normal-state-map (kbd "C-r") 'undo-redo)
