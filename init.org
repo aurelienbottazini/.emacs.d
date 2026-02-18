@@ -89,6 +89,8 @@ brew install --cask emacs-plus-app
 (declare-function eldoc-doc-buffer "eldoc")
 (declare-function corfu-next "corfu" (&optional n))
 (declare-function corfu-previous "corfu" (&optional n))
+(declare-function eglot-current-server "eglot")
+(declare-function eglot-execute "eglot" (server action))
 
 (defun abo/tangle-init-config ()
   "Tangle `init.org' into `init-tangled.el'."
@@ -1239,6 +1241,7 @@ cons cell (regexp . minor-mode)."
 ** LSP
 #+BEGIN_SRC emacs-lisp
 (defvar abo/js-lsp-server-missing-reported nil)
+(defvar abo/prettier-missing-reported nil)
 
 (defun abo/js-lsp-server-command ()
   "Return the JavaScript/TypeScript LSP command when available."
@@ -1270,10 +1273,94 @@ cons cell (regexp . minor-mode)."
   (when (abo/js-like-file-p)
     (abo/start-lsp-maybe)))
 
+(defun abo/eglot-auto-imports-maybe ()
+  "Apply import-related Eglot code actions non-interactively when possible."
+  (when (and (fboundp 'eglot-managed-p)
+             (eglot-managed-p)
+             (fboundp 'eglot-code-actions))
+    (let ((server (ignore-errors (eglot-current-server))))
+      (when server
+        ;; Apply quickfix actions mentioning imports (e.g. missing symbol import).
+        (dolist (action (or (ignore-errors
+                              (eglot-code-actions (point-min) (point-max) "quickfix" nil))
+                            '()))
+          (let ((title (downcase (or (plist-get action :title) ""))))
+            (when (string-match-p "import" title)
+              (ignore-errors (eglot-execute server action)))))
+        ;; Keep imports tidy.
+        (when-let ((organize-action
+                    (car (or (ignore-errors
+                               (eglot-code-actions (point-min) (point-max) "source.organizeImports" nil))
+                             '()))))
+          (ignore-errors (eglot-execute server organize-action)))))))
+
+(defun abo/prettier-format-buffer-maybe ()
+  "Format current JS/TS buffer with Prettier when available."
+  (when (and (abo/js-like-file-p)
+             buffer-file-name
+             (not (file-remote-p buffer-file-name)))
+    (if-let ((prettier (executable-find "prettier")))
+        (let* ((errbuf (get-buffer-create "*prettier-errors*"))
+               (outbuf (get-buffer-create " *prettier-output*"))
+               (errfile (make-temp-file "prettier-"))
+               (point-before (point))
+               (window-start-before (window-start))
+               (coding-system-for-read 'utf-8)
+               (coding-system-for-write 'utf-8))
+          (unwind-protect
+              (progn
+                (with-current-buffer errbuf
+                  (erase-buffer))
+                (with-current-buffer outbuf
+                  (erase-buffer))
+                (let ((status (call-process-region
+                               (point-min) (point-max)
+                               prettier
+                               nil (list outbuf errfile) nil
+                               "--stdin-filepath" buffer-file-name)))
+                  (if (and (integerp status) (zerop status))
+                      (progn
+                        (erase-buffer)
+                        (insert-buffer-substring outbuf)
+                        (goto-char (min point-before (point-max)))
+                        (set-window-start (selected-window)
+                                          (min window-start-before (point-max))
+                                          t))
+                    (with-current-buffer errbuf
+                      (insert-file-contents errfile))
+                    (display-buffer errbuf)
+                    (message "Prettier failed (%s), see *prettier-errors*" status))))
+            (ignore-errors (delete-file errfile))
+            (kill-buffer outbuf)))
+      (unless abo/prettier-missing-reported
+        (setq abo/prettier-missing-reported t)
+        (message "Prettier not found in PATH; JS/TS format-on-save disabled.")))))
+
+(defun abo/js-ts-before-save ()
+  "Run JS/TS code quality actions before saving."
+  (when (abo/js-like-file-p)
+    (abo/eglot-auto-imports-maybe)
+    (abo/prettier-format-buffer-maybe)))
+
+(defun abo/setup-js-ts-save-actions ()
+  "Enable JS/TS save automation in current buffer."
+  (when (abo/js-like-file-p)
+    (add-hook 'before-save-hook #'abo/js-ts-before-save nil t)))
+
 (with-eval-after-load 'eglot
   ;; Ensure hover docs are available for `K`/Eldoc.
   (setq eglot-ignored-server-capabilities
         (remove :hoverProvider eglot-ignored-server-capabilities))
+  ;; Keep TS/JS auto-import completion suggestions enabled.
+  (setq-default eglot-workspace-configuration
+                '((:typescript . ((suggest . ((completeFunctionCalls . t)))
+                                  (preferences . ((includeCompletionsForModuleExports . t)
+                                                  (includeCompletionsForImportStatements . t)
+                                                  (includePackageJsonAutoImports . "auto")))))
+                  (:javascript . ((suggest . ((completeFunctionCalls . t)))
+                                  (preferences . ((includeCompletionsForModuleExports . t)
+                                                  (includeCompletionsForImportStatements . t)
+                                                  (includePackageJsonAutoImports . "auto")))))))
   (let ((cmd (abo/js-lsp-server-command)))
     (if cmd
         (dolist (mode '(js-mode js-ts-mode js2-mode web-mode
@@ -1287,7 +1374,12 @@ cons cell (regexp . minor-mode)."
                 typescript-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook))
   (add-hook hook #'abo/start-lsp-maybe))
 
+(dolist (hook '(js-mode-hook js-ts-mode-hook js2-mode-hook
+                typescript-mode-hook typescript-ts-mode-hook tsx-ts-mode-hook))
+  (add-hook hook #'abo/setup-js-ts-save-actions))
+
 (add-hook 'web-mode-hook #'abo/start-lsp-in-web-mode-maybe)
+(add-hook 'web-mode-hook #'abo/setup-js-ts-save-actions)
 #+END_SRC
 
 ** AI assistants
@@ -1821,16 +1913,14 @@ With `C-u', prompt for any file."
 
 (use-package consult
   :if (locate-library "consult")
-  :bind ("C-c f" . consult-fd)
-  :config
-  ;; Use Consult's in-buffer completion UI when completion-at-point is active.
-  (setq completion-in-region-function #'consult-completion-in-region))
+  :bind ("C-c f" . consult-fd))
 
 (setq tab-always-indent 'complete
       completion-cycle-threshold 3)
 
 (use-package corfu
   :if (locate-library "corfu")
+  :demand t
   :init
   (global-corfu-mode)
   :bind (:map corfu-map
@@ -1844,6 +1934,7 @@ With `C-u', prompt for any file."
   (add-to-list 'corfu-continue-commands #'abo/evil-insert-previous)
   :custom
   (corfu-auto t)
+  (corfu-auto-prefix 2)
   (corfu-cycle t)
   (corfu-preselect 'first)
   (corfu-quit-no-match 'separator))
@@ -1859,6 +1950,18 @@ With `C-u', prompt for any file."
   (dolist (capf '(cape-file cape-dabbrev cape-abbrev))
     (when (fboundp capf)
       (add-to-list 'completion-at-point-functions capf))))
+
+(defun abo/eglot-managed-completion-setup ()
+  "Keep Corfu and useful CAPE fallbacks active in Eglot-managed buffers."
+  (when (fboundp 'corfu-mode)
+    (corfu-mode 1))
+  (dolist (capf '(cape-file cape-dabbrev cape-abbrev))
+    (when (and (fboundp capf)
+               (not (memq capf completion-at-point-functions)))
+      (add-hook 'completion-at-point-functions capf 90 t))))
+
+(with-eval-after-load 'eglot
+  (add-hook 'eglot-managed-mode-hook #'abo/eglot-managed-completion-setup))
 
 (use-package embark
   :if (locate-library "embark")
