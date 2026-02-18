@@ -1280,6 +1280,15 @@ cons cell (regexp . minor-mode)."
              (fboundp 'eglot-code-actions))
     (let ((server (ignore-errors (eglot-current-server))))
       (when server
+        ;; TypeScript/JavaScript server exposes this as a source action.
+        (dolist (action (or (ignore-errors
+                              (eglot-code-actions (point-min) (point-max) "source.addMissingImports.ts" nil))
+                            '()))
+          (ignore-errors (eglot-execute server action)))
+        (dolist (action (or (ignore-errors
+                              (eglot-code-actions (point-min) (point-max) "source.addMissingImports" nil))
+                            '()))
+          (ignore-errors (eglot-execute server action)))
         ;; Apply quickfix actions mentioning imports (e.g. missing symbol import).
         (dolist (action (or (ignore-errors
                               (eglot-code-actions (point-min) (point-max) "quickfix" nil))
@@ -1353,7 +1362,8 @@ cons cell (regexp . minor-mode)."
         (remove :hoverProvider eglot-ignored-server-capabilities))
   ;; Keep TS/JS auto-import completion suggestions enabled.
   (setq-default eglot-workspace-configuration
-                '((:typescript . ((suggest . ((completeFunctionCalls . t)))
+                '((:implicitProjectConfiguration . ((checkJs . t)))
+                  (:typescript . ((suggest . ((completeFunctionCalls . t)))
                                   (preferences . ((includeCompletionsForModuleExports . t)
                                                   (includeCompletionsForImportStatements . t)
                                                   (includePackageJsonAutoImports . "auto")))))
