@@ -155,7 +155,6 @@
  '(dumb-jump-mode t)
  '(eglot-confirm-server-edits nil)
  '(eglot-confirm-server-initiated-edits nil)
- '(eglot-ignored-server-capabilities '(:hoverProvider))
  '(electric-pair-mode nil)
  '(electric-quote-string t)
  '(emamux:use-nearest-pane t t)

@@ -48,6 +48,7 @@ brew install --cask emacs-plus-app
 (defvar org-ditaa-jar-path)
 (defvar org-download-timestamp-format)
 (defvar project-find-file-function)
+(defvar corfu--total)
 (declare-function default-text-scale-increment "default-text-scale" (&optional increment))
 (declare-function default-text-scale-reset "default-text-scale" ())
 (declare-function dired-get-file-for-visit "dired")
@@ -60,6 +61,9 @@ brew install --cask emacs-plus-app
 (declare-function evil-set-initial-state "evil-core" (mode state))
 (declare-function evil-ex-define-cmd "evil-commands" (cmd func))
 (declare-function evil-define-key* "evil-core" (state keymap key def &rest bindings))
+(declare-function evil-complete-next "evil-common")
+(declare-function evil-complete-previous "evil-common")
+(declare-function evil-lookup "evil-commands")
 (declare-function evil-insert-state-p "evil-states" ())
 (declare-function evil-visual-state-p "evil-states" ())
 (declare-function evil-emacs-state-p "evil-states" ())
@@ -81,6 +85,10 @@ brew install --cask emacs-plus-app
 (declare-function org-end-of-meta-data "org")
 (declare-function org-element--property "org-element")
 (declare-function consult-org-heading "consult")
+(declare-function eglot-managed-p "eglot")
+(declare-function eldoc-doc-buffer "eldoc")
+(declare-function corfu-next "corfu" (&optional n))
+(declare-function corfu-previous "corfu" (&optional n))
 
 (defun abo/tangle-init-config ()
   "Tangle `init.org' into `init-tangled.el'."
@@ -1013,13 +1021,50 @@ cons cell (regexp . minor-mode)."
 (use-package evil
   :init (setq evil-want-C-i-jump nil)
   :config
+  (defun abo/corfu-navigation-active-p ()
+    "Return non-nil when Corfu has an active candidate list."
+    (and (boundp 'corfu--total)
+         (> corfu--total 0)))
+
+  (defun abo/evil-insert-next ()
+    "In insert state, prefer Corfu navigation when completion popup is active."
+    (interactive)
+    (if (abo/corfu-navigation-active-p)
+        (corfu-next)
+      (evil-complete-next)))
+
+  (defun abo/evil-insert-previous ()
+    "In insert state, prefer Corfu navigation when completion popup is active."
+    (interactive)
+    (if (abo/corfu-navigation-active-p)
+        (corfu-previous)
+      (evil-complete-previous)))
+
+  (defun abo/evil-show-doc-or-lookup ()
+    "Show docs via Eglot in managed buffers, else fallback to `evil-lookup'."
+    (interactive)
+    (if (and (fboundp 'eglot-managed-p)
+             (eglot-managed-p))
+        (progn
+          ;; Trigger doc retrieval immediately, then pop the doc buffer if available.
+          (when (fboundp 'eldoc-print-current-symbol-info)
+            (eldoc-print-current-symbol-info))
+          (when (fboundp 'eldoc-doc-buffer)
+            (ignore-errors (eldoc-doc-buffer))
+            (when-let ((buf (get-buffer "*eldoc*")))
+              (pop-to-buffer buf))))
+      (evil-lookup)))
+
   (define-key evil-normal-state-map (kbd "C-r") 'undo-redo)
   (define-key evil-normal-state-map (kbd "C-n") 'next-line)
   (define-key evil-normal-state-map (kbd "C-p") 'previous-line)  (define-key evil-normal-state-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+  (define-key evil-normal-state-map (kbd "K") #'abo/evil-show-doc-or-lookup)
   (define-key evil-normal-state-map (kbd "gr") 'xref-find-references)
   (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error)
   (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
+  (define-key evil-insert-state-map (kbd "C-n") #'abo/evil-insert-next)
+  (define-key evil-insert-state-map (kbd "C-p") #'abo/evil-insert-previous)
   (evil-mode 1)
 
   (defun my-evil-record-macro ()
@@ -1214,6 +1259,9 @@ cons cell (regexp . minor-mode)."
     (abo/start-lsp-maybe)))
 
 (with-eval-after-load 'eglot
+  ;; Ensure hover docs are available for `K`/Eldoc.
+  (setq eglot-ignored-server-capabilities
+        (remove :hoverProvider eglot-ignored-server-capabilities))
   (let ((cmd (abo/js-lsp-server-command)))
     (if cmd
         (dolist (mode '(js-mode js-ts-mode js2-mode web-mode
@@ -1773,6 +1821,15 @@ With `C-u', prompt for any file."
   :if (locate-library "corfu")
   :init
   (global-corfu-mode)
+  :bind (:map corfu-map
+              ("C-n" . corfu-next)
+              ("C-p" . corfu-previous)
+              ([remap evil-complete-next] . corfu-next)
+              ([remap evil-complete-previous] . corfu-previous))
+  :config
+  ;; Keep popup open when Evil insert wrappers dispatch Corfu navigation.
+  (add-to-list 'corfu-continue-commands #'abo/evil-insert-next)
+  (add-to-list 'corfu-continue-commands #'abo/evil-insert-previous)
   :custom
   (corfu-auto t)
   (corfu-cycle t)
