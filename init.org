@@ -183,6 +183,10 @@ brew install --cask emacs-plus-app
   (setq redisplay-skip-fontification-on-input t))
 (when (boundp 'native-comp-async-report-warnings-errors)
   (setq native-comp-async-report-warnings-errors 'silent))
+(when (boundp 'native-comp-jit-compilation)
+  (setq native-comp-jit-compilation nil))
+(when (boundp 'package-native-compile)
+  (setq package-native-compile nil))
 
 (setq byte-compile-warnings '(not obsolete cl-functions))
 
@@ -194,7 +198,8 @@ brew install --cask emacs-plus-app
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
 (setq package--init-file-ensured t) ; do not add things at the end of init.el
-(setq package-check-signature 'allow-unsigned)
+;; GNU ELPA signature checks can fail on machines without a working GPG setup.
+(setq package-check-signature nil)
 (setq package-quickstart nil)
 
 (package-initialize)
@@ -232,6 +237,72 @@ brew install --cask emacs-plus-app
     ;; Keep startup reliable even when ELPA is unavailable.
     (defalias 'diminish #'ignore))
   (require 'diminish nil 'noerror))
+
+(defconst abo/required-packages
+  '(exec-path-from-shell
+    rainbow-mode
+    paredit
+    expand-region
+    origami
+    highlight-blocks
+    windresize
+    which-key
+    general
+    hydra
+    drag-stuff
+    multiple-cursors
+    deft
+    markdown-mode
+    writeroom-mode
+    writegood-mode
+    biblio
+    dired-rsync
+    evil
+    evil-surround
+    evil-commentary
+    evil-visualstar
+    evil-matchit
+    key-chord
+    emamux
+    restclient
+    hyperbole
+    envrc
+    copilot
+    ob-clojurescript
+    ob-mermaid
+    htmlize
+    org-tree-slide
+    ox-reveal
+    org-download
+    org-ref
+    vertico
+    marginalia
+    orderless
+    consult
+    corfu
+    cape
+    embark
+    embark-consult
+    magit
+    wgrep
+    iedit
+    deadgrep
+    rg)
+  "Third-party packages required by this configuration.")
+
+(defun abo/ensure-required-packages ()
+  "Install third-party packages needed before `use-package' declarations run."
+  (let (missing-packages)
+    (dolist (package abo/required-packages)
+      (unless (package-installed-p package)
+        (push package missing-packages)))
+    (when missing-packages
+      (unless package-archive-contents
+        (abo/refresh-package-contents))
+      (dolist (package (nreverse missing-packages))
+        (require-package package)))))
+
+(abo/ensure-required-packages)
 
 (setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
 (setq use-package-always-ensure nil)

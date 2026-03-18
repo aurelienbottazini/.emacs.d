@@ -11,3 +11,9 @@
       gc-cons-percentage 0.6
       file-name-handler-alist nil
       package-enable-at-startup nil)
+
+;; Native compilation is not usable on this machine right now.
+(when (boundp 'native-comp-enable-subr-trampolines)
+  (setq native-comp-enable-subr-trampolines nil))
+(when (boundp 'comp-enable-subr-trampolines)
+  (setq comp-enable-subr-trampolines nil))
