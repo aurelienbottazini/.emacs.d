@@ -1054,13 +1054,15 @@ cons cell (regexp . minor-mode)."
 
 (defun my-dired-mode-setup ()
   "to be run as hook for `dired-mode'."
-  (dired-hide-details-mode 1))
+  (dired-hide-details-mode 1)
+  (dired-omit-mode 1))
 (add-hook 'dired-mode-hook 'my-dired-mode-setup)
 
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-dwim-target t)
 (with-eval-after-load 'dired
   (require 'dired-x)
+  (setq dired-omit-files "^\\.DS_Store\\'")
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'top))
 
@@ -1281,36 +1283,41 @@ cons cell (regexp . minor-mode)."
 
 ** Misc packages
 #+BEGIN_SRC emacs-lisp
-(use-package restclient
-  :mode "\\.http\\'")
+    (use-package restclient
+      :mode "\\.http\\'")
 
-(use-package hyperbole
-  :if (not noninteractive)
-  :defer 2
-  :diminish hyperbole-mode
-  :init
-  (let ((hyperbole-dir (expand-file-name "hyperbole/" user-emacs-directory)))
-    (unless (file-directory-p hyperbole-dir)
-      (make-directory hyperbole-dir t))
-    (setq hbmap:dir-user hyperbole-dir))
-  :config
-  (hyperbole-mode 1))
+    (use-package hyperbole
+      :if (not noninteractive)
+      :defer 2
+      :diminish hyperbole-mode
+      :init
+      (setq abo/notes-dir (expand-file-name "~/Documents/notes/")
+        abo/zk-dir (expand-file-name "zk/" abo/notes-dir)
+        org-directory abo/notes-dir
+        hywiki-directory abo/zk-dir
+        abo/rolo-file (expand-file-name ".rolo.org" abo/notes-dir)
+        hyrolo-file-list
+          (list abo/rolo-file
+                (expand-file-name "references/" abo/notes-dir)
+                (expand-file-name "guides/" abo/notes-dir)))
+      :config
+      (hyperbole-mode 1))
 
-(use-package sqlite3 :defer t)
-(use-package jsonrpc :defer t)
+    (use-package sqlite3 :defer t)
+    (use-package jsonrpc :defer t)
 
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+    (require 'uniquify)
+    (setq uniquify-buffer-name-style 'forward)
 
-(use-package hideshow :defer t)
-(with-eval-after-load 'hideshow
-  (require 'hideshowvis))
+    (use-package hideshow :defer t)
+    (with-eval-after-load 'hideshow
+      (require 'hideshowvis))
 
-(use-package envrc
-  :defer 2
-  :diminish envrc-mode
-  :config
-  (envrc-global-mode))
+    (use-package envrc
+      :defer 2
+      :diminish envrc-mode
+      :config
+      (envrc-global-mode))
 #+END_SRC
 
 ** LSP
@@ -1518,9 +1525,11 @@ cons cell (regexp . minor-mode)."
 * Org
 ** General settings
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/Dropbox/notes")
+(setq org-directory "~/Documents/notes")
 (setq org-id-locations-file
       (expand-file-name ".org-id-locations" org-directory))
+(setq org-attach-id-dir (expand-file-name "attachments" org-directory))
+(setq org-attach-directory (expand-file-name "attachments" org-directory))
 (setq org-archive-location "archives/%s_archive::")
 
 (defun abo/refresh-org-agenda-files ()
@@ -1848,6 +1857,96 @@ cons cell (regexp . minor-mode)."
 
 ** Attachments and references
 #+BEGIN_SRC emacs-lisp
+(defun abo/org-attach--decode-markdown-path (raw)
+  "Decode a Markdown/Bear path RAW into a usable local path."
+  (require 'url-util)
+  (let* ((unescaped (replace-regexp-in-string "\\\\([()\\[\\]])" "\\1" raw))
+         (decoded (decode-coding-string (url-unhex-string unescaped) 'utf-8)))
+    (if (string-prefix-p "file://" decoded)
+        (string-remove-prefix "file://" decoded)
+      decoded)))
+
+(defun abo/org-attach--resolve-clipboard-path ()
+  "Resolve a local file path from the macOS clipboard."
+  (or
+   (let ((finder-path
+          (string-trim
+           (shell-command-to-string
+            "osascript -e 'try' -e 'POSIX path of (the clipboard as alias)' -e 'end try' 2>/dev/null"))))
+     (and (not (string-empty-p finder-path))
+          (file-exists-p finder-path)
+          finder-path))
+   (let* ((clipboard
+           (string-trim
+            (or (shell-command-to-string "pbpaste 2>/dev/null")
+                (ignore-errors (current-kill 0 t))
+                "")))
+          (raw-path
+           (cond
+            ((string-match "\\`\\[.*?\\](\\([^)\n]+\\))" clipboard)
+             (match-string 1 clipboard))
+            ((string-match "\\`file://.+\\'" clipboard)
+             clipboard)
+            ((file-name-absolute-p clipboard)
+             clipboard)
+            (t nil))))
+     (when raw-path
+       (let* ((decoded (abo/org-attach--decode-markdown-path raw-path))
+              (candidate
+               (cond
+                ((file-exists-p decoded) decoded)
+                ((file-exists-p (expand-file-name decoded default-directory))
+                 (expand-file-name decoded default-directory))
+                ((file-exists-p (expand-file-name decoded org-directory))
+                 (expand-file-name decoded org-directory))
+                (t nil))))
+         (or candidate
+             (let* ((basename (file-name-nondirectory decoded))
+                    (matches (and (not (string-empty-p basename))
+                                  (directory-files-recursively
+                                   (expand-file-name "~/Documents")
+                                   (format "\\`%s\\'" (regexp-quote basename)) nil))))
+               (car matches))))))))
+
+(defun abo/org-attach--insert-link-under-heading (basename)
+  "Insert an `attachment:' link for BASENAME below the current heading."
+  (let ((link (format "[[attachment:%s][%s]]" basename basename)))
+    (save-excursion
+      (org-back-to-heading t)
+      (let ((entry-end (save-excursion
+                         (or (org-end-of-subtree t t) (point-max))))
+            (content-start (save-excursion
+                             (or (org-end-of-meta-data t)
+                                 (progn
+                                   (forward-line 1)
+                                   (point))))))
+        (unless (save-excursion
+                  (goto-char content-start)
+                  (re-search-forward (regexp-quote link) entry-end t))
+          (goto-char content-start)
+          (unless (bolp)
+            (insert "\n"))
+          (insert link "\n")
+          (unless (or (eobp) (looking-at-p "\n"))
+            (insert "\n")))))))
+
+(defun abo/org-attach-file-from-macos-clipboard ()
+  "Attach the current Finder file from the macOS clipboard to this heading."
+  (interactive)
+  (require 'org-attach)
+  (require 'org-id)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "Not in Org mode"))
+  (save-excursion
+    (org-back-to-heading t)
+    (let ((path (abo/org-attach--resolve-clipboard-path)))
+      (unless (and (stringp path) (not (string-empty-p path)) (file-exists-p path))
+        (user-error "Clipboard does not contain a resolvable local file"))
+      (org-id-get-create)
+      (org-attach-attach path nil 'cp)
+      (abo/org-attach--insert-link-under-heading
+       (file-name-nondirectory (directory-file-name path))))))
+
 (use-package org-download
   :commands (org-download-enable org-download-yank)
   :hook (dired-mode . org-download-enable))
@@ -1859,6 +1958,9 @@ cons cell (regexp . minor-mode)."
   (require 'org-ref-isbn))
 
 (setq org-download-timestamp-format "")
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-x y") #'abo/org-attach-file-from-macos-clipboard))
 #+END_SRC
 
 ** Archive
