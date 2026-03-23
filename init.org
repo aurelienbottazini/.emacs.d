@@ -526,49 +526,53 @@ brew install --cask emacs-plus-app
 
 ** UI and display
 #+BEGIN_SRC emacs-lisp
-(global-display-line-numbers-mode -1)
-(defun show-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'absolute))
-(defun hide-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'nil))
-(defun show-relative-line-numbers ()
-  (interactive)
-  (setq display-line-numbers 'relative))
+      (global-display-line-numbers-mode -1)
+      (defun show-line-numbers ()
+        (interactive)
+        (setq display-line-numbers 'absolute))
+      (defun hide-line-numbers ()
+        (interactive)
+        (setq display-line-numbers 'nil))
+      (defun show-relative-line-numbers ()
+        (interactive)
+        (setq display-line-numbers 'relative))
 
-(global-hl-line-mode nil)
+      (global-hl-line-mode nil)
 
-(use-package rainbow-mode
-  :commands (rainbow-mode)
-  :diminish rainbow-mode)
+      (use-package rainbow-mode
+        :commands (rainbow-mode)
+        :diminish rainbow-mode)
 
-(if (fboundp 'mac-auto-operator-composition-mode)
-    (mac-auto-operator-composition-mode t))
+      (if (fboundp 'mac-auto-operator-composition-mode)
+          (mac-auto-operator-composition-mode t))
 
-(blink-cursor-mode 0)
-(column-number-mode)
+      (blink-cursor-mode 0)
+      (column-number-mode)
 
-(setq frame-title-format "emacs")
+      (setq frame-title-format "emacs")
 
-(when (boundp 'fringe-mode)
-  (fringe-mode 20))
+      (when (boundp 'fringe-mode)
+        (fringe-mode 20))
 
-(setq blink-matching-paren 'jump-offscreen)
-(show-paren-mode nil)
+      (setq blink-matching-paren 'jump-offscreen)
+      (show-paren-mode nil)
 
-(setq-default cursor-type 'bar)
-(setq-default truncate-lines nil)
+      (setq-default cursor-type 'bar)
+      (setq-default truncate-lines nil)
 
-(setq frame-title-format
-      `((buffer-file-name "%f" "%b")))
+      (setq frame-title-format
+            `((buffer-file-name "%f" "%b")))
 
-(when (and (image-type-available-p 'image-io)
-           (not (boundp 'imagemagick-render-type)))
-  (setq imagemagick-enabled-types t)
-  (setq imagemagick-types-inhibit
-        (cons 'XML (delq 'PDF imagemagick-types-inhibit)))
-  (imagemagick-register-types))
+      (when (and (image-type-available-p 'image-io)
+                 (not (boundp 'imagemagick-render-type)))
+        (setq imagemagick-enabled-types t)
+        (setq imagemagick-types-inhibit
+              (cons 'XML (delq 'PDF imagemagick-types-inhibit)))
+        (imagemagick-register-types))
+
+      (use-package zenburn-theme
+        :config
+        (load-theme 'zenburn))
 #+END_SRC
 
 ** Diminish

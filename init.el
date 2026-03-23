@@ -9,4 +9,6 @@
     (org-babel-tangle-file init-org init-el))
   (when (file-newer-than-file-p init-org init-el)
     (message "init-tangled.el is older than init.org; save init.org to re-tangle."))
-  (load init-base nil 'nomessage))
+  ;; Load the tangled source directly so a stale init-tangled.elc
+  ;; cannot shadow recent config fixes.
+  (load init-el nil 'nomessage))
