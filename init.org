@@ -572,7 +572,11 @@ brew install --cask emacs-plus-app
 
       (use-package zenburn-theme
         :config
-        (load-theme 'zenburn))
+        (load-theme 'zenburn)
+        (custom-theme-set-faces
+         'user
+         '(org-drawer ((t (:inherit font-lock-comment-delimiter-face :weight normal))))
+         '(org-special-keyword ((t (:inherit font-lock-comment-delimiter-face :weight normal))))))
 #+END_SRC
 
 ** Diminish
