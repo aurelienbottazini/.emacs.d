@@ -1914,7 +1914,11 @@ cons cell (regexp . minor-mode)."
 
 (defun abo/org-attach--insert-link-under-heading (basename)
   "Insert an `attachment:' link for BASENAME below the current heading."
-  (let ((link (format "[[attachment:%s][%s]]" basename basename)))
+  (let* ((description (replace-regexp-in-string
+                       "[][]"
+                       (lambda (match) (concat "\\" match))
+                       basename t t))
+         (link (org-link-make-string (concat "attachment:" basename) description)))
     (save-excursion
       (org-back-to-heading t)
       (let ((entry-end (save-excursion
