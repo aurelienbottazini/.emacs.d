@@ -788,7 +788,7 @@ cons cell (regexp . minor-mode)."
   (defun abo/open-gtd-org ()
     "Open GTD notes."
     (interactive)
-    (find-file "~/Documents/notes/gtd.org"))
+    (find-file "~/Documents/notes/gtd"))
 
   (defun abo/open-inbox-org ()
     "Open inbox notes."
@@ -894,7 +894,6 @@ cons cell (regexp . minor-mode)."
    "-" 'dired-jump
    "[[" 'previous-buffer
    "]]" 'next-buffer
-   ":" 'execute-extended-command
    "-" 'dired-jump
    )
 
@@ -1657,11 +1656,9 @@ cons cell (regexp . minor-mode)."
 ** Capture
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("i" "inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox") "* %?\n")
-        ("h" "things-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
-         "* TODO [THINGS] %?\nCaptured: %U\n")
-        ("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org") "* %?" :empty-lines 1)
-        ("t" "todo-inbox" entry (file+headline "~/Dropbox/notes/inbox.org" "Inbox")
+      '(("i" "inbox" entry (file+headline "~/Documents/notes/inbox.org" "Inbox") "* %?\n")
+        ("j" "Journal" entry (file+olp+datetree "~/Documents/notes/journal.org") "* %?" :empty-lines 1)
+        ("t" "todo-inbox" entry (file+headline "~/Documents/notes/inbox.org" "Inbox")
          "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")))
 
 (defun abo/delete-capture-frame (&rest _)
@@ -1678,14 +1675,68 @@ cons cell (regexp . minor-mode)."
   "Open core GTD buffers for weekly review."
   (interactive)
   (delete-other-windows)
-  (find-file "~/Dropbox/notes/gtd.org")
+  (find-file "~/Documents/notes/gtd.org")
   (split-window-right)
   (other-window 1)
-  (find-file "~/Dropbox/notes/inbox.org")
+  (find-file "~/Documents/notes/inbox.org")
   (split-window-below)
   (other-window 1)
-  (find-file "~/Dropbox/notes/journal.org")
+  (find-file "~/Documents/notes/journal.org")
   (other-window -2))
+#+END_SRC
+
+** Journal from DONE
+#+BEGIN_SRC emacs-lisp
+(defvar abo/next-todos-file (expand-file-name "~/Documents/notes/gtd/next.org")
+  "File whose completed TODO items are mirrored into the daily journal.")
+
+(defvar abo/journal-directory (expand-file-name "~/Documents/notes/journal/")
+  "Directory containing weekly journal files.")
+
+;; Keep this path in sync even when re-evaluating the block in a live session.
+(setq abo/journal-directory (expand-file-name "~/Documents/notes/journal/"))
+
+(defun abo/journal-weekly-file-for-today ()
+  "Return today's weekly journal file path as ISO year/week: YYYY-WW.org."
+  (expand-file-name (format-time-string "%G-%V.org") abo/journal-directory))
+
+(defun abo/journal-append-line-to-today (line)
+  "Append LINE at the end of today's journal entry."
+  (let* ((journal-file (abo/journal-weekly-file-for-today))
+         (today-heading (format-time-string "%Y-%m-%d")))
+    (make-directory (file-name-directory journal-file) t)
+    (with-current-buffer (find-file-noselect journal-file)
+      (org-with-wide-buffer
+       (goto-char (point-min))
+       (unless (re-search-forward (format "^\\* %s$" (regexp-quote today-heading)) nil t)
+         (goto-char (point-max))
+         (unless (bolp)
+           (insert "\n"))
+         (insert (format "* %s\n" today-heading)))
+       (beginning-of-line)
+       (org-end-of-subtree t t)
+       (unless (bolp)
+         (insert "\n"))
+       (insert line "\n")
+       (save-buffer)))))
+
+(defun abo/log-next-todo-done-to-journal ()
+  "When a TODO changes state in `abo/next-todos-file', append it to today's journal."
+  (when (and (derived-mode-p 'org-mode)
+             buffer-file-name
+             (string-equal (file-truename buffer-file-name)
+                           (file-truename abo/next-todos-file))
+             (string= org-last-state "TODO")
+             org-state
+             (not (string= org-state "TODO")))
+    (let ((title (org-get-heading t t t t)))
+      (abo/journal-append-line-to-today
+       (format "- [%s] %s %s"
+               (format-time-string "%H:%M")
+               org-state
+               title)))))
+
+(add-hook 'org-after-todo-state-change-hook #'abo/log-next-todo-done-to-journal)
 #+END_SRC
 
 ** Babel
