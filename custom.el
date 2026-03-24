@@ -227,7 +227,7 @@
  '(eglot-confirm-server-initiated-edits nil)
  '(electric-pair-mode nil)
  '(electric-quote-string t)
- '(emamux:use-nearest-pane t)
+ '(emamux:use-nearest-pane t t)
  '(enable-remote-dir-locals t)
  '(engine/browser-function 'eww)
  '(evil-mode-line-format nil)
@@ -300,16 +300,7 @@
  '(org-startup-indented t)
  '(org-startup-truncated t)
  '(org-startup-with-inline-images t)
- '(package-selected-packages
-   '(cape copilot corfu deadgrep deft diminish dired-rsync drag-stuff
-          emamux embark-consult envrc evil-commentary evil-matchit
-          evil-surround evil-visualstar exec-path-from-shell
-          expand-region general gruvbox-theme highlight-blocks hydra
-          hyperbole iedit key-chord magit marginalia markdown-mode
-          multiple-cursors ob-clojurescript ob-mermaid orderless
-          org-download org-ref org-tree-slide origami ox-reveal
-          paredit rainbow-mode restclient rg vertico windresize
-          writegood-mode writeroom-mode zenburn-theme))
+ '(package-selected-packages nil)
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(projectile-mode-line-prefix " Proj")
  '(projectile-switch-project-action 'projectile-dired)
