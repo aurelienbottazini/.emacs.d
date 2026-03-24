@@ -788,22 +788,22 @@ cons cell (regexp . minor-mode)."
   (defun abo/open-gtd-org ()
     "Open GTD notes."
     (interactive)
-    (find-file "~/Dropbox/notes/gtd.org"))
+    (find-file "~/Documents/notes/gtd.org"))
 
   (defun abo/open-inbox-org ()
     "Open inbox notes."
     (interactive)
-    (find-file "~/Dropbox/notes/inbox.org"))
+    (find-file "~/Documents/notes/inbox.org"))
 
   (defun abo/open-journal-org ()
     "Open journal notes."
     (interactive)
-    (find-file "~/Dropbox/notes/journal.org"))
+    (find-file "~/Documents/notes/journal.org"))
 
   (defun abo/open-notes-directory ()
     "Open notes directory."
     (interactive)
-    (find-file "~/Dropbox/notes/"))
+    (find-file "~/Documents/notes/"))
 
   (defun abo/open-projects-directory ()
     "Open projects directory."
@@ -889,13 +889,13 @@ cons cell (regexp . minor-mode)."
   (winner-mode 1)
 
   (general-define-key
-   :states 'normal
+   :states '(normal visual)
    "gr" 'xref-find-references
    "-" 'dired-jump
    "[[" 'previous-buffer
    "]]" 'next-buffer
-    ":" 'evil-ex
-    "-" 'dired-jump
+   ":" 'execute-extended-command
+   "-" 'dired-jump
    )
 
   (general-define-key
@@ -1160,6 +1160,11 @@ cons cell (regexp . minor-mode)."
   (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
   (define-key evil-insert-state-map (kbd "C-n") #'abo/evil-insert-next)
   (define-key evil-insert-state-map (kbd "C-p") #'abo/evil-insert-previous)
+  (dolist (state-map (list evil-normal-state-map evil-visual-state-map evil-motion-state-map))
+    (define-key state-map (kbd "C-h") #'abo/move-left)
+    (define-key state-map (kbd "C-j") #'abo/move-down)
+    (define-key state-map (kbd "C-k") #'abo/move-up)
+    (define-key state-map (kbd "C-l") #'abo/move-right))
   (evil-mode 1)
 
   (defun my-evil-record-macro ()
