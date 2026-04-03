@@ -153,176 +153,178 @@ brew install --cask emacs-plus-app
 
 ** abo-initialization
 #+BEGIN_SRC emacs-lisp
-(defvar abo/default-file-name-handler-alist file-name-handler-alist)
-(defvar abo/default-gc-cons-threshold (* 16 1024 1024))
-(defvar abo/default-gc-cons-percentage 0.1)
+  (defvar abo/default-file-name-handler-alist file-name-handler-alist)
+  (defvar abo/default-gc-cons-threshold (* 16 1024 1024))
+  (defvar abo/default-gc-cons-percentage 0.1)
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold abo/default-gc-cons-threshold
-                  gc-cons-percentage abo/default-gc-cons-percentage
-                  file-name-handler-alist abo/default-file-name-handler-alist)
-            (garbage-collect)))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold abo/default-gc-cons-threshold
+                    gc-cons-percentage abo/default-gc-cons-percentage
+                    file-name-handler-alist abo/default-file-name-handler-alist)
+              (garbage-collect)))
 
-;; Run GC while idle to reduce pauses during interactive editing.
-(unless noninteractive
-  (run-with-idle-timer
-   5 t
-   (lambda ()
-     (unless (minibufferp)
-       (garbage-collect)))))
+  ;; Run GC while idle to reduce pauses during interactive editing.
+  (unless noninteractive
+    (run-with-idle-timer
+     5 t
+     (lambda ()
+       (unless (minibufferp)
+         (garbage-collect)))))
 
-(setq read-process-output-max (* 1024 1024)
-      process-adaptive-read-buffering nil)
+  (setq read-process-output-max (* 1024 1024)
+        process-adaptive-read-buffering nil)
 
-(when (boundp 'inhibit-compacting-font-caches)
-  (setq inhibit-compacting-font-caches t))
-(when (boundp 'fast-but-imprecise-scrolling)
-  (setq fast-but-imprecise-scrolling t))
-(when (boundp 'redisplay-skip-fontification-on-input)
-  (setq redisplay-skip-fontification-on-input t))
-(when (boundp 'native-comp-async-report-warnings-errors)
-  (setq native-comp-async-report-warnings-errors 'silent))
-(when (boundp 'native-comp-jit-compilation)
-  (setq native-comp-jit-compilation nil))
-(when (boundp 'package-native-compile)
-  (setq package-native-compile nil))
+  (when (boundp 'inhibit-compacting-font-caches)
+    (setq inhibit-compacting-font-caches t))
+  (when (boundp 'fast-but-imprecise-scrolling)
+    (setq fast-but-imprecise-scrolling t))
+  (when (boundp 'redisplay-skip-fontification-on-input)
+    (setq redisplay-skip-fontification-on-input t))
+  (when (boundp 'native-comp-async-report-warnings-errors)
+    (setq native-comp-async-report-warnings-errors 'silent))
+  (when (boundp 'native-comp-jit-compilation)
+    (setq native-comp-jit-compilation nil))
+  (when (boundp 'package-native-compile)
+    (setq package-native-compile nil))
 
-(setq byte-compile-warnings '(not obsolete cl-functions))
+  (setq byte-compile-warnings '(not obsolete cl-functions))
 
-(setq package-archives
-      '(("melpa"       . "https://melpa.org/packages/")
-        ("gnu"         . "https://elpa.gnu.org/packages/")
-        ("nongnu"      . "https://elpa.nongnu.org/nongnu/")))
+  (setq package-archives
+        '(("melpa"       . "https://melpa.org/packages/")
+          ("gnu"         . "https://elpa.gnu.org/packages/")
+          ("nongnu"      . "https://elpa.nongnu.org/nongnu/")))
 
-(setq package-user-dir (concat user-emacs-directory "elpa"))
+  (setq package-user-dir (concat user-emacs-directory "elpa"))
 
-(setq package--init-file-ensured t) ; do not add things at the end of init.el
-;; GNU ELPA signature checks can fail on machines without a working GPG setup.
-(setq package-check-signature nil)
-(setq package-quickstart nil)
+  (setq package--init-file-ensured t) ; do not add things at the end of init.el
+  ;; GNU ELPA signature checks can fail on machines without a working GPG setup.
+  (setq package-check-signature nil)
+  (setq package-quickstart nil)
 
-(package-initialize)
+  (package-initialize)
 
-(defun abo/refresh-package-contents ()
-  "Refresh package archives on demand."
-  (interactive)
+  (defun abo/refresh-package-contents ()
+    "Refresh package archives on demand."
+    (interactive)
+    (condition-case err
+        (package-refresh-contents)
+      (error
+       (message "Package refresh failed: %s" (error-message-string err))
+       nil)))
+
+  (defun require-package (package &optional min-version)
+    "Install PACKAGE via ELPA when missing. Return non-nil on success."
+    (condition-case err
+        (progn
+          (unless (package-installed-p package min-version)
+            (unless package-archive-contents
+              (abo/refresh-package-contents))
+            (when package-archive-contents
+              (package-install package)))
+          (package-installed-p package min-version))
+      (error
+       (message "Package install failed for %s: %s" package (error-message-string err))
+       nil)))
+
+  (unless (require 'use-package nil 'noerror)
+    (unless (require-package 'use-package)
+      (error "Missing required package `use-package`; run M-x abo/refresh-package-contents and restart Emacs"))
+    (require 'use-package))
+
+  (unless (require 'diminish nil 'noerror)
+    (unless (require-package 'diminish)
+      ;; Keep startup reliable even when ELPA is unavailable.
+      (defalias 'diminish #'ignore))
+    (require 'diminish nil 'noerror))
+
+  (defconst abo/required-packages
+    '(exec-path-from-shell
+      rainbow-mode
+      paredit
+      expand-region
+      origami
+      highlight-blocks
+      windresize
+      which-key
+      general
+      hydra
+      drag-stuff
+      multiple-cursors
+      deft
+      markdown-mode
+      writeroom-mode
+      writegood-mode
+      biblio
+      dired-rsync
+      evil
+      evil-surround
+      evil-commentary
+      evil-visualstar
+      evil-matchit
+      key-chord
+      emamux
+      restclient
+      hyperbole
+      envrc
+      copilot
+      ob-clojurescript
+      ob-mermaid
+      htmlize
+      org-tree-slide
+      ox-reveal
+      org-download
+      org-ref
+      vertico
+      marginalia
+      orderless
+      consult
+      corfu
+      cape
+      embark
+      embark-consult
+      magit
+      wgrep
+      iedit
+      deadgrep
+      rg
+      zenburn-theme
+      )
+    "Third-party packages required by this configuration.")
+
+  (defun abo/ensure-required-packages ()
+    "Install third-party packages needed before `use-package' declarations run."
+    (let (missing-packages)
+      (dolist (package abo/required-packages)
+        (unless (package-installed-p package)
+          (push package missing-packages)))
+      (when missing-packages
+        (unless package-archive-contents
+          (abo/refresh-package-contents))
+        (dolist (package (nreverse missing-packages))
+          (require-package package)))))
+
+  (abo/ensure-required-packages)
+
+  (setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
+  (setq use-package-always-ensure nil)
+
+  (setq custom-file (concat user-emacs-directory "custom.el"))
   (condition-case err
-      (package-refresh-contents)
+      (load custom-file 'noerror 'nomessage)
     (error
-     (message "Package refresh failed: %s" (error-message-string err))
-     nil)))
+     (message "Skipping invalid custom.el entry: %s" (error-message-string err))))
 
-(defun require-package (package &optional min-version)
-  "Install PACKAGE via ELPA when missing. Return non-nil on success."
-  (condition-case err
-      (progn
-        (unless (package-installed-p package min-version)
-          (unless package-archive-contents
-            (abo/refresh-package-contents))
-          (when package-archive-contents
-            (package-install package)))
-        (package-installed-p package min-version))
-    (error
-     (message "Package install failed for %s: %s" package (error-message-string err))
-     nil)))
+  (if (file-exists-p "~/.emacs.d/.emacs-local")
+      (load "~/.emacs.d/.emacs-local"))
 
-(unless (require 'use-package nil 'noerror)
-  (unless (require-package 'use-package)
-    (error "Missing required package `use-package`; run M-x abo/refresh-package-contents and restart Emacs"))
-  (require 'use-package))
-
-(unless (require 'diminish nil 'noerror)
-  (unless (require-package 'diminish)
-    ;; Keep startup reliable even when ELPA is unavailable.
-    (defalias 'diminish #'ignore))
-  (require 'diminish nil 'noerror))
-
-(defconst abo/required-packages
-  '(exec-path-from-shell
-    rainbow-mode
-    paredit
-    expand-region
-    origami
-    highlight-blocks
-    windresize
-    which-key
-    general
-    hydra
-    drag-stuff
-    multiple-cursors
-    deft
-    markdown-mode
-    writeroom-mode
-    writegood-mode
-    biblio
-    dired-rsync
-    evil
-    evil-surround
-    evil-commentary
-    evil-visualstar
-    evil-matchit
-    key-chord
-    emamux
-    restclient
-    hyperbole
-    envrc
-    copilot
-    ob-clojurescript
-    ob-mermaid
-    htmlize
-    org-tree-slide
-    ox-reveal
-    org-download
-    org-ref
-    vertico
-    marginalia
-    orderless
-    consult
-    corfu
-    cape
-    embark
-    embark-consult
-    magit
-    wgrep
-    iedit
-    deadgrep
-    rg)
-  "Third-party packages required by this configuration.")
-
-(defun abo/ensure-required-packages ()
-  "Install third-party packages needed before `use-package' declarations run."
-  (let (missing-packages)
-    (dolist (package abo/required-packages)
-      (unless (package-installed-p package)
-        (push package missing-packages)))
-    (when missing-packages
-      (unless package-archive-contents
-        (abo/refresh-package-contents))
-      (dolist (package (nreverse missing-packages))
-        (require-package package)))))
-
-(abo/ensure-required-packages)
-
-(setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
-(setq use-package-always-ensure nil)
-
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(condition-case err
-    (load custom-file 'noerror 'nomessage)
-  (error
-   (message "Skipping invalid custom.el entry: %s" (error-message-string err))))
-
-(if (file-exists-p "~/.emacs.d/.emacs-local")
-    (load "~/.emacs.d/.emacs-local"))
-
-(let ((site-lisp-dir (expand-file-name "site-lisp" user-emacs-directory)))
-  (when (file-directory-p site-lisp-dir)
-    (add-to-list 'load-path site-lisp-dir)
-    (dolist (dir (directory-files site-lisp-dir t "^[^.]" t))
-      (when (and (file-directory-p dir)
-                 (directory-files dir nil "\\.el\\'" t))
-        (add-to-list 'load-path dir)))))
+  (let ((site-lisp-dir (expand-file-name "site-lisp" user-emacs-directory)))
+    (when (file-directory-p site-lisp-dir)
+      (add-to-list 'load-path site-lisp-dir)
+      (dolist (dir (directory-files site-lisp-dir t "^[^.]" t))
+        (when (and (file-directory-p dir)
+                   (directory-files dir nil "\\.el\\'" t))
+          (add-to-list 'load-path dir)))))
 #+END_SRC
 
 ** Environment and paths
@@ -1014,7 +1016,7 @@ cons cell (regexp . minor-mode)."
   :init
   (setq deft-extensions '("org" "md")
         deft-recursive t
-        deft-directory "~/Dropbox/notes"))
+        deft-directory "~/Documents/notes"))
 
 (use-package markdown-mode
   :mode "\\.md\\'")
