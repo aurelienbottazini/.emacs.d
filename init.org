@@ -1823,6 +1823,28 @@ cons cell (regexp . minor-mode)."
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize :defer t)
 
+(defconst abo/org-export-inline-style
+  "<style>
+img {
+  display: block;
+  max-width: min(100%, 900px);
+  height: auto;
+  margin: 1.75rem auto;
+  border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.14);
+}
+
+.figure {
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.figure p {
+  margin-top: 0.85rem;
+}
+</style>"
+  "Extra HTML styles for exported Org documents.")
+
 (defvar abo/org-export-configured nil)
 
 (defun abo/setup-org-export (&rest _)
@@ -1841,12 +1863,13 @@ cons cell (regexp . minor-mode)."
              :publishing-function org-html-publish-to-html
              :headline-levels 4
              :auto-preamble t
-             :html-head-extra nil
+             :html-head-extra ,abo/org-export-inline-style
              :body-only t))
           user-full-name "Aurélien Bottazini"
           org-export-with-toc t
           org-html-doctype "html5"
           org-html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/main.css\" />"
+          org-html-head-extra abo/org-export-inline-style
           org-html-head-include-default-style nil
           org-html-head-include-scripts nil
           org-html-html5-fancy t
@@ -1924,6 +1947,43 @@ cons cell (regexp . minor-mode)."
 
 ** Attachments and references
 #+BEGIN_SRC emacs-lisp
+(defconst abo/org-image-attr-lines
+  '("#+attr_org: :width 0.72"
+    "#+attr_html: :width 82%")
+  "Default Org attributes inserted before wiki images.")
+
+(defun abo/org-image-file-p (path)
+  "Return non-nil when PATH points to an image."
+  (and (stringp path)
+       (image-type-from-file-name path)))
+
+(defun abo/org-refresh-inline-images ()
+  "Refresh inline images in the current Org buffer."
+  (when (derived-mode-p 'org-mode)
+    (org-remove-inline-images)
+    (org-display-inline-images t t)))
+
+(defun abo/org-slugify (text)
+  "Convert TEXT to a compact file-name slug."
+  (let* ((slug (downcase (string-trim (or text ""))))
+         (slug (replace-regexp-in-string "[^[:alnum:]]+" "-" slug))
+         (slug (replace-regexp-in-string "\\`-+\\|-+\\'" "" slug)))
+    (if (string-empty-p slug) "image" slug)))
+
+(defun abo/org-download-file-name (filename)
+  "Return a readable file name for downloaded images based on FILENAME."
+  (let* ((heading (when (derived-mode-p 'org-mode)
+                    (org-get-heading t t t t)))
+         (base (abo/org-slugify
+                (or heading
+                    (file-name-base filename)
+                    "image")))
+         (ext (or (file-name-extension filename) "png")))
+    (format "%s-%s.%s"
+            base
+            (format-time-string "%Y%m%d-%H%M%S")
+            ext)))
+
 (defun abo/org-attach--decode-markdown-path (raw)
   "Decode a Markdown/Bear path RAW into a usable local path."
   (require 'url-util)
@@ -1933,9 +1993,29 @@ cons cell (regexp . minor-mode)."
         (string-remove-prefix "file://" decoded)
       decoded)))
 
+(defun abo/org-attach--spotlight-find-by-name (basename)
+  "Return first Spotlight match for BASENAME, or nil."
+  (when (and (stringp basename) (not (string-empty-p basename)))
+    (let* ((query (format "kMDItemFSName == %S" basename))
+           (cmd (format "mdfind %s" (shell-quote-argument query)))
+           (paths (split-string (shell-command-to-string cmd) "\n" t))
+           (found nil))
+      (while (and paths (not found))
+        (let ((candidate (pop paths)))
+          (when (file-exists-p candidate)
+            (setq found candidate))))
+      found)))
+
 (defun abo/org-attach--resolve-clipboard-path ()
   "Resolve a local file path from the macOS clipboard."
   (or
+   (let ((furl-path
+          (string-trim
+           (shell-command-to-string
+            "osascript -e 'try' -e 'POSIX path of (the clipboard as «class furl»)' -e 'end try' 2>/dev/null"))))
+     (and (not (string-empty-p furl-path))
+          (file-exists-p furl-path)
+          furl-path))
    (let ((finder-path
           (string-trim
            (shell-command-to-string
@@ -1969,19 +2049,78 @@ cons cell (regexp . minor-mode)."
                 (t nil))))
          (or candidate
              (let* ((basename (file-name-nondirectory decoded))
+                    (downloads-match
+                     (or (let ((p (expand-file-name basename "~/Downloads")))
+                           (and (file-exists-p p) p))
+                         (let ((p (expand-file-name
+                                   basename
+                                   "~/Library/Mobile Documents/com~apple~CloudDocs/Downloads")))
+                           (and (file-exists-p p) p))))
+                    (spotlight-match (abo/org-attach--spotlight-find-by-name basename))
                     (matches (and (not (string-empty-p basename))
                                   (directory-files-recursively
                                    (expand-file-name "~/Documents")
                                    (format "\\`%s\\'" (regexp-quote basename)) nil))))
-               (car matches))))))))
+               (or downloads-match spotlight-match (car matches)))))))))
 
-(defun abo/org-attach--insert-link-under-heading (basename)
-  "Insert an `attachment:' link for BASENAME below the current heading."
+(defun abo/org-download-annotate (_link)
+  "Keep inserted wiki images visually clean."
+  "")
+
+(defun abo/org-download-setup ()
+  "Configure image handling for Org wiki buffers."
+  (org-download-enable)
+  (setq-local org-image-actual-width nil)
+  (setq-local org-image-max-width 'window))
+
+(defun abo/org-download-insert-clipboard-image ()
+  "Insert the current clipboard image into the active Org heading."
+  (interactive)
+  (require 'org-id)
+  (save-excursion
+    (org-back-to-heading t)
+    (org-id-get-create)
+    (call-interactively #'org-download-clipboard))
+  (abo/org-refresh-inline-images))
+
+(defun abo/org-download-insert-screenshot ()
+  "Create a screenshot and insert it into the active Org heading."
+  (interactive)
+  (require 'org-id)
+  (save-excursion
+    (org-back-to-heading t)
+    (org-id-get-create)
+    (call-interactively #'org-download-screenshot))
+  (abo/org-refresh-inline-images))
+
+(defun abo/org-download-insert-last-link ()
+  "Rename the last inserted Org image file."
+  (interactive)
+  (call-interactively #'org-download-rename-last-file)
+  (abo/org-refresh-inline-images))
+
+(defun abo/org-attach-dwim ()
+  "Attach an image from the clipboard, a Finder file, or a screenshot."
+  (interactive)
+  (condition-case err
+      (abo/org-download-insert-clipboard-image)
+    (error
+     (condition-case nil
+         (abo/org-attach-file-from-macos-clipboard)
+       (error
+        (if (yes-or-no-p "No clipboard image or Finder file. Capture a screenshot instead? ")
+            (abo/org-download-insert-screenshot)
+          (signal (car err) (cdr err))))))))
+
+(defun abo/org-attach--insert-link-under-heading (path)
+  "Insert an `attachment:' link for PATH below the current heading."
   (let* ((description (replace-regexp-in-string
                        "[][]"
                        (lambda (match) (concat "\\" match))
-                       basename t t))
-         (link (org-link-make-string (concat "attachment:" basename) description)))
+                       (file-name-nondirectory path) t t))
+         (link (org-link-make-string
+                (concat "attachment:" (file-name-nondirectory path))
+                description)))
     (save-excursion
       (org-back-to-heading t)
       (let ((entry-end (save-excursion
@@ -1997,6 +2136,11 @@ cons cell (regexp . minor-mode)."
           (goto-char content-start)
           (unless (bolp)
             (insert "\n"))
+          (if (abo/org-image-file-p path)
+              (progn
+                (insert (string-join abo/org-image-attr-lines "\n"))
+                (insert "\n"))
+            nil)
           (insert link "\n")
           (unless (or (eobp) (looking-at-p "\n"))
             (insert "\n")))))))
@@ -2015,12 +2159,23 @@ cons cell (regexp . minor-mode)."
         (user-error "Clipboard does not contain a resolvable local file"))
       (org-id-get-create)
       (org-attach-attach path nil 'cp)
-      (abo/org-attach--insert-link-under-heading
-       (file-name-nondirectory (directory-file-name path))))))
+      (abo/org-attach--insert-link-under-heading path)
+      (abo/org-refresh-inline-images))))
 
 (use-package org-download
-  :commands (org-download-enable org-download-yank)
-  :hook (dired-mode . org-download-enable))
+  :commands (org-download-enable
+             org-download-yank
+             org-download-clipboard
+             org-download-screenshot
+             org-download-rename-last-file)
+  :hook ((dired-mode . org-download-enable)
+         (org-mode . abo/org-download-setup))
+  :config
+  (setq org-download-timestamp ""
+        org-download-annotate-function #'abo/org-download-annotate
+        org-download-file-format-function #'abo/org-download-file-name
+        org-download-image-attr-list abo/org-image-attr-lines
+        org-download-screenshot-method "screencapture -i %s"))
 
 (setq org-cite-global-bibliography '("~/Documents/notes/bibliography.bib"))
 (use-package org-ref
@@ -2028,10 +2183,14 @@ cons cell (regexp . minor-mode)."
   :config
   (require 'org-ref-isbn))
 
-(setq org-download-timestamp-format "")
-
 (with-eval-after-load 'org
-  (define-key org-mode-map (kbd "C-c C-x y") #'abo/org-attach-file-from-macos-clipboard))
+  (setq org-image-actual-width nil
+        org-image-max-width 'window)
+  (define-key org-mode-map (kbd "C-c C-x y") #'abo/org-attach-file-from-macos-clipboard)
+  (define-key org-mode-map (kbd "C-c C-x i") #'abo/org-attach-dwim)
+  (define-key org-mode-map (kbd "C-c C-x p") #'abo/org-download-insert-clipboard-image)
+  (define-key org-mode-map (kbd "C-c C-x s") #'abo/org-download-insert-screenshot)
+  (define-key org-mode-map (kbd "C-c C-x r") #'abo/org-download-insert-last-link))
 #+END_SRC
 
 ** Archive
