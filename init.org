@@ -284,10 +284,16 @@ brew install --cask emacs-plus-app
       embark
       embark-consult
       magit
+      treemacs
+      git-link
+      git-timemachine
       wgrep
       iedit
       deadgrep
       rg
+      web-mode
+      js2-mode
+      typescript-mode
       zenburn-theme
       )
     "Third-party packages required by this configuration.")
@@ -529,6 +535,39 @@ brew install --cask emacs-plus-app
 ** UI and display
 #+BEGIN_SRC emacs-lisp
       (global-display-line-numbers-mode -1)
+      (defconst abo/default-font-family "Operator Mono SSm AB")
+      (defconst abo/default-font-height 180)
+
+      (defun abo/setup-fonts ()
+        "Keep the UI on `abo/default-font-family' across font-lock faces."
+        (when (display-graphic-p)
+          (setf (alist-get 'font default-frame-alist)
+                (format "%s-18" abo/default-font-family))
+          (setf (alist-get 'font initial-frame-alist)
+                (format "%s-18" abo/default-font-family)))
+        (set-face-attribute 'default nil
+                            :family abo/default-font-family
+                            :height abo/default-font-height
+                            :weight 'regular)
+        (set-face-attribute 'fixed-pitch nil
+                            :family abo/default-font-family)
+        (set-face-attribute 'fixed-pitch-serif nil
+                            :family abo/default-font-family)
+        (dolist (face '(font-lock-builtin-face
+                        font-lock-comment-delimiter-face
+                        font-lock-comment-face
+                        font-lock-constant-face
+                        font-lock-doc-face
+                        font-lock-function-name-face
+                        font-lock-keyword-face
+                        font-lock-preprocessor-face
+                        font-lock-string-face
+                        font-lock-type-face
+                        font-lock-variable-name-face
+                        font-lock-warning-face))
+          (when (facep face)
+            (set-face-attribute face nil :family abo/default-font-family))))
+
       (defun show-line-numbers ()
         (interactive)
         (setq display-line-numbers 'absolute))
@@ -575,6 +614,7 @@ brew install --cask emacs-plus-app
       (use-package zenburn-theme
         :config
         (load-theme 'zenburn)
+        (abo/setup-fonts)
         (custom-theme-set-faces
          'user
          '(org-drawer ((t (:inherit font-lock-comment-delimiter-face :weight normal))))
@@ -695,6 +735,17 @@ cons cell (regexp . minor-mode)."
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.el\\'" . emacs-lisp-mode))
+
+(use-package js2-mode
+  :commands js2-mode)
+
+(use-package typescript-mode
+  :commands typescript-mode)
+
+(use-package web-mode
+  :commands web-mode
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.vue\\'" . web-mode)))
 
 (defvar abo/typescript-major-mode
   (cond
@@ -920,8 +971,6 @@ cons cell (regexp . minor-mode)."
    "M-." 'xref-find-definitions
    "M-c" 'kill-ring-save ; ⌘-c = Copy
    "M-v" 'yank ; ⌘-v = Paste
-   ;; "M-x" 'counsel-M-x
-
    "C-h" 'abo/move-left
    "C-j" 'abo/move-down
    "C-l" 'abo/move-right
@@ -1187,8 +1236,8 @@ cons cell (regexp . minor-mode)."
   (evil-set-initial-state 'ert-results-mode 'emacs)
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
-  (evil-set-initial-state 'tab-switcher-mode 'emacs)  (evil-set-initial-state 'ivy-occur-mode 'emacs)
-  (evil-set-initial-state 'ivy-occur-grep-mode 'emacs)  (evil-set-initial-state 'compilation-mode 'emacs)
+  (evil-set-initial-state 'tab-switcher-mode 'emacs)
+  (evil-set-initial-state 'compilation-mode 'emacs)
 
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
 
@@ -1328,6 +1377,15 @@ cons cell (regexp . minor-mode)."
       :diminish envrc-mode
       :config
       (envrc-global-mode))
+
+    (use-package treemacs
+      :commands (treemacs treemacs-select-window))
+
+    (use-package git-link
+      :commands git-link)
+
+    (use-package git-timemachine
+      :commands git-timemachine-toggle)
 #+END_SRC
 
 ** LSP
