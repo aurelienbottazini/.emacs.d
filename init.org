@@ -2350,6 +2350,11 @@ img {
 (add-hook 'org-archive-hook 'org-save-all-org-buffers)
 #+END_SRC
 
+** Hywiki
+#+begin_src emacs-lisp
+(load "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/notes/notes2/hywiki-setup.el")
+#+end_src
+
 * Utilities
 ** Date
 In org mode you can do ~C-c !~ to pick and insert the date
