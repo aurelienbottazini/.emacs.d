@@ -39,6 +39,8 @@ brew install --cask emacs-plus-app
   (require 'speedbar nil t)
   (require 'time-stamp))
 
+(require 'seq)
+
 ;; Declared for byte-compiler in minimal batch contexts.
 (defvar package--init-file-ensured)
 (defvar reb-re-syntax)
@@ -49,6 +51,13 @@ brew install --cask emacs-plus-app
 (defvar org-download-timestamp-format)
 (defvar project-find-file-function)
 (defvar corfu--total)
+(defvar abo/notes-dir)
+(defvar abo/rolo-file)
+(defvar abo/zk-dir)
+(defvar eglot-ignored-server-capabilities)
+(defvar eglot-server-programs)
+(defvar org-last-state)
+(defvar org-state)
 (declare-function default-text-scale-increment "default-text-scale" (&optional increment))
 (declare-function default-text-scale-reset "default-text-scale" ())
 (declare-function dired-get-file-for-visit "dired")
@@ -84,6 +93,7 @@ brew install --cask emacs-plus-app
 (declare-function org-map-entries "org")
 (declare-function org-end-of-meta-data "org")
 (declare-function org-element--property "org-element")
+(declare-function org-attach-attach "org-attach" (file &optional visit-dir method))
 (declare-function consult-org-heading "consult")
 (declare-function eglot-managed-p "eglot")
 (declare-function eldoc-doc-buffer "eldoc")
@@ -198,8 +208,9 @@ brew install --cask emacs-plus-app
   (setq package-user-dir (concat user-emacs-directory "elpa"))
 
   (setq package--init-file-ensured t) ; do not add things at the end of init.el
-  ;; GNU ELPA signature checks can fail on machines without a working GPG setup.
-  (setq package-check-signature nil)
+  ;; Verify signatures when archives provide them, while still allowing MELPA's
+  ;; unsigned packages and machines without a full GPG setup.
+  (setq package-check-signature 'allow-unsigned)
   (setq package-quickstart nil)
 
   (package-initialize)
@@ -298,6 +309,54 @@ brew install --cask emacs-plus-app
       )
     "Third-party packages required by this configuration.")
 
+  (setq package-selected-packages abo/required-packages)
+
+  (defconst abo/expected-commands
+    '(consult-buffer
+      consult-fd
+      consult-global-mark
+      consult-mark
+      consult-outline
+      consult-org-heading
+      consult-recent-file
+      consult-ripgrep
+      corfu-next
+      corfu-previous
+      deadgrep
+      deft
+      drag-stuff-down
+      drag-stuff-up
+      embark-act
+      embark-bindings
+      embark-dwim
+      emamux:run-last-command
+      emamux:send-command
+      emamux:send-region
+      er/contract-region
+      er/expand-region
+      git-link
+      git-timemachine-toggle
+      iedit-mode
+      magit-file-dispatch
+      magit-status
+      mc/mark-all-like-this
+      mc/mark-next-like-this
+      mc/mark-previous-like-this
+      org-download-clipboard
+      org-download-enable
+      org-download-rename-last-file
+      org-download-screenshot
+      org-ref-insert-link
+      org-tree-slide-mode
+      org-tree-slide-skip-done-toggle
+      rg
+      treemacs
+      web-mode
+      which-key-mode
+      windresize
+      writeroom-mode)
+    "Commands this configuration binds or calls from third-party packages.")
+
   (defun abo/ensure-required-packages ()
     "Install third-party packages needed before `use-package' declarations run."
     (let (missing-packages)
@@ -311,6 +370,37 @@ brew install --cask emacs-plus-app
           (require-package package)))))
 
   (abo/ensure-required-packages)
+
+  (defun abo/missing-required-packages ()
+    "Return required packages that are not installed."
+    (seq-filter (lambda (package)
+                  (not (package-installed-p package)))
+                abo/required-packages))
+
+  (defun abo/missing-expected-commands ()
+    "Return expected commands that are not currently available."
+    (seq-filter (lambda (command)
+                  (not (fboundp command)))
+                abo/expected-commands))
+
+  (defun abo/validate-config (&optional noerror)
+    "Validate packages and command autoloads declared by this config.
+When NOERROR is non-nil, return nil instead of signaling on failures."
+    (interactive)
+    (let ((missing-packages (abo/missing-required-packages))
+          (missing-commands (abo/missing-expected-commands)))
+      (if (or missing-packages missing-commands)
+          (let ((message
+                 (format "Config validation failed; missing packages: %S; missing commands: %S"
+                         missing-packages missing-commands)))
+            (if noerror
+                (progn
+                  (message "%s" message)
+                  nil)
+              (user-error "%s" message)))
+        (when (called-interactively-p 'interactive)
+          (message "Config validation passed"))
+        t)))
 
   (setq use-package-compute-statistics nil) ; set to t temporarily when profiling startup
   (setq use-package-always-ensure nil)
@@ -1362,7 +1452,6 @@ cons cell (regexp . minor-mode)."
       :config
       (hyperbole-mode 1))
 
-    (use-package sqlite3 :defer t)
     (use-package jsonrpc :defer t)
 
     (require 'uniquify)
@@ -1788,7 +1877,7 @@ cons cell (regexp . minor-mode)."
        (save-buffer)))))
 
 (defun abo/log-next-todo-done-to-journal ()
-  "When a TODO changes state in `abo/next-todos-file', append it to today's journal."
+  "Append completed `abo/next-todos-file' TODOs to today's journal."
   (when (and (derived-mode-p 'org-mode)
              buffer-file-name
              (string-equal (file-truename buffer-file-name)
@@ -1991,7 +2080,10 @@ img {
   (default-text-scale-reset))
 
 (use-package org-tree-slide
-  :commands (org-tree-slide-mode org-tree-slide-move-previous-tree org-tree-slide-move-next-tree)
+  :commands (org-tree-slide-mode
+             org-tree-slide-move-previous-tree
+             org-tree-slide-move-next-tree
+             org-tree-slide-skip-done-toggle)
   :hook ((org-tree-slide-play . abott/org-tree-slide-play)
          (org-tree-slide-stop . abott/org-tree-slide-stop))
   :config
@@ -2475,4 +2567,9 @@ With `C-u', prompt for any file."
   :commands deadgrep)
 (use-package rg
   :commands rg)
+
+(unless noninteractive
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (abo/validate-config t))))
 #+END_SRC
